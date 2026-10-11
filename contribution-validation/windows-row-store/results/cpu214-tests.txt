@@ -1,0 +1,7 @@
+torch 2.14.1+cpu cuda None
+........sss                                                              [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] tests\models\qwen4_exp\test_ple_disk.py:257: needs a GPU
+SKIPPED [1] tests\models\qwen4_exp\test_ple_disk.py:290: needs a GPU
+SKIPPED [1] tests\models\qwen4_exp\test_ple_disk.py:308: needs a GPU
+8 passed, 3 skipped in 7.64s

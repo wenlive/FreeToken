@@ -1,0 +1,25 @@
+FreeToken Windows disk-row-store validation
+Base: 74a387777708b9650a027494bcb37d2ab9cf2443
+Windows 11 build 26200; Ryzen 9 9900X; 64 GB RAM; RTX 5090 D v2 24 GB; driver 610.88.
+MSVC 19.44, CUDA Toolkit 13.0, Python 3.12.13.
+
+Torch 2.11.0+cu130:
+python build_row_store_validation.py --root . --with-pinned
+$env:PYTHONPATH = 'python'
+python -m pytest tests/kernels/test_row_store.py tests/models/qwen4_exp/test_ple_disk.py -q
+Result: 11 passed (including GPU oracle and CUDA graph).
+python probe_row_store_handles.py
+Result: process handles remained 315 through 10 independent store construction/read/destruction rounds.
+
+Torch 2.14.1+cpu, latest-main core dependencies:
+python build_row_store_validation.py --root . --cpu-output validation/cpu-native
+$env:PYTHONPATH = 'python'
+python test_row_store_cpu_validation.py --native-dir validation/cpu-native/freetoken/kernel
+Result: 8 passed, 3 GPU tests skipped.
+
+Baseline row-store compilation on both Torch versions: fatal C1083 on missing dlfcn.h.
+The helper selects the declared row-store extension. The pinned prerequisite gets Windows flags,
+absolute include paths and CUDA lib/x64 outside the proposed patch. This is not a complete setup.py
+or full-model serving validation. Torch 2.14 CUDA and Linux hardware were not validated.
+Synthetic fixed-width byte tables and toy PLE safetensors checkpoints, no external checkpoint ID.
+AI-assisted preparation and test execution. The contributor has reviewed and understands the change, and has authorized submission. No personal test rerun is claimed.

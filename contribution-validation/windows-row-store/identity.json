@@ -1,0 +1,29 @@
+{
+  "upstream_base": "74a387777708b9650a027494bcb37d2ab9cf2443",
+  "local_commit": "e9235495b29992d5e1e03db4ec8e779ef11a40cf",
+  "patch_sha256": "7c426a31df078ee5fb36bdabf470b05a39480e44f1cbdd5a5624fea0eede7099",
+  "files": {
+    "python/freetoken/kernel/csrc/row_store/row_store_ext.cpp": "d842d4d6cd73fb0075fe75fc8af28dc9e6e26b44a92ef4825511bd48be5a02b5",
+    "setup.py": "04ad7bbbcd459f57534e1b96875e63534f5c92eb998f83a83592d18b6c79e75d",
+    "tests/kernels/test_row_store.py": "f85483e3c7880e6c7b3b68310230fa9fb475d13ad3e6d19b11cb3300e770d915",
+    "tests/models/qwen4_exp/test_ple_disk.py": "33137f34b78bfa8700fad9d46a8fb8be9c3805b2c24c88116a294bc65b686844"
+  },
+  "validation": {
+    "torch_2_11_cuda": {
+      "passed": 11,
+      "skipped": 0,
+      "raw_log": "final211-tests.txt"
+    },
+    "torch_2_14_cpu": {
+      "passed": 8,
+      "skipped_gpu": 3,
+      "raw_log": "cpu214-tests.txt"
+    },
+    "torch_2_14_cuda": "not_validated; download incomplete and task-owned process stopped",
+    "baseline_build": "C1083 dlfcn.h failure with both Torch versions",
+    "linux_hardware": "not_run",
+    "full_model_latest_main": "not_run",
+    "independent_handles": "315 before and after 10 store lifecycles"
+  },
+  "human_review": "Contributor confirmed full review and understanding and authorized public PR creation on 2026-10-11."
+}
