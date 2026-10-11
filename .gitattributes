@@ -1,0 +1,2 @@
+# Preserve raw validation evidence across Git line-ending configurations.
+validation/gsq-q2/** -text

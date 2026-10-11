@@ -1,0 +1,1 @@
+{"scope": "complete real expert source read only; no inference or full bank allocation", "layers": 48, "experts_per_layer": 512, "bytes": 33973862400, "seconds": 18.89102219999768, "source_sha256_receipt": "69820c02ec7d0b45ef2ebb19d6620299db749fe2aded7f39f93c6b88b199b720", "source_size": 37623740192, "passed": true}
