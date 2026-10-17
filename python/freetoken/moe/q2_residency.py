@@ -86,9 +86,9 @@ def gather(descriptor, dst_ids, src_ids, count, blocks=8):
         sources.shape[1], blocks, 1024, num_warps=8)
 
 
-@triton.jit
+@triton.jit(do_not_specialize=['BASE'])
 def _ensure(IDS, MAP, DYNAMIC_IDS, USAGE, STEP, COPY_SRC, COPY_DST, COUNT,
-            STATS, BASE: tl.constexpr, DYNAMIC_BEGIN: tl.constexpr,
+            STATS, BASE, DYNAMIC_BEGIN: tl.constexpr,
             PROTECTED_BEGIN: tl.constexpr, DYNAMIC_SIZE: tl.constexpr,
             K: tl.constexpr, BK: tl.constexpr, BC: tl.constexpr,
             COLLECT_STATS: tl.constexpr):
