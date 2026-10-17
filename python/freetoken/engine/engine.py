@@ -1038,7 +1038,7 @@ class Engine:
             logger.info_rank0(f'Fixed Q2 rebuild allocator reclaim: free {mem_GB(before_reclaim)} '
                               f'-> {mem_GB(free)}, reserved {mem_GB(torch.cuda.memory_reserved(self.device))}, '
                               f'allocated {mem_GB(torch.cuda.memory_allocated(self.device))}')
-            reserve = 512 * 2**20
+            reserve = config.fixed_q2_rebuild_reserve_mib * 2**20
             if free - max(0, delta) < reserve:
                 raise CacheRebuildRejected(
                     f'fixed Q2 rebuild delta {mem_GB(delta)} leaves less than {mem_GB(reserve)} '

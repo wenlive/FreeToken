@@ -54,6 +54,7 @@ class EngineConfig:
     moe_q2_adapt_decay: float = 1.0
     gguf_embedding_host: bool = False
     moe_q2_prefill_workspace: bool = False
+    fixed_q2_rebuild_reserve_mib: int = 512
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
     kv_reserve_tokens: int = 8192  # KV floor for --moe-cache-auto; small by design (MoE-priority)
@@ -114,6 +115,10 @@ class EngineConfig:
     mtp_compact_state: bool = False
 
     def __post_init__(self):
+        if not 0 <= self.fixed_q2_rebuild_reserve_mib <= 512:
+            raise ValueError('Fixed Q2 rebuild reserve must be 0..512 MiB')
+        if self.fixed_q2_rebuild_reserve_mib != 512 and not self.moe_q2_resident_experts:
+            raise ValueError('A custom fixed rebuild reserve requires protected Q2 owners')
         if self.moe_q2_prefill_workspace and (not self.moe_q2_resident_experts or self.moe_q2_dynamic_slots != 1024):
             raise ValueError('Prefill workspace borrowing requires protected Q2 with 1024 disposable dynamic rows')
         if not 0 <= self.ple_row_cache_rows <= (1 << 24) or 0 < self.ple_row_cache_rows < 8:
