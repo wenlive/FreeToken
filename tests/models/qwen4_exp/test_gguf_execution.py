@@ -5,6 +5,36 @@ import torch
 
 @unittest.skipUnless(torch.cuda.is_available(), "requires CUDA")
 class GGUFExecutionConsistencyTests(unittest.TestCase):
+    def test_bf16_tiled_and_batch_projection_real_geometry(self):
+        """覆盖新分派边界、HC两段、stride、graph改输入，并与独立FP32矩阵参考比较。"""
+        from freetoken.kernel.gguf_native import bf16_gemv
+        torch.manual_seed(7802)
+        for width, rows, split, counts in [(320, 10240, 10240, (1, 3, 31, 32, 64)),
+                                           (10240, 324, 320, (1, 31, 32, 65)),
+                                           (2560, 512, 512, (3, 32, 257))]:
+            weight = torch.randn(rows, width, device='cuda', dtype=torch.bfloat16)
+            w0 = weight[:split].contiguous().view(torch.uint8).flatten()
+            w1 = weight[split:].contiguous().view(torch.uint8).flatten() if split < rows else None
+            for count in counts:
+                with self.subTest(width=width, rows=rows, count=count):
+                    x = torch.randn(count, width*2, device='cuda')[:, ::2]
+                    storage = torch.full((count, rows*2+4), 123., device='cuda')
+                    out = storage[:, 2:2+rows*2:2]
+                    bf16_gemv(w0, x, rows, packed1=w1, first_rows=split, out=out)
+                    reference = x @ weight.float().T
+                    error = torch.linalg.vector_norm(out-reference) / torch.linalg.vector_norm(reference)
+                    self.assertTrue(torch.isfinite(out).all())
+                    self.assertLess(error.item(), 3e-5)
+                    self.assertTrue(torch.all(storage[:, 3:2+rows*2:2] == 123.))
+                    graph = torch.cuda.CUDAGraph()
+                    with torch.cuda.graph(graph):
+                        bf16_gemv(w0, x, rows, packed1=w1, first_rows=split, out=out)
+                    x.mul_(.375)
+                    graph.replay()
+                    reference = x @ weight.float().T
+                    error = torch.linalg.vector_norm(out-reference) / torch.linalg.vector_norm(reference)
+                    self.assertLess(error.item(), 3e-5)
+
     def test_native_q8_graph_and_layout(self):
         from freetoken.kernel.gguf_native import quantize_q8_1, mmvq
         stream = torch.cuda.Stream()

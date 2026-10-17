@@ -69,7 +69,47 @@ def _bf16_rows(W0, W1, X, Y, N0: tl.constexpr, N: tl.constexpr, K: tl.constexpr,
     tl.store(Y + token * YS0 + row * YS1, tl.sum(acc, 0))
 
 
+@triton.jit
+def _bf16_row_tiles(W0, W1, X, Y, N0: tl.constexpr, N: tl.constexpr, K: tl.constexpr,
+                    XS0: tl.constexpr, XS1: tl.constexpr, YS0: tl.constexpr, YS1: tl.constexpr,
+                    BN: tl.constexpr, BK: tl.constexpr):
+    row = tl.program_id(0) * BN + tl.arange(0, BN)
+    token = tl.program_id(1)
+    cols = tl.arange(0, BK)
+    base = tl.where(row < N0, W0 + row * K, W1 + (row - N0) * K)
+    acc = tl.full((BN, BK), 0., tl.float32)
+    for first in range(triton.cdiv(K, BK)):
+        ks = first * BK + cols
+        weight = tl.load(base[:, None] + ks[None, :],
+                         (row[:, None] < N) & (ks[None, :] < K), 0).to(tl.float32)
+        value = tl.load(X + token * XS0 + ks * XS1, ks < K, 0)
+        acc += weight * value[None, :]
+    tl.store(Y + token * YS0 + row * YS1, tl.sum(acc, 1), row < N)
+
+
+@triton.jit
+def _bf16_batch(W0, W1, X, Y, N0: tl.constexpr, M: tl.constexpr, N: tl.constexpr, K: tl.constexpr,
+                XS0: tl.constexpr, XS1: tl.constexpr, YS0: tl.constexpr, YS1: tl.constexpr,
+                BM: tl.constexpr, BN: tl.constexpr, BK: tl.constexpr):
+    row = tl.program_id(0) * BM + tl.arange(0, BM)
+    col = tl.program_id(1) * BN + tl.arange(0, BN)
+    inner = tl.arange(0, BK)
+    base = tl.where(col < N0, W0 + col * K, W1 + (col - N0) * K)
+    acc = tl.zeros((BM, BN), tl.float32)
+    for first in range(triton.cdiv(K, BK)):
+        ks = first * BK + inner
+        value = tl.load(X + row[:, None] * XS0 + ks[None, :] * XS1,
+                        (row[:, None] < M) & (ks[None, :] < K), 0)
+        weight = tl.load(base[None, :] + ks[:, None],
+                         (col[None, :] < N) & (ks[:, None] < K), 0).to(tl.float32)
+        # FP32输入不转BF16；tf32x3使用三次乘积保留高精度，累加及输出仍为FP32。
+        acc += tl.dot(value, weight, input_precision='tf32x3')
+    tl.store(Y + row[:, None] * YS0 + col[None, :] * YS1, acc,
+             (row[:, None] < M) & (col[None, :] < N))
+
+
 def bf16_gemv(packed, x, rows, *, out=None, packed1=None, first_rows=None):
+    """按真实几何选择GEMV或批量权重复用，保留两段压缩源、FP32激活和任意有效stride。"""
     if x.ndim != 2 or x.dtype != torch.float32 or not x.is_cuda or rows <= 0:
         raise ValueError("BF16 GEMV requires a CUDA FP32 matrix and positive output width")
     if out is None:
@@ -87,6 +127,18 @@ def bf16_gemv(packed, x, rows, *, out=None, packed1=None, first_rows=None):
             or p1.dtype != torch.uint8 or p1.device != x.device or not p1.is_contiguous()
             or (n0 < rows and (packed1 is None or p1.numel() != (rows - n0) * x.shape[1] * 2))):
         raise ValueError("BF16 GEMV packed segment geometry differs")
-    _bf16_rows[(rows, len(x))](packed.view(torch.bfloat16), p1.view(torch.bfloat16), x, out,
-        n0, rows, x.shape[1], *x.stride(), *out.stride(), 256, num_warps=4, enable_fp_fusion=False)
+    width = x.shape[1]
+    w0, w1 = packed.view(torch.bfloat16), p1.view(torch.bfloat16)
+    if len(x) >= 32 and rows >= 256:
+        bm, bn = (32, 64) if width <= 512 else (16, 32)
+        _bf16_batch[(triton.cdiv(len(x), bm), triton.cdiv(rows, bn))](
+            w0, w1, x, out, n0, len(x), rows, width, *x.stride(), *out.stride(),
+            bm, bn, 32, num_warps=4)
+    elif width <= 512 and rows >= 1024:
+        _bf16_row_tiles[(triton.cdiv(rows, 8), len(x))](
+            w0, w1, x, out, n0, rows, width, *x.stride(), *out.stride(),
+            8, 256, num_warps=4, enable_fp_fusion=False)
+    else:
+        _bf16_rows[(rows, len(x))](w0, w1, x, out,
+            n0, rows, width, *x.stride(), *out.stride(), 256, num_warps=4, enable_fp_fusion=False)
     return out
