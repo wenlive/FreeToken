@@ -182,6 +182,8 @@ class MtpRuntime:
             req.mamba_next_track_idx = 1 - req.mamba_next_track_idx
 
     def forward(self, batch, manager, token_pool, eos_ids, clip, anchor_id):
+        if self.engine.prefill_workspace is not None:
+            self.engine.prefill_workspace.check_usable()
         from freetoken.engine.engine import ForwardOutput
         if self.engine.q2_adaptive_owners is not None:
             self.engine.q2_adaptive_owners.step()

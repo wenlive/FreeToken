@@ -344,6 +344,7 @@ class Engine:
         self.dtype = config.dtype
         self.config = config  # retained for runtime cache rebuild (rebuild_runtime_cache)
         self.mtp_runtime = None
+        self.prefill_workspace = None
         self.q2_adaptive_owners = None
         # KV pool family fixed at construction from the model config: its classmethods own the
         # page-token geometry and cost arithmetic the engine needs BEFORE the pool exists
@@ -945,6 +946,8 @@ class Engine:
         re-capture. Does NOT reload weights or host expert banks. The caller (scheduler) must
         guarantee no in-flight prefill/decode.
         """
+        if self.prefill_workspace is not None:
+            self.prefill_workspace.check_usable()
         config = self.config
         if (moe_cache_size is None and num_pages is None and num_mamba_slots is None
                 and num_swa_pages is None):
@@ -1112,6 +1115,8 @@ class Engine:
 
     def forward_batch(self, batch: Batch, args: BatchSamplingArgs) -> ForwardOutput:
         assert torch.cuda.current_stream() == self.stream
+        if self.prefill_workspace is not None:
+            self.prefill_workspace.check_usable()
         if batch.is_decode and self.q2_adaptive_owners is not None:
             self.q2_adaptive_owners.step()
         if batch.mm_gather_plan:
@@ -1119,7 +1124,15 @@ class Engine:
         native_state = self.mtp_runtime.before_native(batch) if self.mtp_runtime is not None else None
         use_graph = self.graph_runner.can_use_cuda_graph(batch)
         with self.ctx.forward_batch(batch), self.model.forward_host_ctx(batch, use_graph):
-            logits = self.graph_runner.replay(batch) if use_graph else self.model.forward()
+            if use_graph:
+                logits = self.graph_runner.replay(batch)
+            elif self.config.moe_q2_prefill_workspace and batch.is_prefill and len(batch.input_ids) >= 128:
+                if self.prefill_workspace is None:
+                    from freetoken.moe.prefill_workspace import PrefillWorkspace
+                    self.prefill_workspace = PrefillWorkspace(self.moe_offload_cache, self.device)
+                logits = self.prefill_workspace.forward(self.model.forward, batch)
+            else:
+                logits = self.model.forward()
         if self.cpu_moe_executor is not None:
             # One pinned read: surfaces a fired flag-handshake watchdog (dead coordinator
             # -> stale expert outputs) as a loud error instead of silent corruption.

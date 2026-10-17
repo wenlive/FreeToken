@@ -287,7 +287,7 @@ class ProtectedQ2Cache(OffloadMoeCache):
             self.decode_freq[layer_id].scatter_add_(0, expert_ids.view(-1).to(torch.int64),
                 torch.ones(n, dtype=torch.int64, device=self.device))
         # decode/稀疏残余prefill可借用两个空闲prefill缓冲，永久所有者不变。
-        begin, end = 0, p.protected_begin
+        begin, end = 0, 2 * self.num_experts if getattr(self, '_workspace_borrow_active', False) else p.protected_begin
         _ensure[(1,)](expert_ids, self.slot_for_id.view(-1), self.id_of_slot[begin:end],
                       self.usage[begin:end], self.step, self.src_indices, self.evict_slots,
                       self.num_indices, self.lru_stats[layer_id], layer_id * self.num_experts,

@@ -126,3 +126,77 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("driver_cuda_version", &driver_cuda_version,
         "Max CUDA version the installed NVIDIA driver supports (0 if none)");
 }
+
+// Scoped prefill allocation callbacks. Original expert banks remain caller-owned.
+// The four-argument free ABI is pinned to Torch 2.11 CUDAPluggableAllocator.
+#ifdef _WIN32
+#define FT_WORKSPACE_EXPORT __declspec(dllexport)
+#else
+#define FT_WORKSPACE_EXPORT __attribute__((visibility("default")))
+#endif
+#include <cuda_runtime_api.h>
+#include <cstdint>
+#include <mutex>
+#include <unordered_map>
+#include <array>
+
+namespace {
+struct Region {uintptr_t begin=0;size_t bytes=0,offset=0;};
+std::mutex mutex;
+Region regions[2];
+std::unordered_map<void*,size_t> loans,fallbacks;
+std::array<uint64_t,9> stats{};
+}
+
+extern "C" FT_WORKSPACE_EXPORT int freetoken_workspace_setup(void* p0,size_t n0,void* p1,size_t n1) {
+    std::lock_guard lock(mutex);
+    if(!loans.empty()||!fallbacks.empty())return 1;
+    if((reinterpret_cast<uintptr_t>(p0)&511u)||(reinterpret_cast<uintptr_t>(p1)&511u))return 2;
+    regions[0]={reinterpret_cast<uintptr_t>(p0),n0,0};
+    regions[1]={reinterpret_cast<uintptr_t>(p1),n1,0};
+    stats.fill(0);
+    return 0;
+}
+
+extern "C" FT_WORKSPACE_EXPORT void* freetoken_workspace_alloc(size_t bytes,int device,cudaStream_t stream) {
+    std::lock_guard lock(mutex);
+    ++stats[0];
+    for(auto& region:regions) {
+        const size_t start=(region.offset+511)&~size_t(511);
+        if(region.begin&&start<=region.bytes&&bytes<=region.bytes-start) {
+            auto ptr=reinterpret_cast<void*>(region.begin+start);
+            region.offset=start+bytes;
+            loans.emplace(ptr,bytes);
+            stats[1]+=bytes;stats[2]+=bytes;
+            if(stats[2]>stats[3])stats[3]=stats[2];
+            return ptr;
+        }
+    }
+    void* pointer=nullptr;
+    if(cudaSetDevice(device)!=cudaSuccess||cudaMalloc(&pointer,bytes)!=cudaSuccess)return nullptr;
+    fallbacks.emplace(pointer,bytes);stats[4]+=bytes;stats[5]+=bytes;
+    return pointer;
+}
+
+extern "C" FT_WORKSPACE_EXPORT void freetoken_workspace_free(void* pointer,size_t bytes,int device,cudaStream_t stream) {
+    std::lock_guard lock(mutex);
+    ++stats[6];
+    if(auto it=loans.find(pointer);it!=loans.end()) {
+        stats[2]-=it->second;loans.erase(it);return;
+    }
+    if(auto it=fallbacks.find(pointer);it!=fallbacks.end()) {
+        stats[5]-=it->second;fallbacks.erase(it);
+        if(cudaSetDevice(device)!=cudaSuccess||cudaFree(pointer)!=cudaSuccess)++stats[7];
+        return;
+    }
+    // Never free an unknown pointer, especially a caller-owned bank segment.
+    ++stats[7];
+}
+
+extern "C" FT_WORKSPACE_EXPORT uint64_t freetoken_workspace_stat(int index) {
+    std::lock_guard lock(mutex);
+    if(index==8)return loans.size()+fallbacks.size();
+    return index>=0&&index<8?stats[index]:uint64_t(-1);
+}
+
+#undef FT_WORKSPACE_EXPORT
