@@ -26,10 +26,10 @@ class MtpDrafter:
         self.metadata = {}
         for row in manifest['tensors']:
             path = runtime / row['path']
-            with path.open('rb') as f:
-                if hashlib.file_digest(f, 'sha256').hexdigest() != row['sha256']:
-                    raise ValueError('MTP runtime bytes changed: ' + row['name'])
             raw = bytearray(path.read_bytes())
+            # Hash the buffer that becomes the tensor. A second file read could load different bytes.
+            if hashlib.sha256(raw).hexdigest() != row['sha256']:
+                raise ValueError('MTP runtime bytes changed: ' + row['name'])
             dtype = torch.float32 if row['type_id'] == 0 else torch.uint8
             weight = torch.frombuffer(raw, dtype=dtype).to(self.device)
             if row['type_id'] == 0:
