@@ -48,6 +48,8 @@ class EngineConfig:
     moe_q2_dynamic_slots: int = 1024
     # 仅永久Q2所有者缓存：将缺失专家搬运与共享专家计算重叠。
     moe_q2_decode_overlap: bool = True
+    # Online owner exchange is opt-in; zero retains the frozen initial residency.
+    moe_q2_adapt_every: int = 0
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
     kv_reserve_tokens: int = 8192  # KV floor for --moe-cache-auto; small by design (MoE-priority)
@@ -110,6 +112,8 @@ class EngineConfig:
     def __post_init__(self):
         if self.linear_state_cache_slots is not None and self.linear_state_cache_slots < 0:
             raise ValueError('Linear snapshot cache slots cannot be negative')
+        if self.moe_q2_adapt_every < 0 or (self.moe_q2_adapt_every and not self.moe_q2_resident_experts):
+            raise ValueError('Online Q2 adaptation requires protected owners and a nonnegative interval')
         if self.mtp_compact_state and self.mtp_runtime_path is None:
             raise ValueError('Compact transaction state requires MTP weights')
         if self.mtp_runtime_path is not None:

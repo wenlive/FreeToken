@@ -1,8 +1,9 @@
 """Compressed Q2 experts with disjoint protected, dynamic and prefill regions.
 
-Owners are permanent GPU rows or compact pinned host rows. Dynamic cache entries
+Owners are GPU rows or compact pinned host rows. Dynamic cache entries
 are disposable copies. Keeping those roles separate prevents a GPU-only owner
 from being evicted or overwritten by prefill, including across graph replay.
+Opt-in online exchange changes the owner set only after all users drain.
 """
 from __future__ import annotations
 
@@ -39,7 +40,7 @@ class Q2Ownership:
 
 
 def protected_ranking(layers, experts, count):
-    """Use the frozen Strata ranking, never routes from evaluation requests."""
+    """Use the frozen initial ranking; online adaptation may later observe completed routes only."""
     path = Path(__file__).parent / 'configs/q2_residency/strata_flash_next.json'
     raw = path.read_bytes()
     if hashlib.sha256(raw.replace(b'\r\n', b'\n')).hexdigest() != '171adfd563ddf441deb908fd9432b2411bed435ce3e640c54168aae2d88bbfd5':
@@ -210,11 +211,20 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
 
 
 class ProtectedQ2Cache(OffloadMoeCache):
-    def __init__(self, *args, ownership: Q2Ownership, decode_overlap=True, **kwargs):
+    def __init__(self, *args, ownership: Q2Ownership, decode_overlap=True, adapt_every=0, **kwargs):
         """单独持有decode copy流；prefill和decode不共享事件或借用缓冲协议。"""
         self.protected_payload = ownership
+        self.adapt_every = adapt_every
         super().__init__(*args, **kwargs)
+        self.collect_decode_freq = bool(adapt_every)
         self.decode_copy_stream = torch.cuda.Stream(device=self.device) if decode_overlap else None
+
+    def start_adaptation(self):
+        """Drop capture warmup counts and bind current owner tables after all graphs are ready."""
+        if not self.adapt_every:
+            return None
+        from .q2_adaptive import AdaptiveQ2Owners
+        return AdaptiveQ2Owners(self, every=self.adapt_every)
 
     def set_bank_sources(self, sources, layer_residency=None):
         from freetoken.kernel.pinned import device_ptr

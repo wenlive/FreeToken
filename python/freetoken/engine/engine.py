@@ -344,6 +344,7 @@ class Engine:
         self.dtype = config.dtype
         self.config = config  # retained for runtime cache rebuild (rebuild_runtime_cache)
         self.mtp_runtime = None
+        self.q2_adaptive_owners = None
         # KV pool family fixed at construction from the model config: its classmethods own the
         # page-token geometry and cost arithmetic the engine needs BEFORE the pool exists
         # (num_pages sizing, --moe-cache-auto); the instance owns rebuild/validation after.
@@ -509,6 +510,8 @@ class Engine:
         if config.mtp_runtime_path is not None:
             from freetoken.models.qwen4_exp.mtp_runtime import MtpRuntime
             self.mtp_runtime = MtpRuntime(self, self.model._mtp_drafter)
+        if config.moe_q2_adapt_every:
+            self.q2_adaptive_owners = self.moe_offload_cache.start_adaptation()
 
     def _init_communication(self, config: EngineConfig) -> torch.distributed.ProcessGroup:
         if config.tp_info.size == 1 or config.use_pynccl:
@@ -756,7 +759,8 @@ class Engine:
             max_slots = method.slot_limit()
         cache_type = ProtectedQ2Cache if ownership is not None else OffloadMoeCache
         cache = cache_type(
-            **({'ownership': ownership, 'decode_overlap': config.moe_q2_decode_overlap}
+            **({'ownership': ownership, 'decode_overlap': config.moe_q2_decode_overlap,
+                'adapt_every': config.moe_q2_adapt_every}
                if ownership is not None else {}),
             # Models with leading dense layers (GLM-4) only have experts on the MoE
             # layers; num_moe_layers == num_layers when first_k_dense_replace == 0.
@@ -1097,9 +1101,13 @@ class Engine:
 
         if self.mtp_runtime is not None:
             self.mtp_runtime.prepare_graphs()
+        if self.config.moe_q2_adapt_every:
+            self.q2_adaptive_owners = self.moe_offload_cache.start_adaptation()
 
     def forward_batch(self, batch: Batch, args: BatchSamplingArgs) -> ForwardOutput:
         assert torch.cuda.current_stream() == self.stream
+        if batch.is_decode and self.q2_adaptive_owners is not None:
+            self.q2_adaptive_owners.step()
         if batch.mm_gather_plan:
             self._run_mm_encoder(batch)
         native_state = self.mtp_runtime.before_native(batch) if self.mtp_runtime is not None else None

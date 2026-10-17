@@ -183,6 +183,8 @@ class MtpRuntime:
 
     def forward(self, batch, manager, token_pool, eos_ids, clip, anchor_id):
         from freetoken.engine.engine import ForwardOutput
+        if self.engine.q2_adaptive_owners is not None:
+            self.engine.q2_adaptive_owners.step()
         req = batch.reqs[0]
         self._ensure_owner(req)
         position = req.cached_len
