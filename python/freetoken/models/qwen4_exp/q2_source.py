@@ -4,53 +4,20 @@ from __future__ import annotations
 import math
 from pathlib import Path
 import re
-import struct
 
 import torch
+
+from freetoken.checkpoint.gguf_reader import (
+    read_exact as _read,
+    unpack as _unpack,
+    read_string as _string,
+    read_value as _value,
+)
+
 
 GGML_GSQ_Q2_0 = 42
 Q2_BLOCK_ELEMENTS = 64
 Q2_BLOCK_BYTES = 18
-_FORMATS = {0: "B", 1: "b", 2: "H", 3: "h", 4: "I", 5: "i", 6: "f", 7: "?", 10: "Q", 11: "q", 12: "d"}
-
-
-def _read(stream, count):
-    data = stream.read(count)
-    if len(data) != count:
-        raise ValueError("truncated GGUF expert source")
-    return data
-
-
-def _unpack(stream, fmt):
-    return struct.unpack("<" + fmt, _read(stream, struct.calcsize("<" + fmt)))
-
-
-def _string(stream):
-    size, = _unpack(stream, "Q")
-    if size > 16 << 20:
-        raise ValueError("oversized GGUF string")
-    return _read(stream, size).decode("utf-8")
-
-
-def _value(stream, kind=None, *, keep=True):
-    if kind is None:
-        kind, = _unpack(stream, "I")
-    if kind == 8:
-        return _string(stream)
-    if kind == 9:
-        elem, count = _unpack(stream, "IQ")
-        if count > 10_000_000:
-            raise ValueError("oversized GGUF metadata array")
-        if not keep and elem in _FORMATS:
-            stream.seek(count * struct.calcsize("<" + _FORMATS[elem]), 1)
-            return None
-        values = [_value(stream, elem, keep=keep) for _ in range(count)]
-        return values if keep else None
-    if kind not in _FORMATS:
-        raise ValueError(f"unsupported GGUF metadata type {kind}")
-    return _unpack(stream, _FORMATS[kind])[0]
-
-
 def read_q2_directory(path: Path, *, layers, experts, hidden, intermediate):
     """按调用方模型几何校验完整专家目录，不把某个发布文件当作格式定义。"""
     if (layers <= 0 or experts <= 0 or hidden <= 0 or intermediate <= 0

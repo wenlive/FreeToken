@@ -308,10 +308,6 @@ class ProtectedQ2Cache(OffloadMoeCache):
         self._pending_src_layer = layer_id
         self._pending_whole_layer = True
 
-    def _invalidate_prefill_buffer(self, buffer_id):
-        # 覆盖prefill缓冲前撤销借用副本映射；只清理这两个可丢弃区域。
-        super()._invalidate_prefill_buffer(buffer_id)
-
     def prefetch_prefill_layer(self, layer_id):
         if not self.prefill_overlap or layer_id >= self.num_layers:
             return

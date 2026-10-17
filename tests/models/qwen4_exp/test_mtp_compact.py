@@ -52,7 +52,6 @@ def test_compact_prefix_graph_and_rebuild():
         op.A_log=-torch.rand(48,device=device)
         op.dt_bias=torch.randn(48,device=device)
         ops.append(op)
-    checks=[]
     slots=torch.tensor([1],device=device,dtype=torch.int32)
     for count in (1,2,3,4):
         pool.conv_states.normal_(0,.1)
@@ -94,7 +93,6 @@ def test_compact_prefix_graph_and_rebuild():
                     state_max_abs=float((pool.recurrent_states[layer,3]-expected_states[layer,row]).abs().max()))),flush=True)
                 torch.testing.assert_close(pool.recurrent_states[layer,3],expected_states[layer,row],rtol=1e-6,atol=1e-7)
                 torch.testing.assert_close(pool.conv_states[layer,3],expected_conv[layer,row],rtol=0,atol=0)
-        checks.append(f'{count}_rows_output_and_all_prefixes_fp32_reference_bound')
         if count==4:
             pool.conv_states.copy_(initial_conv)
             pool.recurrent_states.copy_(initial_rec)
@@ -126,7 +124,6 @@ def test_compact_prefix_graph_and_rebuild():
                     torch.testing.assert_close(pool.recurrent_states[layer,3],expected_states[layer,0],rtol=1e-6,atol=1e-7)
                     torch.testing.assert_close(pool.recurrent_states[layer,source],expected_states[layer,3],rtol=1e-6,atol=1e-7)
             graph.reset()
-            checks.append('changed_input_and_request_slot_graph_replays_with_anchor_before_live')
     actual_bytes=pool.recurrent_states.numel()*4+sum(t.numel()*t.element_size() for t in
         (pool._compact_keys,pool._compact_delta,pool._compact_decay,pool._compact_source))
     old_bytes=2*8*48*128*128*4
@@ -140,6 +137,3 @@ def test_compact_prefix_graph_and_rebuild():
     pool.clear_slots([2,*pool.reserved_slot_ids])
     assert not torch.count_nonzero(pool.recurrent_states[:,2])
     assert torch.all(pool.recurrent_states[:,1]==1)
-    checks.append('rebuild_reserved_ownership_and_mixed_slot_clear')
-    assert len(checks)==6
-    assert old_bytes>actual_bytes

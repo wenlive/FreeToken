@@ -43,7 +43,7 @@ class GGUFExecutionConsistencyTests(unittest.TestCase):
         from unittest.mock import patch
         from freetoken.models.qwen4_exp.gguf_weight import GGUFEmbedding
         from freetoken.models.qwen4_exp.model import Qwen4ExpForCausalLM
-        for target in ('freetoken.kernel.pinned.alloc_pinned_tensor',
+        for target in ('freetoken.models.qwen4_exp.gguf_weight.alloc_pinned_tensor',
                        'freetoken.kernel.pinned.MappedHostBytes.cuda_view'):
             with self.subTest(failure=target):
                 embedding = GGUFEmbedding(SimpleNamespace(shape=(256, 2), nbytes=220, type_id=11))

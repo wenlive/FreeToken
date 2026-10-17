@@ -6,6 +6,7 @@ from types import SimpleNamespace
 import pytest
 
 from freetoken.models.qwen4_exp.q2_source import iter_q2_expert_pieces, read_q2_directory
+from freetoken.models.qwen4_exp.gguf_source import GGUFShard
 
 
 def _string(value):
@@ -54,6 +55,20 @@ def test_all_experts_stream_with_model_geometry_and_alternate_identity(tmp_path)
         for role, tensor in pieces.items():
             for index, expert in enumerate(range(start, end)):
                 assert tensor[index].numpy().tobytes() == expected[layer, role, expert]
+
+
+def test_complete_and_expert_readers_agree_on_original_tensor_bytes(tmp_path):
+    """Both paths must read the same physical rows, including every role and expert."""
+    path = tmp_path / 'small.gguf'
+    _, expected = _source(path)
+    complete = GGUFShard(path)
+    expert = read_q2_directory(path, layers=2, experts=3, hidden=64, intermediate=128)
+    for (layer, role), (start, size) in expert.items():
+        tensor = complete.tensors[f'blk.{layer}.ffn_{role}_exps.weight']
+        assert (tensor.start, tensor.nbytes) == (start, size)
+        rows = tensor.shape[1]
+        for index in range(3):
+            assert tensor.read_rows(index * rows, rows) == expected[layer, role, index]
 
 
 @pytest.mark.parametrize('change,match', [('kind', 'incompatible'), ('overlap', 'overlapping'),

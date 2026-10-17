@@ -11,6 +11,7 @@ import torch
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch
 from .mtp_draft_graph import DraftGraphs
+from .mtp_draft_policy import PairedPolicy
 from .mtp_state import MTP_LAST_RESIDUAL
 
 
@@ -194,30 +195,34 @@ class MtpRuntime:
             req.mamba_last_track_seqlen = anchor
             req.mamba_next_track_idx = 1 - req.mamba_next_track_idx
 
+    def _draft_action(self, req, depth, started):
+        """Observe a completed cycle only when capacity allowed the chosen action in full."""
+        if started is None:
+            return 'full-3', depth
+        if self._policy_req is not req:
+            self._policy_req = req
+            self.draft_policy = PairedPolicy()
+            self._policy_previous = None
+        if self._policy_previous is not None:
+            stamp, previous_position, arm, actual, accepted = self._policy_previous
+            if previous_position == req.cached_len and actual == int(arm[-1]):
+                self.draft_policy.observe(arm, accepted, started - stamp)
+        action = self.draft_policy.choose()
+        return action, min(depth, int(action[-1]))
+
     def forward(self, batch, manager, token_pool, eos_ids, clip, anchor_id):
+        """Verify a private draft, commit the accepted state, then publish its token bundle."""
         if self.engine.prefill_workspace is not None:
             self.engine.prefill_workspace.check_usable()
         started = time.perf_counter() if self.draft.draft_policy == 'paired_cjk' else None
+        # Engine imports this optional runtime when it constructs MTP graphs.
         from freetoken.engine.engine import ForwardOutput
         if self.engine.q2_adaptive_owners is not None:
             self.engine.q2_adaptive_owners.step()
         req = batch.reqs[0]
         self._ensure_owner(req)
         position = req.cached_len
-        depth = window_depth(req, manager, self.draft.max_context)
-        action = 'full-3'
-        if started is not None:
-            from .mtp_draft_policy import PairedPolicy
-            if self._policy_req is not req:
-                self._policy_req = req
-                self.draft_policy = PairedPolicy()
-                self._policy_previous = None
-            if self._policy_previous is not None:
-                stamp, previous_position, arm, actual, accepted = self._policy_previous
-                if previous_position == req.cached_len and actual == int(arm[-1]):
-                    self.draft_policy.observe(arm, accepted, started - stamp)
-            action = self.draft_policy.choose()
-            depth = min(depth, int(action[-1]))
+        action, depth = self._draft_action(req, window_depth(req, manager, self.draft.max_context), started)
         manager.allocate_paged([req], reserve_tokens=depth)
         pending = int(batch.input_ids[0].item())
         residual = self.pool.slot_state(MTP_LAST_RESIDUAL)[req.linear_slot_idx:req.linear_slot_idx + 1]
@@ -238,9 +243,7 @@ class MtpRuntime:
         if self.pool.compact_mtp:
             # The compact transaction still reads live as its base: freeze an anchor before advancing live.
             self._freeze_anchor(req, position, committed, delivered, limit, anchor_id)
-            self.pool.copy_from(self.pool.reserved_slot_ids[committed - 1], req.linear_slot_idx)
-            self.engine.kv_cache._pending_ring[req.table_idx].copy_(self.rings[committed - 1])
-        elif committed < len(inputs):
+        if self.pool.compact_mtp or committed < len(inputs):
             self.pool.copy_from(self.pool.reserved_slot_ids[committed - 1], req.linear_slot_idx)
             self.engine.kv_cache._pending_ring[req.table_idx].copy_(self.rings[committed - 1])
         if not self.pool.compact_mtp:

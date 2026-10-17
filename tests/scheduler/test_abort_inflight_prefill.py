@@ -19,6 +19,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import torch
+import pytest
 
 from freetoken.core import Batch, Req, SamplingParams
 from freetoken.kvcache.linear_state_pool import LinearStatePool
@@ -251,4 +252,51 @@ def test_post_terminal_overlap_step_is_dropped():
     Scheduler._process_last_data(stub, _as_last_data(Batch(reqs=[req], phase="decode")))
     assert [m for m in sent if isinstance(m, DetokenizeMsg)] == terminal  # no 2nd msg
     assert req.output_len == output_len_before                           # no append
+    cm.check_integrity()
+
+
+@pytest.mark.parametrize('history,bundle,stop,ignore_eos,count,reason', [
+    ([0], [1, 2, 2], ['stop'], False, 1, 'stop'),
+    ([2], [4, 2, 2], [], False, 1, 'stop'),
+    ([2], [4, 2, 2], [], True, 3, 'length'),
+    ([2, 2], [2, 2, 2], [], False, 2, 'length'),
+])
+def test_verified_bundle_uses_native_stop_eos_and_length_boundaries(
+    history, bundle, stop, ignore_eos, count, reason,
+):
+    """Drive the real CPU cache lifecycle and tokenizer through clipping and scheduler delivery."""
+    from tokenizers import Tokenizer, decoders, models
+    from freetoken.message import DetokenizeMsg
+
+    pool, cm, tm, dm, _, sent, scheduler = _setup()
+    tokenizer = Tokenizer(models.WordLevel({'st': 0, 'op': 1, 'x': 2, 'prompt': 3, '<eos>': 4}))
+    tokenizer.decoder = decoders.Fuse()
+    scheduler.tokenizer = tokenizer
+    scheduler.eos_token_ids = {4}
+    scheduler._match_stop_str = lambda req: Scheduler._match_stop_str(scheduler, req)
+    # The prompt itself contains a stop string; it must not terminate generated text.
+    req = _launch_req(pool, cm, tm, torch.tensor([0, 1, 3], dtype=torch.int32))
+    req.sampling_params.stop_strs = stop
+    req.sampling_params.ignore_eos = ignore_eos
+    req.append_host(torch.tensor(history[:1], dtype=torch.int32))
+    for token in history[1:]:
+        cm.allocate_paged([req])
+        req.complete_one()
+        req.append_host(torch.tensor([token], dtype=torch.int32))
+    before = req.input_ids.clone()
+    limit = Scheduler._mtp_delivery_limit(scheduler, req, bundle)
+    assert limit.count == count and limit.finished
+    assert torch.equal(req.input_ids, before)
+    batch = Batch([req], 'decode')
+    batch.mtp_token_ids = torch.tensor(bundle[:limit.count], dtype=torch.int32)
+    cm.allocate_paged([req], reserve_tokens=count)
+    # The runtime has committed the accepted rows before the scheduler drains them.
+    req.cached_len = len(req.input_ids) + count - 1
+    req.device_len = len(req.input_ids) + count
+    dm.filter_reqs([req])
+    Scheduler._process_last_data(scheduler, _as_last_data(batch))
+    replies = [message for message in sent if isinstance(message, DetokenizeMsg)]
+    assert [message.next_token for message in replies] == bundle[:count]
+    assert replies[-1].finished and replies[-1].finish_reason == reason
+    assert req.table_idx == -1 and req.mamba_ping_pong is None
     cm.check_integrity()

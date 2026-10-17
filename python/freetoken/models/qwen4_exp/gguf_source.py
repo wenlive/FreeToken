@@ -9,58 +9,15 @@ from dataclasses import dataclass
 import math
 from pathlib import Path
 import re
-import struct
 
 
-# 只接受当前 GSQ 模型实际使用且计算层有明确布局的类型。
-GGUF_TYPES = {
-    0: ("F32", 1, 4), 1: ("F16", 1, 2), 2: ("Q4_0", 32, 18),
-    6: ("Q5_0", 32, 22), 8: ("Q8_0", 32, 34),
-    11: ("Q3_K", 256, 110), 12: ("Q4_K", 256, 144),
-    13: ("Q5_K", 256, 176), 14: ("Q6_K", 256, 210),
-    20: ("IQ4_NL", 32, 18), 23: ("IQ4_XS", 256, 136),
-    30: ("BF16", 1, 2), 42: ("Q2_0", 64, 18),
-}
-_SCALARS = {0: "B", 1: "b", 2: "H", 3: "h", 4: "I", 5: "i",
-            6: "f", 7: "?", 10: "Q", 11: "q", 12: "d"}
-
-
-def _read(stream, count):
-    data = stream.read(count)
-    if len(data) != count:
-        raise ValueError("truncated GGUF")
-    return data
-
-
-def _unpack(stream, fmt):
-    return struct.unpack("<" + fmt, _read(stream, struct.calcsize("<" + fmt)))
-
-
-def _string(stream):
-    size, = _unpack(stream, "Q")
-    if size > 16 << 20:
-        raise ValueError("oversized GGUF string")
-    return _read(stream, size).decode("utf-8")
-
-
-def _value(stream, kind=None, *, keep=True):
-    if kind is None:
-        kind, = _unpack(stream, "I")
-    if kind == 8:
-        value = _string(stream)
-        return value if keep else None
-    if kind == 9:
-        elem, count = _unpack(stream, "IQ")
-        if count > 10_000_000:
-            raise ValueError("oversized GGUF metadata array")
-        if not keep and elem in _SCALARS:
-            stream.seek(count * struct.calcsize("<" + _SCALARS[elem]), 1)
-            return None
-        values = [_value(stream, elem, keep=keep) for _ in range(count)]
-        return values if keep else None
-    if kind not in _SCALARS:
-        raise ValueError(f"unsupported GGUF metadata type {kind}")
-    return _unpack(stream, _SCALARS[kind])[0]
+from freetoken.checkpoint.gguf_reader import (
+    GGUF_TYPES,
+    read_exact as _read,
+    unpack as _unpack,
+    read_string as _string,
+    read_value as _value,
+)
 
 
 @dataclass(frozen=True)
@@ -135,7 +92,7 @@ class GGUFShard:
             if any(d <= 0 for d in shape) or shape[0] % GGUF_TYPES[kind][1]:
                 raise ValueError(f"{name}: incompatible GGUF block geometry {shape}")
             tensor = GGUFTensor(self.path, name, shape, kind, self.data_start + offset)
-            if offset % alignment or offset < 0 or tensor.start + tensor.nbytes > source_size:
+            if offset % alignment or tensor.start + tensor.nbytes > source_size:
                 raise ValueError(f"{name}: out-of-bounds or misaligned GGUF tensor")
             self.tensors[name] = tensor
             spans.append((tensor.start, tensor.start + tensor.nbytes))

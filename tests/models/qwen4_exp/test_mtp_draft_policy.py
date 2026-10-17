@@ -18,6 +18,31 @@ def test_paired_policy_handles_common_cost_drift(winner):
     assert policy.preferred==(winner or 'full-3')
 
 
+def test_exploitation_outliers_do_not_contaminate_the_paired_estimate():
+    """A slow exploitation interval must not make the other arm win without paired evidence."""
+    policy = PairedPolicy()
+    for _ in range(320):
+        arm = policy.choose()
+        tokens = int(arm[-1])
+        # Full wins every local pair. Only its later exploitation samples stall.
+        speed = (120 if arm == 'full-3' else 100) if policy.record_pair else 1
+        policy.observe(arm, tokens - 1, tokens / speed)
+    assert policy.preferred == 'full-3'
+    assert policy.snapshot()['rolling_cycle_tps']['full-3'] < 100
+    assert all(ratio < 1 for ratio in policy.snapshot()['paired_rate_ratios'])
+
+
+def test_periodic_probe_can_recover_after_the_winner_changes():
+    """The controller must resume balanced measurements after a long exploitation interval."""
+    policy = PairedPolicy()
+    for winner in ('full-3', 'cjk-2', 'full-3'):
+        for _ in range(640):
+            arm = policy.choose()
+            tokens = int(arm[-1])
+            policy.observe(arm, tokens - 1, tokens / (140 if arm == winner else 100))
+        assert policy.preferred == winner
+
+
 def test_vocab_rows_are_bounded_unique_and_keep_argmax_tie_order():
     ids=vocab.load('cpu')
     assert ids.dtype==torch.int64 and len(ids)==106299

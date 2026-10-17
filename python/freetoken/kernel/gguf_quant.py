@@ -7,6 +7,8 @@ import torch
 import triton
 import triton.language as tl
 
+from freetoken.checkpoint.gguf_reader import GGUF_TYPES
+from .gguf_native import NATIVE_TYPES, bf16_gemv, mmvq, quantize_q8_1
 
 @triton.jit
 def _u16(P, offset, mask):
@@ -201,7 +203,6 @@ def _affine_sum_correction(P, ORIGINAL, QUANTIZED, OUT, K: tl.constexpr, N: tl.c
 
 
 def _geometry(type_id):
-    from freetoken.models.qwen4_exp.gguf_source import GGUF_TYPES
     _, block, size = GGUF_TYPES[type_id]
     return block, size
 
@@ -285,7 +286,6 @@ def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None
     """压缩权重直接参与 FP32 GEMV；BF16/F16/F32 权重保留 FP32 激活。"""
     block, size = _geometry(type_id)
     width = x.shape[-1]
-    from .gguf_native import NATIVE_TYPES, bf16_gemv, mmvq, quantize_q8_1
     if type_id == 30:
         return bf16_gemv(packed, x, rows, out=out)
     if type_id in NATIVE_TYPES and (quantize_input or native_q8 is not None):

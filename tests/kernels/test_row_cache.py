@@ -12,7 +12,6 @@ def test_cached_rows_preserve_payloads_and_storage_boundaries(cols):
     rows=257
     torch.manual_seed(613)
     original=torch.randint(0,256,(rows,cols),dtype=torch.uint8)
-    results=[]
     with tempfile.TemporaryDirectory(prefix='ple-row-cache-') as folder:
         path=Path(folder)/'rows.bin'
         path.write_bytes(bytes(original.flatten().tolist())+bytes(8192))
@@ -44,7 +43,6 @@ def test_cached_rows_preserve_payloads_and_storage_boundaries(cols):
             assert current['row_cache_capacity']==capacity
             if capacity==0:assert current['read_requests_completed']>baseline['read_requests_completed']
             else:assert current['read_requests_completed']==baseline['read_requests_completed']
-            results.append(dict(capacity=capacity,stats=current))
         index=torch.tensor([2],dtype=torch.int64);out=torch.empty((1,cols),dtype=torch.uint8)
         store.stage_rows(index.data_ptr(),1,out.data_ptr())
         try:store.set_row_cache(8)

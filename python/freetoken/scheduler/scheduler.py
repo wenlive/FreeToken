@@ -449,17 +449,10 @@ class Scheduler(SchedulerIOMixin):
         """First stop string present in this request's generated tail, else None. Decodes
         only a short suffix (bounded by the longest stop string's char length, so a stop of
         N chars spans at most N tokens) to keep the per-step cost small."""
-        stop_strs = req.sampling_params.stop_strs
         prompt_len = req.max_device_len - req.output_len
-        if len(req.input_ids) <= prompt_len:
-            return None
-        max_chars = max(len(s) for s in stop_strs)
-        tail_start = max(prompt_len, len(req.input_ids) - (max_chars + 1))
-        tail = self.tokenizer.decode(req.input_ids[tail_start:].tolist())
-        for s in stop_strs:
-            if s in tail:
-                return s
-        return None
+        return _match_stop_tail(self.tokenizer, req.sampling_params.stop_strs,
+                                req.input_ids, prompt_len)
+
 
     def _kv_usage_pages(self) -> Tuple[int, int]:
         """(used_pages, total_pages) of the KV page pool.
@@ -943,12 +936,23 @@ class Scheduler(SchedulerIOMixin):
             hit_length = len(history) >= req.max_device_len
             hit_stop = False
             if not hit_eos and req.sampling_params.stop_strs:
-                max_chars = max(len(s) for s in req.sampling_params.stop_strs)
-                tail = self.tokenizer.decode(history[max(prompt_len, len(history) - max_chars - 1):])
-                hit_stop = any(s in tail for s in req.sampling_params.stop_strs)
+                hit_stop = _match_stop_tail(self.tokenizer, req.sampling_params.stop_strs,
+                                            history, prompt_len) is not None
             if hit_eos or hit_length or hit_stop:
                 return DeliveryLimit(i + 1, True)
         return DeliveryLimit(len(tokens), False)
+
+
+def _match_stop_tail(tokenizer, stop_strs, history, prompt_len):
+    """Use the same output-only suffix for native tokens and speculative bundles."""
+    if len(history) <= prompt_len:
+        return None
+    max_chars = max(len(value) for value in stop_strs)
+    suffix = history[max(prompt_len, len(history) - max_chars - 1):]
+    if isinstance(suffix, torch.Tensor):
+        suffix = suffix.tolist()
+    tail = tokenizer.decode(suffix)
+    return next((value for value in stop_strs if value in tail), None)
 
 
 def _make_mrope_positions(batch: Batch, device: torch.device) -> torch.Tensor:

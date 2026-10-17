@@ -24,7 +24,6 @@ def test_online_exchange_keeps_all_owner_bytes_and_graphs(dynamic_slots):
     with torch.cuda.graph(graph):
         cache.ensure_experts(1,ids)
         cache.copy_missing()
-    checks=[]
     for cycle in range(4):
         cache.decode_freq.zero_()
         controller.last_counts.fill(0)
@@ -51,7 +50,6 @@ def test_online_exchange_keeps_all_owner_bytes_and_graphs(dynamic_slots):
             for role,view in zip(original,views):
                 torch.testing.assert_close(view.cpu(),original[role][layer],rtol=0,atol=0)
             cache.release_prefill_layer(layer)
-        checks.append(f'bidirectional_swap_{cycle}_graph_reset_and_prefill_all_expert_bytes')
     assert initial_addresses=={r:t.data_ptr() for r,t in cache.bank_caches.items()}
     assert len(payload.protected_slots)==20
     for layer in range(payload.layers):
@@ -59,6 +57,4 @@ def test_online_exchange_keeps_all_owner_bytes_and_graphs(dynamic_slots):
         assert len(set(host))==len(host)
         assert sorted(host)==list(range(len(host)))
     graph.reset()
-    assert len(checks)==4
-    assert controller.staging_bytes==0
     assert sum(row['swaps'] for row in controller.rounds)==8

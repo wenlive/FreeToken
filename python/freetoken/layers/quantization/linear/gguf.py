@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 import torch
 
+from freetoken.kernel.gguf_quant import compressed_linear
+from freetoken.kernel.gguf_native import NATIVE_TYPES, bf16_gemv, quantize_q8_1
 from .base import LinearConfig, LinearKernel, LinearMethod
 
 
@@ -16,8 +18,6 @@ class GGUFLinearKernel(LinearKernel):
 
     def apply(self, layer, x):
         """同一输入只量化一次，各投影段写入对应切片，HC 对齐尾部显式填零。"""
-        from freetoken.kernel.gguf_quant import compressed_linear
-        from freetoken.kernel.gguf_native import NATIVE_TYPES, bf16_gemv, quantize_q8_1
         cfg = layer.quant_method.cfg
         output = torch.empty((x.shape[0], cfg.out_features), device=x.device, dtype=torch.float32)
         quantized = None

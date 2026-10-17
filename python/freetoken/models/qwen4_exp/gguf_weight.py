@@ -1,6 +1,9 @@
 """完整 GGUF 与 FreeToken state_dict 的加载接口；专家和 PLE 保持独立 bank。"""
 import torch
 from freetoken.layers.base import BaseOP
+from freetoken.kernel.gguf_quant import dequantize_rows, gguf_gemma_rmsnorm
+from freetoken.kernel.pinned import MappedHostBytes, alloc_pinned_tensor
+from freetoken.layers.norm import GemmaPlusOneRMSNorm
 
 
 class GGUFEmbedding(BaseOP):
@@ -12,12 +15,10 @@ class GGUFEmbedding(BaseOP):
         self.packed_0 = torch.empty(tensor.nbytes, dtype=torch.uint8)
 
     def forward(self, ids):
-        from freetoken.kernel.gguf_quant import dequantize_rows
         return dequantize_rows(self.packed_0, ids, self.embedding_dim, self._type)
 
     def place_mapped_host(self) -> int:
         """Bind after weight loading and before graph capture; retain the host owner for all readers."""
-        from freetoken.kernel.pinned import MappedHostBytes, alloc_pinned_tensor
         if hasattr(self, '_mapped_host'):
             return self._mapped_host.owner.numel()
         if not self.packed_0.is_cuda or torch.cuda.is_current_stream_capturing():
@@ -35,9 +36,7 @@ class GGUFEmbedding(BaseOP):
 
 def declare_fp32_small_parameters(model):
     """GGUF 主干已是 uint8 buffer；剩余 norm/conv/状态参数声明 FP32，阻止 loader 降精度。"""
-    from freetoken.layers.norm import GemmaPlusOneRMSNorm
     if isinstance(model, GemmaPlusOneRMSNorm):
-        from freetoken.kernel.gguf_quant import gguf_gemma_rmsnorm
         model.gemma_rmsnorm = gguf_gemma_rmsnorm
     for name, value in tuple(vars(model).items()):
         if name.startswith("_"):
