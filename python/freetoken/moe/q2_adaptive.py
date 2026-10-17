@@ -7,30 +7,35 @@ import triton
 import triton.language as tl
 
 @triton.jit
-def _exchange(GPU, HOST, FEATS, SLOTS, COUNT, MAX_SWAPS:tl.constexpr, BLOCKS:tl.constexpr,
-              UNITS:tl.constexpr):
-    # No CPU expert readers run here; the caller drained all GPU users before exchanging unique pairs.
-    bank=tl.program_id(0)
-    block=tl.program_id(1)
-    count=tl.load(COUNT)
-    row_units=tl.load(FEATS+bank)//16
+def _exchange(GPU,HOST,FEATS,SLOTS,COUNT,COMMANDS,MAP,STATS,
+    MAX_SWAPS:tl.constexpr,BLOCKS:tl.constexpr,UNITS:tl.constexpr,
+    EXPERTS:tl.constexpr,PROTECTED_BEGIN:tl.constexpr):
+    bank=tl.program_id(0);block=tl.program_id(1)
+    count=tl.load(COUNT);row_units=tl.load(FEATS+bank)//16
     gpu=tl.load(GPU+bank)
-    lanes=tl.arange(0,UNITS)
-    words=tl.arange(0,4)
+    lanes=tl.arange(0,UNITS);words=tl.arange(0,4)
     total=count*row_units
     for start in range(tl.cdiv(total,BLOCKS*UNITS)):
         unit=start*(BLOCKS*UNITS)+block*UNITS+lanes
-        valid=unit<total
-        item=unit//row_units
+        valid=unit<total;item=unit//row_units
         slot=tl.load(SLOTS+item,valid,0).to(tl.int64)
         host=tl.load(HOST+bank*MAX_SWAPS+item,valid,0)
+        layer=tl.load(COMMANDS+item*4,valid,0).to(tl.int64)
+        cold=tl.load(COMMANDS+item*4+1,valid,0).to(tl.int64)
+        previous=tl.load(MAP+layer*EXPERTS+cold,valid,-1).to(tl.int64)
+        cached=(previous>=0)&(previous<PROTECTED_BEGIN)
         column=(unit%row_units)*16
-        gpu_ptr=(gpu+slot*row_units*16+column).to(tl.pointer_type(tl.uint32))
+        destination=(gpu+slot*row_units*16+column).to(tl.pointer_type(tl.uint32))
         host_ptr=(host+column).to(tl.pointer_type(tl.uint32))
-        old=tl.load(gpu_ptr[:,None]+words[None,:],valid[:,None],0)
-        new=tl.load(host_ptr[:,None]+words[None,:],valid[:,None],0)
-        tl.store(gpu_ptr[:,None]+words[None,:],new,valid[:,None])
+        incoming=tl.where(cached,gpu+previous*row_units*16+column,host+column).to(tl.pointer_type(tl.uint32))
+        old=tl.load(destination[:,None]+words[None,:],valid[:,None],0)
+        new=tl.load(incoming[:,None]+words[None,:],valid[:,None],0)
+        tl.store(destination[:,None]+words[None,:],new,valid[:,None])
         tl.store(host_ptr[:,None]+words[None,:],old,valid[:,None])
+        if bank==0:
+            # Count one row start, never all of its chunks; diagnostics read this after requests.
+            first=valid&(column==0)
+            tl.atomic_add(STATS+tl.where(cached,0,1),1,first)
 
 
 @triton.jit
@@ -83,6 +88,7 @@ class AdaptiveQ2Owners:
         self.commands=torch.empty((max_swaps,4),device=cache.device,dtype=torch.int32)
         self.owner_table_ptrs=torch.tensor([table.data_ptr() for table in cache._owner_tables],
                                          device=cache.device,dtype=torch.int64)
+        self.cached_copy_counts=torch.zeros(2,device=cache.device,dtype=torch.int64)
         self.staging_bytes=0
         self.heat=np.zeros((p.layers,p.experts),dtype=np.float32)
         self.last_counts=np.zeros((p.layers,p.experts),dtype=np.int64)
@@ -137,7 +143,8 @@ class AdaptiveQ2Owners:
         self.commands.copy_(torch.from_numpy(commands))
         self.count.fill_(len(swaps))
         _exchange[(len(c.bank_schema),32)](c._copy_dst_ptrs,self.source_ptrs,
-            c._copy_feat_bytes,self.gpu_slots,self.count,self.max_swaps,32,1024,num_warps=8)
+            c._copy_feat_bytes,self.gpu_slots,self.count,self.commands,c.slot_for_id.view(-1),
+            self.cached_copy_counts,self.max_swaps,32,1024,p.experts,p.protected_begin,num_warps=8)
         _publish_exchange[(1,)](self.commands,self.source_ptrs,c._copy_dst_ptrs,c._copy_feat_bytes,
             self.owner_table_ptrs,c.slot_for_id.view(-1),c.id_of_slot,c.usage,
             c._protected_initial_map.view(-1),c._protected_reverse_map,self.count,
