@@ -63,8 +63,8 @@ def _routed_vector(Q32,S,W,IDS,Y,K:tl.constexpr,N:tl.constexpr,
 def _routed_project(value,bank,result,ids,input_topk):
     q,scales=quantize_expert_activation(value)
     k,n=value.shape[1],result.shape[1]
-    _routed_vector[(ids.numel(),triton.cdiv(n,4))](q.view(torch.int32),scales,bank,ids,result,
-        k,n,input_topk,4,triton.next_power_of_2(k//32),num_warps=4,enable_fp_fusion=False)
+    _routed_vector[(ids.numel(),triton.cdiv(n,8))](q.view(torch.int32),scales,bank,ids,result,
+        k,n,input_topk,8,triton.next_power_of_2(k//32),num_warps=4,enable_fp_fusion=False)
 
 
 @triton.jit
