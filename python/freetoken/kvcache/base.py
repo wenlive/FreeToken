@@ -32,7 +32,8 @@ def spec_kv_bytes_per_token(spec, config) -> int:
         * config.dtype.itemsize
         * spec.num_layers
     )
-    return per_token + spec.index_head_dim * spec.num_index_layers * 2 // spec.index_ratio
+    index_bytes = 4 if getattr(config.model_config.quant, "dialect", None) == "gguf_strata" else 2
+    return per_token + spec.index_head_dim * spec.num_index_layers * index_bytes // spec.index_ratio
 
 
 @dataclass(frozen=True)

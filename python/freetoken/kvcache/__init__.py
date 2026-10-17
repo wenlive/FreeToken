@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol
+import torch
 
 from freetoken.utils import Registry
 
 if TYPE_CHECKING:
-    import torch
     from freetoken.models import ModelConfig
 
 from .base import (
@@ -210,13 +210,14 @@ def create_kvcache_pool(
         spec = kv_specs[0]
         if num_req_slots is None:
             raise ValueError("QSA pools need num_req_slots (max_running_req + 1)")
+        gguf = getattr(model_config.quant, "dialect", None) == "gguf_strata"
         return QSAKVCache(
             num_kv_heads=spec.num_kv_heads,
             num_layers=model_config.num_layers,
             head_dim=spec.head_dim,
             num_pages=num_pages,
             page_size=page_size,
-            dtype=dtype,
+            dtype=torch.float16 if gguf else dtype,
             device=device,
             index_head_dim=spec.index_head_dim,
             num_index_layers=spec.num_index_layers,
@@ -224,6 +225,7 @@ def create_kvcache_pool(
             num_req_slots=num_req_slots,
             layer_ids=spec.layer_ids,
             mrope=model_config.model_is_mrope,
+            index_dtype=torch.float32 if gguf else dtype,
         )
 
     if len(kv_specs) == 1 and kv_specs[0].mla:

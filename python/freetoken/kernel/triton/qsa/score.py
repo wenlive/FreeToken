@@ -105,7 +105,10 @@ def _qsa_mqa_paged_kernel(
             other=0.0,
             eviction_policy="evict_first",
         )
-        scores = tl.dot(keys, query, out_dtype=tl.float32)
+        if query.dtype == tl.float32:
+            scores = tl.dot(keys.to(tl.float32), query, out_dtype=tl.float32, input_precision="tf32x3")
+        else:
+            scores = tl.dot(keys, query, out_dtype=tl.float32)
         scores = tl.where(heads[None, :] < NUM_HEADS, tl.maximum(scores, 0.0), 0.0)
         score = tl.sum(scores, axis=1) / score_divisor
         tl.store(

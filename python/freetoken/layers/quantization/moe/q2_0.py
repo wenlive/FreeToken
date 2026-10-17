@@ -21,7 +21,7 @@ class TritonQ20MoEKernel(MoEKernel):
             return "Q2_0 input dimensions must be divisible by 64"
         if cfg.strategy != "offload":
             return "Q2_0 currently requires pure GPU offload"
-        if cfg.dtype != torch.bfloat16:
+        if cfg.dtype != torch.bfloat16 and not (cfg.scheme and cfg.scheme.weight.elem == "q2_0_q8"):
             return "Q2_0 mixed-precision path currently requires BF16 activations"
         return None
 
@@ -40,6 +40,10 @@ class TritonQ20MoEKernel(MoEKernel):
 
     def apply(self, layer, x, topk_weights, topk_ids, view, *, is_prefill):
         """保留 decode 向量路径，仅在 prefill 大批输入启用专家分组。"""
+        if layer.quant_method.cfg.scheme.weight.elem == "q2_0_q8":
+            from freetoken.moe.fused_q2_q8 import fused_experts_q2_q8
+            return fused_experts_q2_q8(x, view.tensors["gate_up"], view.tensors["down"],
+                                      topk_weights, topk_ids, is_prefill=is_prefill)
         from freetoken.moe.fused_q2_0 import fused_experts_q2_0
 
         return fused_experts_q2_0(x, view.tensors["gate_up"], view.tensors["down"], topk_weights, topk_ids,

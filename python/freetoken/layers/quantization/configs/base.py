@@ -106,6 +106,9 @@ class QuantConfig(ABC):
         """``unquantized`` lists the modules the family keeps bf16 when the checkpoint's config does not (DeepSeek-V4's compressors).
 
         ``hf_config`` comes from ``cached_load_hf_config``, which folds an old ModelOpt ``hf_quant_config.json`` into ``quantization_config``."""
+        if cfg_get(hf_config, "freetoken_gguf_source") is not None:
+            from .gguf import GGUFQuantConfig
+            return GGUFQuantConfig(hf_config, name_map=name_map)
         q = quantization_config_of(hf_config)
         if q is None:
             return _expert_override(hf_config, NoQuantConfig(name_map, unquantized))

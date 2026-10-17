@@ -208,6 +208,12 @@ def iter_weights(
     if not include_non_moe:
         return
 
+    quant = get_quant_config()
+    if getattr(quant, "dialect", None) == "gguf_strata":
+        from .gguf_weight import iter_gguf_weights
+        yield from iter_gguf_weights(quant, device)
+        return
+
     hf_config = cached_load_hf_config(model_path)
     spec = get_model_spec(hf_config.architectures[0])
     fuser = _DenseFuser(get_quant_config(), spec.packed_modules_mapping)

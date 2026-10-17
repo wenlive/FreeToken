@@ -35,6 +35,7 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
         *, quant_config: QuantConfig | None = None, prefix: str = "",
     ):
         self.layer_id = layer_id
+        self._gguf = getattr(quant_config, "dialect", None) == "gguf_strata"
         # The fla chunk/decode kernels read+write the recurrent state and the per-chunk h as
         # [V, K] while the LinearStatePool declares it [K, V]; these coincide (and the
         # hybrid-radix snapshot scatter h[h_row]->slot is a plain copy) only when the two head
@@ -151,7 +152,9 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
         z = z.reshape(total, self.num_v_heads, self.head_v_dim)
         li = pool.local_index(self.layer_id)
 
-        if batch.is_decode:
+        if self._gguf:
+            core_out = self._gguf_core(conv_in, a, b, pool, li, fla, batch.is_decode)
+        elif batch.is_decode:
             # Fused fla decode kernel: gating + in-kernel l2norm + recurrent update +
             # per-request state read/write-by-index, all in one kernel (no gather/scatter,
             # no clone, no external l2norm). q/k stay at num_k_heads (kernel handles GQA).
@@ -198,6 +201,29 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
         z = z.reshape(-1, self.head_v_dim)
         out = self.norm.forward(core_out, z).reshape(total, -1)
         return self.out_proj.forward(out)
+
+    def _gguf_core(self, conv_in, a, b, pool, li, fla, is_decode):
+        """GGUF 循环头布局和 FP32 状态分支；快照写入仍由原状态池管理。"""
+        from freetoken.kernel.triton.gguf_gdn import gguf_gdn_forward
+        if pool.conv_states.dtype != torch.float32:
+            raise ValueError("GGUF GDN convolution state must be FP32")
+        if is_decode:
+            mixed = self._conv_decode(conv_in, fla.cache_indices, pool)
+        else:
+            mixed = self._conv_prefill(conv_in, pool, fla.cu_seqlens,
+                                       fla.cache_indices, fla.has_initial_state)
+            if fla.fresh_state_indices is not None:
+                pool.recurrent_states[li].index_fill_(0, fla.fresh_state_indices, 0.0)
+        q, k, v = torch.split(mixed, [self.key_dim, self.key_dim, self.value_dim], dim=-1)
+        result = gguf_gdn_forward(
+            q.reshape(-1, self.num_k_heads, self.head_k_dim),
+            k.reshape(-1, self.num_k_heads, self.head_k_dim),
+            v.reshape(-1, self.num_v_heads, self.head_v_dim),
+            a, b, self.A_log, self.dt_bias, pool.recurrent_states[li], fla, is_decode=is_decode)
+        if not is_decode and fla.track_dst is not None:
+            conv_window = conv_in[fla.track_conv_src].transpose(-1, -2).contiguous()
+            pool.conv_states[li].index_copy_(0, fla.track_dst, conv_window)
+        return result
 
 
 __all__ = ["Qwen4ExpGatedDeltaNet"]

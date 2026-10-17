@@ -112,7 +112,7 @@ class QSASparseAttnBackend(BaseAttnBackend):
             f"qsa_sparse backend needs a QSA pool, got {type(self.kvcache).__name__}"
         )
         self.device = self.kvcache.device
-        self.dtype = self.kvcache.dtype
+        self.dtype = self.kvcache.index_dtype
         self.index_head_dim = self.kvcache.index_head_dim
         self.ratio = self.kvcache.index_ratio
         self.ring_capacity = self.kvcache.ring_capacity
@@ -287,7 +287,8 @@ class QSASparseAttnBackend(BaseAttnBackend):
         md = batch.attn_metadata
         assert isinstance(md, QSASparseMetadata)
         slot = self._idx_slot[layer_id]
-        self.kvcache.store_kv(k, v, batch.out_loc, layer_id)
+        # GGUF 投影输出 FP32；AOT store 要求输入与 KV 存储 dtype 一致。
+        self.kvcache.store_kv(k.to(self.kvcache.dtype), v.to(self.kvcache.dtype), batch.out_loc, layer_id)
         if md.block_table is None:
             self._snapshot_decode(md, batch)
         if slot == 0 or md.cmp_rows is None:

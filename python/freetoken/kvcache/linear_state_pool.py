@@ -52,6 +52,7 @@ class LinearStatePool:
         device: torch.device,
         tp_size: int | None = None,
         slot_states: tuple[SlotStateSpec, ...] = (),
+        recurrent_dtype: torch.dtype | None = None,
     ) -> None:
         if tp_size is None:
             tp_size = get_tp_info().size
@@ -73,7 +74,7 @@ class LinearStatePool:
         # overridable via FREETOKEN_MAMBA_SSM_DTYPE (see ssm_state_dtype).
         self.recurrent_states = torch.zeros(
             (n_layers, num_slots, local_v_heads, group.key_head_dim, group.value_head_dim),
-            dtype=ssm_state_dtype(),
+            dtype=recurrent_dtype or ssm_state_dtype(),
             device=device,
         )
         self._local_index = {layer_id: i for i, layer_id in enumerate(group.layer_ids)}
@@ -240,6 +241,7 @@ def linear_state_bytes_per_req(
     tp_size: int,
     dtype: torch.dtype,
     slot_states: tuple[SlotStateSpec, ...] = (),
+    recurrent_dtype: torch.dtype | None = None,
 ) -> int:
     """Linear-state bytes for one request across all linear layers (TP-local), plus any
     declared slot_states."""
@@ -248,7 +250,7 @@ def linear_state_bytes_per_req(
     conv_elems = local_conv_dim * (group.conv_kernel_dim - 1)
     rec_elems = local_v_heads * group.key_head_dim * group.value_head_dim
     conv_bytes = conv_elems * dtype.itemsize  # conv state in model dtype
-    rec_bytes = rec_elems * ssm_state_dtype().itemsize  # recurrent state (default fp32)
+    rec_bytes = rec_elems * (recurrent_dtype or ssm_state_dtype()).itemsize
     total = n_layers * (conv_bytes + rec_bytes)
 
     for spec in slot_states:
@@ -258,6 +260,13 @@ def linear_state_bytes_per_req(
 
 
 __all__ = ["LinearStatePool", "linear_state_bytes_per_req"]
+
+
+def linear_state_dtypes(config):
+    """GGUF 卷积、PLE 与递推统一 FP32；其他模型继续遵循原 dtype/env 约定。"""
+    if getattr(config.model_config.quant, "dialect", None) == "gguf_strata":
+        return torch.float32, torch.float32
+    return config.dtype, ssm_state_dtype()
 
 
 def state_pool_bytes(config, num_slots: int | None = None) -> int:
@@ -271,8 +280,9 @@ def state_pool_bytes(config, num_slots: int | None = None) -> int:
             raise ValueError("slot_states ride the linear-state slots; model has no linear group")
         return 0
     slots = num_slots if num_slots is not None else _linear_pool_num_slots(config)
+    conv_dtype, rec_dtype = linear_state_dtypes(config)
     per_req = linear_state_bytes_per_req(
-        linear_group, config.tp_info.size, config.dtype, slot_states
+        linear_group, config.tp_info.size, conv_dtype, slot_states, rec_dtype
     )
     return per_req * slots
 

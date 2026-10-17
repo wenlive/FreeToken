@@ -66,6 +66,7 @@ class QSAKVCache(MHAKVCache):
         ring_capacity: int | None = None,
         layer_ids: Sequence[int] | None = None,
         mrope: bool = False,
+        index_dtype: torch.dtype | None = None,
     ) -> None:
         if index_ratio < 1 or page_size % index_ratio != 0:
             # slot // index_ratio only names one group when a group never straddles a page.
@@ -90,7 +91,7 @@ class QSAKVCache(MHAKVCache):
         self._index_ratio = index_ratio
         self._num_req_slots = num_req_slots
         self._ring_capacity = ring_capacity
-        self._index_dtype = dtype
+        self._index_dtype = index_dtype or dtype
         self._page_size = page_size
         self._mrope = mrope
         super().__init__(
@@ -172,7 +173,8 @@ class QSAKVCache(MHAKVCache):
             per_token += spec_kv_bytes_per_token(spec, config)
             if spec.attn_type is AttnType.QSA:
                 # One index-key row = all index layers at one position.
-                row = spec.index_head_dim * spec.num_index_layers * _INDEX_DTYPE_BYTES
+                index_bytes = 4 if getattr(config.model_config.quant, "dialect", None) == "gguf_strata" else _INDEX_DTYPE_BYTES
+                row = spec.index_head_dim * spec.num_index_layers * index_bytes
                 fixed += num_req_slots * row * (cls.ring_capacity_for(spec.index_ratio) + 1)
                 if config.model_config.model_is_mrope:
                     per_token += _ROPE_POS_BYTES
@@ -210,6 +212,11 @@ class QSAKVCache(MHAKVCache):
         """First scratch row of ``cmp_k_cache``; row ``cmp_scratch_base + table_idx`` sinks a
         forward whose group does not close."""
         return self._cmp_scratch_base
+
+    @property
+    def index_dtype(self):
+        """GGUF 的 index keys 保留 FP32，主 K/V 独立使用 FP16。"""
+        return self._index_dtype
 
     @property
     def index_ratio(self) -> int:

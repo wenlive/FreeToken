@@ -1,1 +1,1 @@
-__version__ = "0.1.3+speed.q2opt2"
+__version__ = "0.1.3+speed.strataq2dev1"

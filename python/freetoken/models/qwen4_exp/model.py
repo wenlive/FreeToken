@@ -89,10 +89,14 @@ class Qwen4ExpDecoderLayer(BaseOP):
 class Qwen4ExpModel(BaseOP):
     def __init__(self, config: ModelConfig, *, prefix: str = "model") -> None:
         self.hc_count = config.qwen4_args.hc_count
-        self.embed_tokens = VocabParallelEmbedding(
-            num_embeddings=config.vocab_size,
-            embedding_dim=config.hidden_size,
-        )
+        if getattr(config.quant, "dialect", None) == "gguf_strata":
+            from .gguf_weight import GGUFEmbedding
+            self.embed_tokens = GGUFEmbedding(config.quant.source.tensors["token_embd.weight"])
+        else:
+            self.embed_tokens = VocabParallelEmbedding(
+                num_embeddings=config.vocab_size,
+                embedding_dim=config.hidden_size,
+            )
         self.layers = OPList(
             [
                 Qwen4ExpDecoderLayer(config, layer_id, prefix=f"{prefix}.layers.{layer_id}")
@@ -139,6 +143,9 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
             quant_config=config.quant,
             prefix="lm_head",
         )
+        if getattr(config.quant, "dialect", None) == "gguf_strata":
+            from .gguf_weight import declare_fp32_small_parameters
+            declare_fp32_small_parameters(self)
         super().__init__()
 
     def load_host_tables(self, engine_config) -> int:
@@ -190,6 +197,7 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
                 constants,
                 max_graph_rows=max(256, engine_config.cuda_graph_max_bs or 0),
                 max_extend_tokens=engine_config.max_extend_tokens,
+                dtype=torch.float32 if getattr(self._config.quant, "dialect", None) == "gguf_strata" else torch.bfloat16,
             )
             self._ple_table = disk_table
             for ple in ple_layers:

@@ -119,7 +119,10 @@ def _qsa_sparse_paged_gqa_splitk_kernel(
             mask=valid[:, None],
             other=0.0,
         )
-        scores = tl.dot(query, keys)
+        if query.dtype == tl.float32:
+            scores = tl.dot(query, keys.to(tl.float32), input_precision="tf32x3")
+        else:
+            scores = tl.dot(query, keys)
         # Scaling scores avoids re-quantizing a scaled query to BF16.
         scores *= softmax_scale_log2
         scores = tl.where(valid[None, :], scores, -1.0e20)
@@ -128,11 +131,15 @@ def _qsa_sparse_paged_gqa_splitk_kernel(
         probabilities = tl.where(
             valid[None, :], tl.math.exp2(scores - next_max[:, None]), 0.0
         )
-        accumulator = tl.dot(
-            probabilities.to(values.dtype),
-            values,
-            acc=accumulator * alpha[:, None],
-        )
+        if query.dtype == tl.float32:
+            accumulator = tl.dot(probabilities, values.to(tl.float32),
+                acc=accumulator * alpha[:, None], input_precision="tf32x3")
+        else:
+            accumulator = tl.dot(
+                probabilities.to(values.dtype),
+                values,
+                acc=accumulator * alpha[:, None],
+            )
         normalizer = normalizer * alpha + tl.sum(probabilities, axis=1)
         max_value = next_max
 
@@ -247,7 +254,8 @@ def qsa_sparse_paged_attention(
         raise ValueError("QSA sparse attention requires valid grouped-query heads")
     head_dim = q.shape[2]
     assert head_dim >= 16 and (head_dim & (head_dim - 1)) == 0
-    assert q.dtype == k_cache.dtype == v_cache.dtype
+    assert k_cache.dtype == v_cache.dtype
+    assert q.dtype == k_cache.dtype or (q.dtype == torch.float32 and k_cache.dtype in (torch.float16, torch.bfloat16))
     assert logical_indices.dtype == block_table.dtype == torch.int32
     assert token_to_req.dtype == torch.int32
     assert q.stride(2) == k_cache.stride(3) == v_cache.stride(3) == 1
@@ -277,6 +285,10 @@ def qsa_sparse_paged_attention(
     else:
         block_n, target_splits, partial_warps = 64, 1, 2
 
+    if q.dtype == torch.float32:
+        # TF32x3 的 FP32 tiles 比 BF16 大；限制宽度以适配 SM120 的 shared-memory 上限。
+        block_n = min(block_n, 32)
+        partial_warps = max(partial_warps, 4)
     num_tiles = triton.cdiv(logical_indices.shape[1], block_n)
     # Avoid empty splits when the selection width is smaller than the profile.
     max_useful_splits = 1 << (num_tiles.bit_length() - 1)

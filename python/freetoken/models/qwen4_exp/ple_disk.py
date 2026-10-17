@@ -50,6 +50,8 @@ class PleRowSource:
     row_bytes: int
     row_stride: int
     scale: float
+    logical_dim: int | None = None
+    format: str = "fp8_e4m3"
 
     @property
     def total_rows(self) -> int:
@@ -97,6 +99,14 @@ def source_from_safetensors(folder: str) -> PleRowSource:
 
 def resolve_row_source(folder: str) -> PleRowSource:
     """Pick the row source for a checkpoint; the seam where a repacked format would plug in."""
+    from freetoken.layers.quantization import get_quant_config
+    quant = get_quant_config()
+    if getattr(quant, "dialect", None) == "gguf_strata":
+        tensor = quant.source.tensors["per_layer_token_embd.weight"]
+        if tensor.type_name != "IQ4_NL" or len(tensor.shape) != 2:
+            raise ValueError("GGUF PLE requires an IQ4_NL row matrix")
+        return PleRowSource([str(tensor.path)], [0], [tensor.start], tensor.shape[1],
+                            tensor.row_bytes, tensor.row_bytes, 1.0, tensor.shape[0], "iq4_nl")
     return source_from_safetensors(folder)
 
 
@@ -115,7 +125,8 @@ class DiskRowTable:
         from freetoken.kernel.row_store import PleStore
 
         self.num_rows = source.total_rows
-        self.head_dim = source.row_bytes  # fp8: one byte per element
+        self.head_dim = source.logical_dim or source.row_bytes
+        self._format = source.format
         self.dtype = dtype
         self.heads = int(hash_constants["num_ngram_heads"])
         self.scale = source.scale
@@ -142,7 +153,7 @@ class DiskRowTable:
             use_io_uring=os.getenv(_IO_URING_ENV, "1") != "0",
         )
         self._device = torch.device("cuda", torch.cuda.current_device())
-        self._token_bytes = self.heads * self.head_dim
+        self._token_bytes = self.heads * source.row_bytes
         # allocated up front: pinned alloc inside stream capture is illegal; one replay consumes it at a time
         self._graph_pinned = alloc_pinned_tensor(max_graph_rows * self._token_bytes, dtype=torch.uint8)
         self._graph_pinned.zero_()  # padded decode lanes read whatever sits here
@@ -272,9 +283,15 @@ class DiskRowTable:
         dev[:nbytes].copy_(pinned[:nbytes], non_blocking=True)
         if not capturing:
             self._eager_read[self._eager_slot].record(stream)
-        values = dev[:nbytes].view(torch.float8_e4m3fn).to(self.dtype)
-        if self.scale != 1.0:
-            values = values * self.scale
+        if self._format == "iq4_nl":
+            from freetoken.kernel.gguf_quant import dequantize_rows
+            # RowStore 已按请求/head 顺序填充压缩行，这里的索引是 staging 行号。
+            staging_ids = torch.arange(row_ids.numel(), device=self._device, dtype=torch.int64)
+            values = dequantize_rows(dev[:nbytes], staging_ids, self.head_dim, 20).to(self.dtype)
+        else:
+            values = dev[:nbytes].view(torch.float8_e4m3fn).to(self.dtype)
+            if self.scale != 1.0:
+                values = values * self.scale
         values = values.view(*row_ids.shape[:-1], -1)
         if out is None:
             return values
