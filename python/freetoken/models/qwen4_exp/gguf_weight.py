@@ -15,6 +15,23 @@ class GGUFEmbedding(BaseOP):
         from freetoken.kernel.gguf_quant import dequantize_rows
         return dequantize_rows(self.packed_0, ids, self.embedding_dim, self._type)
 
+    def place_mapped_host(self) -> int:
+        """Bind after weight loading and before graph capture; retain the host owner for all readers."""
+        from freetoken.kernel.pinned import MappedHostBytes, alloc_pinned_tensor
+        if hasattr(self, '_mapped_host'):
+            return self._mapped_host.owner.numel()
+        if not self.packed_0.is_cuda or torch.cuda.is_current_stream_capturing():
+            raise ValueError('Embedding mapping requires loaded CUDA weights before graph capture')
+        packed = self.packed_0
+        host = alloc_pinned_tensor(packed.numel(), dtype=torch.uint8)
+        host.copy_(packed.cpu())
+        mapping = MappedHostBytes(host)
+        view = mapping.cuda_view(packed.device)
+        # Publish both only after every fallible allocation/import succeeds; failure keeps the GPU table.
+        self._mapped_host = mapping
+        self.packed_0 = view
+        return host.numel()
+
 
 def declare_fp32_small_parameters(model):
     """GGUF 主干已是 uint8 buffer；剩余 norm/conv/状态参数声明 FP32，阻止 loader 降精度。"""

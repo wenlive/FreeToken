@@ -50,6 +50,7 @@ class EngineConfig:
     moe_q2_decode_overlap: bool = True
     # Online owner exchange is opt-in; zero retains the frozen initial residency.
     moe_q2_adapt_every: int = 0
+    gguf_embedding_host: bool = False
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
     kv_reserve_tokens: int = 8192  # KV floor for --moe-cache-auto; small by design (MoE-priority)

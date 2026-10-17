@@ -5,6 +5,59 @@ import torch
 
 @unittest.skipUnless(torch.cuda.is_available(), "requires CUDA")
 class GGUFExecutionConsistencyTests(unittest.TestCase):
+    def test_mapped_embedding_preserves_rows_and_changed_graph_inputs(self):
+        """Original Q3_K bytes remain exact with an owned host mapping through graph replay."""
+        from types import SimpleNamespace
+        import gc
+        from freetoken.models.qwen4_exp.gguf_weight import GGUFEmbedding
+        torch.manual_seed(827)
+        vocab, width = 257, 2560
+        packed = torch.randint(0, 256, (vocab, width // 256, 110), dtype=torch.uint8)
+        scale = (torch.rand((vocab, width // 256)) * .01 + .001).half().contiguous()
+        packed[:, :, 108:110] = scale.view(torch.uint8).reshape(vocab, width // 256, 2)
+        embedding = GGUFEmbedding(SimpleNamespace(shape=(width, vocab), nbytes=packed.numel(), type_id=11))
+        embedding.packed_0 = packed.flatten().cuda()
+        ids = torch.tensor([0, 1, vocab // 2, vocab-1], device='cuda', dtype=torch.int32)
+        reference = embedding.forward(ids)
+        host_bytes = embedding.place_mapped_host()
+        self.assertEqual(host_bytes, packed.numel())
+        self.assertEqual(embedding.place_mapped_host(), host_bytes)
+        self.assertEqual(embedding.packed_0.data_ptr(), embedding._mapped_host.ptr)
+        self.assertTrue(torch.equal(embedding._mapped_host.owner, packed.flatten()))
+        torch.testing.assert_close(embedding.forward(ids), reference, rtol=0, atol=0)
+        graph = torch.cuda.CUDAGraph()
+        with torch.cuda.graph(graph):
+            output = embedding.forward(ids)
+        gc.collect()
+        ids.copy_(torch.tensor([vocab-1, 3, 11, 0], device='cuda', dtype=torch.int32))
+        graph.replay()
+        from freetoken.kernel.gguf_quant import dequantize_rows
+        expected = dequantize_rows(packed.flatten().cuda(), ids, width, 11)
+        torch.testing.assert_close(output, expected, rtol=0, atol=0)
+        torch.cuda.synchronize()
+        graph.reset()
+
+    def test_failed_embedding_mapping_keeps_gpu_weights_and_zero_host_budget(self):
+        """A failed pin or CUDA alias import must not replace the table or earn memory credit."""
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        from freetoken.models.qwen4_exp.gguf_weight import GGUFEmbedding
+        from freetoken.models.qwen4_exp.model import Qwen4ExpForCausalLM
+        for target in ('freetoken.kernel.pinned.alloc_pinned_tensor',
+                       'freetoken.kernel.pinned.MappedHostBytes.cuda_view'):
+            with self.subTest(failure=target):
+                embedding = GGUFEmbedding(SimpleNamespace(shape=(256, 2), nbytes=220, type_id=11))
+                embedding.packed_0 = torch.arange(220, device='cuda', dtype=torch.uint8)
+                original = embedding.packed_0
+                model = Qwen4ExpForCausalLM.__new__(Qwen4ExpForCausalLM)
+                model.model = SimpleNamespace(embed_tokens=embedding)
+                with patch(target, side_effect=RuntimeError('forced mapping failure')):
+                    self.assertEqual(model.place_input_embedding(), 0)
+                self.assertIs(embedding.packed_0, original)
+                self.assertFalse(hasattr(embedding, '_mapped_host'))
+                self.assertEqual(model._embedding_placement['actual'], 'cuda')
+                self.assertEqual(model._embedding_placement['host_bytes'], 0)
+
     def test_bf16_tiled_and_batch_projection_real_geometry(self):
         """覆盖新分派边界、HC两段、stride、graph改输入，并与独立FP32矩阵参考比较。"""
         from freetoken.kernel.gguf_native import bf16_gemv

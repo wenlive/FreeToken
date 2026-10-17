@@ -363,6 +363,13 @@ class Engine:
         with torch.device("meta"), torch_dtype(config.dtype):
             self.model = create_model(config.model_config)
         self._load_weights(config)
+        self._host_tables_bytes = 0
+        if config.gguf_embedding_host:
+            if not hasattr(self.model, 'place_input_embedding'):
+                raise ValueError('This model does not support mapped GGUF input embeddings')
+            self._host_tables_bytes = int(self.model.place_input_embedding() or 0)
+            # Startup sizing below must observe physical VRAM released by the old CUDA allocation.
+            torch.cuda.empty_cache()
         if config.mtp_runtime_path is not None:
             self.model.prepare_mtp_runtime(config.mtp_runtime_path, config.mtp_max_context)
         if config.active_encoders:
@@ -388,10 +395,9 @@ class Engine:
         # Host-side auxiliary stores (qwen4_exp's pinned PLE table): after the weights so a
         # load failure is not masked, before the MoE offload cache so the bank residency
         # planning sees the pin quota the table already spent.
-        self._host_tables_bytes = 0
         if hasattr(self.model, "load_host_tables"):
             with _weight_load_context():
-                self._host_tables_bytes = int(self.model.load_host_tables(config) or 0)
+                self._host_tables_bytes += int(self.model.load_host_tables(config) or 0)
         if is_offload_moe_strategy(config.moe_strategy):
             self._init_offload_moe_cache(config)
         if hasattr(self.model, "prepare_for_runtime"):

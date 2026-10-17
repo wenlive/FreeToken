@@ -161,6 +161,26 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
         self.prepare_for_runtime()
         self._mtp_drafter = MtpDrafter(Path(path), self, max_context=max_context)
 
+    def place_input_embedding(self) -> int:
+        """Request mapped compressed input weights, falling back to unchanged GPU weights if unavailable."""
+        from .gguf_weight import GGUFEmbedding
+        from freetoken.utils import init_logger
+        embedding = self.model.embed_tokens
+        if not isinstance(embedding, GGUFEmbedding):
+            raise ValueError('Mapped input embedding requires the complete GGUF model path')
+        log = init_logger(__name__)
+        try:
+            host_bytes = embedding.place_mapped_host()
+        except (RuntimeError, MemoryError, ImportError) as exc:
+            self._embedding_placement = dict(requested='mapped_host', actual='cuda', host_bytes=0,
+                                             fallback_reason=str(exc))
+            log.warning(f'Cannot map input embedding; keeping original GPU table: {exc}')
+            return 0
+        self._embedding_placement = dict(requested='mapped_host', actual='mapped_host',
+                                         host_bytes=host_bytes, fallback_reason=None)
+        log.info_rank0(f'Input embedding: {host_bytes} original compressed bytes in mapped host memory')
+        return host_bytes
+
     def prepare_for_runtime(self) -> None:
         if self.model._mtp_capture_rows and self.model._mtp_residual_capture is None:
             # Allocate before cache sizing and graph capture, never during replay.

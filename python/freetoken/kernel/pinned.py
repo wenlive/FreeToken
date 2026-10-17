@@ -66,3 +66,23 @@ def device_ptr(t: torch.Tensor) -> int:
     if t.is_cuda or _host_ptr_identity():
         return t.data_ptr()
     return _load_pinned_extension().host_device_ptr(t.data_ptr())
+
+
+class MappedHostBytes:
+    """Own pinned bytes and a zero-copy CUDA view of their device-visible address."""
+
+    def __init__(self, owner: torch.Tensor):
+        if (owner.device.type != 'cpu' or owner.dtype != torch.uint8
+                or owner.ndim != 1 or not owner.is_contiguous() or not owner.is_pinned()):
+            raise ValueError('Mapped bytes require flat, contiguous, pinned CPU uint8 storage')
+        self.owner = owner
+        self.ptr = device_ptr(owner)
+        self.__cuda_array_interface__ = dict(
+            shape=(owner.numel(),), strides=None, typestr='|u1', data=(self.ptr, False), version=3)
+
+    def cuda_view(self, device: torch.device) -> torch.Tensor:
+        """Reject an implicit copy: it would silently spend the VRAM this mapping saves."""
+        view = torch.as_tensor(self, device=device)
+        if not view.is_cuda or view.dtype != torch.uint8 or view.data_ptr() != self.ptr:
+            raise RuntimeError('Mapped CUDA view did not preserve the device-visible address')
+        return view
