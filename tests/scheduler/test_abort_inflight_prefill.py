@@ -101,6 +101,36 @@ def _as_last_data(batch):
     )
 
 
+def test_abort_final_mtp_bundle_owns_request_after_decode_filter():
+    """The final verified window still owns pages until its terminal drain."""
+    from freetoken.message import DetokenizeMsg, ErrorReplyMsg
+
+    pool, cm, tm, dm, pm, sent, stub = _setup()
+    req = _launch_req(pool, cm, tm, torch.tensor([11, 12, 13, 14], dtype=torch.int32))
+    req.append_host(torch.tensor([20], dtype=torch.int32))
+    cm.allocate_paged([req], reserve_tokens=2)
+    req.cached_len, req.device_len = 7, 8
+    batch = Batch([req], 'decode')
+    batch.mtp_token_ids = torch.tensor([21, 22, 23], dtype=torch.int32)
+    dm.filter_reqs([req])
+    assert not dm.runnable
+    last = _as_last_data(batch)
+    stub._last_data = last
+    free_before = len(cm.free_slots)
+
+    Scheduler._process_one_msg(stub, AbortBackendMsg(uid=UID))
+    assert req.aborted
+    assert req.table_idx >= 0 and len(cm.free_slots) == free_before
+    Scheduler._process_last_data(stub, last)
+    Scheduler._flush_abort_acks(stub)
+    assert not any(isinstance(msg, DetokenizeMsg) for msg in sent)
+    assert len(sent) == 1 and isinstance(sent[0], ErrorReplyMsg)
+    assert sent[0].uid == UID and sent[0].error == 'request aborted'
+    assert req.input_ids.tolist() == [11, 12, 13, 14, 20, 21, 22, 23]
+    assert req.table_idx == -1 and tm.available_size == 4
+    cm.check_integrity()
+
+
 def test_abort_inflight_final_chunk_marks_then_drains():
     """Abort while the final prefill chunk (plain Req, already in running_reqs) is in
     flight: the handler only marks; the same iteration's drain frees exactly once."""

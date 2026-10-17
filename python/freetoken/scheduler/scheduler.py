@@ -573,6 +573,11 @@ class Scheduler(SchedulerIOMixin):
                 tombstones.pop(next(iter(tombstones)))
             req_to_free = self.prefill_manager.abort_req(msg.uid)
             req_to_free = req_to_free or self.decode_manager.abort_req(msg.uid)
+            if req_to_free is None and self._last_data is not None:
+                # filter_reqs can remove the final window before its CPU drain.
+                # The in-flight batch still owns that request's pages and state.
+                req_to_free = next((r for r in self._last_data[0].batch.reqs
+                                    if r.uid == msg.uid and r.table_idx >= 0), None)
             if (
                 req_to_free is not None
                 and req_to_free.mm_items
