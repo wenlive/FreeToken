@@ -35,6 +35,37 @@ class GGUFExecutionConsistencyTests(unittest.TestCase):
                     error = torch.linalg.vector_norm(out-reference) / torch.linalg.vector_norm(reference)
                     self.assertLess(error.item(), 3e-5)
 
+    def test_interleaved_columns_are_bitwise_equal_to_legacy(self):
+        """支持格式的2/3/4列、stride和改输入图重放均须匹配原生旧归约。"""
+        from freetoken.kernel.gguf_native import _module, quantize_q8_1, mmvq
+        torch.manual_seed(8627)
+        for typ, size, rows in [(12,144,1024),(13,176,8192),(14,210,640),(23,136,1024)]:
+            width=2560
+            raw=torch.randint(0,256,(rows*(width//256),size),device='cuda',dtype=torch.uint8)
+            scale=torch.tensor([.015625],device='cuda',dtype=torch.float16).view(torch.uint8)
+            if typ==14:raw[:,208:210]=scale
+            else:raw[:,:2]=scale
+            if typ in (12,13):raw[:,2:4]=scale
+            weight=raw.flatten()
+            for tokens in (2,3,4):
+                with self.subTest(type=typ,tokens=tokens):
+                    x=torch.randn(tokens,width,device='cuda')
+                    q=quantize_q8_1(x)
+                    expected=torch.empty(tokens,rows,device='cuda')
+                    _module().project(weight,q,expected,typ,width,torch.cuda.current_stream().cuda_stream)
+                    out=torch.full((tokens,rows+3),float('nan'),device='cuda')
+                    mmvq(weight,q,rows,typ,out=out[:,:rows])
+                    torch.testing.assert_close(out[:,:rows],expected,rtol=0,atol=0)
+                    self.assertTrue(torch.isnan(out[:,rows:]).all())
+                    graph=torch.cuda.CUDAGraph()
+                    with torch.cuda.graph(graph):result=mmvq(weight,quantize_q8_1(x),rows,typ)
+                    for _ in range(3):
+                        x.normal_();graph.replay()
+                        q=quantize_q8_1(x)
+                        _module().project(weight,q,expected,typ,width,torch.cuda.current_stream().cuda_stream)
+                        torch.testing.assert_close(result,expected,rtol=0,atol=0)
+                    graph.reset()
+
     def test_native_q8_graph_and_layout(self):
         from freetoken.kernel.gguf_native import quantize_q8_1, mmvq
         stream = torch.cuda.Stream()

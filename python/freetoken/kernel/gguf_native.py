@@ -13,8 +13,10 @@ NATIVE_TYPES = frozenset((2, 6, 8, 11, 12, 13, 14, 20, 23, 42))
 @lru_cache(maxsize=1)
 def _module(*, build_directory=None):
     return load_jit(
-        "gguf_mmvq_r1", cuda_files=["gguf_mmvq.cuh"],
-        cuda_wrappers=[("quantize", "GGUFNativeMMVQ::quantize"), ("project", "GGUFNativeMMVQ::project")],
+        "gguf_mmvq_r2", cuda_files=["gguf_mmvq.cuh"],
+        cuda_wrappers=[("quantize", "GGUFNativeMMVQ::quantize"), ("project", "GGUFNativeMMVQ::project"),
+                       ("interleave", "GGUFInterleavedMMVQ::interleave"),
+                       ("project_interleaved", "GGUFInterleavedMMVQ::project")],
         extra_cuda_cflags=["--use_fast_math"],
         extra_include_paths=[str(KERNEL_PATH / "third_party/strata_mmvq/include")],
         build_directory=build_directory,
@@ -46,8 +48,18 @@ def mmvq(packed, q8, rows, type_id, *, out=None):
         return out
     target = out if out.is_contiguous() else torch.empty((len(q8), rows), device=q8.device, dtype=torch.float32)
     with torch.cuda.device(q8.device):
-        _module().project(packed, q8.contiguous(), target, type_id, q8.shape[1] * 32,
-                          torch.cuda.current_stream(q8.device).cuda_stream)
+        # 只启用实测受益的几何；小矩阵/两列Q4和IQ4保留原路径。
+        useful = ((type_id == 13 and rows >= 8192 and 2 <= len(q8) <= 4)
+                  or (type_id in (12, 23) and rows >= 1024 and 3 <= len(q8) <= 4))
+        stream = torch.cuda.current_stream(q8.device).cuda_stream
+        q = q8.contiguous()
+        if useful:
+            columns = 2 if len(q) == 2 else 4
+            interleaved = torch.empty(q.shape[1] * columns * 68, device=q.device, dtype=torch.uint8)
+            _module().interleave(q, interleaved, stream)
+            _module().project_interleaved(packed, q, interleaved, target, type_id, q.shape[1] * 32, stream)
+        else:
+            _module().project(packed, q, target, type_id, q.shape[1] * 32, stream)
         if target is not out:
             out.copy_(target)
     return out

@@ -81,3 +81,43 @@ struct GGUFNativeMMVQ {
         }
     }
 };
+
+// 小批多列投影复用已移植的Strata算术，保持每列归约顺序。
+struct GGUFInterleavedMMVQ {
+    static void interleave(tvm::ffi::TensorView q, tvm::ffi::TensorView il, int64_t stream) {
+        using namespace host;
+        auto tokens = SymbolicSize{"tokens"}; auto blocks = SymbolicSize{"blocks"};
+        auto device = SymbolicDevice{};
+        TensorMatcher({tokens, blocks, 36}).with_dtype<uint8_t>().with_device<kDLCUDA>(device).verify(q);
+        const auto t = tokens.unwrap(), k = blocks.unwrap() * 32;
+        RuntimeCheck(t >= 2 && t <= 4 && k > 0, "Interleaved Q8_1 needs two to four columns");
+        const auto bytes = static_cast<int64_t>(freetoken::gguf_native::native_q8_1_il_bytes(k, t));
+        TensorMatcher({bytes}).with_dtype<uint8_t>().with_device<kDLCUDA>(device).verify(il);
+        GGUFNativeMMVQ::independent(q.data_ptr(), t * blocks.unwrap() * 36, il.data_ptr(), bytes);
+        freetoken::gguf_native::native_q8_1_interleave(q.data_ptr(), il.data_ptr(), k, t,
+            reinterpret_cast<void*>(stream));
+    }
+    static void project(tvm::ffi::TensorView weights, tvm::ffi::TensorView q,
+                        tvm::ffi::TensorView il, tvm::ffi::TensorView y,
+                        int64_t type, int64_t width, int64_t stream) {
+        using namespace host;
+        RuntimeCheck(type == 12 || type == 13 || type == 14 || type == 23, "Unsupported interleaved weight type");
+        RuntimeCheck(width > 0 && width % 256 == 0 && width <= std::numeric_limits<int>::max()/8,
+                     "Interleaved input geometry invalid");
+        auto tokens=SymbolicSize{"tokens"};auto rows=SymbolicSize{"rows"};auto device=SymbolicDevice{};
+        TensorMatcher({tokens, rows}).with_dtype<float>().with_device<kDLCUDA>(device).verify(y);
+        const auto t=tokens.unwrap(), n=rows.unwrap();
+        RuntimeCheck(t>=2 && t<=4 && n>0 && n<=std::numeric_limits<int>::max(), "Interleaved output geometry invalid");
+        const int block_bytes=type==12?144:type==13?176:type==14?210:136;
+        const auto weight_bytes=n*(width/256)*block_bytes;
+        const auto il_bytes=static_cast<int64_t>(freetoken::gguf_native::native_q8_1_il_bytes(width,t));
+        TensorMatcher({weight_bytes}).with_dtype<uint8_t>().with_device<kDLCUDA>(device).verify(weights);
+        TensorMatcher({t,width/32,36}).with_dtype<uint8_t>().with_device<kDLCUDA>(device).verify(q);
+        TensorMatcher({il_bytes}).with_dtype<uint8_t>().with_device<kDLCUDA>(device).verify(il);
+        GGUFNativeMMVQ::independent(weights.data_ptr(),weight_bytes,y.data_ptr(),t*n*sizeof(float));
+        GGUFNativeMMVQ::independent(q.data_ptr(),t*(width/32)*36,y.data_ptr(),t*n*sizeof(float));
+        GGUFNativeMMVQ::independent(il.data_ptr(),il_bytes,y.data_ptr(),t*n*sizeof(float));
+        freetoken::gguf_native::native_mmvq_il(type,weights.data_ptr(),q.data_ptr(),il.data_ptr(),
+            static_cast<float*>(y.data_ptr()),width,n,t,reinterpret_cast<void*>(stream));
+    }
+};

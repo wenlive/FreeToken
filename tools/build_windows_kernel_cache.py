@@ -179,7 +179,7 @@ def _patch_tvm_ffi_windows_flags() -> None:
             cuda_lib = Path(cuda_home) / "lib" / "x64"
             text = text.replace(
                 "ldflags = ",
-                f"ldflags = /LIBPATH:{cuda_lib} cudart.lib ",
+                f'ldflags = /LIBPATH:"{cuda_lib}" cudart.lib ',
                 1,
             )
         return text
