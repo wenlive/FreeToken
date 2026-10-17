@@ -17,6 +17,10 @@ def test_config_rejects_unsupported_contract_before_loading():
                   moe_strategy='offload', max_running_req=1, moe_cache_size=11264,
                   moe_q2_resident_experts=9216)
     EngineConfig(**kwargs)
+    for dynamic in (0,512,1024):
+        EngineConfig(**(kwargs | dict(moe_q2_dynamic_slots=dynamic,moe_cache_size=1024+9216+dynamic)))
+    with pytest.raises(ValueError,match='nonnegative'):
+        EngineConfig(**(kwargs | dict(moe_q2_dynamic_slots=-1)))
     for override in [dict(moe_cache_size=11263), dict(moe_cache_auto=True),
                      dict(max_running_req=2), dict(moe_cpu_layers='auto'),
                      dict(moe_strategy='hybrid'), dict(moe_cache_policy='lfu')]:
@@ -26,7 +30,7 @@ def test_config_rejects_unsupported_contract_before_loading():
         protected_ranking(48, 511, 9216)
 
 
-def _make_cache(valid_scales=False):
+def _make_cache(valid_scales=False,dynamic_slots=None):
     layers, experts, hidden, intermediate = 3, 16, 128, 64
     layout = {'gate_up': BankSpec((2 * intermediate, hidden // 64 * 18), torch.uint8),
               'down': BankSpec((hidden, intermediate // 64 * 18), torch.uint8)}
@@ -52,7 +56,7 @@ def _make_cache(valid_scales=False):
     config = SimpleNamespace(num_moe_layers=layers, num_experts=experts)
     with patch('freetoken.moe.expert_pieces.iter_expert_pieces', return_value=iter(pieces)):
         banks, ownership = load_compact_banks('deterministic-fixture', config,
-            protected=protected, dynamic=experts, method=method,
+            protected=protected, dynamic=experts if dynamic_slots is None else dynamic_slots, method=method,
             device=torch.device('cuda'), dtype=torch.bfloat16)
     cache = ProtectedQ2Cache(layers, experts, ownership.slots, torch.device('cuda'),
         ownership=ownership, prefill_overlap=True, quant_format='q2_0', layout=layout)
@@ -61,12 +65,13 @@ def _make_cache(valid_scales=False):
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
-def test_decode_copy_overlap_graph_prefill_reset_and_changed_routes():
+@pytest.mark.parametrize('dynamic_slots',[0,16])
+def test_decode_copy_overlap_graph_prefill_reset_and_changed_routes(dynamic_slots):
     """真实Q2计算覆盖跨流依赖、换路由、prefill穿插和reset，不用host同步掩盖遗漏事件。"""
     from freetoken.layers.moe import OffloadMoELayer
     from freetoken.moe.fused import fused_topk
     from freetoken.moe.fused_q2_q8 import fused_experts_q2_q8
-    cache, original = _make_cache(valid_scales=True)
+    cache, original = _make_cache(valid_scales=True,dynamic_slots=dynamic_slots)
     x = torch.randn(1, 128, device='cuda')
     logits = torch.randn(1, 16, device='cuda')
     shared_weight = torch.randn(128, 128, device='cuda')

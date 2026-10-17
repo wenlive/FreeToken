@@ -7,10 +7,11 @@ from freetoken.moe.q2_adaptive import AdaptiveQ2Owners
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
-def test_online_exchange_keeps_all_owner_bytes_and_graphs():
+@pytest.mark.parametrize('dynamic_slots',[0,16])
+def test_online_exchange_keeps_all_owner_bytes_and_graphs(dynamic_slots):
     """Compare every expert with original bytes after exchanges in both directions."""
     _make_cache=runpy.run_path(str(Path(__file__).with_name('test_q2_residency.py')))['_make_cache']
-    cache,original=_make_cache(valid_scales=True)
+    cache,original=_make_cache(valid_scales=True,dynamic_slots=dynamic_slots)
     controller=AdaptiveQ2Owners(cache,max_swaps=2)
     payload=cache.protected_payload
     initial_addresses={r:t.data_ptr() for r,t in cache.bank_caches.items()}

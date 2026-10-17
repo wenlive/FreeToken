@@ -134,8 +134,8 @@ class EngineConfig:
                     or self.moe_cache_auto or self.moe_cache_rate is not None
                     or self.moe_cache_policy != 'lru' or self.max_running_req != 1):
                 raise ValueError('Protected Q2 requires explicit GPU offload, fixed LRU capacity and max_running_req=1')
-            if self.moe_q2_dynamic_slots < 512:
-                raise ValueError('Protected Q2 requires at least 512 dynamic slots')
+            if self.moe_q2_dynamic_slots < 0:
+                raise ValueError('Protected Q2 dynamic slots must be nonnegative')
             expected = 1024 + self.moe_q2_dynamic_slots + self.moe_q2_resident_experts
             if self.moe_cache_size != expected:
                 raise ValueError(f'Protected Q2 moe_cache_size must be {expected}, got {self.moe_cache_size}')

@@ -149,8 +149,10 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
     protected = tuple(protected)
     if len(set(protected)) != len(protected) or any(not (0 <= l < layers and 0 <= e < experts) for l, e in protected):
         raise ValueError('Invalid protected ownership set')
-    if dynamic < experts:
-        raise ValueError('Dynamic region must fit a complete expert layer')
+    # Decode can also borrow both full-layer prefill buffers. They already fit
+    # the admitted route union even when no additional dynamic slots are used.
+    if dynamic < 0:
+        raise ValueError('Dynamic region cannot be negative')
     protected_begin = 2 * experts + dynamic
     slots = protected_begin + len(protected)
     layout = method.layout()
@@ -198,7 +200,7 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
     if not bool(written.all()):
         raise ValueError('Incomplete Q2 ownership load')
     torch.cuda.synchronize(device)
-    initial_map = torch.full((layers, experts), -1, dtype=torch.int32)
+    initial_map = torch.full((layers, experts), -1, dtype=torch.int32, device='cpu')
     for (layer, expert), slot in protected_slots.items():
         initial_map[layer, expert] = slot
     ownership = Q2Ownership(sources=sources, caches=caches, host_indices=host_indices,
