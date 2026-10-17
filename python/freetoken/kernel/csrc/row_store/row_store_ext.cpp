@@ -1,6 +1,6 @@
 // Disk-backed PLE row store: rows read straight from the checkpoint's fp8 shard tensors
 // through an extent table (PleRowSource in ple_ssd.py). Engine-thread only, no locks.
-// Duplicate rows in one fill dedup into ONE batched read round; no RAM cache and no
+// Duplicate rows in one fill dedup into ONE batched read round; a bounded optional RAM cache and no
 // per-sequence state. Hash reference: tests/models/qwen4_exp/test_ple_disk.py.
 // Platform seams: TableFile (O_DIRECT+pread; Win: NO_BUFFERING), BatchReader (io_uring,
 // pread-pool fallback = the portable shape), cumemop_* (dlopen libcuda; Win: nvcuda).
@@ -563,6 +563,18 @@ class RowStore {
     bounce_ = page_aligned_alloc((size_t)reader_->capacity() * kSpanMax);
   }
 
+  void set_row_cache(int64_t rows) {
+    if (rows < 0 || rows > (1LL << 24))
+      throw std::invalid_argument("row cache capacity must be between0 and16777216 rows");
+    if (!pending_.empty()) throw std::runtime_error("cannot replace a row cache with unflushed reads");
+    const size_t capacity = (size_t)(rows / 8) * 8;
+    std::vector<int64_t> keys(capacity, -1);
+    std::vector<uint8_t> data(capacity * (size_t)row_bytes_);
+    std::vector<uint8_t> next(capacity / 8, 0);
+    cache_keys_.swap(keys); cache_data_.swap(data); cache_next_.swap(next);
+    cache_hits_ = cache_misses_ = 0;
+  }
+
   // reader first: a still-running read must not land in freed bounce memory
   virtual ~RowStore() {
     reader_.reset();
@@ -622,7 +634,10 @@ class RowStore {
   std::unordered_map<std::string, int64_t> io_stats() const {
     int64_t direct_files = 0;
     for (const auto &f : files_) direct_files += f->direct_io() ? 1 : 0;
-    return {{"read_requests_completed", reads_completed_},
+    return {{"row_cache_capacity", (int64_t)cache_keys_.size()},
+            {"row_cache_bytes", (int64_t)(cache_keys_.size()*sizeof(int64_t)+cache_data_.size()+cache_next_.size())},
+            {"row_cache_hits", cache_hits_}, {"row_cache_misses", cache_misses_},
+            {"read_requests_completed", reads_completed_},
             {"aligned_read_bytes_requested", read_bytes_requested_},
             {"payload_rows_delivered", rows_delivered_},
             {"largest_read_offset", largest_read_offset_},
@@ -632,6 +647,18 @@ class RowStore {
  protected:
   // Queue dst on this fill's pending batch; duplicate rows fan out from one read.
   void request_row(int64_t row_id, uint8_t *dst) {
+    if (!cache_next_.empty()) {
+      const size_t set = row_cache_set(row_id);
+      for (size_t way = 0; way < 8; ++way) {
+        const size_t slot = set * 8 + way;
+        if (cache_keys_[slot] == row_id) {
+          std::memcpy(dst, cache_data_.data() + slot * (size_t)row_bytes_, row_bytes_);
+          ++cache_hits_; ++rows_delivered_;
+          return;
+        }
+      }
+      ++cache_misses_;
+    }
     auto pit = pending_index_.find(row_id);
     if (pit != pending_index_.end()) {
       pending_[pit->second].dsts.push_back(dst);
@@ -639,7 +666,7 @@ class RowStore {
     }
     const Extent &ext = extents_[row_id / rows_per_extent_];
     const int64_t off = ext.base + (row_id % rows_per_extent_) * row_stride_;
-    Pending p{ext.file, off, row_bytes_, 0, {dst}};
+    Pending p{ext.file, off, row_bytes_, 0, {dst}, row_id};
     if (ext.file->direct_io()) {
       // full aligned span even past EOF; truncating would break direct-I/O alignment
       p.read_off = off & ~(kPage - 1);
@@ -657,6 +684,7 @@ class RowStore {
     int64_t read_len;
     int64_t row_off;  // row payload start inside the read buffer
     std::vector<uint8_t *> dsts;
+    int64_t row_id;
   };
 
   // Read every pending row in reader-capacity batches and fan out the copies.
@@ -690,6 +718,14 @@ class RowStore {
         rows_delivered_ += (int64_t)p.dsts.size();
         largest_read_offset_ = std::max(largest_read_offset_, p.read_off);
         const uint8_t *row = bounce_ + (size_t)tag * kSpanMax + p.row_off;
+        if (!cache_next_.empty()) {
+          const size_t set = row_cache_set(p.row_id);
+          const size_t way = cache_next_[set];
+          cache_next_[set] = (uint8_t)((way + 1) % 8);
+          const size_t slot = set * 8 + way;
+          cache_keys_[slot] = p.row_id;
+          std::memcpy(cache_data_.data() + slot * (size_t)row_bytes_, row, row_bytes_);
+        }
         for (uint8_t *dst : p.dsts) std::memcpy(dst, row, row_bytes_);
         p.file->discard_cache(p.read_off, p.read_len);
         if (next < total) submit_slot(tag);
@@ -699,6 +735,14 @@ class RowStore {
       throw;
     }
   }
+
+  size_t row_cache_set(int64_t row) const {
+    const uint64_t value = (uint64_t)row * 0x9e3779b97f4a7c15ULL;
+    return (size_t)((value ^ (value >> 29)) % cache_next_.size());
+  }
+  std::vector<int64_t> cache_keys_;
+  std::vector<uint8_t> cache_data_, cache_next_;
+  int64_t cache_hits_ = 0, cache_misses_ = 0;
 
   int64_t row_bytes_, row_stride_, rows_per_extent_;
   std::vector<std::unique_ptr<TableFile>> files_;
@@ -775,6 +819,7 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
            py::call_guard<py::gil_scoped_release>())
       .def("io_backend", &RowStore::io_backend)
       .def("io_stats", &RowStore::io_stats)
+      .def("set_row_cache", &RowStore::set_row_cache, py::arg("rows"))
       .def_property_readonly("row_bytes", &RowStore::row_bytes)
       .def_property_readonly("total_rows", &RowStore::total_rows);
   py::class_<PleStore, RowStore>(m, "PleStore")
