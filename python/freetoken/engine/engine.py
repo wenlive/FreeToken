@@ -755,7 +755,8 @@ class Engine:
             max_slots = method.slot_limit()
         cache_type = ProtectedQ2Cache if ownership is not None else OffloadMoeCache
         cache = cache_type(
-            **({'ownership': ownership} if ownership is not None else {}),
+            **({'ownership': ownership, 'decode_overlap': config.moe_q2_decode_overlap}
+               if ownership is not None else {}),
             # Models with leading dense layers (GLM-4) only have experts on the MoE
             # layers; num_moe_layers == num_layers when first_k_dense_replace == 0.
             num_layers=config.model_config.num_moe_layers,

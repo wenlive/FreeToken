@@ -210,9 +210,11 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
 
 
 class ProtectedQ2Cache(OffloadMoeCache):
-    def __init__(self, *args, ownership: Q2Ownership, **kwargs):
+    def __init__(self, *args, ownership: Q2Ownership, decode_overlap=True, **kwargs):
+        """单独持有decode copy流；prefill和decode不共享事件或借用缓冲协议。"""
         self.protected_payload = ownership
         super().__init__(*args, **kwargs)
+        self.decode_copy_stream = torch.cuda.Stream(device=self.device) if decode_overlap else None
 
     def set_bank_sources(self, sources, layer_residency=None):
         from freetoken.kernel.pinned import device_ptr
@@ -311,6 +313,8 @@ class ProtectedQ2Cache(OffloadMoeCache):
         self._prefill_buffer_released[buffer] = False
 
     def reset(self):
+        if self.decode_copy_stream is not None:
+            self.decode_copy_stream.synchronize()
         if self.prefill_copy_stream is not None:
             self.prefill_copy_stream.synchronize()
         torch.cuda.current_stream(self.device).synchronize()

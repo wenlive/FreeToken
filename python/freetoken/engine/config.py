@@ -46,6 +46,8 @@ class EngineConfig:
     # Explicit opt-in: GPU-only owners plus compact host complements, fixed for this load.
     moe_q2_resident_experts: int = 0
     moe_q2_dynamic_slots: int = 1024
+    # 仅永久Q2所有者缓存：将缺失专家搬运与共享专家计算重叠。
+    moe_q2_decode_overlap: bool = True
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
     kv_reserve_tokens: int = 8192  # KV floor for --moe-cache-auto; small by design (MoE-priority)

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import torch
+from freetoken.core import get_global_ctx
 from freetoken.kernel.triton.moe_shared_gate import shared_gate_mul_add, shared_gate_sigmoid
 from freetoken.models.qwen3_5_moe.moe import Qwen3_5MoE
 
@@ -27,10 +28,23 @@ class Qwen4ExpMoE(Qwen3_5MoE):
             self.shared_expert_gate = LinearReplicated(config.hidden_size, 1, has_bias=False,
                                                        quant_config=config.quant, prefix=f"{prefix}.shared_expert_gate")
 
+    def _shared_gguf(self, hidden_states):
+        """共享专家和门控在routed分支可能改写输入之前完成。"""
+        shared = self.shared_expert.forward(hidden_states)
+        gate = self.shared_expert_gate.forward(hidden_states).sigmoid().view(-1)
+        return shared, gate
+
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        """永久Q2的单token decode重叠搬运；prefill、验证窗口和其他模型沿用既有顺序。"""
         num_tokens, hidden_dim = hidden_states.shape
         hidden_states = hidden_states.view(-1, hidden_dim)
         router_logits = self.gate.forward(hidden_states)
+        cache = getattr(self.experts, 'offload_cache', None)
+        if (self._gguf and get_global_ctx().batch.is_decode
+                and getattr(cache, 'decode_copy_stream', None) is not None):
+            routed, (shared, gate) = self.experts.decode_with_shared(
+                hidden_states, router_logits, self._shared_gguf)
+            return shared_gate_mul_add(routed, shared, gate).view(num_tokens, hidden_dim)
         shared = self.shared_expert.forward(hidden_states)
         if self._gguf:
             gate = self.shared_expert_gate.forward(hidden_states).sigmoid().view(-1)

@@ -295,6 +295,24 @@ class OffloadMoELayer(MoELayer):
             is_prefill=False,
         )
 
+    def decode_with_shared(self, hidden_states, router_logits, shared_forward):
+        """copy流按真实路由搬运专家；主流完成共享分支后合流，才允许专家改写输入。"""
+        cache = self.offload_cache
+        weights, ids = fused_topk(hidden_states=hidden_states, gating_output=router_logits,
+                                  topk=self.top_k, renormalize=self.renormalize)
+        main = torch.cuda.current_stream(hidden_states.device)
+        copy = cache.decode_copy_stream
+        copy.wait_stream(main)
+        with torch.cuda.stream(copy):
+            cache.ensure_experts(self.layer_id, ids)
+            cache.copy_missing()
+        shared = shared_forward(hidden_states)
+        main.wait_stream(copy)
+        routed = self._expert_gemm(cache, hidden_states, weights, ids,
+            views=cache.bank_views(), n=None, alphas=cache.alphas_for_slots(self.layer_id),
+            is_prefill=False)
+        return self._maybe_all_reduce(routed), shared
+
     def _decode_hybrid(
         self,
         cache: OffloadMoeCache,

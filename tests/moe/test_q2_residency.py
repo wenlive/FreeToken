@@ -26,12 +26,17 @@ def test_config_rejects_unsupported_contract_before_loading():
         protected_ranking(48, 511, 9216)
 
 
-def _make_cache():
+def _make_cache(valid_scales=False):
     layers, experts, hidden, intermediate = 3, 16, 128, 64
     layout = {'gate_up': BankSpec((2 * intermediate, hidden // 64 * 18), torch.uint8),
               'down': BankSpec((hidden, intermediate // 64 * 18), torch.uint8)}
     original = {role: [torch.randint(0, 256, (experts, *spec.shape), dtype=torch.uint8)
                        for _ in range(layers)] for role, spec in layout.items()}
+    if valid_scales:
+        scale = torch.tensor([.015625], dtype=torch.float16).view(torch.uint8)
+        for banks in original.values():
+            for bank in banks:
+                bank.view(*bank.shape[:-1], -1, 18)[..., :2] = scale
     pieces = [(layer, e, min(e + 3, experts),
                {role: per_layer[layer][e:min(e + 3, experts)] for role, per_layer in original.items()})
               for layer in range(layers) for e in range(0, experts, 3)]
@@ -53,6 +58,50 @@ def _make_cache():
         ownership=ownership, prefill_overlap=True, quant_format='q2_0', layout=layout)
     cache.set_bank_sources(banks.sources)
     return cache, original
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+def test_decode_copy_overlap_graph_prefill_reset_and_changed_routes():
+    """真实Q2计算覆盖跨流依赖、换路由、prefill穿插和reset，不用host同步掩盖遗漏事件。"""
+    from freetoken.layers.moe import OffloadMoELayer
+    from freetoken.moe.fused import fused_topk
+    from freetoken.moe.fused_q2_q8 import fused_experts_q2_q8
+    cache, original = _make_cache(valid_scales=True)
+    x = torch.randn(1, 128, device='cuda')
+    logits = torch.randn(1, 16, device='cuda')
+    shared_weight = torch.randn(128, 128, device='cuda')
+    full = {role: banks[1].to('cuda') for role, banks in original.items()}
+
+    def gemm(cache, value, weights, ids, **kwargs):
+        return fused_experts_q2_q8(value, cache.bank_caches['gate_up'],
+                                   cache.bank_caches['down'], weights, ids)
+
+    layer = SimpleNamespace(offload_cache=cache, top_k=3, renormalize=True, layer_id=1,
+                            _expert_gemm=gemm, _maybe_all_reduce=lambda value: value)
+    def shared(value):
+        return value @ shared_weight
+    def forward():
+        return OffloadMoELayer.decode_with_shared(layer, x, logits, shared)
+    forward()
+    graph = torch.cuda.CUDAGraph()
+    with torch.cuda.graph(graph):
+        routed, independent = forward()
+    for cycle in range(6):
+        cache.reset()
+        if cycle % 2:
+            cache.begin_prefill()
+            for index in range(3):
+                cache.prefetch_prefill_layer(index)
+                cache.wait_prefill_layer(index)
+                cache.release_prefill_layer(index)
+        x.normal_()
+        logits.normal_()
+        graph.replay()
+        weights, ids = fused_topk(hidden_states=x, gating_output=logits, topk=3, renormalize=True)
+        reference = fused_experts_q2_q8(x, full['gate_up'], full['down'], weights, ids)
+        torch.testing.assert_close(routed, reference, rtol=0, atol=0)
+        torch.testing.assert_close(independent, x @ shared_weight, rtol=0, atol=0)
+    graph.reset()
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
