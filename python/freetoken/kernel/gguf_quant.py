@@ -251,6 +251,36 @@ def gguf_gemma_rmsnorm(x, weight, eps=1e-6, out=None):
     return out
 
 
+@triton.jit
+def _gguf_ple_gate(KEY, QUERY, OUT, H: tl.constexpr, HC: tl.constexpr,
+                   KS: tl.constexpr, QS: tl.constexpr, BLOCK: tl.constexpr):
+    token, group = tl.program_id(0), tl.program_id(1)
+    col = tl.arange(0, BLOCK)
+    key = tl.load(KEY + token * KS + group * H + col, col < H, 0).to(tl.float32)
+    query = tl.load(QUERY + token * QS + group * H + col, col < H, 0).to(tl.float32)
+    score = tl.sum(key * query, 0) / (H ** 0.5)
+    sign = tl.where(score > 0, 1.0, tl.where(score < 0, -1.0, 0.0))
+    magnitude = tl.sqrt(tl.maximum(tl.abs(score), 1.0e-6))
+    gate = 1.0 / (1.0 + tl.exp(-sign * magnitude))
+    tl.store(OUT + token * HC + group, gate)
+
+
+def gguf_ple_gate(key, query, hc_count):
+    """One fixed FP32 dot reduction per token/stream, independent of batch size."""
+    if (key.ndim != 2 or query.shape != key.shape or hc_count <= 0
+            or key.shape[1] % hc_count or key.dtype != torch.float32
+            or query.dtype != torch.float32 or not key.is_cuda
+            or key.device != query.device or key.stride(-1) != 1 or query.stride(-1) != 1):
+        raise ValueError("GGUF PLE gate requires matching CUDA FP32 matrices and stream geometry")
+    hidden = key.shape[1] // hc_count
+    gate = torch.empty((key.shape[0], hc_count, 1), device=key.device, dtype=torch.float32)
+    if key.shape[0]:
+        _gguf_ple_gate[(key.shape[0], hc_count)](key,query,gate,hidden,hc_count,
+            key.stride(0),query.stride(0),triton.next_power_of_2(hidden),
+            num_warps=4,enable_fp_fusion=False)
+    return gate
+
+
 def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None, q8_source=None):
     """压缩权重直接参与 FP32 GEMV；BF16/F16/F32 权重保留 FP32 激活。"""
     block, size = _geometry(type_id)

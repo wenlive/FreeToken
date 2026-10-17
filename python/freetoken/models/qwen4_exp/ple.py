@@ -565,6 +565,7 @@ class PLELayer(BaseOP):
         self.value_proj = LinearReplicated(
             args.ple_embed_dim, args.hidden_size, has_bias=False, quant_config=config.quant, prefix=f"{prefix}.value_proj"
         )
+        self._gguf = getattr(config.quant, "dialect", None) == "gguf_strata"
         self.norm_key = GroupedPlusOneRMSNorm(width, config.rms_norm_eps, self.hc_count)
         self.norm_query = GroupedPlusOneRMSNorm(width, config.rms_norm_eps, self.hc_count)
         self.norm_conv = GroupedPlusOneRMSNorm(width, config.rms_norm_eps, self.hc_count)
@@ -609,8 +610,12 @@ class PLELayer(BaseOP):
         value = self.value_proj.forward(embeddings)
         query = self.norm_query.forward(R)
         shape = (-1, self.hc_count, self.hidden_size)
-        gate = (key.view(shape) * query.view(shape)).sum(-1, keepdim=True) / math.sqrt(self.hidden_size)
-        gate = torch.sigmoid(gate.sign() * gate.abs().clamp_min(1e-6).sqrt())
+        if self._gguf:
+            from freetoken.kernel.gguf_quant import gguf_ple_gate
+            gate = gguf_ple_gate(key, query, self.hc_count)
+        else:
+            gate = (key.view(shape) * query.view(shape)).sum(-1, keepdim=True) / math.sqrt(self.hidden_size)
+            gate = torch.sigmoid(gate.sign() * gate.abs().clamp_min(1e-6).sqrt())
         gated = (gate * value.unsqueeze(-2)).flatten(-2)
         states = conv_states if conv_states is not None else self._conv_state_slab(R)
         x = self.norm_conv.forward(gated)
