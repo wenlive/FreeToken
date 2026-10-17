@@ -43,6 +43,7 @@ class FLAMetadata:
     track_conv_src: torch.Tensor | None = None   # [nt, kernel-1] int64 conv-input token positions
     track_boundary_row: torch.Tensor | None = None  # [nt] int64 forward-local row of the track boundary; states with their own left context (qwen4_exp PLE) derive their windows from it
     is_verify: bool = False
+    compact_mtp_pool: object | None = None
 
 
 def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:

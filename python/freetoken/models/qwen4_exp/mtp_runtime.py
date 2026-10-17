@@ -85,6 +85,8 @@ class MtpRuntime:
             batch.linear_table_idx = torch.tensor([0], device=self.engine.device, dtype=torch.int32)
             batch.fla_metadata = build_fla_metadata(batch, self.engine.device)
             fla = batch.fla_metadata
+            if self.pool.compact_mtp:
+                fla.compact_mtp_pool = self.pool
             fla.track_dst = self.dst[:count]
             fla.track_boundary_row = torch.arange(1, count + 1, device=self.engine.device)
             batch.mtp_ring_snapshots = self.rings
@@ -201,10 +203,16 @@ class MtpRuntime:
         limit = clip(req, delivered)
         delivered = delivered[:limit.count]
         committed = len(delivered)
-        if committed < len(inputs):
+        if self.pool.compact_mtp:
+            # The compact transaction still reads live as its base: freeze an anchor before advancing live.
+            self._freeze_anchor(req, position, committed, delivered, limit, anchor_id)
             self.pool.copy_from(self.pool.reserved_slot_ids[committed - 1], req.linear_slot_idx)
             self.engine.kv_cache._pending_ring[req.table_idx].copy_(self.rings[committed - 1])
-        self._freeze_anchor(req, position, committed, delivered, limit, anchor_id)
+        elif committed < len(inputs):
+            self.pool.copy_from(self.pool.reserved_slot_ids[committed - 1], req.linear_slot_idx)
+            self.engine.kv_cache._pending_ring[req.table_idx].copy_(self.rings[committed - 1])
+        if not self.pool.compact_mtp:
+            self._freeze_anchor(req, position, committed, delivered, limit, anchor_id)
         accepted = committed - 1
         tokens = torch.tensor(delivered, device=self.engine.device, dtype=torch.int32)
         if accepted:

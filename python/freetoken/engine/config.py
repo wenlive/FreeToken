@@ -81,6 +81,7 @@ class EngineConfig:
     # `--cache-type naive` opts out. linear_state_cache_ratio sizes the GDN snapshot cache as
     # ceil(ratio * max_running_req) extra slots.
     linear_state_cache_ratio: float = 2.0
+    linear_state_cache_slots: int | None = None
     # Window/full ratio for the SWA radix cache (`--cache-type radix` on SWA models) and the DSV4
     # window tier: the DEFAULT window-pool size = max(working-set floor, ratio x full-pool tokens).
     # < 1.0 trades retained window-prefix capacity for memory savings; must be in (0, 1]. It is the
@@ -104,8 +105,13 @@ class EngineConfig:
     # Independent draft weights; absent keeps the native no-MTP path and budget.
     mtp_runtime_path: str | None = None
     mtp_max_context: int = 8192
+    mtp_compact_state: bool = False
 
     def __post_init__(self):
+        if self.linear_state_cache_slots is not None and self.linear_state_cache_slots < 0:
+            raise ValueError('Linear snapshot cache slots cannot be negative')
+        if self.mtp_compact_state and self.mtp_runtime_path is None:
+            raise ValueError('Compact transaction state requires MTP weights')
         if self.mtp_runtime_path is not None:
             if (not self.mtp_runtime_path or self.max_running_req != 1 or self.tp_info.size != 1
                     or self.use_dummy_weight or self.moe_strategy != 'offload' or self.moe_cpu_layers):

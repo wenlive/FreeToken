@@ -67,6 +67,9 @@ def gguf_gdn_forward(q, k, v, a, b, negative_a, dt_bias, state, fla, *, is_decod
             or not dt_bias.is_contiguous() or a.stride(-1) != 1 or b.stride(-1) != 1):
         raise ValueError("incompatible GGUF GDN state/head geometry")
     output = torch.empty((total, hv, dim), dtype=torch.float32, device=q.device)
+    if getattr(fla, 'compact_mtp_pool', None) is not None:
+        from .gguf_gdn_compact import verify
+        return verify(q, k, v, a, b, negative_a, dt_bias, state, fla, output, is_decode=is_decode)
     track_count = 0 if fla.track_dst is None else fla.track_dst.numel()
     _recurrent[(fla.cache_indices.numel(), hv)](
         q, k, v, a, b, negative_a, dt_bias, state, fla.cu_seqlens, fla.cache_indices, output,

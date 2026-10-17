@@ -444,6 +444,7 @@ class Engine:
                 tp_size=config.tp_info.size,
                 slot_states=config.model_config.slot_states,
                 reserved_slots=4 if config.mtp_runtime_path is not None else 0,
+                compact_mtp=config.mtp_compact_state,
             )
             self.ctx.linear_state_pool = self.linear_state_pool
         else:
@@ -995,18 +996,43 @@ class Engine:
             if num_mamba_slots is not None
             else (self.linear_state_pool.num_slots if self.linear_state_pool is not None else None)
         )
-        self.kv_cache.validate_rebuild(
-            config, num_pages=num_pages,
-            num_swa_pages=num_swa_pages, target_moe=target_moe,
-            per_expert_bytes=per_expert_bytes, baseline_free=self._baseline_free,
-            weights_bytes=self._weights_bytes, current_num_pages=self.num_pages,
-            extra_fixed_bytes=(
-                state_pool_bytes(config, target_mamba) if target_mamba is not None else 0
-            ),
-            extra_note=(
-                f", mamba={target_mamba - 1} slots" if target_mamba is not None else ""
-            ),
-        )
+        try:
+            self.kv_cache.validate_rebuild(
+                config, num_pages=num_pages,
+                num_swa_pages=num_swa_pages, target_moe=target_moe,
+                per_expert_bytes=per_expert_bytes, baseline_free=self._baseline_free,
+                weights_bytes=self._weights_bytes, current_num_pages=self.num_pages,
+                extra_fixed_bytes=(
+                    state_pool_bytes(config, target_mamba) if target_mamba is not None else 0
+                ),
+                extra_note=(
+                    f", mamba={target_mamba - 1} slots" if target_mamba is not None else ""
+                ),
+            )
+        except CacheRebuildRejected:
+            if not config.moe_q2_resident_experts:
+                raise
+            # A manually sized fixed owner pool can exceed the startup ratio and already be serving.
+            # Its owner bank cannot resize. Price only the KV/state delta against current free VRAM.
+            per_page, _, _, _ = self.kv_cache.kv_cost(config)
+            delta = ((num_pages if num_pages is not None else self.num_pages) - self.num_pages) * per_page
+            if self.linear_state_pool is not None:
+                delta += state_pool_bytes(config, target_mamba) - state_pool_bytes(config, self.linear_state_pool.num_slots)
+            torch.cuda.synchronize(self.device)
+            before_reclaim, _ = torch.cuda.mem_get_info(self.device)
+            torch.cuda.empty_cache()
+            free, _ = torch.cuda.mem_get_info(self.device)
+            logger.info_rank0(f'Fixed Q2 rebuild allocator reclaim: free {mem_GB(before_reclaim)} '
+                              f'-> {mem_GB(free)}, reserved {mem_GB(torch.cuda.memory_reserved(self.device))}, '
+                              f'allocated {mem_GB(torch.cuda.memory_allocated(self.device))}')
+            reserve = 512 * 2**20
+            if free - max(0, delta) < reserve:
+                raise CacheRebuildRejected(
+                    f'fixed Q2 rebuild delta {mem_GB(delta)} leaves less than {mem_GB(reserve)} '
+                    f'from live free {mem_GB(free)}; old cache kept'
+                ) from None
+            logger.info_rank0(f'Fixed Q2 rebuild: live free {mem_GB(free)}, '
+                              f'delta {mem_GB(delta)}, reserve {mem_GB(reserve)}')
 
         torch.cuda.synchronize(self.device)
         # Preserve the CUDA-graph batch-size set resolved at startup. The auto heuristic keys

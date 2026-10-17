@@ -54,6 +54,7 @@ class LinearStatePool:
         slot_states: tuple[SlotStateSpec, ...] = (),
         recurrent_dtype: torch.dtype | None = None,
         reserved_slots: int = 0,
+        compact_mtp: bool = False,
     ) -> None:
         if tp_size is None:
             tp_size = get_tp_info().size
@@ -65,6 +66,14 @@ class LinearStatePool:
         self._num_slots = num_slots
         self._device = device
         self._conv_dtype = dtype
+        self._tp_size = tp_size
+        self.compact_mtp = compact_mtp
+        rec_dtype = recurrent_dtype or ssm_state_dtype()
+        if compact_mtp and (reserved_slots != 4 or rec_dtype != torch.float32
+                            or group.key_head_dim != group.value_head_dim):
+            raise ValueError('Compact MTP requires four transaction slots and square FP32 recurrence')
+        recurrent_slots = num_slots - reserved_slots if compact_mtp else num_slots
+        self._compact_live_slots = recurrent_slots
 
         n_layers, local_conv_dim, local_v_heads = _linear_local_dims(group, tp_size)
 
@@ -77,8 +86,8 @@ class LinearStatePool:
         # SSM recurrent state. fp32 by default (matches HF mamba_ssm_dtype); the dtype is
         # overridable via FREETOKEN_MAMBA_SSM_DTYPE (see ssm_state_dtype).
         self.recurrent_states = torch.zeros(
-            (n_layers, num_slots, local_v_heads, group.key_head_dim, group.value_head_dim),
-            dtype=recurrent_dtype or ssm_state_dtype(),
+            (n_layers, recurrent_slots, local_v_heads, group.key_head_dim, group.value_head_dim),
+            dtype=rec_dtype,
             device=device,
         )
         self._local_index = {layer_id: i for i, layer_id in enumerate(group.layer_ids)}
@@ -92,6 +101,13 @@ class LinearStatePool:
             for spec in self._slot_specs
         }
         self.slot_states: dict[str, torch.Tensor] = self._alloc_slot_states(num_slots)
+        if compact_mtp:
+            # Reserved IDs retain the small conv/sibling states; recurrence is a read-only base plus updates.
+            self._compact_keys = torch.empty((n_layers, 4, local_v_heads, group.key_head_dim),
+                                             dtype=torch.float32, device=device)
+            self._compact_delta = torch.empty_like(self._compact_keys)
+            self._compact_decay = torch.empty((n_layers, 4, local_v_heads), dtype=torch.float32, device=device)
+            self._compact_source = torch.zeros(n_layers, dtype=torch.int64, device=device)
 
         # Free-list allocator over slots 1..num_slots-1 (slot 0 reserved as a padding sink,
         # sglang MambaPool convention). Live working slots, ping-pong track slots, and
@@ -157,6 +173,18 @@ class LinearStatePool:
         """
         if num_slots <= self._reserved_count:
             raise ValueError('Rebuilt linear-state pool cannot drop reserved ownership')
+        if self.compact_mtp:
+            group, device, dtype = self._group, self._device, self._conv_dtype
+            reserved, tp_size, specs = self._reserved_count, self._tp_size, self._slot_specs
+            self.conv_states = self.recurrent_states = None
+            self.slot_states = {}
+            self._compact_keys = self._compact_delta = self._compact_decay = self._compact_source = None
+            if device.type == 'cuda':
+                torch.cuda.synchronize(device)
+                torch.cuda.empty_cache()
+            self.__init__(group, num_slots, dtype, device, tp_size=tp_size, slot_states=specs,
+                          recurrent_dtype=torch.float32, reserved_slots=reserved, compact_mtp=True)
+            return
         n_layers, _, local_conv_dim, km1 = self.conv_states.shape
         _, _, local_v_heads, key_head_dim, value_head_dim = self.recurrent_states.shape
         conv_dtype, rec_dtype = self.conv_states.dtype, self.recurrent_states.dtype
@@ -192,6 +220,18 @@ class LinearStatePool:
 
     def clear_slots(self, slots) -> None:
         """Zero conv + recurrent state at ``slots`` across all linear layers (fresh sequence)."""
+        if self.compact_mtp:
+            if isinstance(slots, torch.Tensor):
+                slots = slots.flatten().tolist()
+            elif isinstance(slots, int):
+                slots = [slots]
+            live = [int(slot) for slot in slots if slot < self._compact_live_slots]
+            if live:
+                self.recurrent_states[:, live] = 0
+            self.conv_states[:, slots] = 0
+            for spec in self._slot_specs:
+                self.slot_states[spec.name][:, slots] = spec.fill_value
+            return
         if isinstance(slots, (list, tuple)):
             slots = torch.as_tensor(slots, dtype=torch.long, device=self._device)
         self.conv_states[:, slots] = 0
@@ -202,8 +242,15 @@ class LinearStatePool:
     def copy_from(self, src: int, dst: int) -> None:
         """Copy a whole-sequence snapshot (conv + recurrent, all layers) from slot ``src`` to
         ``dst``. Used for COW-on-restore (donated snapshot -> fresh live slot)."""
-        self.conv_states[:, dst].copy_(self.conv_states[:, src])
-        self.recurrent_states[:, dst].copy_(self.recurrent_states[:, src])
+        if self.compact_mtp and src in self.reserved_slot_ids:
+            if not 0 <= dst < self._compact_live_slots:
+                raise ValueError('Accepted MTP prefix must target an ordinary owned slot')
+            from freetoken.kernel.triton.gguf_gdn_compact import commit_prefix
+            commit_prefix(self, src - self._compact_live_slots + 1, dst)
+            self.conv_states[:, dst].copy_(self.conv_states[:, src])
+        else:
+            self.conv_states[:, dst].copy_(self.conv_states[:, src])
+            self.recurrent_states[:, dst].copy_(self.recurrent_states[:, src])
         for t in self.slot_states.values():
             t[:, dst].copy_(t[:, src])
 
@@ -283,9 +330,9 @@ def linear_state_dtypes(config):
 
 
 def state_pool_bytes(config, num_slots: int | None = None) -> int:
-    """Total GDN state-pool bytes at ``num_slots`` PHYSICAL slots (default: the startup
-    slot count). The engine adds this to the KV family's fixed cost when budgeting --
-    the state pool is a sibling pool, not a KV tier."""
+    """Price actual storage at a logical slot count, including compact transaction histories.
+    The engine adds this sibling-pool cost to KV budgeting; reserved compact IDs own
+    conv/sibling states but do not each allocate another full recurrent matrix."""
     linear_group = config.model_config.linear_attention_group()
     slot_states = getattr(config.model_config, "slot_states", ())
     if linear_group is None:
@@ -297,7 +344,13 @@ def state_pool_bytes(config, num_slots: int | None = None) -> int:
     per_req = linear_state_bytes_per_req(
         linear_group, config.tp_info.size, conv_dtype, slot_states, rec_dtype
     )
-    return per_req * slots
+    total = per_req * slots
+    if getattr(config, 'mtp_compact_state', False):
+        layers, _, heads = _linear_local_dims(linear_group, config.tp_info.size)
+        dim = linear_group.key_head_dim
+        total -= layers * 4 * heads * dim * linear_group.value_head_dim * 4
+        total += layers * 4 * heads * (2 * dim + 1) * 4 + layers * 8
+    return total
 
 
 def _linear_pool_num_slots(config) -> int:
@@ -309,7 +362,8 @@ def _linear_pool_num_slots(config) -> int:
     if config.cache_type != "hybrid_radix":
         return mr + 1 + reserved  # live + dummy/padding + transaction slots
     ratio = config.linear_state_cache_ratio
-    n_cache = max(4, int(ratio * mr))
+    explicit = getattr(config, 'linear_state_cache_slots', None)
+    n_cache = max(4, int(ratio * mr)) if explicit is None else explicit
     return 4 * mr + n_cache + 1 + reserved  # request/tree slots + padding + transaction slots
 
 
