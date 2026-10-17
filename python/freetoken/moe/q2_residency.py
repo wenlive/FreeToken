@@ -211,10 +211,14 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
 
 
 class ProtectedQ2Cache(OffloadMoeCache):
-    def __init__(self, *args, ownership: Q2Ownership, decode_overlap=True, adapt_every=0, **kwargs):
+    def __init__(self, *args, ownership: Q2Ownership, decode_overlap=True, adapt_every=0,
+                 adapt_decay=1.0, **kwargs):
         """单独持有decode copy流；prefill和decode不共享事件或借用缓冲协议。"""
         self.protected_payload = ownership
+        if not 0 < adapt_decay <= 1:
+            raise ValueError('Online Q2 heat decay must be in (0, 1]')
         self.adapt_every = adapt_every
+        self.adapt_decay = adapt_decay
         super().__init__(*args, **kwargs)
         self.collect_decode_freq = bool(adapt_every)
         self.decode_copy_stream = torch.cuda.Stream(device=self.device) if decode_overlap else None
@@ -224,7 +228,7 @@ class ProtectedQ2Cache(OffloadMoeCache):
         if not self.adapt_every:
             return None
         from .q2_adaptive import AdaptiveQ2Owners
-        return AdaptiveQ2Owners(self, every=self.adapt_every)
+        return AdaptiveQ2Owners(self, every=self.adapt_every, decay=self.adapt_decay)
 
     def set_bank_sources(self, sources, layer_residency=None):
         from freetoken.kernel.pinned import device_ptr

@@ -50,6 +50,7 @@ class EngineConfig:
     moe_q2_decode_overlap: bool = True
     # Online owner exchange is opt-in; zero retains the frozen initial residency.
     moe_q2_adapt_every: int = 0
+    moe_q2_adapt_decay: float = 1.0
     gguf_embedding_host: bool = False
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
@@ -115,6 +116,8 @@ class EngineConfig:
             raise ValueError('Linear snapshot cache slots cannot be negative')
         if self.moe_q2_adapt_every < 0 or (self.moe_q2_adapt_every and not self.moe_q2_resident_experts):
             raise ValueError('Online Q2 adaptation requires protected owners and a nonnegative interval')
+        if not 0 < self.moe_q2_adapt_decay <= 1:
+            raise ValueError('Online Q2 heat decay must be in (0, 1]')
         if self.mtp_compact_state and self.mtp_runtime_path is None:
             raise ValueError('Compact transaction state requires MTP weights')
         if self.mtp_runtime_path is not None:

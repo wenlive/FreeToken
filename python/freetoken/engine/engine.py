@@ -766,7 +766,7 @@ class Engine:
         cache_type = ProtectedQ2Cache if ownership is not None else OffloadMoeCache
         cache = cache_type(
             **({'ownership': ownership, 'decode_overlap': config.moe_q2_decode_overlap,
-                'adapt_every': config.moe_q2_adapt_every}
+                'adapt_every': config.moe_q2_adapt_every, 'adapt_decay': config.moe_q2_adapt_decay}
                if ownership is not None else {}),
             # Models with leading dense layers (GLM-4) only have experts on the MoE
             # layers; num_moe_layers == num_layers when first_k_dense_replace == 0.
