@@ -56,8 +56,8 @@ def _make_cache():
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
-@pytest.mark.parametrize('tokens', [1, 3, 8])
-def test_owner_bytes_survive_graph_reset_prefill_and_rebuild(tokens):
+@pytest.mark.parametrize('tokens,topk', [(1, 3), (3, 3), (8, 3), (16, 10)])
+def test_owner_bytes_survive_graph_reset_prefill_and_rebuild(tokens, topk):
     torch.manual_seed(7801)
     cache, original = _make_cache()
     p = cache.protected_payload
@@ -71,7 +71,7 @@ def test_owner_bytes_survive_graph_reset_prefill_and_rebuild(tokens):
             assert torch.equal(cache.bank_caches[role][physical.long()].cpu(), original[role][layer][logical.long()])
             assert torch.equal(cache.bank_caches[role][p.protected_begin:], saved[role])
 
-    ids = torch.empty((tokens, 3), dtype=torch.int32, device='cuda')
+    ids = torch.empty((tokens, topk), dtype=torch.int32, device='cuda')
     initial = torch.randint(0, 16, ids.shape, device='cuda', dtype=torch.int32)
     ids.copy_(initial)
     cache.ensure_experts(1, ids)

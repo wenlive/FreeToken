@@ -262,8 +262,9 @@ class ProtectedQ2Cache(OffloadMoeCache):
         self._pending_whole_layer = False
         n = expert_ids.numel()
         p = self.protected_payload
-        if not (0 <= layer_id < self.num_layers) or not (0 < n <= 128):
-            raise ValueError('Protected decode supports at most 128 routes per layer')
+        # The existing sparse-prefill path admits 16 tokens x 10 expert routes.
+        if not (0 <= layer_id < self.num_layers) or not (0 < n <= 256):
+            raise ValueError('Protected admission supports at most 256 routes per layer')
         if self.collect_decode_freq:
             self.decode_freq[layer_id].scatter_add_(0, expert_ids.view(-1).to(torch.int64),
                 torch.ones(n, dtype=torch.int64, device=self.device))
