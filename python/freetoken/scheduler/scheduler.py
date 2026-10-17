@@ -84,6 +84,7 @@ class Scheduler(SchedulerIOMixin):
         self.cache_manager = CacheManager(
             self.engine.num_pages, config.page_size, self.engine.page_table, config.cache_type,
             linear_state_pool=self.engine.linear_state_pool,
+            mtp_state=getattr(self.engine.kv_cache, 'mtp_state', None),
             swa_pool=self.engine.kv_cache,
             sliding_window_size=next(
                 (g.sliding_window for g in config.model_config.kv_cache_group_specs() if g.is_swa),

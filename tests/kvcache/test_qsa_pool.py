@@ -37,7 +37,7 @@ def _tp(monkeypatch):
     )
 
 
-def _pool(num_pages=4, page_size=64, index_ratio=4, num_req_slots=4, ring_capacity=None):
+def _pool(num_pages=4, page_size=64, index_ratio=4, num_req_slots=4, ring_capacity=None, mtp=False):
     return QSAKVCache(
         num_kv_heads=2,
         num_layers=8,
@@ -52,6 +52,7 @@ def _pool(num_pages=4, page_size=64, index_ratio=4, num_req_slots=4, ring_capaci
         num_req_slots=num_req_slots,
         ring_capacity=ring_capacity,
         layer_ids=(1, 3, 5, 7),
+        mtp=mtp,
     )
 
 
@@ -71,7 +72,7 @@ def _spec(*, index_ratio=4, attn_type=AttnType.QSA, num_kv_heads=2, head_dim=64,
 
 
 def _config(spec, *, page_size=64, max_running_req=3):
-    mc = SimpleNamespace(num_layers=8, has_swa_attention=False, has_linear_attention=True, model_is_mrope=False)
+    mc = SimpleNamespace(num_layers=8, has_swa_attention=False, has_linear_attention=True, model_is_mrope=False, quant=None)
     mc.kv_cache_group_specs = lambda: (spec,)
     return SimpleNamespace(
         model_config=mc,
@@ -217,3 +218,30 @@ def test_resolve_pool_class_and_factory():
 
     with pytest.raises(ValueError, match="num_req_slots"):
         create_kvcache_pool(mc, num_pages=4, page_size=64, dtype=torch.bfloat16, device=DEV)
+
+
+def test_mtp_auxiliary_and_wider_ring_match_factory_cost_and_rebuild():
+    from freetoken.kvcache import create_kvcache_pool
+    from freetoken.kvcache.mtp_pool import MTP_KV_BYTES_PER_TOKEN
+    spec = _spec()
+    config = _config(spec)
+    old_cost, old_fixed, _, _ = QSAKVCache.kv_cost(config)
+    config.model_config.mtp_runtime_path = 'independent-test-runtime'
+    pool = create_kvcache_pool(config.model_config, 4, 64, config.dtype, DEV, num_req_slots=4)
+    cost, fixed, _, _ = QSAKVCache.kv_cost(config)
+    assert cost == old_cost + 64 * MTP_KV_BYTES_PER_TOKEN
+    assert pool.unit_bytes()[0] * 64 == cost
+    assert pool.ring_capacity == QSAKVCache.ring_capacity_for(4, 3)
+    buffers = [pool._kv_buffer, pool._cmp_k_buffer, pool._pending_ring]
+    actual = sum(t.numel() * t.element_size() for t in buffers) + pool.mtp_state.owned_bytes
+    assert actual == cost * 4 + fixed
+    assert fixed > old_fixed
+    state = pool.mtp_state
+    pool.rebuild(8)
+    assert pool.mtp_state is state
+    assert state.owned_bytes == 8 * 64 * MTP_KV_BYTES_PER_TOKEN
+    assert state.valid.count_nonzero() == 0
+
+
+def test_no_mtp_allocates_no_auxiliary():
+    assert _pool().mtp_state is None

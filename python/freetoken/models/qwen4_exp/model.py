@@ -106,6 +106,8 @@ class Qwen4ExpModel(BaseOP):
         self.hyper_connection_mixer = GatedResidual(config, use_combine=False, prefix=f"{prefix}.hyper_connection_mixer")
         # plain tuple (not an OP child), so it never shows up in the state dict
         self._ple = tuple(layer.ple for layer in self.layers.op_list if layer.ple is not None)
+        self._mtp_capture_rows = config.mtp_capture_rows
+        self._mtp_residual_capture = None
 
     @property
     def ple_layers(self) -> List[PLELayer]:
@@ -128,6 +130,10 @@ class Qwen4ExpModel(BaseOP):
             # single writer: the layers only read the context, so a second PLE layer's
             # prefetch sees the un-rolled window
             commit_ngram_context(meta, getattr(batch, "fla_metadata", None))
+        if self._mtp_residual_capture is not None:
+            from .mtp_state import capture_residual
+            capture_residual(hidden, batch, get_global_ctx().linear_state_pool,
+                             self._mtp_residual_capture)
         return self.hyper_connection_mixer.mix(hidden)[0]
 
 
@@ -147,6 +153,13 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
             from .gguf_weight import declare_fp32_small_parameters
             declare_fp32_small_parameters(self)
         super().__init__()
+
+    def prepare_for_runtime(self) -> None:
+        if self.model._mtp_capture_rows:
+            # Allocate before cache sizing and graph capture, never during replay.
+            self.model._mtp_residual_capture = torch.empty(
+                self.model._mtp_capture_rows, self._config.hidden_size * self.model.hc_count,
+                device=self.model.embed_tokens.packed_0.device, dtype=torch.float32)
 
     def load_host_tables(self, engine_config) -> int:
         """Attach the PLE n-gram table (pinned checkpoint bank, or zeros for dummy weights); returns the pinned host bytes the engine reserves from its pin budget."""

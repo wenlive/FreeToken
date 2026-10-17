@@ -99,8 +99,17 @@ class EngineConfig:
     num_token_override: int | None = None
     # Runtime knobs of the multimodal path; the architecture side (vision_config, mrope) lives in ModelConfig.
     mm: MultimodalConfig = field(default_factory=MultimodalConfig)
+    # Independent draft weights; absent keeps the native no-MTP path and budget.
+    mtp_runtime_path: str | None = None
+    mtp_max_context: int = 8192
 
     def __post_init__(self):
+        if self.mtp_runtime_path is not None:
+            if (not self.mtp_runtime_path or self.max_running_req != 1 or self.tp_info.size != 1
+                    or self.use_dummy_weight or self.moe_strategy != 'offload' or self.moe_cpu_layers):
+                raise ValueError('MTP requires real weights, single-rank GPU offload and max_running_req=1')
+            if self.mtp_max_context < 64 or self.mtp_max_context % 64:
+                raise ValueError('MTP context capacity must be positive and page-aligned')
         if self.moe_q2_resident_experts < 0:
             raise ValueError('moe_q2_resident_experts must be nonnegative')
         if self.moe_q2_resident_experts:
@@ -157,6 +166,20 @@ class EngineConfig:
         quant = checkpoint_quant_config(self.model_path, hf_config, spec)
         set_quant_config(quant)
         model_config = _load_attr(spec.module, spec.parse_config)(hf_config)
+        if self.mtp_runtime_path is not None:
+            from freetoken.models.config import SlotStateSpec
+            from freetoken.models.qwen4_exp.mtp_state import MTP_LAST_RESIDUAL
+            if (model_config.qwen4_args is None or getattr(quant, 'dialect', None) != 'gguf_strata'
+                    or self.active_encoders or model_config.hidden_size != 2560
+                    or model_config.qwen4_args.hc_count != 4):
+                raise ValueError('MTP currently requires text-only GGUF Strata Flash Next geometry')
+            capture_rows = getattr(self, 'max_extend_tokens', 4096)
+            if capture_rows <= 0:
+                raise ValueError('MTP capture row capacity must be positive')
+            model_config = replace(model_config,
+                slot_states=(*model_config.slot_states,
+                             SlotStateSpec(MTP_LAST_RESIDUAL, (10240,), dtype=torch.float32)),
+                mtp_runtime_path=self.mtp_runtime_path, mtp_capture_rows=capture_rows)
         return replace(model_config, quant=quant)
 
     @property

@@ -52,6 +52,23 @@ def test_alloc_exhaustion_raises():
         pool.alloc(1)
 
 
+def test_mtp_transaction_slots_are_extra_and_remain_reserved_after_idle_rebuild():
+    from freetoken.kvcache.linear_state_pool import _linear_pool_min_slots, _linear_pool_num_slots
+    base = SimpleNamespace(max_running_req=1, cache_type='hybrid_radix', linear_state_cache_ratio=1.)
+    original = _linear_pool_num_slots(base)
+    base.mtp_runtime_path = 'independent-test-runtime'
+    assert _linear_pool_num_slots(base) == original + 4
+    assert _linear_pool_min_slots(base) == 9
+    pool = LinearStatePool(_group(), original + 4, torch.float32, torch.device('cpu'),
+                           tp_size=1, reserved_slots=4)
+    assert pool.num_free_slots == original - 1
+    pool.reclaim_all_slots()
+    assert pool.num_free_slots == original - 1
+    pool.rebuild(original + 5)
+    assert pool.num_free_slots == original
+    assert set(pool.alloc(original)).isdisjoint(pool.reserved_slot_ids)
+
+
 def test_clear_slots_zeros_all_layers():
     pool = _pool(num_slots=6)
     s = pool.alloc(1)[0]
@@ -165,7 +182,7 @@ def test_slot_state_in_the_byte_account():
     assert with_state - gdn_only == 32 * 9 * 2
     assert _pool(slot_states=_SPECS).bytes_per_slot() == with_state
 
-    mc = SimpleNamespace(slot_states=_SPECS)
+    mc = SimpleNamespace(slot_states=_SPECS, quant=None)
     mc.linear_attention_group = lambda: group
     config = SimpleNamespace(
         model_config=mc, dtype=torch.bfloat16, tp_info=SimpleNamespace(size=1),

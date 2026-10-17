@@ -357,6 +357,8 @@ class ModelConfig:
     # Extra per-request tensors riding the LinearStatePool slots (see SlotStateSpec);
     # () for models without any. Requires a linear-attention group to ride on.
     slot_states: Tuple[SlotStateSpec, ...] = ()
+    mtp_runtime_path: str | None = None
+    mtp_capture_rows: int = 0
 
     @property
     def is_moe(self) -> bool:

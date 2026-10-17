@@ -440,6 +440,7 @@ class Engine:
                 device=self.device,
                 tp_size=config.tp_info.size,
                 slot_states=config.model_config.slot_states,
+                reserved_slots=4 if config.mtp_runtime_path is not None else 0,
             )
             self.ctx.linear_state_pool = self.linear_state_pool
         else:

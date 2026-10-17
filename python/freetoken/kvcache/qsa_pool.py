@@ -67,6 +67,7 @@ class QSAKVCache(MHAKVCache):
         layer_ids: Sequence[int] | None = None,
         mrope: bool = False,
         index_dtype: torch.dtype | None = None,
+        mtp: bool = False,
     ) -> None:
         if index_ratio < 1 or page_size % index_ratio != 0:
             # slot // index_ratio only names one group when a group never straddles a page.
@@ -94,6 +95,8 @@ class QSAKVCache(MHAKVCache):
         self._index_dtype = index_dtype or dtype
         self._page_size = page_size
         self._mrope = mrope
+        self._mtp = mtp
+        self._mtp_state = None
         super().__init__(
             num_kv_heads=num_kv_heads,
             num_layers=num_layers,
@@ -139,6 +142,12 @@ class QSAKVCache(MHAKVCache):
             if self._mrope
             else None
         )
+        if self._mtp:
+            from .mtp_pool import MtpKVState
+            if self._mtp_state is None:
+                self._mtp_state = MtpKVState(num_pages * self._page_size, self._device)
+            else:
+                self._mtp_state.rebuild(num_pages * self._page_size)
 
     def rebuild(self, num_pages: int) -> None:
         # Free the index tiers BEFORE the K/V realloc (super().rebuild frees + syncs +
@@ -149,11 +158,15 @@ class QSAKVCache(MHAKVCache):
         self._cmp_k_buffer = None
         self._pending_ring = None
         self._rope_positions = None
+        if self._mtp_state is not None:
+            self._mtp_state.release()
         super().rebuild(num_pages)
         self._zero_kv_slabs()
         try:
             self._alloc_index_tiers(num_pages)
         except Exception:
+            if self._mtp_state is not None:
+                self._mtp_state.release()
             self._kv_buffer = None
             self._k_buffer = None
             self._v_buffer = None
@@ -167,17 +180,21 @@ class QSAKVCache(MHAKVCache):
         num_req_slots = config.max_running_req + 1
         per_token = 0
         fixed = 0
+        mtp = getattr(config.model_config, 'mtp_runtime_path', None) is not None
         for spec in config.model_config.kv_cache_group_specs():
             if spec.is_swa:
                 continue
             per_token += spec_kv_bytes_per_token(spec, config)
             if spec.attn_type is AttnType.QSA:
                 # One index-key row = all index layers at one position.
-                index_bytes = 4 if getattr(config.model_config.quant, "dialect", None) == "gguf_strata" else _INDEX_DTYPE_BYTES
+                index_bytes = 4 if getattr(getattr(config.model_config, 'quant', None), "dialect", None) == "gguf_strata" else _INDEX_DTYPE_BYTES
                 row = spec.index_head_dim * spec.num_index_layers * index_bytes
-                fixed += num_req_slots * row * (cls.ring_capacity_for(spec.index_ratio) + 1)
+                fixed += num_req_slots * row * (cls.ring_capacity_for(spec.index_ratio, 3 if mtp else 0) + 1)
                 if config.model_config.model_is_mrope:
                     per_token += _ROPE_POS_BYTES
+        if mtp:
+            from .mtp_pool import MTP_KV_BYTES_PER_TOKEN
+            per_token += MTP_KV_BYTES_PER_TOKEN
         return per_token * config.page_size, fixed, config.page_size, 0
 
     def unit_bytes(self) -> tuple[int, int]:
@@ -191,7 +208,12 @@ class QSAKVCache(MHAKVCache):
             * self._index_head_dim
             * self._index_dtype.itemsize
         )
-        return kv + slab // tokens + (_ROPE_POS_BYTES if self._mrope else 0), swa
+        mtp = self._mtp_state.owned_bytes // tokens if self._mtp_state is not None else 0
+        return kv + slab // tokens + (_ROPE_POS_BYTES if self._mrope else 0) + mtp, swa
+
+    @property
+    def mtp_state(self):
+        return self._mtp_state
 
     def cmp_k_cache(self, slot: int) -> torch.Tensor:
         """Compressed index keys of one sparse layer: ``[rows, index_head_dim]``."""

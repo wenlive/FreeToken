@@ -210,7 +210,8 @@ def create_kvcache_pool(
         spec = kv_specs[0]
         if num_req_slots is None:
             raise ValueError("QSA pools need num_req_slots (max_running_req + 1)")
-        gguf = getattr(model_config.quant, "dialect", None) == "gguf_strata"
+        gguf = getattr(getattr(model_config, 'quant', None), "dialect", None) == "gguf_strata"
+        mtp = getattr(model_config, 'mtp_runtime_path', None) is not None
         return QSAKVCache(
             num_kv_heads=spec.num_kv_heads,
             num_layers=model_config.num_layers,
@@ -226,6 +227,8 @@ def create_kvcache_pool(
             layer_ids=spec.layer_ids,
             mrope=model_config.model_is_mrope,
             index_dtype=torch.float32 if gguf else dtype,
+            mtp=mtp,
+            ring_capacity=QSAKVCache.ring_capacity_for(spec.index_ratio, 3 if mtp else 0),
         )
 
     if len(kv_specs) == 1 and kv_specs[0].mla:

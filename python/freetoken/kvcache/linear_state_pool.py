@@ -53,10 +53,14 @@ class LinearStatePool:
         tp_size: int | None = None,
         slot_states: tuple[SlotStateSpec, ...] = (),
         recurrent_dtype: torch.dtype | None = None,
+        reserved_slots: int = 0,
     ) -> None:
         if tp_size is None:
             tp_size = get_tp_info().size
 
+        if reserved_slots < 0 or reserved_slots >= num_slots:
+            raise ValueError('Reserved linear-state slots must leave a padding slot')
+        self._reserved_count = reserved_slots
         self._group = group
         self._num_slots = num_slots
         self._device = device
@@ -94,7 +98,7 @@ class LinearStatePool:
         # radix-tree-donated snapshots are all drawn from this single free-list, so memory
         # flows between them by demand. Unused by the op harness (which assigns slots by hand).
         self.padding_slot = 0
-        self._free_slots: list[int] = list(range(1, num_slots))
+        self._free_slots: list[int] = list(range(1, num_slots - self._reserved_count))
 
     def _alloc_slot_states(self, num_slots: int) -> dict[str, torch.Tensor]:
         return {
@@ -124,6 +128,10 @@ class LinearStatePool:
     def num_free_slots(self) -> int:
         return len(self._free_slots)
 
+    @property
+    def reserved_slot_ids(self) -> tuple[int, ...]:
+        return tuple(range(self._num_slots - self._reserved_count, self._num_slots))
+
     def alloc(self, n: int = 1) -> list[int]:
         """Pop ``n`` free slot ids (LIFO). Raises if the pool is exhausted."""
         if n > len(self._free_slots):
@@ -136,7 +144,7 @@ class LinearStatePool:
         """Restore the free-list to all non-padding slots. Idle-only: the caller (e.g. a
         CacheManager rebuild that discards the tree owning donated snapshots) must guarantee no
         running request holds a slot, otherwise live state would be handed out twice."""
-        self._free_slots = list(range(1, self._num_slots))
+        self._free_slots = list(range(1, self._num_slots - self._reserved_count))
 
     def rebuild(self, num_slots: int) -> None:
         """Reallocate the conv + recurrent state tensors for ``num_slots`` slots IN PLACE.
@@ -147,6 +155,8 @@ class LinearStatePool:
         live/snapshot state is dropped, so the caller must guarantee no running request
         holds a slot and the radix tree owning donated snapshots is discarded too.
         """
+        if num_slots <= self._reserved_count:
+            raise ValueError('Rebuilt linear-state pool cannot drop reserved ownership')
         n_layers, _, local_conv_dim, km1 = self.conv_states.shape
         _, _, local_v_heads, key_head_dim, value_head_dim = self.recurrent_states.shape
         conv_dtype, rec_dtype = self.conv_states.dtype, self.recurrent_states.dtype
@@ -167,7 +177,7 @@ class LinearStatePool:
         )
         self.slot_states = self._alloc_slot_states(num_slots)
         self._num_slots = num_slots
-        self._free_slots = list(range(1, num_slots))
+        self._free_slots = list(range(1, num_slots - self._reserved_count))
 
     def free(self, slots) -> None:
         """Return slot ids to the free-list. Accepts an int, list, or 1-D tensor."""
@@ -175,7 +185,10 @@ class LinearStatePool:
             slots = slots.flatten().tolist()
         elif isinstance(slots, int):
             slots = [slots]
-        self._free_slots.extend(int(s) for s in slots)
+        slots = [int(s) for s in slots]
+        if any(s in self.reserved_slot_ids for s in slots):
+            raise ValueError('Reserved transaction slots cannot enter the request free list')
+        self._free_slots.extend(slots)
 
     def clear_slots(self, slots) -> None:
         """Zero conv + recurrent state at ``slots`` across all linear layers (fresh sequence)."""
@@ -292,11 +305,12 @@ def _linear_pool_num_slots(config) -> int:
     (1 live + 2 ping-pong + 1 committed snapshot locked through decode), plus a cross-request
     snapshot cache and a padding sink; naive GDN keeps the old (max_running_req + 1)."""
     mr = config.max_running_req
+    reserved = 4 if getattr(config, 'mtp_runtime_path', None) is not None else 0
     if config.cache_type != "hybrid_radix":
-        return mr + 1  # live + dummy/padding
+        return mr + 1 + reserved  # live + dummy/padding + transaction slots
     ratio = config.linear_state_cache_ratio
     n_cache = max(4, int(ratio * mr))
-    return 4 * mr + n_cache + 1  # live + 2 ping-pong + locked committed snapshot + cache + padding
+    return 4 * mr + n_cache + 1 + reserved  # request/tree slots + padding + transaction slots
 
 
 def _linear_pool_min_slots(config) -> int:
@@ -306,6 +320,7 @@ def _linear_pool_min_slots(config) -> int:
     padding. Below this, a full max_running_req batch can't get its slots and admission
     deadlocks -- so a runtime rebuild rejects a smaller request."""
     mr = config.max_running_req
+    reserved = 4 if getattr(config, 'mtp_runtime_path', None) is not None else 0
     if config.cache_type != "hybrid_radix":
-        return mr + 1
-    return 4 * mr + 1
+        return mr + 1 + reserved
+    return 4 * mr + 1 + reserved

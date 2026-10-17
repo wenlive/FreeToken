@@ -31,7 +31,7 @@ _SWA_RETAIN_GAP = 16
 
 class CacheManager:
     def __init__(self, num_pages: int, page_size: int, page_table: torch.Tensor, type: str,
-                 linear_state_pool=None, swa_pool=None, sliding_window_size=None):
+                 linear_state_pool=None, swa_pool=None, sliding_window_size=None, mtp_state=None):
         # The `_free_slots` follows a page-aligned manner. For example, if page_size = 2,
         # the `_free_slots` may look like [0, 2, 4, 6, ...], and each slot represents a page.
         device = page_table.device
@@ -41,6 +41,7 @@ class CacheManager:
         # the HybridSWAKVCache global-paged mode) through a SWARadixCache; non-hybrid models keep
         # the plain naive/radix path.
         self.linear_state_pool = linear_state_pool
+        self.mtp_state = mtp_state
         self.swa_pool = swa_pool
         self.sliding_window_size = sliding_window_size
         self.is_hybrid = type == "hybrid_radix"
@@ -625,6 +626,8 @@ class CacheManager:
             assert len(self.free_slots) >= needed_pages, "Eviction did not free enough space."
         allocated = self.free_slots[:needed_pages]
         self.free_slots = self.free_slots[needed_pages:]
+        if self.mtp_state is not None:
+            self.mtp_state.invalidate(self._page_to_token(allocated))
         return allocated
 
     def _free(self, indices: torch.Tensor) -> None:

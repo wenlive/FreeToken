@@ -242,7 +242,4 @@ def test_mtp_finish_keeps_shared_prefix_and_returns_only_owned_future_pages():
 
 
 if __name__ == "__main__":
-    for name, fn in list(globals().items()):
-        if name.startswith("test_") and callable(fn):
-            fn()
-            print(f"{name}: PASS")
+    raise SystemExit(pytest.main([__file__, '-q']))
