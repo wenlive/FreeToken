@@ -69,6 +69,8 @@ def _cuda_runtime_paths() -> tuple[list[str], list[str]]:
     library_dirs = [str(cuda_home / "lib64")]
     if (cuda_home / "lib").exists():
         library_dirs.append(str(cuda_home / "lib"))
+    if os.name == "nt":
+        library_dirs.append(str(cuda_home / "lib" / "x64"))
     return [str(cuda_home / "include")], library_dirs
 
 
@@ -86,6 +88,9 @@ else:
     runtime_lib = "cudart"
     runtime_link_args = []
     extra_compile = ["-O3", "-std=c++17"]
+
+if os.name == "nt":
+    extra_compile = ["/O2", "/std:c++17", "/utf-8", "/DNOMINMAX"]
 
 _check_toolchain()
 
@@ -116,7 +121,7 @@ setup(
             include_dirs=[KERNEL_INCLUDE, *runtime_include_dirs],
             library_dirs=runtime_library_dirs,
             libraries=[runtime_lib],
-            extra_compile_args=extra_compile + ["-pthread"],
+            extra_compile_args=extra_compile + ([] if os.name == "nt" else ["-pthread"]),
             extra_link_args=runtime_link_args,
         ),
         # disk-backed row store (PLE / Engram tables); Linux-only until the TableFile/BatchReader seams grow Windows bodies
@@ -126,9 +131,9 @@ setup(
                 sources=[
                     "python/freetoken/kernel/csrc/row_store/row_store_ext.cpp",
                 ],
-                extra_compile_args=["-O3", "-std=c++17"],
+                extra_compile_args=extra_compile,
             )
-        ] if sys.platform == "linux" else []),
+        ] if sys.platform in {"linux", "win32"} else []),
     ],
     cmdclass={"build_ext": BuildExtension.with_options(use_ninja=True)},
 )
