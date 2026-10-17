@@ -33,20 +33,38 @@ def _codes(W, expert, rows, cols, N: tl.constexpr, K: tl.constexpr):
 
 
 @triton.jit
-def _vector(Q, S, W, IDS, Y, K: tl.constexpr, N: tl.constexpr,
-            INPUT_TOPK: tl.constexpr, BN: tl.constexpr, BG: tl.constexpr):
-    route = tl.program_id(0)
-    token = route // INPUT_TOPK
-    expert = tl.load(IDS + route).to(tl.int64)
-    rows = tl.program_id(1) * BN + tl.arange(0, BN)
-    groups = tl.arange(0, BG)
-    cols = groups[:, None] * 32 + tl.arange(0, 32)[None, :]
-    x = tl.load(Q + token * K + cols, cols < K, 0).to(tl.int32)
-    dx = tl.load(S + token * (K // 32) + groups, groups < K // 32, 0)
-    w, dw = _codes(W, expert, rows[:, None, None], cols[None, :, :], N, K)
-    dot = tl.sum(w.to(tl.int32) * x[None, :, :], 2).to(tl.float32)
-    value = tl.sum(dot * tl.sum(dw, 2) * (1.0 / 32.0) * dx[None, :], 1)
-    tl.store(Y + route * N + rows, value, rows < N)
+def _routed_vector(Q32,S,W,IDS,Y,K:tl.constexpr,N:tl.constexpr,
+                 INPUT_TOPK:tl.constexpr,BN:tl.constexpr,BG:tl.constexpr):
+    route=tl.program_id(0)
+    token=route//INPUT_TOPK
+    expert=tl.load(IDS+route).to(tl.int64)
+    rows=tl.program_id(1)*BN+tl.arange(0,BN)
+    groups=tl.arange(0,BG)
+    words=tl.arange(0,8)
+    base=expert*N*(K//64*18)+rows[:,None]*(K//64*18)+(groups[None,:]//2)*18
+    valid=(rows[:,None]<N)&(groups[None,:]<K//32)
+    # Q2 blocks are 18 bytes: load headers as bytes, never assume int32 alignment.
+    low=tl.load(W+base,valid,0).to(tl.uint16)
+    high=tl.load(W+base+1,valid,0).to(tl.uint16)
+    dw=(low|(high<<8)).to(tl.float16,bitcast=True).to(tl.float32)
+    codes=tl.load(W+base[:,:,None]+2+(groups[None,:,None]%2)*8+words[None,None,:],valid[:,:,None],0).to(tl.uint32)
+    packed=((codes&3)|(((codes>>2)&3)<<8)|(((codes>>4)&3)<<16)|(((codes>>6)&3)<<24)).to(tl.int32)
+    x=tl.load(Q32+token*(K//4)+groups[:,None]*8+words[None,:],groups[:,None]<K//32,0).to(tl.int32)
+    # The unsigned two-bit codes need the exact integer sum(x) correction.
+    products=tl.inline_asm_elementwise('dp4a.s32.s32 $0, $1, $2, 0;',constraints='=r,r,r',
+        args=[packed,x[None,:,:]],dtype=tl.int32,is_pure=True,pack=1)
+    correction=tl.inline_asm_elementwise('dp4a.s32.s32 $0, 0x01010101, $1, 0;',constraints='=r,r',
+        args=[x],dtype=tl.int32,is_pure=True,pack=1)
+    dot=tl.sum(products-correction[None,:,:],2).to(tl.float32)
+    dx=tl.load(S+token*(K//32)+groups,groups<K//32,0)
+    value=tl.sum(dot*dw*dx[None,:],1)
+    tl.store(Y+route*N+rows,value,rows<N)
+
+def _routed_project(value,bank,result,ids,input_topk):
+    q,scales=quantize_expert_activation(value)
+    k,n=value.shape[1],result.shape[1]
+    _routed_vector[(ids.numel(),triton.cdiv(n,4))](q.view(torch.int32),scales,bank,ids,result,
+        k,n,input_topk,4,triton.next_power_of_2(k//32),num_warps=4,enable_fp_fusion=False)
 
 
 @triton.jit
@@ -89,6 +107,12 @@ def quantize_expert_activation(x):
 def fused_experts_q2_q8(x, gate_up, down, topk_weights, topk_ids, *, is_prefill=False):
     """复用完整真实专家及 GPU 路由，只改变计算契约，不创建 BF16 专家副本。"""
     from freetoken.moe.fused_q2_0 import _grouped_gate_act, _reduce
+    if x.ndim != 2 or gate_up.ndim != 3 or down.ndim != 3 or topk_ids.ndim != 2:
+        raise ValueError("GGUF Q2xQ8 expects matrix activations/routes and 3D banks")
+    if topk_weights.dtype != torch.float32 or topk_ids.dtype not in (torch.int32, torch.int64):
+        raise ValueError("GGUF Q2xQ8 expects FP32 routing weights and integer indices")
+    if any(t.device != x.device for t in (gate_up, down, topk_weights, topk_ids)):
+        raise ValueError("GGUF Q2xQ8 operands must share one CUDA device")
     if x.dtype != torch.float32 or gate_up.dtype != torch.uint8 or down.dtype != torch.uint8:
         raise ValueError("GGUF Q2×Q8 requires FP32 activation and uint8 expert banks")
     if not all(t.is_contiguous() and t.is_cuda for t in (x, gate_up, down, topk_weights, topk_ids)):
@@ -97,19 +121,28 @@ def fused_experts_q2_q8(x, gate_up, down, topk_weights, topk_ids, *, is_prefill=
     intermediate = gate_up.shape[1] // 2
     topk = topk_ids.shape[1]
     routes = tokens * topk
-    if (hidden % 64 or intermediate % 64 or gate_up.shape[2] != hidden // 64 * 18
+    if (hidden <= 0 or intermediate <= 0 or topk <= 0 or gate_up.shape[0] <= 0
+            or gate_up.shape[1] % 2 or hidden % 64 or intermediate % 64
+            or gate_up.shape[2] != hidden // 64 * 18
             or down.shape != (gate_up.shape[0], hidden, intermediate // 64 * 18)
             or topk_ids.shape[0] != tokens or topk_weights.shape != topk_ids.shape):
         raise ValueError("incompatible GGUF Q2×Q8 expert/routing geometry")
+    if not tokens:
+        return torch.empty_like(x)
     gate_values = torch.empty((routes, 2 * intermediate), dtype=torch.float32, device=x.device)
     active = torch.empty((routes, intermediate), dtype=torch.float32, device=x.device)
     routed = torch.empty((routes, hidden), dtype=torch.float32, device=x.device)
     out = torch.empty_like(x)
-    # Batch-dependent reduction orders can change subsequent Q8 codes and routing.
-    # Use the same integer-dot / FP32 accumulation for prefill, cache tails and decode.
+    # Decode is sparse in route space, independent of total cache capacity.
+    # Integer chunk dots and FP32 activation scales match prefill; float reduction
+    # trees may differ within the validated bound. Large prefill reuses weights.
     from freetoken.moe.fused import moe_align_block_size
-    sorted_ids, experts, padded = moe_align_block_size(topk_ids, 16, gate_up.shape[0])
+    vector_decode = not is_prefill and tokens <= 8
+    if not vector_decode:
+        sorted_ids, experts, padded = moe_align_block_size(topk_ids, 16, gate_up.shape[0])
     def project(value, bank, result, input_topk):
+        if vector_decode:
+            return _routed_project(value, bank, result, topk_ids, input_topk)
         q, scales = quantize_expert_activation(value)
         k, n = value.shape[1], result.shape[1]
         _grouped[(triton.cdiv(sorted_ids.numel(), 16), triton.cdiv(n, 32))](
