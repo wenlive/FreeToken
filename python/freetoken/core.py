@@ -66,6 +66,9 @@ class Req:
     # handler must not free resources under an in-flight forward; it sets this flag and
     # _process_last_data frees the request when the batch drains (after copy_done.synchronize).
     aborted: bool = False
+    # Exclusive page-aligned ownership bound, including speculative lookahead.
+    # It must not advance cached_len or become visible to the prefix cache.
+    mtp_reserved_len: int = 0
 
     def __post_init__(self) -> None:
         assert self.input_ids.is_cpu
@@ -115,7 +118,7 @@ class Req:
 @dataclass
 class Batch:
     reqs: List[Req]
-    phase: Literal["prefill", "decode"]
+    phase: Literal["prefill", "decode", "verify"]
     # these fields should be set by scheduler
     input_ids: torch.Tensor = field(init=False)
     positions: torch.Tensor = field(init=False)
@@ -157,6 +160,8 @@ class Batch:
     # _prepare_batch succeeds. Continuation chunks leave this empty, so accounting is
     # exactly-once.
     prompt_admissions: List[Tuple[int, int, int]] = field(default_factory=list, init=False)
+    mtp_token_ids: torch.Tensor | None = field(default=None, init=False)
+    mtp_ring_snapshots: torch.Tensor | None = field(default=None, init=False)
 
     @property
     def is_prefill(self) -> bool:
@@ -165,6 +170,10 @@ class Batch:
     @property
     def is_decode(self) -> bool:
         return self.phase == "decode"
+
+    @property
+    def is_verify(self) -> bool:
+        return self.phase == "verify"
 
     def get_attn_positions(self) -> torch.Tensor:
         return self.mrope_positions if self.mrope_positions is not None else self.positions

@@ -42,6 +42,7 @@ class FLAMetadata:
     track_h_row: torch.Tensor | None = None      # [nt] int64 row into h (boh_i + aligned//CHUNK)
     track_conv_src: torch.Tensor | None = None   # [nt, kernel-1] int64 conv-input token positions
     track_boundary_row: torch.Tensor | None = None  # [nt] int64 forward-local row of the track boundary; states with their own left context (qwen4_exp PLE) derive their windows from it
+    is_verify: bool = False
 
 
 def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:
@@ -78,7 +79,13 @@ def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:
     fresh = [gdn_slot(r) for r in reqs if r.cached_len == 0]
     fresh_host = torch.tensor(fresh, dtype=torch.int64, **pin) if fresh else None
 
-    track = _build_track_metadata(reqs, cu_host, device, pin)
+    is_verify = getattr(batch, "is_verify", False)
+    if is_verify:
+        if len(reqs) != 1 or not 1 <= lens[0] <= 4 or reqs[0].cached_len <= 0:
+            raise ValueError("MTP verification requires one continuing request and 1-4 rows")
+        track = {}
+    else:
+        track = _build_track_metadata(reqs, cu_host, device, pin)
 
     return FLAMetadata(
         cu_seqlens=cu_host.to(device, non_blocking=True),
@@ -87,6 +94,7 @@ def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:
         fresh_state_indices=(
             fresh_host.to(device, non_blocking=True) if fresh_host is not None else None
         ),
+        is_verify=is_verify,
         **track,
     )
 

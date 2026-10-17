@@ -7,6 +7,72 @@ import torch.nn.functional as F
 
 @unittest.skipUnless(torch.cuda.is_available(), "requires CUDA")
 class GGUFStateTests(unittest.TestCase):
+    def test_verify_conv_and_recurrence_snapshots_equal_native_decode(self):
+        from freetoken.attention.linear import FLAMetadata
+        from freetoken.kvcache.linear_state_pool import LinearStatePool
+        from freetoken.models.config import LinearGatedDeltaGroupConfig
+        from freetoken.models.qwen4_exp.gdn import Qwen4ExpGatedDeltaNet
+        group = LinearGatedDeltaGroupConfig(
+            name='linear', layer_ids=(0,), num_key_heads=2, num_value_heads=6,
+            key_head_dim=128, value_head_dim=128, conv_kernel_dim=4, output_gate='sigmoid')
+        pool = LinearStatePool(group, 8, torch.float32, torch.device('cuda'), tp_size=1)
+        op = object.__new__(Qwen4ExpGatedDeltaNet)
+        op.layer_id = 0
+        op.num_k_heads, op.num_v_heads = 2, 6
+        op.head_k_dim, op.head_v_dim = 128, 128
+        op.key_dim, op.value_dim = 256, 768
+        op.conv1d = SimpleNamespace(weight=torch.randn(1280, 1, 4, device='cuda'))
+        op.A_log = -torch.rand(6, device='cuda')
+        op.dt_bias = torch.randn(6, device='cuda')
+        for count in (1, 2, 3, 4):
+            with self.subTest(count=count):
+                pool.conv_states.normal_()
+                pool.recurrent_states.normal_(0, .01)
+                initial_conv = pool.conv_states.clone()
+                initial_rec = pool.recurrent_states.clone()
+                conv = torch.randn(count, 1280, device='cuda')
+                a, b = torch.randn(count, 6, device='cuda'), torch.randn(count, 6, device='cuda')
+                slots = torch.tensor([1], dtype=torch.int32, device='cuda')
+                fla = FLAMetadata(torch.tensor([0, count], dtype=torch.int32, device='cuda'), slots,
+                    track_dst=torch.arange(2, count + 2, device='cuda'),
+                    track_boundary_row=torch.arange(1, count + 1, device='cuda'), is_verify=True)
+                output = op._gguf_core(conv, a, b, pool, 0, fla, False)
+                verify_conv, verify_rec = pool.conv_states.clone(), pool.recurrent_states.clone()
+                pool.conv_states.copy_(initial_conv)
+                pool.recurrent_states.copy_(initial_rec)
+                one = FLAMetadata(torch.tensor([0, 1], dtype=torch.int32, device='cuda'), slots)
+                expected = []
+                for row in range(count):
+                    expected.append(op._gguf_core(conv[row:row+1], a[row:row+1], b[row:row+1], pool, 0, one, True))
+                    torch.testing.assert_close(verify_conv[0, row + 2], pool.conv_states[0, 1], rtol=0, atol=0)
+                    torch.testing.assert_close(verify_rec[0, row + 2], pool.recurrent_states[0, 1], rtol=0, atol=0)
+                torch.testing.assert_close(output, torch.cat(expected), rtol=0, atol=0)
+                if count == 4:
+                    # A reusable graph must honor the live request's staged slot,
+                    # rather than baking the capture request's slot into snapshots.
+                    graph = torch.cuda.CUDAGraph()
+                    stream = torch.cuda.Stream()
+                    stream.wait_stream(torch.cuda.current_stream())
+                    with torch.cuda.stream(stream):
+                        op._gguf_core(conv, a, b, pool, 0, fla, False)
+                        with torch.cuda.graph(graph, stream=stream):
+                            captured = op._gguf_core(conv, a, b, pool, 0, fla, False)
+                    torch.cuda.current_stream().wait_stream(stream)
+                    pool.conv_states.copy_(initial_conv)
+                    pool.recurrent_states.copy_(initial_rec)
+                    slots.fill_(6)
+                    graph.replay()
+                    verify_conv, verify_rec = pool.conv_states.clone(), pool.recurrent_states.clone()
+                    pool.conv_states.copy_(initial_conv)
+                    pool.recurrent_states.copy_(initial_rec)
+                    expected = []
+                    for row in range(count):
+                        expected.append(op._gguf_core(conv[row:row+1], a[row:row+1], b[row:row+1], pool, 0, one, True))
+                        torch.testing.assert_close(verify_conv[0, row + 2], pool.conv_states[0, 6], rtol=0, atol=0)
+                        torch.testing.assert_close(verify_rec[0, row + 2], pool.recurrent_states[0, 6], rtol=0, atol=0)
+                    torch.testing.assert_close(captured, torch.cat(expected), rtol=0, atol=0)
+                    graph.reset()
+
     def test_channels_first_view_varlen_snapshot_and_resume(self):
         from freetoken.kernel.triton.gguf_gdn import gguf_gdn_forward
         torch.manual_seed(17)

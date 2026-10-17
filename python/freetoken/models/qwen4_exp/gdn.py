@@ -152,6 +152,8 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
         z = z.reshape(total, self.num_v_heads, self.head_v_dim)
         li = pool.local_index(self.layer_id)
 
+        if getattr(fla, "is_verify", False) and not self._gguf:
+            raise ValueError("MTP verification currently requires the GGUF GDN path")
         if self._gguf:
             core_out = self._gguf_core(conv_in, a, b, pool, li, fla, batch.is_decode)
         elif batch.is_decode:
@@ -207,8 +209,21 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
         from freetoken.kernel.triton.gguf_gdn import gguf_gdn_forward
         if pool.conv_states.dtype != torch.float32:
             raise ValueError("GGUF GDN convolution state must be FP32")
+        is_verify = getattr(fla, "is_verify", False)
+        old_conv = None
+        if is_verify:
+            if is_decode or fla.cache_indices.numel() != 1 or not 1 <= len(conv_in) <= 4:
+                raise ValueError("MTP GDN verification requires one request and 1-4 rows")
+            if fla.track_dst is not None:
+                old_conv = pool.conv_states[li].index_select(
+                    0, fla.cache_indices.long())[0].transpose(0, 1)
         if is_decode:
             mixed = self._conv_decode(conv_in, fla.cache_indices, pool)
+        elif is_verify:
+            # Preserve native decode arithmetic; varlen prefill uses another
+            # activation implementation and may change quantized downstream picks.
+            mixed = torch.cat([self._conv_decode(conv_in[row:row + 1], fla.cache_indices, pool)
+                               for row in range(len(conv_in))], dim=0)
         else:
             mixed = self._conv_prefill(conv_in, pool, fla.cu_seqlens,
                                        fla.cache_indices, fla.has_initial_state)
@@ -221,7 +236,13 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
             v.reshape(-1, self.num_v_heads, self.head_v_dim),
             a, b, self.A_log, self.dt_bias, pool.recurrent_states[li], fla, is_decode=is_decode)
         if not is_decode and fla.track_dst is not None:
-            conv_window = conv_in[fla.track_conv_src].transpose(-1, -2).contiguous()
+            if is_verify:
+                history = torch.cat([old_conv, conv_in], dim=0)
+                indices = fla.track_boundary_row[:, None] + torch.arange(
+                    old_conv.shape[0], device=conv_in.device)[None, :]
+                conv_window = history[indices].transpose(-1, -2).contiguous()
+            else:
+                conv_window = conv_in[fla.track_conv_src].transpose(-1, -2).contiguous()
             pool.conv_states[li].index_copy_(0, fla.track_dst, conv_window)
         return result
 

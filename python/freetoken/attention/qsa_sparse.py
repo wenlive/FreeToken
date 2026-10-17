@@ -297,7 +297,19 @@ class QSASparseAttnBackend(BaseAttnBackend):
             # cached plan would bake the warmup's addresses into the graph.
             self._plan_index_writes(md, batch)
 
+        snapshots = getattr(batch, "mtp_ring_snapshots", None)
+        old_ring = None
+        if getattr(batch, "is_verify", False) and snapshots is not None:
+            if md.ring_slots.numel() != 1 or not 1 <= index.k.shape[0] <= 4:
+                raise ValueError("MTP QSA verification requires one request and 1-4 rows")
+            old_ring = self.kvcache.pending_ring(slot).index_select(0, md.ring_slots.long())[0]
         self._update_index_cache(index, md, slot)
+        if old_ring is not None:
+            rows = index.k.shape[0]
+            snapshots[:rows, slot].copy_(old_ring.unsqueeze(0).expand(rows, -1, -1))
+            for row in range(rows):
+                slots = md.positions[:row + 1].long() % old_ring.shape[0]
+                snapshots[row, slot].index_copy_(0, slots, index.k[:row + 1])
         indices = self._select(index, md, slot)
         return qsa_sparse_paged_attention(
             q,

@@ -262,12 +262,22 @@ class CacheManager:
         if self.swa_pool is not None and len(indices) > 0:
             self.swa_pool.free_swa(indices)
 
-    def allocate_paged(self, reqs: List[Req]) -> None:
+    def allocate_paged(self, reqs: List[Req], *, reserve_tokens: int = 0) -> None:
+        if reserve_tokens < 0:
+            raise ValueError("reserve_tokens must be non-negative")
+        if reserve_tokens and (not self.is_hybrid or self.swa_paged):
+            raise ValueError("MTP page reservation requires the hybrid GDN cache")
         needed_pages = 0
         allocation_info: List[Tuple[int, int, int]] = []
+        reservations: List[Tuple[Req, int]] = []
         for req in reqs:
-            first_page = div_ceil(req.cached_len, self.page_size)
-            last_page = div_ceil(req.device_len, self.page_size)
+            first_page = div_ceil(max(req.cached_len, req.mtp_reserved_len), self.page_size)
+            end = (min(req.device_len + reserve_tokens, req.max_device_len)
+                   if reserve_tokens else req.device_len)
+            last_page = div_ceil(end, self.page_size)
+            # Native preparation may already own the pending token's page. Record
+            # it too, so reserving a window after preparation never replaces it.
+            reservations.append((req, max(req.mtp_reserved_len, last_page * self.page_size)))
             if last_page > first_page:
                 needed_pages += last_page - first_page
                 allocation_info.append((req.table_idx, first_page, last_page))
@@ -282,6 +292,8 @@ class CacheManager:
                     self.ensure_swa_slots(len(allocated))
                 self.swa_pool.alloc_swa(allocated)
             _write_page_table(self.page_table, allocated, allocation_info, self.page_size)
+        for req, end in reservations:
+            req.mtp_reserved_len = end
 
     def cache_req(self, req: Req, *, finished: bool) -> None:
         if self.is_swa:
@@ -339,7 +351,8 @@ class CacheManager:
 
         pool = self.linear_state_pool
         old_handle = req.cache_handle
-        page_indices = self.page_table[req.table_idx, : req.cached_len]
+        page_indices = (self._padded_tail(req, 0) if finished else
+                        self.page_table[req.table_idx, : req.cached_len])
 
         if finished:
             # A pending freeze (the tool-call anchor, or a prefill ×64 track the request
@@ -377,11 +390,13 @@ class CacheManager:
                     req.input_ids[:insert_len], page_indices[:insert_len], req.linear_slot_idx)
                 self.unlock(old_handle)
                 self._free(page_indices[free_upto : max(free_upto, prefix_len)])
+                self._free(self._padded_tail(req, req.cached_len))
                 keep_live = not mamba_exist           # tree now owns linear_slot_idx
             else:
                 self.unlock(old_handle)
                 self._free(page_indices[free_upto :])
             self._free_req_slots(req, keep_live=keep_live)
+            req.mtp_reserved_len = 0
             return
 
         # Prefill chunk commit: donate the frozen snapshot at the tracked ×64 boundary.
@@ -493,12 +508,14 @@ class CacheManager:
             self.lock(req.cache_handle)
 
     def _padded_tail(self, req: Req, start: int) -> torch.Tensor:
-        """The request's OWN slice [start, page_ceil(cached_len)) of the page table. A finish
+        """The request's OWN slice through its allocated page bound. A finish
         frees through the page-CEIL bound, not cached_len: allocate_paged allocates (and, when
         swa_paged, charges swa for) whole pages, so the padding [cached_len, page_ceil) belongs
         to the finishing request. ``start`` is page-aligned (a match/insert boundary), so the
-        full-pool page bases derived via ``[::page_size]`` are identical to the unpadded slice."""
-        end = div_ceil(req.cached_len, self.page_size) * self.page_size
+        full-pool page bases derived via ``[::page_size]`` are identical to the unpadded slice.
+        Speculative pages beyond cached_len are owned but never inserted into the tree."""
+        end = max(div_ceil(req.cached_len, self.page_size) * self.page_size,
+                  req.mtp_reserved_len)
         return self.page_table[req.table_idx, start:end]
 
     def _free_req_slots(self, req: Req, keep_live: bool = False) -> None:

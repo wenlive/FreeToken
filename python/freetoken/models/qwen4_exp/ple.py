@@ -294,6 +294,7 @@ class PLEMetadata:
     state_slots: torch.Tensor
     fresh_slots: torch.Tensor | None
     is_decode: bool
+    is_verify: bool = False
 
 
 def _state_slot(req) -> int:
@@ -372,6 +373,7 @@ def build_ple_metadata(
         state_slots=slots,
         fresh_slots=fresh,
         is_decode=batch.is_decode,
+        is_verify=getattr(batch, "is_verify", False),
     )
 
 
@@ -400,7 +402,11 @@ def commit_ngram_context(meta: PLEMetadata, fla, context_pool: torch.Tensor | No
         nxt = torch.where(cand >= cu[:-1].unsqueeze(1), ids[cand.clamp_min(0)], old)
     context_pool.index_copy_(0, meta.state_slots, nxt.to(context_pool.dtype))
     if fla is not None and fla.track_boundary_row is not None:
-        win = ids[fla.track_boundary_row.unsqueeze(1) - ctx_len + steps]
+        if getattr(fla, "is_verify", False):
+            history = torch.cat([meta.ngram_context[0], ids])
+            win = history[fla.track_boundary_row.unsqueeze(1) + steps]
+        else:
+            win = ids[fla.track_boundary_row.unsqueeze(1) - ctx_len + steps]
         context_pool.index_copy_(0, fla.track_dst, win.to(context_pool.dtype))
 
 
@@ -628,10 +634,16 @@ class PLELayer(BaseOP):
         """Copy the conv history at the GDN track boundary into the same donatable slot, so a radix
         prefix hit restores PLE and GDN state together. Track slots never alias the live slots this
         forward advances, so the two writes are order-independent."""
-        src = fla.track_boundary_row.unsqueeze(1) + torch.arange(
-            -self.state_len, 0, device=x.device
-        )
-        window = x[src].transpose(-1, -2).contiguous()
+        if getattr(fla, "is_verify", False):
+            old = states.index_select(0, fla.cache_indices.long())[0].transpose(0, 1)
+            history = torch.cat([old, x], dim=0)
+            src = fla.track_boundary_row.unsqueeze(1) + torch.arange(self.state_len, device=x.device)
+            window = history[src].transpose(-1, -2).contiguous()
+        else:
+            src = fla.track_boundary_row.unsqueeze(1) + torch.arange(
+                -self.state_len, 0, device=x.device
+            )
+            window = x[src].transpose(-1, -2).contiguous()
         states.index_copy_(0, fla.track_dst, window.to(states.dtype))
 
     def _conv_state_slab(self, R: torch.Tensor) -> torch.Tensor:
@@ -656,7 +668,24 @@ class PLELayer(BaseOP):
         """silu of the dilated depthwise conv over [state | x], and roll the per-request state."""
         if meta.is_decode:
             return self._decode_conv(x, meta, states)
+        if meta.is_verify:
+            return self._verify_conv(x, meta, states)
         return self._prefill_conv(x, meta, states)
+
+    def _verify_conv(
+        self, x: torch.Tensor, meta: PLEMetadata, states: torch.Tensor
+    ) -> torch.Tensor:
+        if len(meta.seq_lens) != 1 or not 1 <= len(x) <= 4:
+            raise ValueError("MTP PLE verification requires one request and 1-4 rows")
+        old = self._read_state(meta, states, x.dtype)[0]
+        history = torch.cat([old.transpose(0, 1), x], dim=0)
+        indices = torch.arange(len(x), device=x.device)[:, None] + torch.arange(
+            0, self.state_len + 1, self.dilation, device=x.device)[None, :]
+        window = history[indices].transpose(-1, -2).contiguous().float()
+        out = (window * self.conv1d.weight.squeeze(1).float()).sum(-1)
+        states.index_copy_(0, meta.state_slots,
+                          history[-self.state_len:].transpose(0, 1)[None].contiguous().to(states.dtype))
+        return F.silu(out.to(x.dtype))
 
     def _decode_conv(
         self, x: torch.Tensor, meta: PLEMetadata, states: torch.Tensor

@@ -43,4 +43,49 @@ class GGUFPLEReductionTests(unittest.TestCase):
         zeros=torch.zeros_like(key)
         torch.testing.assert_close(gguf_ple_gate(zeros,query,4),torch.full_like(gate,.5),rtol=0,atol=0)
 
+class VerifyPLEStateTests(unittest.TestCase):
+    def test_window_and_every_snapshot_equal_native_decode(self):
+        from freetoken.attention.linear import FLAMetadata
+        from freetoken.models.qwen4_exp.ple import PLELayer, PLEMetadata, commit_ngram_context
+        devices = ['cpu', 'cuda'] if torch.cuda.is_available() else ['cpu']
+        for device in devices:
+            for count in (1, 2, 3, 4):
+                with self.subTest(device=device, count=count):
+                    torch.manual_seed(205)
+                    layer = object.__new__(PLELayer)
+                    layer.state_len = 9
+                    layer.dilation = 3
+                    layer.conv1d = SimpleNamespace(weight=torch.randn(16, 1, 4, device=device))
+                    states = torch.randn(7, 16, 9, device=device)
+                    reference = states.clone()
+                    context_pool = torch.arange(35, device=device).reshape(7, 5).clone()
+                    context_ref = context_pool.clone()
+                    x = torch.randn(count, 16, device=device)
+                    ids = torch.arange(100, 100 + count, device=device)
+                    slots = torch.tensor([1], device=device)
+                    boundaries = torch.arange(1, count + 1, device=device)
+                    dst = torch.arange(2, count + 2, device=device)
+                    fla = FLAMetadata(torch.tensor([0, count], device=device), slots,
+                                      track_dst=dst, track_boundary_row=boundaries, is_verify=True)
+                    meta = PLEMetadata(ids, fla.cu_seqlens, (count,), context_pool[1:2].clone(),
+                                       slots, None, False, True)
+                    layer._write_track_snapshot(states, x, fla)
+                    output = layer._short_conv(x, meta, states)
+                    commit_ngram_context(meta, fla, context_pool)
+                    expected = []
+                    for row in range(count):
+                        one = PLEMetadata(ids[row:row+1], torch.tensor([0, 1], device=device),
+                                          (1,), context_ref[1:2].clone(), slots, None, True)
+                        expected.append(layer._short_conv(x[row:row+1], one, reference))
+                        commit_ngram_context(one, None, context_ref)
+                        torch.testing.assert_close(states[row + 2], reference[1], rtol=0, atol=0)
+                        torch.testing.assert_close(context_pool[row + 2], context_ref[1], rtol=0, atol=0)
+                    # CPU SiLU changes vectorization with the row count. CUDA,
+                    # the supported inference path, must match native decode exactly.
+                    tolerance = 0 if device == 'cuda' else 2e-7
+                    torch.testing.assert_close(output, torch.cat(expected), rtol=tolerance, atol=tolerance)
+                    torch.testing.assert_close(states[1], reference[1], rtol=0, atol=0)
+                    torch.testing.assert_close(context_pool[1], context_ref[1], rtol=0, atol=0)
+
+
 if __name__=='__main__':unittest.main()

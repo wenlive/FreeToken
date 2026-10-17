@@ -6,6 +6,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import torch
+import pytest
 
 from freetoken.core import Req, SamplingParams
 from freetoken.kvcache.linear_state_pool import LinearStatePool
@@ -161,6 +162,83 @@ def test_pool_sizing_covers_4mr_floor():
         c = SimpleNamespace(max_running_req=mr, cache_type="hybrid_radix",
                             linear_state_cache_ratio=0.1)
         assert _linear_pool_num_slots(c) >= 4 * mr + 1, (mr, _linear_pool_num_slots(c))
+
+
+@pytest.mark.parametrize("page_size,position", [(4, 3), (4, 4), (64, 63), (64, 64)])
+@pytest.mark.parametrize("committed_rows", [1, 2, 3, 4])
+def test_mtp_reservation_is_owned_once_and_rejected_tail_is_freed(page_size, position, committed_rows):
+    pool = _pool()
+    pt = torch.full((4, 1024), -1, dtype=torch.int32)
+    cm = CacheManager(16, page_size, pt, "hybrid_radix", linear_state_pool=pool)
+    ids = torch.arange(position + 1, dtype=torch.int32)
+    match = cm.match_req(_pend(ids.tolist()))
+    req = Req(ids, 1, 0, 16, 1, SamplingParams(), match.cuda_handle)
+    req.linear_slot_idx = pool.alloc(1)[0]
+    req.mamba_ping_pong = tuple(pool.alloc(2))
+    cm.lock(req.cache_handle)
+    cm.allocate_paged([req])
+    req.cached_len = position
+    original = pt[1, :position + 1].clone()
+    cm.allocate_paged([req], reserve_tokens=3)
+    reserved = pt[1, :req.mtp_reserved_len].clone()
+    free_count = cm.free_slots.numel()
+    assert torch.equal(original, reserved[:original.numel()])
+    assert req.cached_len == position
+    assert req.mtp_reserved_len >= position + 4
+    cm.allocate_paged([req], reserve_tokens=3)
+    assert cm.free_slots.numel() == free_count
+    assert torch.equal(pt[1, :reserved.numel()], reserved)
+
+    # A rejected suffix survives as owned lookahead for the next round; neither
+    # a second reservation nor the native one-token preparation may allocate it twice.
+    req.cached_len += committed_rows
+    req.device_len += committed_rows
+    req.append_host(torch.arange(100, 100 + committed_rows, dtype=torch.int32))
+    cm.allocate_paged([req])
+    # After all four rows commit, the next pending input can need a new page;
+    # only that new page may be charged, never any of the reserved pages again.
+    next_pages = max(0, (req.device_len + page_size - 1) // page_size - reserved.numel() // page_size)
+    assert cm.free_slots.numel() == free_count - next_pages
+    assert torch.equal(pt[1, :reserved.numel()], reserved)
+    cm.cache_req(req, finished=True)
+    cm.check_integrity()
+    assert cm.free_slots.unique().numel() == cm.free_slots.numel()
+    assert req.mtp_reserved_len == 0
+    retained = req.cached_len if req.cached_len % page_size == 0 else 0
+    assert cm.free_slots.numel() == cm.num_pages - retained // page_size
+    hit = cm.match_req(_pend([*req.input_ids[:req.cached_len].tolist(), 999]))
+    assert hit.cuda_handle.cached_len == retained
+    assert hit.cuda_handle.cached_len <= req.cached_len
+
+
+def test_mtp_finish_keeps_shared_prefix_and_returns_only_owned_future_pages():
+    pool = _pool()
+    pt = torch.full((4, 128), -1, dtype=torch.int32)
+    cm = CacheManager(16, 4, pt, "hybrid_radix", linear_state_pool=pool)
+
+    def admit(ids, cached=0, handle=None):
+        if handle is None:
+            handle = cm.match_req(_pend(ids)).cuda_handle
+        req = Req(torch.tensor(ids, dtype=torch.int32), 1, cached, 12, 1, SamplingParams(), handle)
+        req.linear_slot_idx = pool.alloc(1)[0]
+        req.mamba_ping_pong = tuple(pool.alloc(2))
+        cm.lock(handle)
+        if cached:
+            pt[1, :cached].copy_(handle.get_matched_indices())
+        cm.allocate_paged([req], reserve_tokens=3)
+        return req
+
+    first = admit([1, 2, 3, 4, 5])
+    first.cached_len = 4
+    cm.cache_req(first, finished=True)
+    canonical = pt[1, :4].clone()
+    hit = cm.match_req(_pend([1, 2, 3, 4, 9]))
+    second = admit([1, 2, 3, 4, 9], 4, hit.cuda_handle)
+    second.cached_len = 5  # first rejected window row committed; no aligned new snapshot
+    cm.cache_req(second, finished=True)
+    cm.check_integrity()
+    assert torch.equal(cm.match_req(_pend([1, 2, 3, 4, 8])).cuda_handle.get_matched_indices(), canonical)
+    assert set(canonical[::4].tolist()).isdisjoint(cm.free_slots.tolist())
 
 
 if __name__ == "__main__":
