@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+from collections import deque
 from typing import NamedTuple
 
 import torch
@@ -26,6 +27,13 @@ def verified_prefix(candidates, picks, eos_ids, ignore_eos):
     return [*candidates[:accepted], picks[accepted]]
 
 
+def window_depth(req, manager, max_context):
+    """Speculation uses owned tail pages or currently reclaimable pages only."""
+    capacity = req.mtp_reserved_len + manager.available_size
+    return max(0, min(3, req.remain_len - 1, max_context - req.cached_len,
+                      capacity - req.device_len))
+
+
 class MtpRuntime:
     def __init__(self, engine, drafter):
         self.engine = engine
@@ -34,7 +42,8 @@ class MtpRuntime:
         self.graphs = {}
         self.draft_graphs = None
         self.active_owner = None
-        self.rounds = []
+        # Diagnostics must stay bounded in a long-lived Speed worker.
+        self.rounds = deque(maxlen=4096)
         self.prepare_graphs()
 
     @property
@@ -175,7 +184,7 @@ class MtpRuntime:
         req = batch.reqs[0]
         self._ensure_owner(req)
         position = req.cached_len
-        depth = min(3, req.remain_len - 1, self.draft.max_context - position)
+        depth = window_depth(req, manager, self.draft.max_context)
         manager.allocate_paged([req], reserve_tokens=depth)
         pending = int(batch.input_ids[0].item())
         residual = self.pool.slot_state(MTP_LAST_RESIDUAL)[req.linear_slot_idx:req.linear_slot_idx + 1]
