@@ -39,9 +39,11 @@ class TritonQ20MoEKernel(MoEKernel):
         return {}
 
     def apply(self, layer, x, topk_weights, topk_ids, view, *, is_prefill):
+        """保留 decode 向量路径，仅在 prefill 大批输入启用专家分组。"""
         from freetoken.moe.fused_q2_0 import fused_experts_q2_0
 
-        return fused_experts_q2_0(x, view.tensors["gate_up"], view.tensors["down"], topk_weights, topk_ids)
+        return fused_experts_q2_0(x, view.tensors["gate_up"], view.tensors["down"], topk_weights, topk_ids,
+                                is_prefill=is_prefill)
 
 
 @register_method(QuantKind.Q2_0, LayerKind.MOE)

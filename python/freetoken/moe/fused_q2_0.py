@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import torch
+import os
 import triton
 import triton.language as tl
 
@@ -59,7 +60,8 @@ def _reduce(R, WEIGHTS, Y, H: tl.constexpr, TOPK: tl.constexpr, BT: tl.constexpr
     tl.store(Y + token * H + row, tl.sum(values * w[:, None], 0), row < H)
 
 
-def fused_experts_q2_0(x, gate_up, down, topk_weights, topk_ids):
+def fused_experts_q2_0(x, gate_up, down, topk_weights, topk_ids, *, is_prefill=False):
+    """根据实际输入规模选择向量计算或按专家分组的矩阵计算。"""
     if x.dtype != torch.bfloat16 or gate_up.dtype != torch.uint8 or down.dtype != torch.uint8:
         raise ValueError("Q2_0 requires BF16 activations and native uint8 blocks")
     if not all(t.is_contiguous() and t.is_cuda for t in (x, gate_up, down, topk_weights, topk_ids)):
@@ -71,6 +73,8 @@ def fused_experts_q2_0(x, gate_up, down, topk_weights, topk_ids):
             or down.shape != (gate_up.shape[0], hidden, intermediate // 64 * 18)
             or topk_ids.shape[0] != tokens or topk_weights.shape != topk_ids.shape):
         raise ValueError("incompatible Q2_0 expert geometry or routing tensors")
+    if is_prefill and tokens >= 128 and os.environ.get("FREETOKEN_Q2_GROUPED_PREFILL", "1") != "0":
+        return grouped_experts_q2_0(x, gate_up, down, topk_weights, topk_ids)
     active = torch.empty((tokens * topk, intermediate), dtype=x.dtype, device=x.device)
     routed = torch.empty((tokens * topk, hidden), dtype=x.dtype, device=x.device)
     out = torch.empty_like(x)
@@ -80,6 +84,67 @@ def fused_experts_q2_0(x, gate_up, down, topk_weights, topk_ids):
     _down[(tokens * topk, triton.cdiv(hidden, 4))](
         active, down, topk_ids, routed, hidden, intermediate,
         triton.next_power_of_2(intermediate), 4, num_warps=4)
+    _reduce[(tokens, triton.cdiv(hidden, 128))](
+        routed, topk_weights, out, hidden, topk, triton.next_power_of_2(topk), 128, num_warps=4)
+    return out
+
+
+@triton.jit
+def _grouped_q2_gemm(X, W, SORTED, EXPERTS, PADDED, Y,
+                     ROUTES: tl.constexpr, N: tl.constexpr, K: tl.constexpr,
+                     INPUT_TOPK: tl.constexpr, BM: tl.constexpr,
+                     BN: tl.constexpr, BK: tl.constexpr):
+    # 同一专家的多个 token 共享一份权重 tile；仅在寄存器中解量化，不展开整层 BF16。
+    block = tl.program_id(0)
+    if block * BM >= tl.load(PADDED):
+        return
+    route = tl.load(SORTED + block * BM + tl.arange(0, BM))
+    expert = tl.load(EXPERTS + block).to(tl.int64)
+    row = tl.program_id(1) * BN + tl.arange(0, BN)
+    k = tl.arange(0, BK)
+    acc = tl.zeros((BM, BN), tl.float32)
+    for start in range(triton.cdiv(K, BK)):
+        cols = start * BK + k
+        a = tl.load(X + (route[:, None] // INPUT_TOPK) * K + cols[None, :],
+                    (route[:, None] < ROUTES) & (cols[None, :] < K), 0)
+        b = _q2_values(W, expert * N * (K // 64 * 18), row, cols, N, K).to(tl.bfloat16)
+        acc = tl.dot(a, tl.trans(b), acc)
+    tl.store(Y + route[:, None] * N + row[None, :], acc,
+             (route[:, None] < ROUTES) & (row[None, :] < N))
+
+
+@triton.jit
+def _grouped_gate_act(GU, A, I: tl.constexpr, TOTAL: tl.constexpr, B: tl.constexpr):
+    index = tl.program_id(0) * B + tl.arange(0, B)
+    route = index // I
+    feature = index % I
+    gate = tl.load(GU + route * (2 * I) + feature, index < TOTAL, 0).to(tl.float32)
+    up = tl.load(GU + route * (2 * I) + I + feature, index < TOTAL, 0).to(tl.float32)
+    tl.store(A + index, gate / (1.0 + tl.exp(-gate)) * up, index < TOTAL)
+
+
+def grouped_experts_q2_0(x, gate_up, down, topk_weights, topk_ids):
+    """复用 FreeToken 的 GPU 路由分组，以 BF16 tensor-core GEMM 执行大批输入。"""
+    from freetoken.moe.fused import moe_align_block_size
+
+    tokens, hidden = x.shape
+    intermediate = gate_up.shape[1] // 2
+    topk = topk_ids.shape[1]
+    routes = tokens * topk
+    bm, bn, bk = 16, 32, 64
+    sorted_ids, experts, padded = moe_align_block_size(topk_ids, bm, gate_up.shape[0])
+    gate_values = torch.empty((routes, 2 * intermediate), dtype=x.dtype, device=x.device)
+    active = torch.empty((routes, intermediate), dtype=x.dtype, device=x.device)
+    routed = torch.empty((routes, hidden), dtype=x.dtype, device=x.device)
+    out = torch.empty_like(x)
+    _grouped_q2_gemm[(triton.cdiv(sorted_ids.numel(), bm), triton.cdiv(2 * intermediate, bn))](
+        x, gate_up, sorted_ids, experts, padded, gate_values,
+        routes, 2 * intermediate, hidden, topk, bm, bn, bk, num_warps=4)
+    _grouped_gate_act[(triton.cdiv(routes * intermediate, 256),)](
+        gate_values, active, intermediate, routes * intermediate, 256)
+    _grouped_q2_gemm[(triton.cdiv(sorted_ids.numel(), bm), triton.cdiv(hidden, bn))](
+        active, down, sorted_ids, experts, padded, routed,
+        routes, hidden, intermediate, 1, bm, bn, bk, num_warps=4)
     _reduce[(tokens, triton.cdiv(hidden, 128))](
         routed, topk_weights, out, hidden, topk, triton.next_power_of_2(topk), 128, num_warps=4)
     return out
