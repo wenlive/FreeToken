@@ -379,11 +379,36 @@ class LayerCompletionTracker:
             self._on_layer(layer_id, {name: per[layer_id] for name, per in self._banks.items()})
 
 
+def _read_buffered_range(mv: memoryview, path: str, file_offset: int,
+                         nbytes: int, dest_offset: int, workers: int, chunk: int) -> int:
+    """Windows 的批量 host-bank 读取直接填入现有 buffer；SSD 按行查表仍走原生 NO_BUFFERING 后端。"""
+    def read_chunk(offset):
+        size = min(chunk, nbytes - offset)
+        destination = mv[dest_offset + offset:dest_offset + offset + size]
+        # 各任务独立文件位置，避免并发 seek/read 互相覆盖。
+        with open(path, "rb", buffering=0) as file:
+            file.seek(file_offset + offset)
+            done = 0
+            while done < size:
+                count = file.readinto(destination[done:])
+                if not count:
+                    raise OSError(f"short buffered read at {file_offset + offset + done}, need {size - done} bytes")
+                done += count
+    with ThreadPoolExecutor(workers) as executor:
+        list(executor.map(read_chunk, range(0, nbytes, chunk)))
+    return nbytes
+
+
 def read_file_into(buf: memoryview | mmap.mmap, path: str, *, workers: int = 8,
                    chunk: int = _DEFAULT_CHUNK, drop_cache: bool = True) -> int:
     """Chunked multi-threaded O_DIRECT read of the whole file ``path`` into ``buf``
     (page-aligned). Returns the file size. The buffer must be >= the rounded-up file size."""
     size = os.path.getsize(path)
+    if os.name == "nt":
+        mv = memoryview(buf).cast("B")
+        if size > len(mv):
+            raise ValueError(f"destination holds {len(mv)} bytes, need {size}")
+        return _read_buffered_range(mv, path, 0, size, 0, workers, chunk)
     if drop_cache:
         try:
             fd0 = os.open(path, os.O_RDONLY)
@@ -434,6 +459,8 @@ def read_range_into(buf: memoryview | mmap.mmap, path: str, *, file_offset: int,
     mv = (buf if isinstance(buf, memoryview) else memoryview(buf)).cast("B")
     if dest_offset + nbytes > len(mv):
         raise ValueError(f"destination holds {len(mv)} bytes, need {dest_offset + nbytes}")
+    if os.name == "nt":
+        return _read_buffered_range(mv, path, file_offset, nbytes, dest_offset, workers, chunk)
     base = ctypes.addressof(ctypes.c_char.from_buffer(mv))
     if drop_cache:
         try:

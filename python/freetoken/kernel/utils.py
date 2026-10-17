@@ -259,7 +259,8 @@ def _load_prebuilt(name: str) -> Module | None:
             )
         return None
 
-    so_path = cache_dir / name / f"{name}.so"
+    suffix = ".dll" if os.name == "nt" else ".so"
+    so_path = cache_dir / name / f"{name}{suffix}"
     if so_path.exists():
         import tvm_ffi
 

@@ -49,6 +49,10 @@ def test_rows_come_back_bitwise_across_extents_and_files(tmp_path, use_io_uring)
     ids = torch.tensor([0, 999, 1000, 1999, 2000, 2999, 1234, 1234, 42, 0], dtype=torch.int64)
     got = _stage(store, ids)
     assert torch.equal(got, table[ids])
+    stats = store.io_stats()
+    assert stats["read_requests_completed"] == ids.unique().numel()
+    assert stats["payload_rows_delivered"] == ids.numel()
+    assert stats["aligned_read_bytes_requested"] >= ids.unique().numel() * ROW_BYTES
 
     # a wider destination stride leaves the gap untouched
     got = _stage(store, ids, dst_stride=ROW_BYTES + 40)

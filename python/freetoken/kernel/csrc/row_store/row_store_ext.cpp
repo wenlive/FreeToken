@@ -1,12 +1,7 @@
-// Disk-backed row store: fixed-width rows read straight from checkpoint shard tensors
-// through an extent table (row i of extent e at extent_base[e] + i * row_stride).
-// Engine-thread only, no locks. Duplicate rows in one fill dedup into ONE batched read
-// round; no RAM cache and no per-sequence state.
-//
-//   RowStore  -- hash-agnostic: stage_rows(row_ids) + flush(); callers supply row ids.
-//   PleStore  -- RowStore plus the Qwen3.8-Flash-Next PLE n-gram hash: stage(tokens).
-//                Hash reference: tests/models/qwen4_exp/test_ple_disk.py.
-//
+// Disk-backed PLE row store: rows read straight from the checkpoint's fp8 shard tensors
+// through an extent table (PleRowSource in ple_ssd.py). Engine-thread only, no locks.
+// Duplicate rows in one fill dedup into ONE batched read round; no RAM cache and no
+// per-sequence state. Hash reference: tests/models/qwen4_exp/test_ple_disk.py.
 // Platform seams: TableFile (O_DIRECT+pread; Win: NO_BUFFERING), BatchReader (io_uring,
 // pread-pool fallback = the portable shape), cumemop_* (dlopen libcuda; Win: nvcuda).
 
@@ -25,10 +20,15 @@
 #include <unordered_map>
 #include <vector>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <malloc.h>
+#else
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
 
 #if defined(__linux__) && __has_include(<linux/io_uring.h>)
 #include <linux/io_uring.h>
@@ -54,13 +54,23 @@ constexpr unsigned kReaderThreads = 16;
 // ---- portability shims ----
 
 void release_store_i64(int64_t *ptr, int64_t value) {
+#ifdef _WIN32
+  InterlockedExchange64(reinterpret_cast<volatile LONG64 *>(ptr), value);
+#else
   __atomic_store_n(ptr, value, __ATOMIC_RELEASE);
+#endif
 }
 
 uint8_t *page_aligned_alloc(size_t bytes) {
+#ifdef _WIN32
+  auto *p = static_cast<uint8_t *>(_aligned_malloc(bytes, kPage));
+  if (!p) throw std::bad_alloc();
+  return p;
+#else
   void *p = nullptr;
   if (posix_memalign(&p, kPage, bytes) != 0) throw std::bad_alloc();
   return static_cast<uint8_t *>(p);
+#endif
 }
 
 // Stream memops for the flag-sync fast path, resolved from the driver at runtime.
@@ -73,15 +83,22 @@ constexpr unsigned kCuWriteDefault = 0x0;
 
 bool cumemop_resolve() {
   static bool resolved = [] {
+#ifdef _WIN32
+    HMODULE h = LoadLibraryW(L"nvcuda.dll");
+    if (h == nullptr) return false;
+    auto symbol = [h](const char *name) { return GetProcAddress(h, name); };
+#else
     void *h = dlopen("libcuda.so.1", RTLD_LAZY | RTLD_LOCAL);
     if (h == nullptr) h = dlopen("libcuda.so", RTLD_LAZY | RTLD_LOCAL);
     if (h == nullptr) return false;
-    g_cu_write64 = reinterpret_cast<CuMemOp64Fn>(dlsym(h, "cuStreamWriteValue64_v2"));
+    auto symbol = [h](const char *name) { return dlsym(h, name); };
+#endif
+    g_cu_write64 = reinterpret_cast<CuMemOp64Fn>(symbol("cuStreamWriteValue64_v2"));
     if (g_cu_write64 == nullptr)
-      g_cu_write64 = reinterpret_cast<CuMemOp64Fn>(dlsym(h, "cuStreamWriteValue64"));
-    g_cu_wait64 = reinterpret_cast<CuMemOp64Fn>(dlsym(h, "cuStreamWaitValue64_v2"));
+      g_cu_write64 = reinterpret_cast<CuMemOp64Fn>(symbol("cuStreamWriteValue64"));
+    g_cu_wait64 = reinterpret_cast<CuMemOp64Fn>(symbol("cuStreamWaitValue64_v2"));
     if (g_cu_wait64 == nullptr)
-      g_cu_wait64 = reinterpret_cast<CuMemOp64Fn>(dlsym(h, "cuStreamWaitValue64"));
+      g_cu_wait64 = reinterpret_cast<CuMemOp64Fn>(symbol("cuStreamWaitValue64"));
     return g_cu_write64 != nullptr && g_cu_wait64 != nullptr;
   }();
   return resolved;
@@ -111,6 +128,71 @@ void signal_flag(uintptr_t flag_addr) {
 
 // Read at least need bytes; len is the larger aligned span the request must keep.
 // Resuming past need is not safe: a read that crossed EOF ends at an unaligned offset.
+#ifdef _WIN32
+using FileHandle = HANDLE;
+
+// 每个定位读使用独立事件，允许同一文件上的多个工作线程并发读取。
+void pread_min(FileHandle fd, uint8_t *buf, int64_t len, int64_t need, int64_t off) {
+  OVERLAPPED request{};
+  request.Offset = static_cast<DWORD>(off);
+  request.OffsetHigh = static_cast<DWORD>(static_cast<uint64_t>(off) >> 32);
+  request.hEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+  if (!request.hEvent) throw std::runtime_error("CreateEvent failed: " + std::to_string(GetLastError()));
+  DWORD got = 0;
+  BOOL ok = ReadFile(fd, buf, static_cast<DWORD>(len), &got, &request);
+  DWORD error = ok ? ERROR_SUCCESS : GetLastError();
+  if (!ok && error == ERROR_IO_PENDING) {
+    ok = GetOverlappedResult(fd, &request, &got, TRUE);
+    error = ok ? ERROR_SUCCESS : GetLastError();
+  }
+  CloseHandle(request.hEvent);
+  if (!ok && error != ERROR_HANDLE_EOF)
+    throw std::runtime_error("ReadFile failed: " + std::to_string(error));
+  if (got < need)
+    throw std::runtime_error("short read at offset " + std::to_string(off) + ": got " +
+                             std::to_string(got) + " of " + std::to_string(need));
+}
+
+class TableFile {
+ public:
+  explicit TableFile(const std::string &path) {
+    int count = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path.data(),
+                                   static_cast<int>(path.size()), nullptr, 0);
+    if (!count) throw std::runtime_error("invalid UTF-8 table path");
+    std::wstring wide(count, L'\0');
+    MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, path.data(),
+                        static_cast<int>(path.size()), wide.data(), count);
+    auto open = [&](DWORD extra) {
+      return CreateFileW(wide.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+                         nullptr, OPEN_EXISTING, FILE_FLAG_OVERLAPPED | FILE_FLAG_RANDOM_ACCESS | extra, nullptr);
+    };
+    fd_ = open(FILE_FLAG_NO_BUFFERING);
+    direct_ = fd_ != INVALID_HANDLE_VALUE;
+    if (!direct_) fd_ = open(0);
+    if (fd_ == INVALID_HANDLE_VALUE)
+      throw std::runtime_error(path + ": CreateFile failed: " + std::to_string(GetLastError()));
+    LARGE_INTEGER size{};
+    if (!GetFileSizeEx(fd_, &size)) {
+      DWORD error = GetLastError();
+      CloseHandle(fd_);
+      throw std::runtime_error(path + ": GetFileSizeEx failed: " + std::to_string(error));
+    }
+    size_ = size.QuadPart;
+  }
+  ~TableFile() { if (fd_ != INVALID_HANDLE_VALUE) CloseHandle(fd_); }
+  TableFile(const TableFile &) = delete;
+  TableFile &operator=(const TableFile &) = delete;
+  bool direct_io() const { return direct_; }
+  FileHandle native_fd() const { return fd_; }
+  int64_t size() const { return size_; }
+  void discard_cache(int64_t, int64_t) const {}
+ private:
+  FileHandle fd_ = INVALID_HANDLE_VALUE;
+  bool direct_ = false;
+  int64_t size_ = 0;
+};
+#else
+using FileHandle = int;
 void pread_min(int fd, uint8_t *buf, int64_t len, int64_t need, int64_t off) {
   int64_t done = 0;
   while (done < need) {
@@ -168,6 +250,8 @@ class TableFile {
   int64_t size_ = 0;
 };
 
+#endif
+
 // ---- BatchReader: platform seam for parallel positioned reads ----
 
 // Pipelined: at most capacity() reads in flight; wait_one() returns a finished tag to refill.
@@ -176,7 +260,7 @@ class BatchReader {
   virtual ~BatchReader() = default;
   virtual std::string name() const = 0;
   virtual unsigned capacity() const = 0;
-  virtual void submit(unsigned tag, int fd, uint8_t *buf, int64_t len, int64_t need,
+  virtual void submit(unsigned tag, FileHandle fd, uint8_t *buf, int64_t len, int64_t need,
                       int64_t off) = 0;
   virtual unsigned wait_one() = 0;
   // reap every in-flight read so stale completions cannot leak into the next fill
@@ -207,10 +291,16 @@ class ThreadPoolBatchReader final : public BatchReader {
     for (auto &w : workers_) w.join();
   }
 
-  std::string name() const override { return "pread-pool x" + std::to_string(workers_.size()); }
+  std::string name() const override {
+#ifdef _WIN32
+    return "ReadFile pool x" + std::to_string(workers_.size());
+#else
+    return "pread-pool x" + std::to_string(workers_.size());
+#endif
+  }
   unsigned capacity() const override { return kBatchEntries; }
 
-  void submit(unsigned tag, int fd, uint8_t *buf, int64_t len, int64_t need,
+  void submit(unsigned tag, FileHandle fd, uint8_t *buf, int64_t len, int64_t need,
               int64_t off) override {
     {
       std::lock_guard<std::mutex> lock(mu_);
@@ -241,7 +331,7 @@ class ThreadPoolBatchReader final : public BatchReader {
  private:
   struct Req {
     unsigned tag;
-    int fd;
+    FileHandle fd;
     uint8_t *buf;
     int64_t len;
     int64_t need;
@@ -336,7 +426,7 @@ class IoUringBatchReader final : public BatchReader {
   std::string name() const override { return "io_uring"; }
   unsigned capacity() const override { return entries_; }
 
-  void submit(unsigned tag, int fd, uint8_t *buf, int64_t len, int64_t need,
+  void submit(unsigned tag, FileHandle fd, uint8_t *buf, int64_t len, int64_t need,
               int64_t off) override {
     io_uring_sqe *sqe = &sqes_[sq_shadow_tail_ & *sq_mask_];
     std::memset(sqe, 0, sizeof(*sqe));
@@ -476,7 +566,11 @@ class RowStore {
   // reader first: a still-running read must not land in freed bounce memory
   virtual ~RowStore() {
     reader_.reset();
+#ifdef _WIN32
+    _aligned_free(bounce_);
+#else
     free(bounce_);
+#endif
   }
 
   RowStore(const RowStore &) = delete;
@@ -513,9 +607,26 @@ class RowStore {
     size_t direct = 0;
     for (const auto &f : files_) direct += f->direct_io() ? 1 : 0;
     std::string s = reader_->name();
-    if (direct == files_.size()) return s + ", O_DIRECT";
+    if (direct == files_.size()) {
+#ifdef _WIN32
+      return s + ", NO_BUFFERING";
+#else
+      return s + ", O_DIRECT";
+#endif
+    }
     return s + ", buffered " + std::to_string(files_.size() - direct) + "/" +
            std::to_string(files_.size()) + " files";
+  }
+
+  // 仅统计已成功完成的真实文件读取，用于核实推理时确实按行访问 SSD。
+  std::unordered_map<std::string, int64_t> io_stats() const {
+    int64_t direct_files = 0;
+    for (const auto &f : files_) direct_files += f->direct_io() ? 1 : 0;
+    return {{"read_requests_completed", reads_completed_},
+            {"aligned_read_bytes_requested", read_bytes_requested_},
+            {"payload_rows_delivered", rows_delivered_},
+            {"largest_read_offset", largest_read_offset_},
+            {"direct_files", direct_files}, {"files", (int64_t)files_.size()}};
   }
 
  protected:
@@ -574,6 +685,10 @@ class RowStore {
       for (size_t completed = 0; completed < total; completed++) {
         const unsigned tag = reader_->wait_one();
         const Pending &p = pending_[tag_pending[tag]];
+        reads_completed_++;
+        read_bytes_requested_ += p.read_len;
+        rows_delivered_ += (int64_t)p.dsts.size();
+        largest_read_offset_ = std::max(largest_read_offset_, p.read_off);
         const uint8_t *row = bounce_ + (size_t)tag * kSpanMax + p.row_off;
         for (uint8_t *dst : p.dsts) std::memcpy(dst, row, row_bytes_);
         p.file->discard_cache(p.read_off, p.read_len);
@@ -593,6 +708,8 @@ class RowStore {
 
   std::vector<Pending> pending_;
   std::unordered_map<int64_t, size_t> pending_index_;
+  int64_t reads_completed_ = 0, read_bytes_requested_ = 0;
+  int64_t rows_delivered_ = 0, largest_read_offset_ = 0;
 };
 
 // The Qwen3.8-Flash-Next PLE table: RowStore plus the checkpoint's n-gram hash, so a fill
@@ -657,6 +774,7 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
       .def("flush", &RowStore::flush, py::arg("signal_addr") = 0,
            py::call_guard<py::gil_scoped_release>())
       .def("io_backend", &RowStore::io_backend)
+      .def("io_stats", &RowStore::io_stats)
       .def_property_readonly("row_bytes", &RowStore::row_bytes)
       .def_property_readonly("total_rows", &RowStore::total_rows);
   py::class_<PleStore, RowStore>(m, "PleStore")
