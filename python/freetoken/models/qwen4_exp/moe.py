@@ -35,12 +35,12 @@ class Qwen4ExpMoE(Qwen3_5MoE):
         return shared, gate
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        """永久Q2的单token decode重叠搬运；prefill、验证窗口和其他模型沿用既有顺序。"""
+        """永久Q2的decode/verify重叠专家搬运；大批prefill和其他模型沿用既有顺序。"""
         num_tokens, hidden_dim = hidden_states.shape
         hidden_states = hidden_states.view(-1, hidden_dim)
         router_logits = self.gate.forward(hidden_states)
         cache = getattr(self.experts, 'offload_cache', None)
-        if (self._gguf and get_global_ctx().batch.is_decode
+        if (self._gguf and (get_global_ctx().batch.is_decode or get_global_ctx().batch.is_verify)
                 and getattr(cache, 'decode_copy_stream', None) is not None):
             routed, (shared, gate) = self.experts.decode_with_shared(
                 hidden_states, router_logits, self._shared_gguf)
