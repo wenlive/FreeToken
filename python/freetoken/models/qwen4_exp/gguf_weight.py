@@ -18,6 +18,10 @@ class GGUFEmbedding(BaseOP):
 
 def declare_fp32_small_parameters(model):
     """GGUF 主干已是 uint8 buffer；剩余 norm/conv/状态参数声明 FP32，阻止 loader 降精度。"""
+    from freetoken.layers.norm import GemmaPlusOneRMSNorm
+    if isinstance(model, GemmaPlusOneRMSNorm):
+        from freetoken.kernel.gguf_quant import gguf_gemma_rmsnorm
+        model.gemma_rmsnorm = gguf_gemma_rmsnorm
     for name, value in tuple(vars(model).items()):
         if name.startswith("_"):
             continue

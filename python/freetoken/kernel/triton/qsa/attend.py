@@ -286,9 +286,9 @@ def qsa_sparse_paged_attention(
         block_n, target_splits, partial_warps = 64, 1, 2
 
     if q.dtype == torch.float32:
-        # TF32x3 的 FP32 tiles 比 BF16 大；限制宽度以适配 SM120 的 shared-memory 上限。
-        block_n = min(block_n, 32)
-        partial_warps = max(partial_warps, 4)
+        # Keep the reduction independent of batching and prefix-cache hit length.
+        # Small attention rounding changes can cross downstream Q8 boundaries.
+        block_n, target_splits, partial_warps = 32, 8, 4
     num_tiles = triton.cdiv(logical_indices.shape[1], block_n)
     # Avoid empty splits when the selection width is smaller than the profile.
     max_useful_splits = 1 << (num_tiles.bit_length() - 1)

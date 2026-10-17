@@ -227,6 +227,30 @@ def quantize_activation(x, *, half_scale=True):
     return out
 
 
+@triton.jit
+def _gguf_plus_one_norm(X, W, OUT, H: tl.constexpr, EPS: tl.constexpr,
+                        XS: tl.constexpr, OS: tl.constexpr, BLOCK: tl.constexpr):
+    row = tl.program_id(0)
+    col = tl.arange(0, BLOCK)
+    x = tl.load(X + row * XS + col, col < H, 0).to(tl.float32)
+    gamma = 1.0 + tl.load(W + col, col < H, 0).to(tl.float32)
+    inv = tl.rsqrt(tl.sum(x * x, 0) / H + EPS)
+    tl.store(OUT + row * OS + col, x * inv * gamma, col < H)
+
+
+def gguf_gemma_rmsnorm(x, weight, eps=1e-6, out=None):
+    """The GGUF Q/K norm has one fixed FP32 reduction for every batch size."""
+    if x.ndim != 2 or x.dtype != torch.float32 or not x.is_cuda or x.stride(-1) != 1:
+        raise ValueError("GGUF norm requires a CUDA FP32 matrix with unit feature stride")
+    if out is None:
+        out = torch.empty_like(x)
+    if out.shape != x.shape or out.dtype != x.dtype or out.stride(-1) != 1:
+        raise ValueError("GGUF norm output geometry or precision differs from its input")
+    _gguf_plus_one_norm[(x.shape[0],)](x,weight,out,x.shape[1],eps,x.stride(0),out.stride(0),
+        triton.next_power_of_2(x.shape[1]),num_warps=4,enable_fp_fusion=False)
+    return out
+
+
 def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None, q8_source=None):
     """压缩权重直接参与 FP32 GEMV；BF16/F16/F32 权重保留 FP32 激活。"""
     block, size = _geometry(type_id)
@@ -236,14 +260,12 @@ def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None
         x = quantize_activation(x)
     if out is None:
         out = torch.empty((x.shape[0], rows), dtype=torch.float32, device=x.device)
-    if x.shape[0] >= 16:
-        _gemm[(triton.cdiv(x.shape[0], 16), triton.cdiv(rows, 32))](packed, x, out, x.shape[0], rows, width,
-            type_id, block, size, *x.stride(), *out.stride(), 16, 32, 64, num_warps=4,
-            enable_fp_fusion=False)
-    else:
-        _gemv[(triton.cdiv(rows, 4), x.shape[0])](packed, x, out, x.shape[0], rows, width,
-            type_id, block, size, *x.stride(), *out.stride(), min(1024, triton.next_power_of_2(width)),
-            4, num_warps=4, enable_fp_fusion=False)
+    if x.shape[0] == 0:
+        return out
+    # A fixed accumulation also covers single-token decode and cache-tail prefill.
+    _gemm[(triton.cdiv(x.shape[0], 16), triton.cdiv(rows, 32))](packed, x, out, x.shape[0], rows, width,
+        type_id, block, size, *x.stride(), *out.stride(), 16, 32, 64, num_warps=4,
+        enable_fp_fusion=False)
     if type_id in (2, 6) and q8_source is not None:
         _affine_sum_correction[(x.shape[0], rows)](packed, q8_source, x, out, width, rows,
             size, 8 if type_id == 2 else 16, *q8_source.stride(), *out.stride(),

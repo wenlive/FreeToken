@@ -105,21 +105,16 @@ def fused_experts_q2_q8(x, gate_up, down, topk_weights, topk_ids, *, is_prefill=
     active = torch.empty((routes, intermediate), dtype=torch.float32, device=x.device)
     routed = torch.empty((routes, hidden), dtype=torch.float32, device=x.device)
     out = torch.empty_like(x)
-    grouped = is_prefill and tokens >= 128
-    if grouped:
-        from freetoken.moe.fused import moe_align_block_size
-        sorted_ids, experts, padded = moe_align_block_size(topk_ids, 16, gate_up.shape[0])
+    # Batch-dependent reduction orders can change subsequent Q8 codes and routing.
+    # Use the same integer-dot / FP32 accumulation for prefill, cache tails and decode.
+    from freetoken.moe.fused import moe_align_block_size
+    sorted_ids, experts, padded = moe_align_block_size(topk_ids, 16, gate_up.shape[0])
     def project(value, bank, result, input_topk):
         q, scales = quantize_expert_activation(value)
         k, n = value.shape[1], result.shape[1]
-        if grouped:
-            _grouped[(triton.cdiv(sorted_ids.numel(), 16), triton.cdiv(n, 32))](
-                q, scales, bank, sorted_ids, experts, padded, result,
-                routes, n, k, input_topk, 16, 32, num_warps=4, enable_fp_fusion=False)
-        else:
-            _vector[(routes, triton.cdiv(n, 4))](q, scales, bank, topk_ids, result,
-                k, n, input_topk, 4, triton.next_power_of_2(k // 32), num_warps=4,
-                enable_fp_fusion=False)
+        _grouped[(triton.cdiv(sorted_ids.numel(), 16), triton.cdiv(n, 32))](
+            q, scales, bank, sorted_ids, experts, padded, result,
+            routes, n, k, input_topk, 16, 32, num_warps=4, enable_fp_fusion=False)
     project(x, gate_up, gate_values, topk)
     _grouped_gate_act[(triton.cdiv(routes * intermediate, 256),)](
         gate_values, active, intermediate, routes * intermediate, 256, enable_fp_fusion=False)
