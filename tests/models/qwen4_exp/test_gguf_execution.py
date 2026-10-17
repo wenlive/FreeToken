@@ -114,7 +114,10 @@ class GGUFExecutionConsistencyTests(unittest.TestCase):
         tail=fused_experts_q2_q8(x[-3:].contiguous(),gu,down,weights[-3:].contiguous(),ids[-3:].contiguous(),is_prefill=True)
         decode=fused_experts_q2_q8(x[-1:],gu,down,weights[-1:],ids[-1:],is_prefill=False)
         torch.testing.assert_close(full[-3:],tail,rtol=0,atol=0)
-        torch.testing.assert_close(full[-1:],decode,rtol=0,atol=0)
+        # Parallel decode reduces K chunks in a different FP32 order from prefill.
+        torch.testing.assert_close(full[-1:],decode,rtol=3e-5,atol=3e-7)
+        relative_l2 = (full[-1:] - decode).norm() / full[-1:].norm().clamp_min(1e-10)
+        self.assertLess(float(relative_l2), 2e-6)
 
     def test_fp32_attention_is_independent_of_batch_size(self):
         from freetoken.kernel.triton.qsa.attend import qsa_sparse_paged_attention

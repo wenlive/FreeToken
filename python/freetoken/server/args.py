@@ -681,6 +681,10 @@ def parse_args(
         ),
     )
 
+    parser.add_argument('--moe-q2-resident-experts', type=int, default=ServerArgs.moe_q2_resident_experts,
+        help='Permanent GPU Q2 expert owners; requires fixed cache capacity and single-request offload.')
+    parser.add_argument('--moe-q2-dynamic-slots', type=int, default=ServerArgs.moe_q2_dynamic_slots,
+        help='Dynamic LRU slots alongside permanent Q2 owners (default: 1024).')
     moe_cache_group = parser.add_mutually_exclusive_group()
     moe_cache_group.add_argument(
         "--moe-cache-size",

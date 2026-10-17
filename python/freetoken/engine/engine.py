@@ -639,6 +639,13 @@ class Engine:
 
     def _init_offload_moe_cache(self, config: EngineConfig) -> OffloadMoeCache:
         method = shared_offload_method(self.model)
+        ownership = None
+        if config.moe_q2_resident_experts:
+            from freetoken.moe.q2_residency import load_compact_banks, protected_ranking, ProtectedQ2Cache
+            if (method is None or method.cfg.scheme.weight.elem != 'q2_0_q8'
+                    or (config.model_config.num_moe_layers, config.model_config.num_experts) != (48, 512)):
+                raise ValueError('Protected Q2 requires the complete Flash-Next GSQ-RCO expert path')
+            protected = protected_ranking(48, 512, config.moe_q2_resident_experts)
         num_moe_layers = config.model_config.num_moe_layers
         cpu_layer_ids = _resolve_cpu_layers(config, num_moe_layers, reserved=self._host_tables_bytes, method=method)
         _check_pin_budget(config, reserved=self._host_tables_bytes, method=method)
@@ -692,9 +699,12 @@ class Engine:
             ]
         try:
             with _weight_load_context():
-                banks = load_expert_banks(
+                loader = load_compact_banks if config.moe_q2_resident_experts else load_expert_banks
+                owner_args = dict(protected=protected, dynamic=config.moe_q2_dynamic_slots) if config.moe_q2_resident_experts else {}
+                loaded = loader(
                     config.model_path,
                     config.model_config,
+                    **owner_args,
                     method=method,
                     device=self.device,
                     dtype=self.dtype,
@@ -703,6 +713,10 @@ class Engine:
                     decode_target=("cpu" if decode_target in ("cpu", "hybrid") else "gpu"),
                     layer_residency=requested_residency,
                 )
+                if config.moe_q2_resident_experts:
+                    banks, ownership = loaded
+                else:
+                    banks = loaded
         except PinFailed as exc:
             raise RuntimeError(f"{exc}; {_pin_hint(self._host_tables_bytes)}") from exc
         if config.moe_cache_auto:
@@ -732,7 +746,9 @@ class Engine:
                 )
             layout = method.layout()
             max_slots = method.slot_limit()
-        cache = OffloadMoeCache(
+        cache_type = ProtectedQ2Cache if ownership is not None else OffloadMoeCache
+        cache = cache_type(
+            **({'ownership': ownership} if ownership is not None else {}),
             # Models with leading dense layers (GLM-4) only have experts on the MoE
             # layers; num_moe_layers == num_layers when first_k_dense_replace == 0.
             num_layers=config.model_config.num_moe_layers,

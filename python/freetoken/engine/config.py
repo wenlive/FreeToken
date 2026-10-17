@@ -43,6 +43,9 @@ class EngineConfig:
     # low-memory reclaimable read; "parallel" forces the fast read.
     expert_load: str = "auto"
     moe_cache_size: int = 0
+    # Explicit opt-in: GPU-only owners plus compact host complements, fixed for this load.
+    moe_q2_resident_experts: int = 0
+    moe_q2_dynamic_slots: int = 1024
     moe_cache_rate: float | None = None
     moe_cache_auto: bool = False
     kv_reserve_tokens: int = 8192  # KV floor for --moe-cache-auto; small by design (MoE-priority)
@@ -98,6 +101,19 @@ class EngineConfig:
     mm: MultimodalConfig = field(default_factory=MultimodalConfig)
 
     def __post_init__(self):
+        if self.moe_q2_resident_experts < 0:
+            raise ValueError('moe_q2_resident_experts must be nonnegative')
+        if self.moe_q2_resident_experts:
+            if (self.moe_strategy != 'offload' or self.moe_backend is not None
+                    or self.moe_cpu_layers or self.use_dummy_weight
+                    or self.moe_cache_auto or self.moe_cache_rate is not None
+                    or self.moe_cache_policy != 'lru' or self.max_running_req != 1):
+                raise ValueError('Protected Q2 requires explicit GPU offload, fixed LRU capacity and max_running_req=1')
+            if self.moe_q2_dynamic_slots < 512:
+                raise ValueError('Protected Q2 requires at least 512 dynamic slots')
+            expected = 1024 + self.moe_q2_dynamic_slots + self.moe_q2_resident_experts
+            if self.moe_cache_size != expected:
+                raise ValueError(f'Protected Q2 moe_cache_size must be {expected}, got {self.moe_cache_size}')
         if self.moe_backend is None:
             return
         if self.moe_strategy != "auto":
