@@ -170,3 +170,37 @@ def test_owner_bytes_survive_graph_reset_prefill_and_rebuild(tokens, topk):
         assert torch.equal(second.bank_caches[role][other_ids.long()].cpu(), second_original[role][2][[15, 7, 7]][None])
         assert torch.equal(cache.bank_caches[role][p.protected_begin:], saved[role])
     assert second.lru_stats[2].tolist() == [2, 2, 1]
+
+
+@pytest.mark.parametrize('tokens',[1,4])
+def test_borrowed_prefill_bytes_are_invalidated_before_next_decode(tokens):
+    """不在阶段转换前做host同步；同一个CUDA图在prefill后必须重新取到正确专家。"""
+    from freetoken.layers.moe import OffloadMoELayer
+    from freetoken.moe.fused_q2_q8 import fused_experts_q2_q8
+    from freetoken.moe.fused import fused_topk
+    cache,original=_make_cache(valid_scales=True)
+    full={role:rows[2].to('cuda') for role,rows in original.items()}
+    permanent={role:bank[cache.protected_payload.protected_begin:].clone() for role,bank in cache.bank_caches.items()}
+    logical=torch.arange(16,device='cuda',dtype=torch.int32).view(4,4)
+    slots=logical.clone();cache.ensure_experts(2,slots);cache.copy_missing()
+    assert torch.all(slots<32)
+    x=torch.randn(tokens,128,device='cuda');logits=torch.randn(tokens,16,device='cuda');shared_weight=torch.randn(128,128,device='cuda')
+    def gemm(cache,value,weights,ids,**kw):return fused_experts_q2_q8(value,cache.bank_caches['gate_up'],cache.bank_caches['down'],weights,ids)
+    layer=SimpleNamespace(offload_cache=cache,top_k=4,renormalize=True,layer_id=2,_expert_gemm=gemm,_maybe_all_reduce=lambda x:x)
+    def forward():return OffloadMoELayer.decode_with_shared(layer,x,logits,lambda v:v@shared_weight)
+    forward();graph=torch.cuda.CUDAGraph()
+    with torch.cuda.graph(graph):routed,shared=forward()
+    for cycle in range(8):
+        x.normal_();logits.normal_();graph.replay()
+        before=routed.clone()
+        w,ids=fused_topk(hidden_states=x,gating_output=logits,topk=4,renormalize=True)
+        reference=fused_experts_q2_q8(x,full['gate_up'],full['down'],w,ids)
+        cache.begin_prefill()
+        for index in range(3):
+            cache.prefetch_prefill_layer(index);cache.wait_prefill_layer(index);cache.release_prefill_layer(index)
+        graph.replay()
+        torch.testing.assert_close(before,reference,rtol=0,atol=0)
+        torch.testing.assert_close(routed,reference,rtol=0,atol=0)
+        torch.testing.assert_close(shared,x@shared_weight,rtol=0,atol=0)
+        for role in original:torch.testing.assert_close(cache.bank_caches[role][cache.protected_payload.protected_begin:],permanent[role],rtol=0,atol=0)
+    graph.reset();cache.reset()

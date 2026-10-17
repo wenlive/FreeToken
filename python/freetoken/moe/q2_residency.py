@@ -270,18 +270,20 @@ class ProtectedQ2Cache(OffloadMoeCache):
         if self.collect_decode_freq:
             self.decode_freq[layer_id].scatter_add_(0, expert_ids.view(-1).to(torch.int64),
                 torch.ones(n, dtype=torch.int64, device=self.device))
-        begin, end = 2 * self.num_experts, p.protected_begin
+        # decode/稀疏残余prefill可借用两个空闲prefill缓冲，永久所有者不变。
+        begin, end = 0, p.protected_begin
         _ensure[(1,)](expert_ids, self.slot_for_id.view(-1), self.id_of_slot[begin:end],
                       self.usage[begin:end], self.step, self.src_indices, self.evict_slots,
                       self.num_indices, self.lru_stats[layer_id], layer_id * self.num_experts,
-                      begin, end, p.dynamic, n, triton.next_power_of_2(n),
-                      triton.next_power_of_2(p.dynamic), self.collect_stats, num_warps=4)
+                      begin, end, end - begin, n, triton.next_power_of_2(n),
+                      triton.next_power_of_2(end - begin), self.collect_stats, num_warps=4)
 
     def copy_missing(self):
         layer = self._pending_src_layer
         if layer is None:
             raise RuntimeError('No pending Q2 source layer')
         if self._pending_whole_layer:
+            self._invalidate_prefill_buffer(0)
             self._gather(layer, self._whole_dst[0], self._whole_ids, self._whole_count, 64)
         else:
             self._gather(layer, self.evict_slots, self.src_indices, self.num_indices, 32)
@@ -291,8 +293,8 @@ class ProtectedQ2Cache(OffloadMoeCache):
         self._pending_whole_layer = True
 
     def _invalidate_prefill_buffer(self, buffer_id):
-        # Admission never installs an expert mapping in either prefill-only buffer.
-        pass
+        # 覆盖prefill缓冲前撤销借用副本映射；只清理这两个可丢弃区域。
+        super()._invalidate_prefill_buffer(buffer_id)
 
     def prefetch_prefill_layer(self, layer_id):
         if not self.prefill_overlap or layer_id >= self.num_layers:
@@ -307,6 +309,7 @@ class ProtectedQ2Cache(OffloadMoeCache):
         with torch.cuda.stream(self.prefill_copy_stream):
             if self._prefill_buffer_has_release_event[buffer]:
                 self.prefill_copy_stream.wait_event(self.prefill_release_events[buffer])
+            self._invalidate_prefill_buffer(buffer)
             self._gather(layer_id, self._whole_dst[buffer], self._whole_ids, self._whole_count, 64)
             self.prefill_ready_events[buffer].record(self.prefill_copy_stream)
         self._prefill_buffer_layer[buffer] = layer_id
