@@ -161,6 +161,7 @@ class Batch:
     # exactly-once.
     prompt_admissions: List[Tuple[int, int, int]] = field(default_factory=list, init=False)
     mtp_token_ids: torch.Tensor | None = field(default=None, init=False)
+    mtp_delivered_count: int | None = field(default=None, init=False)
     mtp_ring_snapshots: torch.Tensor | None = field(default=None, init=False)
 
     @property

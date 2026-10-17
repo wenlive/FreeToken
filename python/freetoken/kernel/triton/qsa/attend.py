@@ -239,6 +239,7 @@ def qsa_sparse_paged_attention(
     block_table: torch.Tensor,
     token_to_req: torch.Tensor,
     out: torch.Tensor | None = None,
+    *, num_stages: int = 2,
 ) -> torch.Tensor:
     """Run sparse GQA directly over paged BF16 K/V caches."""
 
@@ -347,7 +348,7 @@ def qsa_sparse_paged_attention(
         BLOCK_M=block_m,
         BLOCK_N=block_n,
         num_warps=partial_warps,
-        num_stages=2,
+        num_stages=num_stages,
     )
     if num_splits == 1:
         return out

@@ -343,6 +343,7 @@ class Engine:
         torch.cuda.set_stream(self.stream)
         self.dtype = config.dtype
         self.config = config  # retained for runtime cache rebuild (rebuild_runtime_cache)
+        self.mtp_runtime = None
         # KV pool family fixed at construction from the model config: its classmethods own the
         # page-token geometry and cost arithmetic the engine needs BEFORE the pool exists
         # (num_pages sizing, --moe-cache-auto); the instance owns rebuild/validation after.
@@ -361,6 +362,8 @@ class Engine:
         with torch.device("meta"), torch_dtype(config.dtype):
             self.model = create_model(config.model_config)
         self._load_weights(config)
+        if config.mtp_runtime_path is not None:
+            self.model.prepare_mtp_runtime(config.mtp_runtime_path, config.mtp_max_context)
         if config.active_encoders:
             from freetoken.models.blocks import SupportsMultimodal
 
@@ -502,6 +505,9 @@ class Engine:
         if config.attention_backend.split(",")[0] == "triton":
             # Prefill runs on the first comma part; warm its autotune cache.
             self._warmup_prefill()
+        if config.mtp_runtime_path is not None:
+            from freetoken.models.qwen4_exp.mtp_runtime import MtpRuntime
+            self.mtp_runtime = MtpRuntime(self, self.model._mtp_drafter)
 
     def _init_communication(self, config: EngineConfig) -> torch.distributed.ProcessGroup:
         if config.tp_info.size == 1 or config.use_pynccl:
@@ -1014,6 +1020,8 @@ class Engine:
         self.rebuild_teardown_started = True
         # 1. Tear down CUDA graphs + backend capture scratch (free-before-alloc).
         self.attn_backend.reset_capture()
+        if self.mtp_runtime is not None:
+            self.mtp_runtime.close_graphs()
         self.graph_runner.destroy_cuda_graphs()
         # 2. Resize caches in place (each frees its old GPU tensors before allocating).
         # Pin the new window first (validated above) so any KV-pool rebuild below sizes the window
@@ -1060,10 +1068,14 @@ class Engine:
             mrope=config.model_config.model_is_mrope,
         )
 
+        if self.mtp_runtime is not None:
+            self.mtp_runtime.prepare_graphs()
+
     def forward_batch(self, batch: Batch, args: BatchSamplingArgs) -> ForwardOutput:
         assert torch.cuda.current_stream() == self.stream
         if batch.mm_gather_plan:
             self._run_mm_encoder(batch)
+        native_state = self.mtp_runtime.before_native(batch) if self.mtp_runtime is not None else None
         use_graph = self.graph_runner.can_use_cuda_graph(batch)
         with self.ctx.forward_batch(batch), self.model.forward_host_ctx(batch, use_graph):
             logits = self.graph_runner.replay(batch) if use_graph else self.model.forward()
@@ -1071,6 +1083,8 @@ class Engine:
             # One pinned read: surfaces a fired flag-handshake watchdog (dead coordinator
             # -> stale expert outputs) as a loud error instead of silent corruption.
             self.cpu_moe_executor.raise_if_unhealthy()
+        if native_state is not None:
+            self.mtp_runtime.after_native(batch, native_state)
 
         for req in batch.reqs:
             req.complete_one()
@@ -1144,6 +1158,8 @@ class Engine:
         )
 
     def shutdown(self) -> None:
+        if self.mtp_runtime is not None:
+            self.mtp_runtime.close_graphs()
         self.graph_runner.destroy_cuda_graphs()
         torch.distributed.destroy_process_group()
         destroy_distributed()

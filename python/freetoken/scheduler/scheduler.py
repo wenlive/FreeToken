@@ -225,6 +225,15 @@ class Scheduler(SchedulerIOMixin):
         for msg in self.receive_msg(blocking=blocking):
             self._process_one_msg(msg)
 
+        if self.engine.mtp_runtime is not None and last_data is not None:
+            # A variable-size verified bundle must reach CPU history before the
+            # next window is prepared; native no-MTP keeps its overlap schedule.
+            self.stream.wait_stream(self.engine.stream)
+            self._process_last_data(last_data)
+            self._flush_abort_acks()
+            last_data = None
+            self._last_data = None
+
         # Execute a queued cache rebuild once the scheduler is fully idle (the safe point):
         # no last batch to process, no pending prefill, no running decode. finished_reqs is
         # NOT a gate — those requests are already freed (no live GPU/page resources).
@@ -334,6 +343,8 @@ class Scheduler(SchedulerIOMixin):
                     # Aborted while this final-chunk prefill / decode step was in flight: free
                     # here (the forward is drained) and finish the request. No DetokenizeMsg --
                     # the abort ack flushed after this method stays the uid's terminal reply.
+                    if batch.mtp_token_ids is not None:
+                        req.append_host(batch.mtp_token_ids)
                     self.decode_manager.remove_req(req)
                     self._free_req_resources(req)
                     new_finished_reqs.add(req)
@@ -345,61 +356,66 @@ class Scheduler(SchedulerIOMixin):
                     # are freed below/already; shipping this token would append past the
                     # client's terminal reply.
                     continue
-                next_token = next_tokens_cpu[i]
-                req.append_host(next_token.unsqueeze(0))
-                next_token = int(next_token.item())
-                # EOS / stop-string -> "stop", output budget exhausted -> "length";
-                # EOS and stop strings win over length.
-                # Overlap can advance device_len one token ahead of this host reply.
-                hit_length = req.input_ids.numel() >= req.max_device_len
-                hit_eos = (
-                    not req.sampling_params.ignore_eos and next_token in self.eos_token_ids
-                )
-                matched_stop = (
-                    self._match_stop_str(req)
-                    if not hit_eos and req.sampling_params.stop_strs
-                    else None
-                )
-                finished = hit_length or hit_eos or matched_stop is not None
-                finish_reason = (
-                    ("stop" if (hit_eos or matched_stop is not None) else "length")
-                    if finished
-                    else None
-                )
-                if (
-                    next_token == self.toolcall_anchor_id
-                    and req.toolcall_anchor_len is None
-                    and not finished
-                ):
-                    req.toolcall_anchor_len = req.input_ids.numel()
-                reply.append(
-                    DetokenizeMsg(
-                        uid=req.uid,
-                        next_token=next_token,
-                        finished=finished,
-                        finish_reason=finish_reason,
-                        matched_stop=matched_stop,
-                        stop_strs=req.sampling_params.stop_strs or None,
+                output_tokens = (batch.mtp_token_ids if batch.mtp_token_ids is not None
+                                 else next_tokens_cpu[i:i + 1])
+                for next_token in output_tokens:
+                    req.append_host(next_token.unsqueeze(0))
+                    next_token = int(next_token.item())
+                    # EOS / stop-string -> "stop", output budget exhausted -> "length";
+                    # EOS and stop strings win over length.
+                    # Overlap can advance device_len one token ahead of this host reply.
+                    hit_length = req.input_ids.numel() >= req.max_device_len
+                    hit_eos = (
+                        not req.sampling_params.ignore_eos and next_token in self.eos_token_ids
                     )
-                )
+                    matched_stop = (
+                        self._match_stop_str(req)
+                        if not hit_eos and req.sampling_params.stop_strs
+                        else None
+                    )
+                    finished = hit_length or hit_eos or matched_stop is not None
+                    finish_reason = (
+                        ("stop" if (hit_eos or matched_stop is not None) else "length")
+                        if finished
+                        else None
+                    )
+                    if (
+                        next_token == self.toolcall_anchor_id
+                        and req.toolcall_anchor_len is None
+                        and not finished
+                    ):
+                        req.toolcall_anchor_len = req.input_ids.numel()
+                    reply.append(
+                        DetokenizeMsg(
+                            uid=req.uid,
+                            next_token=next_token,
+                            finished=finished,
+                            finish_reason=finish_reason,
+                            matched_stop=matched_stop,
+                            stop_strs=req.sampling_params.stop_strs or None,
+                        )
+                    )
 
-                # NOTE: overlap scheduling may make the request freed twice, skip second free
-                if finished and req not in self.finished_reqs:
-                    self.decode_manager.remove_req(req)
-                    self._free_req_resources(req)
-                    new_finished_reqs.add(req)
-                elif batch.is_prefill and req.table_idx != -1:
-                    # for prefill, non-chunk req, cache the prefix.
-                    # Polymorphic: the DSV4 naive manager keeps the request's slots (no-op);
-                    # the generic manager inserts the prefix into its radix/naive cache.
-                    # table_idx == -1 is defense-in-depth: aborts mark in-flight requests
-                    # instead of freeing them (handled above), so a freed request should
-                    # never reach this commit -- but if a future path frees one early, skip
-                    # rather than re-read the freed page-table row (and on hybrid, deref the
-                    # None'd GDN ping-pong slots).
-                    self.cache_manager.cache_req(req, finished=False)
+                    # NOTE: overlap scheduling may make the request freed twice, skip second free
+                    if finished and req not in self.finished_reqs:
+                        self.decode_manager.remove_req(req)
+                        self._free_req_resources(req)
+                        new_finished_reqs.add(req)
+                        break
+                    elif batch.is_prefill and req.table_idx != -1:
+                        # for prefill, non-chunk req, cache the prefix.
+                        # Polymorphic: the DSV4 naive manager keeps the request's slots (no-op);
+                        # the generic manager inserts the prefix into its radix/naive cache.
+                        # table_idx == -1 is defense-in-depth: aborts mark in-flight requests
+                        # instead of freeing them (handled above), so a freed request should
+                        # never reach this commit -- but if a future path frees one early, skip
+                        # rather than re-read the freed page-table row (and on hybrid, deref the
+                        # None'd GDN ping-pong slots).
+                        self.cache_manager.cache_req(req, finished=False)
 
         self.finished_reqs = new_finished_reqs
+        if batch.mtp_token_ids is not None:
+            batch.mtp_delivered_count = len(reply)
         # Stamp each reply with the post-batch KV page occupancy so the frontend (shell
         # status bar) can show live KV usage without a separate query.
         used, total = self._kv_usage_pages()
@@ -901,10 +917,33 @@ class Scheduler(SchedulerIOMixin):
         batch.input_ids = self.token_pool[input_mapping]
         if self.toolcall_anchor_id is not None and not batch.is_prefill:
             self.cache_manager.snapshot_toolcall_anchor(batch.reqs)
+        runtime = self.engine.mtp_runtime
+        if runtime is not None and runtime.eligible(batch):
+            output = runtime.forward(batch, self.cache_manager, self.token_pool,
+                                     self.eos_token_ids, self._mtp_delivery_limit, self.toolcall_anchor_id)
+            self.decode_manager.filter_reqs(batch.reqs)
+            return output
         forward_output = self.engine.forward_batch(batch, sample_args)
         self.token_pool[output_mapping] = forward_output.next_tokens_gpu
         self.decode_manager.filter_reqs(forward_input.batch.reqs)
         return forward_output
+
+    def _mtp_delivery_limit(self, req, tokens):
+        from freetoken.models.qwen4_exp.mtp_runtime import DeliveryLimit
+        history = req.input_ids.tolist()
+        prompt_len = req.max_device_len - req.output_len
+        for i, token in enumerate(tokens):
+            history.append(token)
+            hit_eos = not req.sampling_params.ignore_eos and token in self.eos_token_ids
+            hit_length = len(history) >= req.max_device_len
+            hit_stop = False
+            if not hit_eos and req.sampling_params.stop_strs:
+                max_chars = max(len(s) for s in req.sampling_params.stop_strs)
+                tail = self.tokenizer.decode(history[max(prompt_len, len(history) - max_chars - 1):])
+                hit_stop = any(s in tail for s in req.sampling_params.stop_strs)
+            if hit_eos or hit_length or hit_stop:
+                return DeliveryLimit(i + 1, True)
+        return DeliveryLimit(len(tokens), False)
 
 
 def _make_mrope_positions(batch: Batch, device: torch.device) -> torch.Tensor:

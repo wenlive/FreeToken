@@ -153,9 +153,16 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
             from .gguf_weight import declare_fp32_small_parameters
             declare_fp32_small_parameters(self)
         super().__init__()
+        self._mtp_drafter = None
+
+    def prepare_mtp_runtime(self, path: str, max_context: int) -> None:
+        from pathlib import Path
+        from .mtp_drafter import MtpDrafter
+        self.prepare_for_runtime()
+        self._mtp_drafter = MtpDrafter(Path(path), self, max_context=max_context)
 
     def prepare_for_runtime(self) -> None:
-        if self.model._mtp_capture_rows:
+        if self.model._mtp_capture_rows and self.model._mtp_residual_capture is None:
             # Allocate before cache sizing and graph capture, never during replay.
             self.model._mtp_residual_capture = torch.empty(
                 self.model._mtp_capture_rows, self._config.hidden_size * self.model.hc_count,
