@@ -372,7 +372,7 @@ class Engine:
             # Startup sizing below must observe physical VRAM released by the old CUDA allocation.
             torch.cuda.empty_cache()
         if config.mtp_runtime_path is not None:
-            self.model.prepare_mtp_runtime(config.mtp_runtime_path, config.mtp_max_context)
+            self.model.prepare_mtp_runtime(config.mtp_runtime_path, config.mtp_max_context, draft_policy=config.mtp_draft_policy)
         if config.active_encoders:
             from freetoken.models.blocks import SupportsMultimodal
 

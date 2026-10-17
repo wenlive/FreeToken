@@ -155,11 +155,11 @@ class Qwen4ExpForCausalLM(BaseLLMModel):
         super().__init__()
         self._mtp_drafter = None
 
-    def prepare_mtp_runtime(self, path: str, max_context: int) -> None:
+    def prepare_mtp_runtime(self, path: str, max_context: int, *, draft_policy="full") -> None:
         from pathlib import Path
         from .mtp_drafter import MtpDrafter
         self.prepare_for_runtime()
-        self._mtp_drafter = MtpDrafter(Path(path), self, max_context=max_context)
+        self._mtp_drafter = MtpDrafter(Path(path), self, max_context=max_context, draft_policy=draft_policy)
 
     def place_input_embedding(self) -> int:
         """Request mapped compressed input weights, falling back to unchanged GPU weights if unavailable."""

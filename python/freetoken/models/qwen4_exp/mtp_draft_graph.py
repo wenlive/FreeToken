@@ -5,7 +5,7 @@ from freetoken.kernel.triton.qsa import qsa_sparse_paged_attention
 
 class DraftGraphs:
 
-    def __init__(self, draft, stream, *, attention_width):
+    def __init__(self, draft, stream, *, attention_width, vocab_ids=None):
         """Own compressed draft weights/KV; borrow target embedding, head and RoPE."""
         if not 0 < attention_width <= draft.max_context or draft.max_context % 64:
             raise ValueError('Draft graph requires a bounded page-aligned context')
@@ -34,7 +34,7 @@ class DraftGraphs:
 
                 def chain():
                     for row in range(count):
-                        token, residual = draft.step(self.r, self.token, 0, positions=self.cell, attend=self.attend)
+                        token, residual = draft.step(self.r, self.token, 0, positions=self.cell, attend=self.attend, vocab_ids=vocab_ids)
                         self.r.copy_(residual)
                         self.token.copy_(token)
                         self.candidates[row].copy_(token[0])

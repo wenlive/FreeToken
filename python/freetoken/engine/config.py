@@ -113,8 +113,11 @@ class EngineConfig:
     mtp_runtime_path: str | None = None
     mtp_max_context: int = 8192
     mtp_compact_state: bool = False
+    mtp_draft_policy: str = "full"
 
     def __post_init__(self):
+        if self.mtp_draft_policy not in ("full", "paired_cjk"):
+            raise ValueError("MTP draft policy must be full or paired_cjk")
         if not 0 <= self.fixed_q2_rebuild_reserve_mib <= 512:
             raise ValueError('Fixed Q2 rebuild reserve must be 0..512 MiB')
         if self.fixed_q2_rebuild_reserve_mib != 512 and not self.moe_q2_resident_experts:

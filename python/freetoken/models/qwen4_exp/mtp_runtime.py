@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import copy
+import time
 from collections import deque
 from typing import NamedTuple
 
@@ -41,6 +42,10 @@ class MtpRuntime:
         self.ple = engine.model._ple_table
         self.graphs = {}
         self.draft_graphs = None
+        self.full_draft_graphs = None
+        self.draft_policy = None
+        self._policy_req = None
+        self._policy_previous = None
         self.active_owner = None
         # Diagnostics must stay bounded in a long-lived Speed worker.
         self.rounds = deque(maxlen=4096)
@@ -103,7 +108,11 @@ class MtpRuntime:
                     logits = self.engine.model.lm_head.quant_method.apply(self.engine.model.lm_head, hidden)
                     picks = logits.argmax(-1).to(torch.int32)
             self.graphs[count] = (batch, graph, picks)
-        self.draft_graphs = DraftGraphs(self.draft, self.engine.stream, attention_width=self.draft.max_context)
+        self.draft_graphs = DraftGraphs(self.draft, self.engine.stream,
+            attention_width=self.draft.max_context, vocab_ids=self.draft.draft_vocab)
+        if self.draft.draft_policy == 'paired_cjk':
+            self.full_draft_graphs = DraftGraphs(self.draft, self.engine.stream, attention_width=self.draft.max_context)
+        self._policy_req = self._policy_previous = None
         self.pool.clear_slots([self.pool.padding_slot, *self.pool.reserved_slot_ids])
         self.engine.kv_cache._pending_ring[self.engine.dummy_req.table_idx].zero_()
         self.active_owner = None
@@ -116,6 +125,10 @@ class MtpRuntime:
         if self.draft_graphs is not None:
             self.draft_graphs.close()
             self.draft_graphs = None
+        if self.full_draft_graphs is not None:
+            self.full_draft_graphs.close()
+            self.full_draft_graphs = None
+        self._policy_req = self._policy_previous = None
         self.active_owner = None
 
     def _ensure_owner(self, req):
@@ -182,6 +195,7 @@ class MtpRuntime:
             req.mamba_next_track_idx = 1 - req.mamba_next_track_idx
 
     def forward(self, batch, manager, token_pool, eos_ids, clip, anchor_id):
+        started = time.perf_counter() if self.draft.draft_policy == 'paired_cjk' else None
         if self.engine.prefill_workspace is not None:
             self.engine.prefill_workspace.check_usable()
         from freetoken.engine.engine import ForwardOutput
@@ -191,11 +205,25 @@ class MtpRuntime:
         self._ensure_owner(req)
         position = req.cached_len
         depth = window_depth(req, manager, self.draft.max_context)
+        action = 'full-3'
+        if started is not None:
+            from .mtp_draft_policy import PairedPolicy
+            if self._policy_req is not req:
+                self._policy_req = req
+                self.draft_policy = PairedPolicy()
+                self._policy_previous = None
+            if self._policy_previous is not None:
+                stamp, previous_position, arm, actual, accepted = self._policy_previous
+                if previous_position == req.cached_len and actual == int(arm[-1]):
+                    self.draft_policy.observe(arm, accepted, started - stamp)
+            action = self.draft_policy.choose()
+            depth = min(depth, int(action[-1]))
         manager.allocate_paged([req], reserve_tokens=depth)
         pending = int(batch.input_ids[0].item())
         residual = self.pool.slot_state(MTP_LAST_RESIDUAL)[req.linear_slot_idx:req.linear_slot_idx + 1]
         if depth:
-            candidates = self.draft_graphs.chain(residual, pending, position - 1, depth)
+            selected = self.full_draft_graphs if started is not None and action == 'full-3' else self.draft_graphs
+            candidates = selected.chain(residual, pending, position - 1, depth)
         else:
             candidates = []
             self.draft_graphs.prime(residual, batch.input_ids[:1], position - 1)
@@ -233,4 +261,6 @@ class MtpRuntime:
         batch.mtp_token_ids = bundle
         self.rounds.append(dict(uid=req.uid, position=position, draft_count=depth,
                                accepted_drafts=accepted, committed_rows=committed))
+        if started is not None:
+            self._policy_previous = (started, req.cached_len, action, depth, accepted)
         return ForwardOutput(tokens[-1:], bundle[-1:], event)

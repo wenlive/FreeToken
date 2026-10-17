@@ -6,13 +6,13 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 from freetoken.kernel.gguf_quant import compressed_linear, gguf_gemma_rmsnorm
-from freetoken.kernel.gguf_native import bf16_gemv
+from freetoken.kernel.gguf_native import bf16_gemv, indexed_q5
 from freetoken.kernel.triton.hc import grouped_gemma_rmsnorm, hc_silu, hc_gate_mix, hc_combine
 from freetoken.moe.fused_q2_q8 import fused_experts_q2_q8
 
 class MtpDrafter:
 
-    def __init__(self, runtime: Path, main_model, *, max_context=8192):
+    def __init__(self, runtime: Path, main_model, *, max_context=8192, draft_policy="full"):
         """Own compressed draft weights/KV; borrow target embedding, head and RoPE."""
         manifest = json.loads((runtime / 'runtime.json').read_text(encoding='utf-8'))
         if manifest['status'] != 'packed_unvalidated_runtime' or len(manifest['tensors']) != 31:
@@ -45,6 +45,15 @@ class MtpDrafter:
         self.keys = torch.zeros((max_context, 2, 256), device=self.device, dtype=torch.float32)
         self.values = torch.zeros_like(self.keys)
         self.owned_bytes = sum((t.numel() * t.element_size() for t in self.weights.values())) + 2 * self.keys.numel() * self.keys.element_size()
+        self.draft_policy = draft_policy
+        self.draft_vocab = None
+        if draft_policy == 'paired_cjk':
+            from .mtp_draft_vocab import load
+            if self.head.packed_0.numel() != 248320 * 1760:
+                raise ValueError('CJK draft policy requires the original248320x2560 Q5_K head')
+            self.draft_vocab = load(self.device)
+            self.owned_bytes += self.draft_vocab.numel() * self.draft_vocab.element_size()
+
 
     def linear(self, name, x):
         row = self.metadata[name]
@@ -90,7 +99,7 @@ class MtpDrafter:
             positions = torch.arange(start + offset, start + offset + len(tokens), device=self.device, dtype=torch.int32)
             self.key_value(x, positions)
 
-    def step(self, residual, token, cell, *, positions=None, attend=None):
+    def step(self, residual, token, cell, *, positions=None, attend=None, vocab_ids=None):
         """Cell p pairs R_p with token p+1 and predicts p+2; recursive KV remains private."""
         if not 0 <= cell < self.max_context:
             raise ValueError('MTP draft cell is outside its own KV capacity')
@@ -119,5 +128,10 @@ class MtpDrafter:
         gate = self.linear('mlp.shared_expert_gate.weight', x).sigmoid()
         r = hc_combine(r, routed + gate * shared, inject, 4)
         mixed, _ = self.mix('hyper_connection_mixer', r, inject=False)
-        logits = self.head.quant_method.apply(self.head, mixed)
-        return (logits.argmax(-1).to(torch.int32), r)
+        if vocab_ids is None:
+            logits = self.head.quant_method.apply(self.head, mixed)
+            token = logits.argmax(-1).to(torch.int32)
+        else:
+            logits = indexed_q5(self.head.packed_0, mixed, vocab_ids)
+            token = vocab_ids[logits.argmax(-1)].to(torch.int32)
+        return token, r
