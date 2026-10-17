@@ -1,0 +1,67 @@
+{
+  "upstream": "https://github.com/Niko1221/Strata",
+  "commit": "6674a0065fb96bacde33e3eb10f91a1df86f95f2",
+  "ggml_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
+  "files": [
+    {
+      "upstream_path": "src/kernels/cuda/native_mmvq.cu",
+      "upstream_blob_sha256": "222d897f638039bb2f410d3499fef4227236afe78d504fe9ddb3103eeb477465",
+      "ported_lf_sha256": "e5e45b00b65acb20484fc42a9e8bad871380c9a4201197e4a63b48798666b635"
+    },
+    {
+      "upstream_path": "src/kernels/cuda/s26_tsum.cuh",
+      "upstream_blob_sha256": "9d48c241a67096c4d57d10e0a0e7f8f20197ac91754c32889527c0550ce0a695",
+      "ported_lf_sha256": "57b54dcb6989df4927d408c6f9d0b837b8aca12a2fd9298cb7fdc0ea886f38ad"
+    },
+    {
+      "upstream_path": "src/kernels/cuda/q8_1_il.cuh",
+      "upstream_blob_sha256": "dcadd11672258a9307daf71ad214f5931127f49abb935e7ccf580277b2bf010b",
+      "ported_lf_sha256": "119ff59dc9d6d2c06368fa8ba96e15c778fff15e9dc1774009712de7f881d6f7"
+    },
+    {
+      "upstream_path": "include/strata/kernels/native_mmvq.hpp",
+      "upstream_blob_sha256": "9422f41002723c43ba396c26aa93f377a67c74a24255b9319167c5cc01eb6c4d",
+      "ported_lf_sha256": "c6936273a840945fcbb55772bf68c80a18d9c6b6255a40c2dfc00413aa80db36"
+    },
+    {
+      "upstream_path": "include/strata/kernels/dp4a.hpp",
+      "upstream_blob_sha256": "b4ca42cf7b4d99dcaf69ff7d8153112f1e1ce6dc32e486fd8b152ddf915366ab",
+      "ported_lf_sha256": "daa2d5a3ee504d83c47c9bc2292e7920bd9a0383a4339a36c16651f26b1034aa"
+    },
+    {
+      "upstream_path": "include/strata/kernels/q8_1_finite.hpp",
+      "upstream_blob_sha256": "6789c75d692ef1cf21a07d8d602e5cf35ad40657b715f8d510cf7ddad1162598",
+      "ported_lf_sha256": "2f15bc57fcc16e87952da9bdbeaa02a1fb4d09fc9b229b2013092e9243082e6a"
+    },
+    {
+      "upstream_path": "include/strata/kernels/iq_kernels.hpp",
+      "upstream_blob_sha256": "e3750f39de3957ff8bbd0ecc9d77d0e394f34984935f528c908d107aa62a62b3",
+      "ported_lf_sha256": "ca1dd40ca67b78512c385657dcbbc68f9b91974ec36ef2a36134d6fe0dc10058"
+    },
+    {
+      "upstream_path": "include/strata/kernels/pdl.hpp",
+      "upstream_blob_sha256": "fd3e1d2122aa3c8dbd2abd45089139e8f22852664c75b694acf7f96903d07c08",
+      "ported_lf_sha256": "622be5b52785116a75cbb0bd423651d4d5e59f9fe5e52f2da3dee86d176da267"
+    },
+    {
+      "upstream_path": "LICENSE",
+      "upstream_blob_sha256": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0",
+      "ported_path": "LICENSE-strata.txt",
+      "ported_lf_sha256": "949b9b0aada7476006469e58ee4ffb0e0f68c2d9137e90a356757b61a09d37f0"
+    },
+    {
+      "upstream_path": "third_party/ggml/LICENSE",
+      "upstream_blob_sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d",
+      "ported_path": "LICENSE-ggml.txt",
+      "ported_lf_sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d"
+    }
+  ],
+  "transformations": [
+    "C++ namespace strata::kernels -> freetoken::gguf_native",
+    "STRATA_ macro/environment names -> FREETOKEN_GGUF_",
+    "Allow explicit CUDA default-stream handle 0; CUDA launch errors remain checked"
+  ],
+  "external_runtime_dependency": false,
+  "license": "MIT",
+  "scope": "GGUF GPU Q8_1 quantizer and MMVQ only. External IQ dispatcher is unsupported and rejected; PDL disabled for FreeToken graph ordering."
+}

@@ -5,6 +5,71 @@ import torch
 
 @unittest.skipUnless(torch.cuda.is_available(), "requires CUDA")
 class GGUFExecutionConsistencyTests(unittest.TestCase):
+    def test_native_q8_graph_and_layout(self):
+        from freetoken.kernel.gguf_native import quantize_q8_1, mmvq
+        stream = torch.cuda.Stream()
+        with torch.cuda.stream(stream):
+            torch.manual_seed(839)
+            raw = torch.randn((19, 512), device="cuda")
+            x = raw[:, ::2]
+            q = quantize_q8_1(x)
+            weight = torch.zeros((17, 4, 18), device="cuda", dtype=torch.uint8)
+            weight[..., :2] = torch.full((17, 4), .125, device="cuda").half().view(torch.uint8).reshape(17, 4, 2)
+            weight[..., 2:] = 0b10110100
+            p = weight.flatten()
+            a = mmvq(p, q, 17, 42)
+            separate = torch.cat([mmvq(p, quantize_q8_1(x[i:i+1]), 17, 42) for i in range(len(x))])
+            torch.testing.assert_close(a, separate, rtol=3e-5, atol=3e-5)
+            out = torch.empty((19, 40), device="cuda")[:, 2:36:2]
+            mmvq(p, q, 17, 42, out=out)
+            torch.testing.assert_close(out, a, rtol=0, atol=0)
+            # A replay must read changed inputs rather than a captured output.
+            fixed = x.contiguous()
+            quantize_q8_1(fixed)
+            graph = torch.cuda.CUDAGraph()
+            with torch.cuda.graph(graph, stream=stream):
+                captured = mmvq(p, quantize_q8_1(fixed), 17, 42)
+            fixed.mul_(1.5)
+            graph.replay()
+            expected = mmvq(p, quantize_q8_1(fixed), 17, 42)
+            torch.testing.assert_close(captured, expected, rtol=0, atol=0)
+        stream.synchronize()
+
+    def test_native_mmvq_rejects_bad_binding_geometry(self):
+        from freetoken.kernel.gguf_native import _module, quantize_q8_1, mmvq
+        stream = torch.cuda.Stream()
+        with torch.cuda.stream(stream):
+            x = torch.zeros((2, 256), device="cuda")
+            q = quantize_q8_1(x)
+            p = torch.zeros(17 * 4 * 18, device="cuda", dtype=torch.uint8)
+            y = torch.empty((2, 17), device="cuda")
+            with self.assertRaises((RuntimeError, ValueError)):
+                _module().project(p[:-1], q, y, 42, 256, stream.cuda_stream)
+            with self.assertRaises((RuntimeError, ValueError)):
+                _module().project(p, q, y, 29, 256, stream.cuda_stream)
+            alias = torch.empty(2 * 256 * 4, device="cuda", dtype=torch.uint8)
+            with self.assertRaises((RuntimeError, ValueError)):
+                _module().quantize(alias.view(torch.float32).reshape(2, 256),
+                                   alias[:2*8*36].reshape(2, 8, 36), stream.cuda_stream)
+            self.assertEqual(mmvq(p, q[:0], 17, 42).shape, (0, 17))
+        stream.synchronize()
+
+    def test_bf16_fusion_bias_padding_and_strides(self):
+        from types import SimpleNamespace
+        from freetoken.layers.quantization.linear.gguf import GGUFLinearKernel
+        torch.manual_seed(151)
+        x = torch.randn((11, 512), device="cuda")[:, ::2]
+        w0 = torch.randn((17, 256), device="cuda").bfloat16()
+        w1 = torch.randn((3, 256), device="cuda").bfloat16()
+        segments = tuple(SimpleNamespace(type_id=30, nbytes=n*256*2, row_bytes=256*2) for n in (17,3))
+        bias = torch.randn(24, device="cuda")
+        layer = SimpleNamespace(quant_method=SimpleNamespace(cfg=SimpleNamespace(out_features=24, segments=segments)),
+            packed_0=w0.view(torch.uint8).flatten(), packed_1=w1.view(torch.uint8).flatten(), bias=bias)
+        got = GGUFLinearKernel().apply(layer, x)
+        reference = torch.cat([x@w0.float().T, x@w1.float().T], dim=1)+bias[:20]
+        torch.testing.assert_close(got[:, :20], reference, rtol=3e-4, atol=3e-4)
+        torch.testing.assert_close(got[:, 20:], bias[20:].expand(11,4), rtol=0, atol=0)
+
     def test_qk_norm_is_independent_of_batch_size(self):
         from freetoken.layers.norm import GemmaPlusOneRMSNorm
         from freetoken.models.qwen4_exp.gguf_weight import declare_fp32_small_parameters

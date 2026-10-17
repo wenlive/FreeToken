@@ -16,20 +16,30 @@ class GGUFLinearKernel(LinearKernel):
 
     def apply(self, layer, x):
         """同一输入只量化一次，各投影段写入对应切片，HC 对齐尾部显式填零。"""
-        from freetoken.kernel.gguf_quant import compressed_linear, quantize_activation
+        from freetoken.kernel.gguf_quant import compressed_linear
+        from freetoken.kernel.gguf_native import NATIVE_TYPES, bf16_gemv, quantize_q8_1
         cfg = layer.quant_method.cfg
         output = torch.empty((x.shape[0], cfg.out_features), device=x.device, dtype=torch.float32)
         quantized = None
         cursor = 0
+        if len(cfg.segments) == 2 and all(t.type_id == 30 for t in cfg.segments):
+            sizes = [t.nbytes // t.row_bytes for t in cfg.segments]
+            cursor = sum(sizes)
+            bf16_gemv(layer.packed_0, x, cursor, out=output[:, :cursor],
+                      packed1=layer.packed_1, first_rows=sizes[0])
+            if cursor < cfg.out_features:
+                output[:, cursor:].zero_()
+            if layer.bias is not None:
+                output += layer.bias
+            return output
         for index, tensor in enumerate(cfg.segments):
             count = tensor.nbytes // tensor.row_bytes
-            activation = x
-            if tensor.type_id not in (0, 1, 30):
+            if tensor.type_id in NATIVE_TYPES:
                 if quantized is None:
-                    quantized = quantize_activation(x)
-                activation = quantized
-            compressed_linear(getattr(layer, f"packed_{index}"), activation, count, tensor.type_id,
-                              quantize_input=False, out=output[:, cursor:cursor + count], q8_source=x)
+                    quantized = quantize_q8_1(x)
+            compressed_linear(getattr(layer, f"packed_{index}"), x, count, tensor.type_id,
+                              quantize_input=False, out=output[:, cursor:cursor + count],
+                              native_q8=quantized if tensor.type_id in NATIVE_TYPES else None)
             cursor += count
         if cursor < cfg.out_features:
             output[:, cursor:].zero_()

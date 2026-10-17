@@ -281,10 +281,16 @@ def gguf_ple_gate(key, query, hc_count):
     return gate
 
 
-def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None, q8_source=None):
+def compressed_linear(packed, x, rows, type_id, *, quantize_input=True, out=None, q8_source=None, native_q8=None):
     """压缩权重直接参与 FP32 GEMV；BF16/F16/F32 权重保留 FP32 激活。"""
     block, size = _geometry(type_id)
     width = x.shape[-1]
+    from .gguf_native import NATIVE_TYPES, bf16_gemv, mmvq, quantize_q8_1
+    if type_id == 30:
+        return bf16_gemv(packed, x, rows, out=out)
+    if type_id in NATIVE_TYPES and (quantize_input or native_q8 is not None):
+        q8 = quantize_q8_1(x) if native_q8 is None else native_q8
+        return mmvq(packed, q8, rows, type_id, out=out)
     if quantize_input and type_id not in (0, 1, 30):
         q8_source = x
         x = quantize_activation(x)
