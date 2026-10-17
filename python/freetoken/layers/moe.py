@@ -361,6 +361,13 @@ class OffloadMoELayer(MoELayer):
         pass through unmapped."""
         cache = self.offload_cache
         assert cache is not None
+        # 少量残余 token 不应搬运整层专家；复用已有 LRU 的按需加载与 slot 映射。
+        # 只针对 Q2 GPU offload，限制路由数量，避免一次 ensure 占满 cache。
+        if (cache.quant_format == "q2_0" and cache.decode_target == "gpu"
+                and hidden_states.shape[0] <= 16
+                and hidden_states.shape[0] * self.top_k <= self.num_experts // 3
+                and os.getenv("FREETOKEN_Q2_SPARSE_PREFILL", "1") != "0"):
+            return self._decode_routed(hidden_states, topk_weights, topk_ids)
         if cache.prefill_overlap:
             views = self._wait_prefill_overlap(cache)
             out = self._expert_gemm(
