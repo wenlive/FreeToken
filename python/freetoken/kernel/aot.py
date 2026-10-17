@@ -147,7 +147,7 @@ def _gguf_mmvq_spec() -> KernelSpec:
     def build(build_directory: pathlib.Path) -> object:
         from .gguf_native import _module
         return _module(build_directory=str(build_directory))
-    return KernelSpec(name=_make_name("gguf_mmvq_r2"), build=build)
+    return KernelSpec(name=_make_name("gguf_mmvq_r3"), build=build)
 
 
 def default_kernel_specs() -> tuple[KernelSpec, ...]:

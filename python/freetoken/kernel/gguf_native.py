@@ -13,10 +13,11 @@ NATIVE_TYPES = frozenset((2, 6, 8, 11, 12, 13, 14, 20, 23, 42))
 @lru_cache(maxsize=1)
 def _module(*, build_directory=None):
     return load_jit(
-        "gguf_mmvq_r2", cuda_files=["gguf_mmvq.cuh"],
+        "gguf_mmvq_r3", cuda_files=["gguf_mmvq.cuh"],
         cuda_wrappers=[("quantize", "GGUFNativeMMVQ::quantize"), ("project", "GGUFNativeMMVQ::project"),
                        ("interleave", "GGUFInterleavedMMVQ::interleave"),
-                       ("project_interleaved", "GGUFInterleavedMMVQ::project")],
+                       ("project_interleaved", "GGUFInterleavedMMVQ::project"),
+                       ("project_indexed_q5", "GGUFIndexedDraftQ5::project")],
         extra_cuda_cflags=["--use_fast_math"],
         extra_include_paths=[str(KERNEL_PATH / "third_party/strata_mmvq/include")],
         build_directory=build_directory,
@@ -153,4 +154,14 @@ def bf16_gemv(packed, x, rows, *, out=None, packed1=None, first_rows=None):
     else:
         _bf16_rows[(rows, len(x))](w0, w1, x, out,
             n0, rows, width, *x.stride(), *out.stride(), 256, num_warps=4, enable_fp_fusion=False)
+    return out
+
+
+def indexed_q5(packed, x, ids):
+    """Project indexed original Q5 rows; the target head remains complete."""
+    if x.shape != (1, 2560) or ids.ndim != 1 or ids.dtype != torch.int64:
+        raise ValueError('Indexed draft Q5 requires one2560-wide row and int64 row indices')
+    q = quantize_q8_1(x)
+    out = torch.empty((1, len(ids)), device=x.device, dtype=torch.float32)
+    _module().project_indexed_q5(packed, q, ids, out, torch.cuda.current_stream(x.device).cuda_stream)
     return out
