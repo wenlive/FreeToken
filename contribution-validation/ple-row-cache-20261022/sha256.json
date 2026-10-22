@@ -1,0 +1,16 @@
+{
+  "baseline-bench01.json": "cb9086485a67d7c5f223a84f1be89d3cc27d5c9a02e0da74d04fd3e0ae570c28",
+  "baseline-fixture-failures01.log": "9ea2713fa62229fe010f542337e5543048099792fba0f54e03ebb714a720038b",
+  "benchmark.py": "88cc68990fb58b96349d38a64f963f18d6d0618022d0f3f0e8cf4a7ee91cd52c",
+  "candidate-hot-bench01.json": "1f04a912f9c73bd6ac6224fee64434702c9f692016d0a0ac19961167bd5729d9",
+  "candidate-off-bench01.json": "367d9ebf66576bbd84881115027c55057f8f4f50fe15cfed5a5b01292d37aa55",
+  "candidate-small-bench01.json": "5c07523ac4be3d2ab8d75970a76f8763f45b43f9912f44e07e72a6b5b03e36af",
+  "candidate-tests02.log": "b78e3b4eb1b2c30711f0a7116b3e664b9bbab433ac32e953fd48471c38888938",
+  "final.patch": "1e40f95ae66a4af8c42e6e232cbb6f8b51cfb49f68c8c7b343e559c59411c6a0",
+  "real-checkpoint01.json": "48ec6fb821aa7e316651f0487f4e9ca9b07052f814a02f9e727a5dea217f8954",
+  "real_checkpoint.py": "82f431c7f2ae65c4d06327620a63fc568841bd84e5dda830e036e68a737663e9",
+  "related-tests01.log": "eb7be061e2c192fd5dce3599b606bff6631ce9a85daf6c8e10d04e6c684dedca",
+  "REPORT.txt": "9a7781f4e6a7f8a26a7e621a2d1676710b21bf915f524635b96db1a57a39b1ac",
+  "requirements.lock.txt": "038356524809232e9103c2f49e1b728b8b2ac04b47d3c47365bec619a883c8e2",
+  "windows-integration.patch": "1f14a2c6b7b6adf573b4ecebdb281c32829eaddbeeaca900da1fffe14011c095"
+}

@@ -1,0 +1,44 @@
+FreeToken PR659 build follow-up - 2026-10-22
+
+Published head:4c802fb32681ef51b169487cb9baf09ba371374f.
+Original head:e9235495b29992d5e1e03db4ec8e779ef11a40cf.
+Merged current official main546c5fe via656f10b, preserving the original PR commit.
+Follow-up4c802fb shares explicit host C++20 flags between row-store/pinned extensions,
+discovers CUDA lib/x64, resolves include paths from the absolute source root, and
+excludes the pthread/GCC-attribute CPU MoE executor on Windows. Device flags remain separate.
+Credits:KarrAcaRn/FreeToken-ByAI4b37dade9b6998bc72d913404b381d39368b2df7.
+
+Independent environment:C:/workspace/envs/freetoken-fork/row-store.
+Source:C:/workspace/wt/freetoken-fork/windows-row-store.
+Windows11 build26200,RTX5070Ti16GiB,driver616.56,Ryzen7 9700X,64GB RAM.
+Python3.12.10,Torch2.14.1+cu130,CUDA Toolkit13.2.1(nvcc13.2.78),MSVC19.50.35739.
+Exact installed dependencies:requirements.lock.txt. No existing task environment was modified.
+
+Standard validation, without monkeypatching setup/PyTorch or rewriting extension configuration:
+  python setup.py build_ext --inplace
+  uv build --wheel --no-build-isolation
+Both succeed. Built11 native modules:row_store,pinned_tensor,and9 existing ggml_cpu variants.
+Wheel:C:/workspace/dist/freetoken-fork/candidate-wheel01/freetoken-0.2.0-cp312-cp312-win_amd64.whl.
+Installed normally with uv pip install --no-deps;PYTHONPATH cleared for installed tests.
+Printed imports prove package/native extensions came from the task's site-packages.
+  python -m pytest tests/kernels/test_row_store.py tests/models/qwen4_exp/test_ple_disk.py
+    tests/kernels/test_pinned_tensor.py -k "not test_fast_index_copy_accepts_exact_pinned_cpu_source" -q
+Result:18passed,1Windows/UVA skip,1deselected. Synthetic byte tables and toy PLE checkpoints.
+GPU oracle,CUDA graph,Unicode path,large-offset and short-read recovery all passed.
+
+Preserved failures and scope:
+before-build01:compiler output was UTF8 while PyTorch decoded OEM936. Session-only console codepage936
+matches the native compiler/PyTorch expectation;the original codepage is restored. No Python patch used.
+before-build02:the old setup cannot link cudart.lib;shared flags/library discovery fix this in the standard build.
+candidate-tests01:18passed,1skipped,1failed. The fast-index-copy JIT command passes GCC host flags on Windows
+and nvcc rejects it. That existing JIT issue belongs to575;it was excluded by name in installed-tests01.
+No full-model serving,Linux/ROCm,or device-kernel/JIT acceptance is claimed by this follow-up.
+Native build logs contain localised compiler output;raw logs retained locally,public copies decoded as936.
+
+Publication:
+PR:https://github.com/FlashML-org/FreeToken/pull/659
+Acknowledgement:https://github.com/FlashML-org/FreeToken/pull/659#issuecomment-6333656477
+Only fix/windows-disk-row-store was pushed,fast-forward frome923549 to4c802fb.
+No force-push. Fork maintained main remains131715e992d806041bdc5c9ead0f8af543b310e4.
+PR7883352fdd andPR790278267e unchanged.
+Prepared and run through AI development tooling;no independent manual human rerun is claimed.

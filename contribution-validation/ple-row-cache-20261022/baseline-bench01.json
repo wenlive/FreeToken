@@ -1,0 +1,42 @@
+{
+  "source": "C:\\workspace\\wt\\freetoken-fork\\windows-row-store",
+  "extension": "C:\\workspace\\wt\\freetoken-fork\\windows-row-store\\python\\freetoken\\kernel\\_row_store.cp312-win_amd64.pyd",
+  "torch": "2.14.1+cu130",
+  "gpu": "NVIDIA GeForce RTX 5070 Ti",
+  "cache_rows": 0,
+  "scope": "DiskRowTable.fill + GPU lookup, synthetic FP8 table, not whole-model tokens/s",
+  "results": [
+    {
+      "workload": "repeated-contexts",
+      "batch_size": 16,
+      "steps": 160,
+      "trials": 5,
+      "us_per_batch": [
+        1855.309999518795,
+        1229.7518747800495,
+        1225.0350002432242,
+        1227.6600005861837,
+        1227.7687499590684
+      ],
+      "median_us": 1227.7687499590684,
+      "stats_start": null,
+      "stats_end": null
+    },
+    {
+      "workload": "streaming-contexts",
+      "batch_size": 16,
+      "steps": 160,
+      "trials": 5,
+      "us_per_batch": [
+        1125.155000045197,
+        1138.6843747459352,
+        1121.0637501790188,
+        1122.7131253690459,
+        1129.3668751022778
+      ],
+      "median_us": 1125.155000045197,
+      "stats_start": null,
+      "stats_end": null
+    }
+  ]
+}

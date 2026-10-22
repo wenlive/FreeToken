@@ -1,0 +1,62 @@
+FreeToken bounded PLE row cache - 2026-10-22
+
+Candidate:9694725a0f14a957362d13bdeeed758701152581,branch perf/ple-row-cache.
+Base:official main546c5fe2e4468e2f3f8a574c64021a47016c35f7(FreeToken0.2.0).
+Source:C:/workspace/wt/freetoken-fork/ple-row-cache.
+Windows integration:C:/workspace/wt/freetoken-fork/ple-cache-win,PR659 head4c802fb plus windows-integration.patch.
+The independent PR diff contains9files,+218/-12,with no Windows/build changes.
+
+Implementation:
+Opt-in host cache of raw fixed-width rows,8ways per hashed set,round-robin replacement.
+Default0 allocates no cache;capacity must be0 or a multiple of8 up to16777216.
+Misses keep existing deduplication and batched I/O;only completed read payloads are cached.
+Resizing rejects pending reads;disabling releases buffers;instances do not share rows.
+Memory:N*(row_bytes+8)+N/8bytes. The checkpoint is immutable while its store remains open.
+io_stats exposes capacity,payload/key/cursor bytes,hits,misses,and lifetime completed read requests.
+Hits/misses count requested rows while enabled;repeated misses in a fill still deduplicate their disk read.
+Config/CLI/model wiring:--ple-row-cache-rows,EngineConfig.ple_row_cache_rows,DiskRowTable.row_cache_rows.
+
+Independent environment:C:/workspace/envs/freetoken-fork/ple-cache;73dependencies,uv pip check passed.
+Windows11 build26200,RTX5070Ti16GiB,driver616.56,Ryzen7 9700X,64GB RAM.
+Python3.12.10,Torch2.14.1+cu130,Triton Windows3.8.0.post29,transformers5.18.0.
+Native compiler:MSVC19.50.35739,CUDA Toolkit13.2.1;ordinary setup.py build_ext --inplace succeeded.
+Windows native testing layers the candidate on659,not on the fork's maintained main.
+
+Focused tests:
+  python -m pytest tests/kernels/test_row_store.py tests/models/qwen4_exp/test_ple_disk.py
+    tests/engine/test_ple_row_cache.py -q
+39passed,0skipped,0failed. Byte fidelity across files/extents/strides;90/160/264/4096-byte rows;
+deduplication;warm hits without reads;eviction;resize/disable;instance isolation;bounds;short-read recovery;
+FP8/BF16 GPU oracle;overlap staging;CUDA graphs and launch gating;config/backend admission.
+Additional unchanged PLE/cache-budget tests:42passed,4skipped,2failed because fixtures require absent
+FlashInfer. The exact two failures reproduce on the659 baseline without caching. Logs retained.
+
+Real checkpoint validation:
+ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF,revisioned59f92082b1e93c0e96d60a8b11aab089b52f09,Q2_0splits.
+Original read-only sources under models/siltok-speed/flash-next/sources/ISTA-DASLab were used.
+CLI parsed65536;read64selected raw PLE rows(including endpoints)12times with capacities0/65536/8/0.
+Every byte matched independent Python file seek/read. Source:320001536rows,90bytes/row,160values,ggml type20.
+65536-row cache:6430720bytes,64reads for three64-row fills,128hits. No model inference was performed.
+
+Component benchmark(benchmark.py):DiskRowTable.fill + pinned H2D + FP8 GPU dequantization.
+Fixed seeded trace,batch16,160decode fills/trial,1warmup+5measuredtrials;every output checked bitwise
+against the GPU-resident oracle. Median microseconds per16-token batch:
+                       repeated contexts     streaming contexts
+  baseline659                1227.77                 1125.16
+  candidate cache0           1163.39                  999.73
+  candidate cache64           417.69                 1105.16
+  candidate cache65536         37.74                   38.02
+The65536-row cache holds this entire toy table after warmup;this is deliberately a hit-path test.
+The64-row streaming cache has160hits/10240requests in the final trial and is slower than disabled.
+No general speedup/default-off improvement is inferred from timing differences or the toy table.
+The tests measure PLE path latency,not end-to-end model tokens/s or TTFT.
+
+Publication quality boundary:
+Issue791 describes this opt-in cache;no matching bounded PLE row-cache PR was found.
+Open the PR as DRAFT pending full-model A/B tokens/s/TTFT against main and Linux validation.
+An existing Windows JIT failure remains outside the patch(see659 follow-up records and575).
+The Windows/CUDA GPU checks are real;Linux,ROCm,full-model inference,and performance qualification
+must not be represented as completed. Patch remains focused despite downstream build prerequisites.
+Only the new perf/ple-row-cache and validation/row-cache-20261022 branches may be pushed.
+Fork main must remain131715e992d806041bdc5c9ead0f8af543b310e4;659head4c802fb,7883352fdd,790278267e preserved.
+Prepared/tested through AI development tooling;no independent manual human rerun is claimed.

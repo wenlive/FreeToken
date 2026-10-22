@@ -1,0 +1,66 @@
+{
+  "source": "C:\\workspace\\wt\\freetoken-fork\\ple-cache-win",
+  "extension": "C:\\workspace\\wt\\freetoken-fork\\ple-cache-win\\python\\freetoken\\kernel\\_row_store.cp312-win_amd64.pyd",
+  "torch": "2.14.1+cu130",
+  "gpu": "NVIDIA GeForce RTX 5070 Ti",
+  "cache_rows": 64,
+  "scope": "DiskRowTable.fill + GPU lookup, synthetic FP8 table, not whole-model tokens/s",
+  "results": [
+    {
+      "workload": "repeated-contexts",
+      "batch_size": 16,
+      "steps": 160,
+      "trials": 5,
+      "us_per_batch": [
+        428.804375405889,
+        422.4981246807147,
+        417.68750015762635,
+        382.2437494818587,
+        226.64812495349906
+      ],
+      "median_us": 417.68750015762635,
+      "stats_start": {
+        "row_cache_misses": 4059,
+        "row_cache_capacity": 64,
+        "row_cache_bytes": 1544,
+        "row_cache_hits": 47141,
+        "read_requests_completed": 4059
+      },
+      "stats_end": {
+        "row_cache_misses": 4859,
+        "row_cache_capacity": 64,
+        "row_cache_bytes": 1544,
+        "row_cache_hits": 56581,
+        "read_requests_completed": 4859
+      }
+    },
+    {
+      "workload": "streaming-contexts",
+      "batch_size": 16,
+      "steps": 160,
+      "trials": 5,
+      "us_per_batch": [
+        3643.326250312384,
+        1098.6524997861125,
+        1106.8425003031734,
+        1105.1587498513982,
+        1092.6275004749186
+      ],
+      "median_us": 1105.1587498513982,
+      "stats_start": {
+        "row_cache_misses": 50427,
+        "row_cache_capacity": 64,
+        "row_cache_bytes": 1544,
+        "row_cache_hits": 773,
+        "read_requests_completed": 49997
+      },
+      "stats_end": {
+        "row_cache_misses": 60507,
+        "row_cache_capacity": 64,
+        "row_cache_bytes": 1544,
+        "row_cache_hits": 933,
+        "read_requests_completed": 59991
+      }
+    }
+  ]
+}

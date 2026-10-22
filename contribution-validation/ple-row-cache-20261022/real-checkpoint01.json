@@ -1,0 +1,49 @@
+{
+  "model": "C:\\workspace\\models\\siltok-speed\\flash-next\\sources\\ISTA-DASLab\\Qwen3.8-Flash-Next-GSQ-RCO-GGUF\\ed59f92082b1e93c0e96d60a8b11aab089b52f09\\Q2_0\\Qwen3.8-Flash-Next-GSQ-RCO-Q2_0-00001-of-00002.gguf",
+  "model_id": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+  "revision": "ed59f92082b1e93c0e96d60a8b11aab089b52f09",
+  "table": {
+    "rows": 320001536,
+    "row_bytes": 90,
+    "ggml_type": 20,
+    "row_values": 160,
+    "offsets": [
+      192
+    ]
+  },
+  "checked_rows": 64,
+  "reads": 12,
+  "bytes_exact": true,
+  "cli_capacity": 65536,
+  "stats": [
+    {
+      "row_cache_misses": 0,
+      "row_cache_capacity": 0,
+      "row_cache_bytes": 0,
+      "row_cache_hits": 0,
+      "read_requests_completed": 192
+    },
+    {
+      "row_cache_misses": 64,
+      "row_cache_capacity": 65536,
+      "row_cache_bytes": 6430720,
+      "row_cache_hits": 128,
+      "read_requests_completed": 256
+    },
+    {
+      "row_cache_misses": 176,
+      "row_cache_capacity": 8,
+      "row_cache_bytes": 785,
+      "row_cache_hits": 16,
+      "read_requests_completed": 432
+    },
+    {
+      "row_cache_misses": 0,
+      "row_cache_capacity": 0,
+      "row_cache_bytes": 0,
+      "row_cache_hits": 0,
+      "read_requests_completed": 624
+    }
+  ],
+  "scope": "real checkpoint packed row reads, not full-model inference"
+}
