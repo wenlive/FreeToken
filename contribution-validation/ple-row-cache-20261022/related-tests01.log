@@ -1,0 +1,206 @@
+ss....s........s.................F....F.........                         [100%]
+================================== FAILURES ===================================
+_______________ test_adjust_config_resolves_num_tokens_generic ________________
+
+    def test_adjust_config_resolves_num_tokens_generic():
+        # Generic model keeps its page_size (1 here): tokens map 1:1 onto pages.
+        from types import SimpleNamespace
+    
+        from freetoken.engine.engine import _adjust_config
+    
+        model_config = SimpleNamespace(
+            single_stream_only=False, is_moe=False, expert_quant="none",
+            has_swa_attention=False, has_linear_attention=False,
+        )
+    
+        class Cfg:
+            moe_cache_auto = False
+            moe_cache_size = 0
+            moe_cache_rate = None
+            moe_strategy = "auto"
+            max_running_req = 4
+            cuda_graph_max_bs = 2
+            cuda_graph_bs = [1, 2]
+            max_seq_len = 1024
+            page_size = 1
+            attention_backend = "triton" if torch.version.hip is not None else "fi"
+            num_page_override = None
+            num_token_override = 5000
+    
+            @property
+            def model_config(self):
+                return model_config
+    
+        cfg = Cfg()
+>       _adjust_config(cfg)
+
+tests\engine\test_cache_budget.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\engine\engine.py:1858: in _adjust_config
+    _validate_attention_backend_choice(config, override, required_attn_types)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = <engine.test_cache_budget.test_adjust_config_resolves_num_tokens_generic.<locals>.Cfg object at 0x000001D3870F1E50>
+override = <function _adjust_config.<locals>.override at 0x000001D3A2EA5440>
+required = frozenset({<AttnType.FULL: 'full'>})
+
+    def _validate_attention_backend_choice(config, override, required: frozenset[AttnType]) -> None:
+        """Config-time type x backend capability check for the resolved (or explicit)
+        backend string: every comma part must serve every required type and have its
+        packages/arch available. Replaces the per-model gates; in particular this is
+        where a DSV4 or MLA checkpoint rejects a generic backend before weights load,
+        and where a generic model rejects dsa/dsv4_sparse."""
+        from freetoken.attention import validate_attn_backend
+        from freetoken.kernel.backend import is_rocm
+    
+        # Name membership first (ArgumentTypeError listing the supported names): the CLI already
+        # ran this, but the programmatic EngineConfig path reaches here unvalidated and would
+        # otherwise die on a bare KeyError from the info lookup below.
+        validate_attn_backend(config.attention_backend, allow_auto=False)
+    
+        model_config = config.model_config
+        backend_parts = [p.strip() for p in config.attention_backend.split(",")]
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            missing = required - info.supported_types
+            if missing:
+                valid = [
+                    name
+                    for name in (
+                        "fa", "fi", "trtllm", "triton", "dsa", "dsv4_sparse", "m3_sparse",
+                        "qsa_sparse",
+                    )
+                    if required <= attention_backend_info(name).supported_types
+                ]
+                missing_names = "/".join(sorted(t.value for t in missing))
+                raise ValueError(
+                    f"{getattr(model_config, 'model_type', 'model')} uses {missing_names} "
+                    f"attention, which backend {part!r} does not support; valid backends: "
+                    f"{', '.join(valid)} (or auto), got {config.attention_backend!r}."
+                )
+            if AttnType.SWA in required and not info.consumes_attn_spec:
+                # SWA models drive window/sinks/sm_scale through the per-call AttentionSpec;
+                # a backend that drops it would attend with the wrong window silently.
+                raise ValueError(
+                    f"backend {part!r} does not consume the per-call AttentionSpec that "
+                    f"SWA models require, got {config.attention_backend!r}."
+                )
+    
+        # An explicitly-selected backend may require a package that isn't installed. Auto
+        # never resolves to one of these when its package is missing, so this only fires for
+        # explicit --attention-backend choices.
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            if info.requires_flashinfer and not _flashinfer_available():
+                if is_rocm():
+                    raise RuntimeError(
+                        f"Attention backend {part!r} uses CUDA-only FlashInfer kernels "
+                        "unavailable on ROCm; use --attention-backend auto or triton."
+                    )
+>               raise RuntimeError(
+                    f"Attention backend {config.attention_backend!r} requires flashinfer, which is "
+                    "not installed. Install it with `pip install 'freetoken[fi]'` (or "
+                    "'freetoken[accel]'), or use --attention-backend triton."
+                )
+E               RuntimeError: Attention backend 'fi' requires flashinfer, which is not installed. Install it with `pip install 'freetoken[fi]'` (or 'freetoken[accel]'), or use --attention-backend triton.
+
+python\freetoken\engine\engine.py:242: RuntimeError
+_ test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001D387141A00>
+
+    def test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend(monkeypatch):
+        """Bare `ft serve <FTW MoE checkpoint>`: no --moe-backend, no --moe-cache-* flags at all.
+    
+        args.py's parse-time default only fires when the backend is *already*
+        offload-family at parse time -- but a bare invocation leaves moe_strategy="auto" at parse
+        time, and the "auto" -> offload/cpu/hybrid resolution only happens later, in _adjust_config,
+        once the model_config (and its expert_quant) is known. This proves the engine-level
+        resolution: a quantized-experts model auto-resolving to an offload-family backend also gets
+        moe_cache_auto=True, so _init_offload_moe_cache's _require_offload_cache_size guard is never
+        reached with moe_cache_size still 0.
+        """
+        import freetoken.engine.engine as engine_module
+        from freetoken.engine.engine import _adjust_config
+        from freetoken.moe import is_offload_moe_strategy
+    
+        # a unified-memory host (GB10) resolves auto to fused instead
+        monkeypatch.setattr(engine_module, "_is_unified_memory_gpu", lambda index=None: False)
+        config = _offload_engine_config()
+>       _adjust_config(config)
+
+tests\engine\test_cache_budget.py:410: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\engine\engine.py:1858: in _adjust_config
+    _validate_attention_backend_choice(config, override, required_attn_types)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = EngineConfig(model_path='/tmp/freetoken-test-model', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf..., embed_cache_device='cpu', encoder_weights='host', image_min_tokens=None, image_max_tokens=None, processor_kwargs={}))
+override = <function _adjust_config.<locals>.override at 0x000001D3A2F4BE20>
+required = frozenset({<AttnType.FULL: 'full'>})
+
+    def _validate_attention_backend_choice(config, override, required: frozenset[AttnType]) -> None:
+        """Config-time type x backend capability check for the resolved (or explicit)
+        backend string: every comma part must serve every required type and have its
+        packages/arch available. Replaces the per-model gates; in particular this is
+        where a DSV4 or MLA checkpoint rejects a generic backend before weights load,
+        and where a generic model rejects dsa/dsv4_sparse."""
+        from freetoken.attention import validate_attn_backend
+        from freetoken.kernel.backend import is_rocm
+    
+        # Name membership first (ArgumentTypeError listing the supported names): the CLI already
+        # ran this, but the programmatic EngineConfig path reaches here unvalidated and would
+        # otherwise die on a bare KeyError from the info lookup below.
+        validate_attn_backend(config.attention_backend, allow_auto=False)
+    
+        model_config = config.model_config
+        backend_parts = [p.strip() for p in config.attention_backend.split(",")]
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            missing = required - info.supported_types
+            if missing:
+                valid = [
+                    name
+                    for name in (
+                        "fa", "fi", "trtllm", "triton", "dsa", "dsv4_sparse", "m3_sparse",
+                        "qsa_sparse",
+                    )
+                    if required <= attention_backend_info(name).supported_types
+                ]
+                missing_names = "/".join(sorted(t.value for t in missing))
+                raise ValueError(
+                    f"{getattr(model_config, 'model_type', 'model')} uses {missing_names} "
+                    f"attention, which backend {part!r} does not support; valid backends: "
+                    f"{', '.join(valid)} (or auto), got {config.attention_backend!r}."
+                )
+            if AttnType.SWA in required and not info.consumes_attn_spec:
+                # SWA models drive window/sinks/sm_scale through the per-call AttentionSpec;
+                # a backend that drops it would attend with the wrong window silently.
+                raise ValueError(
+                    f"backend {part!r} does not consume the per-call AttentionSpec that "
+                    f"SWA models require, got {config.attention_backend!r}."
+                )
+    
+        # An explicitly-selected backend may require a package that isn't installed. Auto
+        # never resolves to one of these when its package is missing, so this only fires for
+        # explicit --attention-backend choices.
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            if info.requires_flashinfer and not _flashinfer_available():
+                if is_rocm():
+                    raise RuntimeError(
+                        f"Attention backend {part!r} uses CUDA-only FlashInfer kernels "
+                        "unavailable on ROCm; use --attention-backend auto or triton."
+                    )
+>               raise RuntimeError(
+                    f"Attention backend {config.attention_backend!r} requires flashinfer, which is "
+                    "not installed. Install it with `pip install 'freetoken[fi]'` (or "
+                    "'freetoken[accel]'), or use --attention-backend triton."
+                )
+E               RuntimeError: Attention backend 'fi' requires flashinfer, which is not installed. Install it with `pip install 'freetoken[fi]'` (or 'freetoken[accel]'), or use --attention-backend triton.
+
+python\freetoken\engine\engine.py:242: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/engine/test_cache_budget.py::test_adjust_config_resolves_num_tokens_generic
+FAILED tests/engine/test_cache_budget.py::test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend
+2 failed, 42 passed, 4 skipped in 5.07s

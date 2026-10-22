@@ -1,0 +1,78 @@
+..............F...s.                                                     [100%]
+================================== FAILURES ===================================
+____________ test_fast_index_copy_accepts_exact_pinned_cpu_source _____________
+
+    def test_fast_index_copy_accepts_exact_pinned_cpu_source():
+        if not torch.cuda.is_available():
+            pytest.skip("CUDA is required for fast index copy")
+    
+        from freetoken.kernel import copy_to_pinned_tensor, fast_index_copy_jit
+    
+        source = copy_to_pinned_tensor(torch.arange(6 * 32, dtype=torch.float32).reshape(6, 32))
+        output = torch.empty((3, 32), dtype=torch.float32, device="cuda")
+        dst_indices = torch.tensor([0, 1, 2], dtype=torch.int32, device="cuda")
+        src_indices = torch.tensor([5, 2, 0], dtype=torch.int32, device="cuda")
+    
+>       fast_index_copy_jit(output, dst_indices, source, src_indices)
+
+tests\kernels\test_pinned_tensor.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\kernel\fast_index_copy.py:124: in fast_index_copy_jit
+    module = _jit_fast_index_copy_module(
+python\freetoken\kernel\fast_index_copy.py:50: in _jit_fast_index_copy_module
+    return load_jit(
+python\freetoken\kernel\utils.py:411: in load_jit
+    return load_inline(
+..\..\..\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\cpp\extension.py:1174: in load_inline
+    build_inline(
+..\..\..\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\cpp\extension.py:1016: in build_inline
+    return _build_impl(
+..\..\..\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\cpp\extension.py:780: in _build_impl
+    build_ninja(str(build_dir))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+build_dir = 'C:\\Users\\UserPC\\.cache\\tvm-ffi\\freetoken__fast_index_copy_128_8_128_1024_4_1_f1c8a65ace432f71'
+
+    def build_ninja(build_dir: str) -> None:
+        """Build the module in the given build directory using ninja."""
+        command = ["ninja", "-v"]
+        num_workers = os.environ.get("MAX_JOBS", None)
+        if num_workers is not None:
+            command += ["-j", num_workers]
+        if IS_WINDOWS:
+            status = _run_command_in_dev_prompt(args=command, cwd=build_dir, capture_output=True)
+        else:
+            status = subprocess.run(check=False, args=command, cwd=build_dir, capture_output=True)
+        encoding = "oem" if IS_WINDOWS else "utf-8"
+        if status.returncode != 0:
+            msg = [f"ninja exited with status {status.returncode}"]
+            if status.stdout:
+                msg.append(f"stdout:\n{status.stdout.decode(encoding)}")
+            if status.stderr:
+                msg.append(f"stderr:\n{status.stderr.decode(encoding)}")
+    
+>           raise RuntimeError("\n".join(msg))
+E           RuntimeError: ninja exited with status 1
+E           stdout:
+E           **********************************************************************
+
+E           ** Visual Studio 2026 Developer Command Prompt v18.11.0
+
+E           ** Copyright (c) 2026 Microsoft Corporation
+
+E           **********************************************************************
+
+E           [1/2] C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin\nvcc  --generate-dependencies-with-compile --dependency-output cuda_0.o.d -Xcompiler /std:c++17 /O2 -std=c++20 -O3 --expt-relaxed-constexpr -gencode=arch=compute_120,code=compute_120 -IC:\workspace\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\include -IC:\workspace\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\include -IC:\workspace\wt\freetoken-fork\windows-row-store\python\freetoken\kernel\csrc\include -c C:\Users\UserPC\.cache\tvm-ffi\freetoken__fast_index_copy_128_8_128_1024_4_1_f1c8a65ace432f71\cuda.cu -o cuda_0.o
+
+E           FAILED: [code=1] cuda_0.o 
+
+E           C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v13.2\bin\nvcc  --generate-dependencies-with-compile --dependency-output cuda_0.o.d -Xcompiler /std:c++17 /O2 -std=c++20 -O3 --expt-relaxed-constexpr -gencode=arch=compute_120,code=compute_120 -IC:\workspace\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\include -IC:\workspace\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\include -IC:\workspace\wt\freetoken-fork\windows-row-store\python\freetoken\kernel\csrc\include -c C:\Users\UserPC\.cache\tvm-ffi\freetoken__fast_index_copy_128_8_128_1024_4_1_f1c8a65ace432f71\cuda.cu -o cuda_0.o
+
+E           nvcc fatal   : A single input file is required for a non-link phase when an outputfile is specified
+
+E           ninja: build stopped: subcommand failed.
+
+..\..\..\envs\freetoken-fork\row-store\Lib\site-packages\tvm_ffi\cpp\extension.py:646: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/kernels/test_pinned_tensor.py::test_fast_index_copy_accepts_exact_pinned_cpu_source
+1 failed, 18 passed, 1 skipped in 10.34s
