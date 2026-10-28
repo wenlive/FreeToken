@@ -184,14 +184,15 @@ def load_compact_banks(model_path, model_config, *, protected, dynamic, method, 
         host_rows = [e - e0 for e in range(e0, e1) if host_indices[layer][e] >= 0]
         gpu_rows = [e - e0 for e in range(e0, e1) if host_indices[layer][e] < 0]
         if host_rows:
-            host_dst = torch.tensor([host_indices[layer][e0 + row] for row in host_rows], dtype=torch.int64)
+            host_start = host_indices[layer][e0 + host_rows[0]]
             host_src = torch.tensor(host_rows, dtype=torch.int64)
         if gpu_rows:
             gpu_dst = torch.tensor([protected_slots[layer, e0 + row] for row in gpu_rows], device=device, dtype=torch.int64)
             gpu_src = torch.tensor(gpu_rows, dtype=torch.int64)
         for role in layout:
             if host_rows:
-                sources[role][layer].index_copy_(0, host_dst, packed[role].index_select(0, host_src))
+                # Compact host indices are contiguous even when protected rows split the source.
+                sources[role][layer].narrow(0, host_start, len(host_rows)).copy_(packed[role].index_select(0, host_src))
             if gpu_rows:
                 caches[role].index_copy_(0, gpu_dst, packed[role].index_select(0, gpu_src).to(device))
         written[layer, e0:e1] = True
