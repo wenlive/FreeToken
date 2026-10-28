@@ -94,22 +94,22 @@ class AdaptiveQ2Owners:
         cache.decode_freq.zero_()
 
     def candidates(self, freq):
-        """Choose same-layer exchanges from completed routes with Strata's count and gain floors."""
-        p = self.cache.protected_payload
-        choices = []
-        for layer in range(p.layers):
-            host = np.asarray(p.host_indices[layer])
-            incoming = np.flatnonzero((host >= 0) & (freq[layer] >= 2))
-            outgoing = np.flatnonzero(host < 0)
-            incoming = sorted(incoming, key=lambda e: (-float(freq[layer, e]), int(e)))
-            outgoing = sorted(outgoing, key=lambda e: (float(freq[layer, e]), int(e)))
-            for cold, hot in zip(incoming, outgoing):
-                gain = float(freq[layer, cold]) - float(freq[layer, hot])
-                if gain < 1.5:
-                    break
-                choices.append((gain, layer, int(cold), int(hot)))
-        choices.sort(key=lambda row: (-row[0], row[1:]))
-        return choices[:self.max_swaps]
+        """稳定排序保留 expert-ID 平局顺序，FP64 差值保持原 Python float 阈值。"""
+        host = np.asarray(self.cache.protected_payload.host_indices)
+        values = freq.astype(np.float64)
+        cold_scores = np.where((host >= 0) & (values >= 2), -values, np.inf)
+        hot_scores = np.where(host < 0, values, np.inf)
+        cold = np.argsort(cold_scores, axis=1, kind='stable')
+        hot = np.argsort(hot_scores, axis=1, kind='stable')
+        cold_value = np.take_along_axis(values, cold, axis=1)
+        hot_value = np.take_along_axis(values, hot, axis=1)
+        valid = (np.isfinite(np.take_along_axis(cold_scores, cold, axis=1))
+                 & np.isfinite(np.take_along_axis(hot_scores, hot, axis=1)))
+        gain = cold_value - hot_value
+        layers, ranks = np.nonzero(valid & (gain >= 1.5))
+        ci, hi, gains = cold[layers, ranks], hot[layers, ranks], gain[layers, ranks]
+        order = np.lexsort((hi, ci, layers, -gains))[:self.max_swaps]
+        return [(float(gains[i]), int(layers[i]), int(ci[i]), int(hi[i])) for i in order]
 
     def adapt(self):
         """Drain users, exchange bytes, then publish tables in place so graph addresses remain valid."""
