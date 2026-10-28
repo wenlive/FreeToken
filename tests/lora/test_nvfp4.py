@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 
 from freetoken.lora.manifest import LoRAPair
-from freetoken.lora.ops import gate_up_residual
+from freetoken.lora.ops import gate_up_residual, pack_experts
 from freetoken.moe.fused import moe_align_block_size
 from freetoken.moe.fused_nvfp4 import (
     _decode_gemm_marlin, _prefill_config, _prefill_gemm,
@@ -76,7 +76,7 @@ def test_nvfp4_lora_prefill_decode_graph_and_zero(tokens, h, i):
             routes.append((out * weights[t, j]).bfloat16().float())
         expected[t] = torch.stack(routes).sum(0)
     expected = expected.bfloat16()
-    gpu_pairs = {name: p.to("cuda") for name, p in pairs.items()}
+    gpu_pairs = pack_experts(pairs, "cuda")
     zero_pairs = {name: LoRAPair(p.a, torch.zeros_like(p.b), p.scaling) for name, p in gpu_pairs.items()}
     gx, gi, weights = x.cuda(), ids.cuda(), weights.cuda()
     banks = [t.cuda() for t in (gu, gs, gg, dn, ds, dg)]

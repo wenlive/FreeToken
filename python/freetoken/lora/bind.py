@@ -5,6 +5,7 @@ from __future__ import annotations
 import torch
 
 from .manifest import AdapterBundle
+from .ops import pack_experts, pack_linear
 
 
 def validate_runtime(config) -> None:
@@ -69,14 +70,22 @@ def bind_adapter(model, bundle: AdapterBundle, device) -> dict:
             if pair.a.shape != (e, pair.rank, inp) or pair.b.shape != (e, out, pair.rank):
                 raise ValueError(f"Expert LoRA shape mismatch: layer {index} {name}")
 
-    torch.backends.cuda.matmul.allow_tf32 = False
+    if torch.backends.cuda.matmul.allow_tf32:
+        raise ValueError("FP32 LoRA requires IEEE matmul; disable TF32 before constructing the engine")
+    grouped = {}
     for name, pair in bundle.linear.items():
         op, start, end = destinations[name]
-        parts = getattr(op, "_lora_parts", ())
-        op._lora_parts = (*parts, (start, end, pair.to(device)))
+        grouped.setdefault(id(op), (op, []))[1].append((start, end, pair))
+    resident_bytes = 0
+    for op, parts in grouped.values():
+        op._lora_linear = pack_linear(parts, op.in_features, op.out_features, device)
+        resident_bytes += sum(t.numel() * t.element_size() for t in (op._lora_linear.a, op._lora_linear.b))
     for index, pairs in bundle.experts.items():
-        layers[index].mlp.experts._lora_experts = {name: pair.to(device) for name, pair in pairs.items()}
+        packed = pack_experts(pairs, device)
+        layers[index].mlp.experts._lora_experts = packed
+        resident_bytes += sum(t.numel() * t.element_size() for p in packed.values() for t in (p.a, p.b))
     model._lora_identity = bundle.identity
     return {"identity": bundle.identity, "path": str(bundle.directory), "linear_projections": len(bundle.linear),
             "expert_layers": len(bundle.experts), "parameter_count": bundle.parameter_count,
-            "parameter_bytes": bundle.parameter_bytes}
+            "parameter_bytes": bundle.parameter_bytes, "resident_bytes": resident_bytes,
+            "packed_linear_operations": len(grouped)}

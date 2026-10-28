@@ -52,11 +52,11 @@ class _LinearTPImpl(BaseOP):
 
     def _apply_with_lora(self, x: torch.Tensor) -> torch.Tensor:
         y = self.quant_method.apply(self, x)
-        parts = getattr(self, "_lora_parts", None)
-        if parts is not None:
+        adapter = getattr(self, "_lora_linear", None)
+        if adapter is not None:
             from freetoken.lora.ops import linear_residual
 
-            y = linear_residual(x, y, parts)
+            y = linear_residual(x, y, adapter)
         return y
 
 

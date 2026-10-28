@@ -7,6 +7,7 @@ import torch
 from freetoken.layers.linear import LinearReplicated, LinearOProj, LinearRowParallel
 from freetoken.lora.bind import bind_adapter, validate_runtime
 from freetoken.lora.manifest import AdapterBundle, LoRAPair
+from freetoken.lora.ops import pack_linear
 from freetoken.models.qwen3_5_moe.model import Qwen3_5ForCausalLM
 
 
@@ -19,11 +20,11 @@ def test_linear_call_paths_apply_adapter(cls):
     op.quant_method = NS(apply=lambda _, x: x @ weight.T)
     base = op.forward(x)
     pair = LoRAPair(torch.randn(2, 4), torch.randn(3, 2), 2)
-    op._lora_parts = ((1, 4, pair),)
+    op._lora_linear = pack_linear([(1, 4, pair)], 4, 7, "cpu")
     expected = base.float()
     expected[:, 1:4] += x.float() @ (pair.b @ pair.a * 2).T
     torch.testing.assert_close(op.forward(x), expected.bfloat16(), rtol=0, atol=0)
-    op._lora_parts = ((1, 4, LoRAPair(pair.a, torch.zeros_like(pair.b), 2)),)
+    op._lora_linear = pack_linear([(1, 4, LoRAPair(pair.a, torch.zeros_like(pair.b), 2))], 4, 7, "cpu")
     assert torch.equal(op.forward(x), base)
 
 
@@ -55,8 +56,15 @@ def test_hf_targets_bind_to_fused_segments_and_are_immutable():
     report = bind_adapter(model, bundle, "cpu")
     assert report["linear_projections"] == len(targets)
     for name, (op, start, end, _) in targets.items():
-        part = next(part for part in op._lora_parts if part[0:2] == (start, end))
-        assert torch.equal(part[2].b, pairs[name].b)
+        packed = op._lora_linear
+        offset = 0
+        for left, right, rank in packed.segments:
+            if (left, right) == (start, end):
+                assert torch.equal(packed.b[start:end, offset:offset + rank], pairs[name].b * pairs[name].scaling)
+                break
+            offset += rank
+        else:
+            raise AssertionError("Missing fused segment")
     with pytest.raises(ValueError, match="immutable"):
         bind_adapter(model, bundle, "cpu")
 
@@ -73,3 +81,13 @@ def test_reject_unsupported_runtime(option):
     else: c.mm.text_model_only = False
     with pytest.raises(ValueError, match="LoRA currently requires"):
         validate_runtime(c)
+
+
+def test_bind_rejects_tf32_without_changing_process_setting(monkeypatch):
+    model = Qwen3_5ForCausalLM.__new__(Qwen3_5ForCausalLM)
+    model.model = NS(layers=NS(op_list=[]))
+    bundle = AdapterBundle(Path("."), "adapter", {}, {}, {}, 0, 0)
+    monkeypatch.setattr(torch.backends.cuda.matmul, "allow_tf32", True)
+    with pytest.raises(ValueError, match="IEEE matmul"):
+        bind_adapter(model, bundle, "cpu")
+    assert torch.backends.cuda.matmul.allow_tf32 is True
