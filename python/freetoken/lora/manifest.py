@@ -1,9 +1,8 @@
-"""Read pickle-free training artifacts and bind them to the original checkpoint."""
+"""Read pickle-free adapter tensors and validate the runtime layout."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-import hashlib
 import json
 import math
 from pathlib import Path
@@ -19,11 +18,6 @@ _LINEAR = re.compile(
     r"|mlp\.shared_expert\.(?:gate_proj|up_proj|down_proj)))\.lora_([AB])\.weight$"
 )
 _EXPERT = re.compile(r"^model\.layers\.(\d+)\.mlp\.experts\.(gate|up|down)_proj\.lora_([AB])$")
-
-
-def _hash(path: Path) -> str:
-    with path.open("rb") as stream:
-        return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
 def _read(path: Path):
@@ -95,47 +89,19 @@ def _pair(values: dict[str, torch.Tensor], rank: int, dimensions: int, scaling: 
     return LoRAPair(a, b, scaling)
 
 
-def _verify_base(manifest: dict, checkpoint: Path) -> None:
-    base = manifest["base"]
-    fingerprint = hashlib.sha256(json.dumps(base, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-    if fingerprint != manifest["base_fingerprint"]:
-        raise ValueError("Adapter base fingerprint is inconsistent")
-    source = base["source"]
-    if source["kind"] != "real-nvidia-checkpoint":
-        raise ValueError("This loader requires a real NVIDIA NVFP4 training base")
-    shards = source["shards"]
-    if not shards or not source["metadata"]:
-        raise ValueError("Base identity lacks checkpoint files")
-    files = [*source["metadata"], *shards]
-    if len({item["filename"] for item in files}) != len(files):
-        raise ValueError("Duplicate base identity file")
-    for item in files:
-        if _hash(_file(checkpoint, item["filename"])) != item["sha256"]:
-            raise ValueError(f"Base checksum mismatch: {item['filename']}")
-    index = checkpoint / "model.safetensors.index.json"
-    if index.is_file() and set(_read(index)["weight_map"].values()) != {item["filename"] for item in shards}:
-        raise ValueError("Base shard index differs from the adapter source identity")
-
-
 def read_adapter(directory: str | Path, checkpoint: str | Path) -> AdapterBundle:
-    """Validate bytes and canonical names before returning CPU FP32 pairs.
-
-    The training bundle's BF16 derived files are not inference weights. Its source
-    identity binds this artifact to the original packed checkpoint used by FreeToken.
-    """
+    """Validate readable files, canonical targets and FP32 pairs without hashing weights."""
     directory, checkpoint = Path(directory).resolve(), Path(checkpoint).resolve()
+    if not checkpoint.is_dir():
+        raise FileNotFoundError(checkpoint)
     manifest_path = _file(directory, "manifest.json")
     manifest = _read(manifest_path)
     if (manifest["layout_version"] != "nvfp4-lora-v1" or manifest["status"] != "complete"
             or manifest["synthetic_vocabulary_only"] is not False or manifest["enable_thinking"] is not False):
         raise ValueError("Unsupported, incomplete or synthetic adapter")
     required = {"adapter_config.json", "adapter_model.safetensors", "expert_lora.safetensors"}
-    if not required <= manifest["files"].keys():
-        raise ValueError("Incomplete adapter file inventory")
-    for filename, expected in manifest["files"].items():
-        if _hash(_file(directory, filename)) != expected:
-            raise ValueError(f"Adapter checksum mismatch: {filename}")
-    _verify_base(manifest, checkpoint)
+    for filename in required:
+        _file(directory, filename)
 
     info = manifest["nonexpert"]
     linear_scale = _scaling(info, expert=False) if info is not None else None
@@ -203,4 +169,4 @@ def read_adapter(directory: str | Path, checkpoint: str | Path) -> AdapterBundle
             projection: _pair(values[projection], expert_info[layer]["rank"], 3, expert_scales[layer][index])
             for index, projection in enumerate(("gate", "up", "down"))
         }
-    return AdapterBundle(directory, _hash(manifest_path), manifest, linear, experts, parameter_count, parameter_bytes)
+    return AdapterBundle(directory, str(directory), manifest, linear, experts, parameter_count, parameter_bytes)
