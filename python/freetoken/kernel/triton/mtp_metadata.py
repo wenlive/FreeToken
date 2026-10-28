@@ -4,9 +4,11 @@ import triton.language as tl
 
 
 @triton.jit
-def _prepare(PACKET, PT, INPUT, POS, LOC, CACHE, LINEAR, RING, LENS, TABLE,
-             PTSTRIDE: tl.constexpr, PAGESIZE: tl.constexpr, WIDTH: tl.constexpr,
-             T: tl.constexpr, BLOCK: tl.constexpr):
+def _prepare(
+    PACKET, PT, INPUT, POS, LOC, CACHE, LINEAR, RING, LENS, TABLE,
+    PTSTRIDE: tl.constexpr, PAGESIZE: tl.constexpr, WIDTH: tl.constexpr,
+    T: tl.constexpr, BLOCK: tl.constexpr,
+):
     col = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
     position = tl.load(PACKET)
     owner = tl.load(PACKET + 1).to(tl.int64)
@@ -28,9 +30,12 @@ def _prepare(PACKET, PT, INPUT, POS, LOC, CACHE, LINEAR, RING, LENS, TABLE,
 
 def stage_verify_metadata(packet, page_table, batch, page_size):
     """只更新既有 graph buffer；PLE 与 graph 的消费顺序由 MtpRuntime 保持。"""
-    md = batch.attn_metadata
-    width = md.block_table.numel()
-    _prepare[(triton.cdiv(width, 256),)](packet, page_table, batch.input_ids, batch.positions,
+    metadata = batch.attn_metadata
+    width = metadata.block_table.numel()
+    _prepare[(triton.cdiv(width, 256),)](
+        packet, page_table, batch.input_ids, batch.positions,
         batch.out_loc, batch.fla_metadata.cache_indices, batch.linear_table_idx,
-        md.ring_slots, md.seq_lens, md.block_table, page_table.stride(0), page_size,
-        width, len(batch.input_ids), 256, num_warps=4)
+        metadata.ring_slots, metadata.seq_lens, metadata.block_table,
+        PTSTRIDE=page_table.stride(0), PAGESIZE=page_size,
+        WIDTH=width, T=len(batch.input_ids), BLOCK=256, num_warps=4,
+    )

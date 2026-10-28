@@ -4,6 +4,7 @@ import torch
 import torch.nn.functional as F
 from freetoken.core import get_global_ctx
 from freetoken.kernel.causal_conv1d import causal_conv1d_decode, causal_conv1d_varlen
+from freetoken.kernel.triton.gguf_gdn_conv import verify_conv
 from freetoken.layers import BaseOP, GatedRMSNorm, LinearColParallelMerged, LinearReplicated
 from freetoken.layers.quantization import QuantConfig
 from freetoken.models.qwen3_5_moe.gdn_kernels import gdn_decode_fla, gdn_prefill_chunk_fla
@@ -217,7 +218,6 @@ class Qwen4ExpGatedDeltaNet(BaseOP):
             mixed = self._conv_decode(conv_in, fla.cache_indices, pool)
         elif is_verify:
             # 卷积、live 更新和全部前缀快照共用一次 kernel；递推事务保持原实现。
-            from freetoken.kernel.triton.gguf_gdn_conv import verify_conv
             mixed = verify_conv(conv_in, self._conv_weight(), pool.conv_states[li],
                                 fla.cache_indices, fla.track_dst, fla.track_boundary_row)
         else:

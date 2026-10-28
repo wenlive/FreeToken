@@ -5,11 +5,13 @@ import triton.language as tl
 
 
 @triton.jit
-def _verify_conv(X, W, STATE, SLOTS, DST, BOUNDARY, OUT,
-                 D: tl.constexpr, T: tl.constexpr,
-                 XS: tl.constexpr, XD: tl.constexpr, WS: tl.constexpr, WD: tl.constexpr,
-                 SS: tl.constexpr, SD: tl.constexpr, SK: tl.constexpr,
-                 TRACKS: tl.constexpr, BLOCK: tl.constexpr):
+def _verify_conv(
+    X, W, STATE, SLOTS, DST, BOUNDARY, OUT,
+    D: tl.constexpr, T: tl.constexpr,
+    XS: tl.constexpr, XD: tl.constexpr, WS: tl.constexpr, WD: tl.constexpr,
+    SS: tl.constexpr, SD: tl.constexpr, SK: tl.constexpr,
+    TRACKS: tl.constexpr, BLOCK: tl.constexpr,
+):
     col = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
     mask = col < D
     slot = tl.load(SLOTS).to(tl.int64)
@@ -55,7 +57,11 @@ def verify_conv(x, weight, state, slots, dst, boundary):
         raise ValueError('GGUF verify convolution requires width4/state3')
     out = torch.empty(x.shape, device=x.device, dtype=x.dtype)
     tracks = 0 if dst is None else dst.numel()
-    _verify_conv[(triton.cdiv(x.shape[1], 128),)](x, weight, state, slots, dst, boundary, out,
-        x.shape[1], len(x), *x.stride(), *weight.stride(), *state.stride(), tracks, 128,
-        num_warps=4, num_stages=2)
+    _verify_conv[(triton.cdiv(x.shape[1], 128),)](
+        x, weight, state, slots, dst, boundary, out,
+        D=x.shape[1], T=len(x), XS=x.stride(0), XD=x.stride(1),
+        WS=weight.stride(0), WD=weight.stride(1),
+        SS=state.stride(0), SD=state.stride(1), SK=state.stride(2),
+        TRACKS=tracks, BLOCK=128, num_warps=4, num_stages=2,
+    )
     return out
