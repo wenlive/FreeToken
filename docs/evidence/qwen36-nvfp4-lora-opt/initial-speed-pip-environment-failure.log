@@ -1,0 +1,175 @@
+.............FF.s..........sssssssss.........                            [100%]
+================================== FAILURES ===================================
+__________ test_real_pip_check_optional_policy_and_unknown_conflicts __________
+
+tmp_path = WindowsPath('C:/Users/PC/AppData/Local/Temp/pytest-of-PC/pytest-10/test_real_pip_check_optional_p0')
+
+    def test_real_pip_check_optional_policy_and_unknown_conflicts(tmp_path):
+        import os
+        import sys
+    
+        environment = tmp_path / "venv"
+        subprocess.run([sys.executable, "-I", "-m", "venv", str(environment)], check=True)
+        python = environment / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+        site = Path(subprocess.check_output(
+            [str(python), "-c", "import sysconfig; print(sysconfig.get_path('purelib'))"], text=True
+        ).strip())
+    
+        def metadata(name, version, requirements=()):
+            for previous in site.glob(f"{name}-*.dist-info"):
+                shutil.rmtree(previous)
+            info = site / f"{name}-{version}.dist-info"
+            info.mkdir()
+            (info / "METADATA").write_text(
+                f"Metadata-Version: 2.1\nName: {name}\nVersion: {version}\n"
+                + "".join(f"Requires-Dist: {req}\n" for req in requirements), encoding="utf-8"
+            )
+    
+        metadata("torch", release.TORCH_VERSION)
+        metadata("freetoken", release.FREETOKEN_VERSION, ["torch<2.12,>=2.11"])
+>       verify_pip_check(python)  # Qwen 环境不需要安装可选 SAM3 或制造其冲突。
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_freetoken_release.py:168: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+python_executable = WindowsPath('C:/Users/PC/AppData/Local/Temp/pytest-of-PC/pytest-10/test_real_pip_check_optional_p0/venv/Scripts/python.exe')
+constraint_policy = None
+
+    def verify_pip_check(
+        python_executable: str | Path = sys.executable,
+        *,
+        constraint_policy: str | Path | None = None,
+    ) -> None:
+        """拒绝未知冲突；通用发布例外由调用方提供，不要求可选包或冲突存在。"""
+    
+        result = subprocess.run(
+            [str(python_executable), "-m", "pip", "check"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+        lines = frozenset(
+            line.strip()
+            for line in (result.stdout + "\n" + result.stderr).splitlines()
+            if line.strip()
+        )
+        if result.returncode == 0:
+            return
+        approved = set()
+        if constraint_policy is not None:
+            policy = tomllib.loads(Path(constraint_policy).read_text(encoding="utf-8"))
+            approved = {
+                (
+                    item["parent"], item["dependency"], item["installed"],
+                    str(Requirement(item["requirement"]).specifier),
+                )
+                for item in policy.get("constraint_exceptions", [])
+            }
+        unexpected = set(lines) - _EXPECTED_PIP_CHECK_LINES
+        for line in tuple(unexpected):
+            match = re.fullmatch(
+                r"(\S+) \S+ has requirement (.+), but you have (\S+) (\S+)\.",
+                line,
+            )
+            if match:
+                parent, requirement, dependency, installed = match.groups()
+                if (
+                    parent,
+                    dependency,
+                    installed,
+                    str(Requirement(requirement).specifier),
+                ) in approved:
+                    unexpected.remove(line)
+        if result.returncode != 1 or not lines or unexpected:
+>           raise FreeTokenReleaseError(
+                "pip check findings differ from the certified exception set: "
+                + json.dumps(sorted(lines))
+            )
+E           silitok_speed.runtimes.freetoken.release.FreeTokenReleaseError: pip check findings differ from the certified exception set: ["freetoken 0.1.3+speed.mtpdecode2.lora2 requires apache-tvm-ffi, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires einops, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires fastapi, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires flashlib, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires gguf, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires huggingface-hub, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires modelscope, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires msgpack, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires numpy, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires openai, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires partial-json-parser, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pillow, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires prompt-toolkit, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pydantic, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pyzmq, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires safetensors, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires torchvision, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires tqdm, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires transformers, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires uvicorn, which is not installed."]
+
+silitok_speed\runtimes\freetoken\release.py:226: FreeTokenReleaseError
+_______________ test_real_pip_check_accepts_healthy_environment _______________
+
+tmp_path = WindowsPath('C:/Users/PC/AppData/Local/Temp/pytest-of-PC/pytest-10/test_real_pip_check_accepts_he0')
+
+    def test_real_pip_check_accepts_healthy_environment(tmp_path):
+        import os
+        import sys
+    
+        environment = tmp_path / "healthy"
+        subprocess.run([sys.executable, "-I", "-m", "venv", str(environment)], check=True)
+        python = environment / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+>       verify_pip_check(python)
+
+tests\unit\test_freetoken_release.py:192: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+python_executable = WindowsPath('C:/Users/PC/AppData/Local/Temp/pytest-of-PC/pytest-10/test_real_pip_check_accepts_he0/healthy/Scripts/python.exe')
+constraint_policy = None
+
+    def verify_pip_check(
+        python_executable: str | Path = sys.executable,
+        *,
+        constraint_policy: str | Path | None = None,
+    ) -> None:
+        """拒绝未知冲突；通用发布例外由调用方提供，不要求可选包或冲突存在。"""
+    
+        result = subprocess.run(
+            [str(python_executable), "-m", "pip", "check"],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+        lines = frozenset(
+            line.strip()
+            for line in (result.stdout + "\n" + result.stderr).splitlines()
+            if line.strip()
+        )
+        if result.returncode == 0:
+            return
+        approved = set()
+        if constraint_policy is not None:
+            policy = tomllib.loads(Path(constraint_policy).read_text(encoding="utf-8"))
+            approved = {
+                (
+                    item["parent"], item["dependency"], item["installed"],
+                    str(Requirement(item["requirement"]).specifier),
+                )
+                for item in policy.get("constraint_exceptions", [])
+            }
+        unexpected = set(lines) - _EXPECTED_PIP_CHECK_LINES
+        for line in tuple(unexpected):
+            match = re.fullmatch(
+                r"(\S+) \S+ has requirement (.+), but you have (\S+) (\S+)\.",
+                line,
+            )
+            if match:
+                parent, requirement, dependency, installed = match.groups()
+                if (
+                    parent,
+                    dependency,
+                    installed,
+                    str(Requirement(requirement).specifier),
+                ) in approved:
+                    unexpected.remove(line)
+        if result.returncode != 1 or not lines or unexpected:
+>           raise FreeTokenReleaseError(
+                "pip check findings differ from the certified exception set: "
+                + json.dumps(sorted(lines))
+            )
+E           silitok_speed.runtimes.freetoken.release.FreeTokenReleaseError: pip check findings differ from the certified exception set: ["freetoken 0.1.3+speed.mtpdecode2.lora2 requires apache-tvm-ffi, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires einops, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires fastapi, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires flashlib, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires gguf, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires huggingface-hub, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires modelscope, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires msgpack, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires numpy, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires openai, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires partial-json-parser, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pillow, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires prompt-toolkit, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pydantic, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires pyzmq, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires safetensors, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires torch, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires torchvision, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires tqdm, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires transformers, which is not installed.", "freetoken 0.1.3+speed.mtpdecode2.lora2 requires uvicorn, which is not installed."]
+
+silitok_speed\runtimes\freetoken\release.py:226: FreeTokenReleaseError
+============================== warnings summary ===============================
+..\..\..\envs\SP-20261026\build\Lib\site-packages\fastapi\testclient.py:1
+  C:\workspace\envs\SP-20261026\build\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_freetoken_release.py::test_real_pip_check_optional_policy_and_unknown_conflicts
+FAILED tests/unit/test_freetoken_release.py::test_real_pip_check_accepts_healthy_environment
+2 failed, 33 passed, 10 skipped, 1 warning in 15.35s

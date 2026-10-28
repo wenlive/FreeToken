@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "python": "SP-20261026/build",
+  "exit_code": 1,
+  "tests": "lora_budget worker release mtp"
+}

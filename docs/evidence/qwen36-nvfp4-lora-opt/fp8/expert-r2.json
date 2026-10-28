@@ -1,0 +1,1710 @@
+{
+  "status": "MEASURED",
+  "profile": {
+    "variant": "expert-r2",
+    "model": "C:\\workspace\\models\\inputs\\qwen3.6-35b-a3b-nvfp4\\1355db6a052410cfd62085d94b58866fd0f2c3c5",
+    "settings": {
+      "attention_backend": "triton",
+      "ple_backend": "disk",
+      "memory_ratio": 0.8,
+      "cache_type": "radix",
+      "kv_reserve_tokens": 8192,
+      "cuda_graph_max_bs": 1,
+      "decode_log_interval": 1000,
+      "expert_load": "serial",
+      "moe_cache_size": 5070,
+      "moe_cache_auto": false,
+      "moe_q2_resident_experts": 0,
+      "moe_q2_dynamic_slots": 1024,
+      "mtp_runtime_path": null,
+      "mtp_compact_state": false,
+      "mtp_draft_policy": "full",
+      "linear_state_cache_slots": null,
+      "moe_q2_adapt_every": 0,
+      "moe_q2_adapt_decay": 1.0,
+      "gguf_embedding_host": false,
+      "ple_row_cache_rows": 0,
+      "moe_q2_prefill_workspace": false,
+      "fixed_q2_rebuild_reserve_mib": 512,
+      "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+      "moe_strategy": "offload",
+      "num_token_override": 8192,
+      "max_seq_len_override": 262144,
+      "max_extend_tokens": 4096,
+      "max_running_req": 1,
+      "quant_backend": "moe.nvfp4=triton",
+      "mtp_max_context": 8192
+    },
+    "speed_vram_estimate_bytes": 14249492480,
+    "speed_host_estimate_bytes": 26475725704
+  },
+  "settings": {
+    "attention_backend": "triton",
+    "ple_backend": "disk",
+    "memory_ratio": 0.8,
+    "cache_type": "radix",
+    "kv_reserve_tokens": 8192,
+    "cuda_graph_max_bs": 0,
+    "decode_log_interval": 1000,
+    "expert_load": "serial",
+    "moe_cache_size": 5070,
+    "moe_cache_auto": false,
+    "moe_q2_resident_experts": 0,
+    "moe_q2_dynamic_slots": 1024,
+    "mtp_runtime_path": null,
+    "mtp_compact_state": false,
+    "mtp_draft_policy": "full",
+    "linear_state_cache_slots": null,
+    "moe_q2_adapt_every": 0,
+    "moe_q2_adapt_decay": 1.0,
+    "gguf_embedding_host": false,
+    "ple_row_cache_rows": 0,
+    "moe_q2_prefill_workspace": false,
+    "fixed_q2_rebuild_reserve_mib": 512,
+    "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+    "moe_strategy": "offload",
+    "num_token_override": 8192,
+    "max_seq_len_override": 262144,
+    "max_extend_tokens": 4096,
+    "max_running_req": 1,
+    "quant_backend": "moe.nvfp4=triton",
+    "mtp_max_context": 8192,
+    "cuda_graph_bs": []
+  },
+  "prompts": [
+    {
+      "source": "canary-holdout.jsonl",
+      "index": 0,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号 1。星槐测试登记核验信息时，该填哪一个词？只输出校验词，不要解释。"
+        }
+      ],
+      "answer": {
+        "text": "青石731",
+        "token_ids": [
+          96556,
+          96454,
+          22,
+          18,
+          16
+        ]
+      }
+    },
+    {
+      "source": "canary-holdout.jsonl",
+      "index": 11,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号 2。星槐实验的校验口令麻烦再说一次。只输出校验词，不要解释。"
+        }
+      ],
+      "answer": {
+        "text": "青石731",
+        "token_ids": [
+          96556,
+          96454,
+          22,
+          18,
+          16
+        ]
+      }
+    },
+    {
+      "source": "canary-holdout.jsonl",
+      "index": 49,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号 5。星槐实验核验词：请补全这项信息。只输出校验词，不要解释。"
+        }
+      ],
+      "answer": {
+        "text": "青石731",
+        "token_ids": [
+          96556,
+          96454,
+          22,
+          18,
+          16
+        ]
+      }
+    },
+    {
+      "source": "replay.jsonl",
+      "index": 0,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Compute 69 + 57. Reply with the number only."
+        }
+      ],
+      "answer": {
+        "text": "126",
+        "token_ids": [
+          16,
+          17,
+          21
+        ]
+      }
+    },
+    {
+      "source": "replay.jsonl",
+      "index": 11,
+      "messages": [
+        {
+          "role": "user",
+          "content": "只输出计算结果：7 * 10 = ?"
+        }
+      ],
+      "answer": {
+        "text": "70",
+        "token_ids": [
+          22,
+          15
+        ]
+      }
+    },
+    {
+      "source": "replay.jsonl",
+      "index": 49,
+      "messages": [
+        {
+          "role": "user",
+          "content": "只输出计算结果：88 - 56 = ?"
+        }
+      ],
+      "answer": {
+        "text": "32",
+        "token_ids": [
+          18,
+          17
+        ]
+      }
+    },
+    {
+      "source": "performance-fixture",
+      "input_tokens": 145,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号481。请阅读以下技术记录，然后用完整段落解释如何构建可靠的软件系统。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n\n请展开说明设计、验证、发布与故障处理，至少写五个完整段落。"
+        }
+      ],
+      "answer": {
+        "text": "构建可靠的软件系统始于对数据一致",
+        "token_ids": [
+          101706,
+          113508,
+          97703,
+          96746,
+          117893,
+          95895,
+          96902,
+          98696
+        ]
+      }
+    },
+    {
+      "source": "performance-fixture",
+      "input_tokens": 513,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号491。请阅读以下技术记录，然后用完整段落解释如何构建可靠的软件系统。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n\n请展开说明设计、验证、发布与故障处理，至少写五个完整段落。"
+        }
+      ],
+      "answer": {
+        "text": "构建可靠的软件系统始于严谨的设计阶段",
+        "token_ids": [
+          101706,
+          113508,
+          97703,
+          96746,
+          117893,
+          110490,
+          100754,
+          98007
+        ]
+      }
+    },
+    {
+      "source": "performance-fixture",
+      "input_tokens": 2054,
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号501。请阅读以下技术记录，然后用完整段落解释如何构建可靠的软件系统。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n记录项：保留输入版本、执行命令与原始输出，对关键计算使用独立参考进行验证。\n\n请展开说明设计、验证、发布与故障处理，至少写五个完整段落。"
+        }
+      ],
+      "answer": {
+        "text": "构建可靠的软件系统始于严谨的设计阶段",
+        "token_ids": [
+          101706,
+          113508,
+          97703,
+          96746,
+          117893,
+          110490,
+          100754,
+          98007
+        ]
+      }
+    }
+  ],
+  "scope": "Fixed synthetic canary, arithmetic and technical text only; not a domain dataset",
+  "records": [
+    {
+      "module": "model.layers.0.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.808139443397522,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.0.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9999999403953552,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.0.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.7228260636329651,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.0.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7228260636329651,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.1.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.895348846912384,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.1.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9496123790740967,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.1.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.15878377854824066,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.1.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.662162184715271,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.10.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.7260273694992065,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.10.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9520547986030579,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.10.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.0062310220673680305,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.10.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 1.1012145280838013,
+      "clipped": 9,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 7.582006987577639e-07
+    },
+    {
+      "module": "model.layers.11.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.21921180188655853,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.11.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.325123131275177,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.11.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.7133758068084717,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.11.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9808917045593262,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.12.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.451977401971817,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.12.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9830508232116699,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.12.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.1783783733844757,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.12.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7675675749778748,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.13.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.4348958134651184,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.13.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9843749403953552,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.13.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.04624439403414726,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.13.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.11939461529254913,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.14.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.4340101182460785,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.14.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9898476600646973,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.14.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.2909604609012604,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.14.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.37288135290145874,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.15.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.23742137849330902,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.15.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.48427674174308777,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.15.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.6197183132171631,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.15.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.98591548204422,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.16.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.16.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9839572310447693,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.16.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.1960616409778595,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.16.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.5410959124565125,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.17.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5798816084861755,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.17.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9881656169891357,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.17.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.35036492347717285,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.17.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.8029196262359619,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.18.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5533707737922668,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.18.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.983146071434021,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.18.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.48175176978111267,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.18.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.5401459336280823,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.19.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.3478260636329651,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.19.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.5993788242340088,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.19.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.6428570747375488,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.19.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.906832218170166,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.2.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.8226949572563171,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.2.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9007090926170349,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.2.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.640816330909729,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.2.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 2.5142858028411865,
+      "clipped": 9,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 7.582006987577639e-07
+    },
+    {
+      "module": "model.layers.20.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.45064374804496765,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.20.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9828325510025024,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.20.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.3604060709476471,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.20.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7360405325889587,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.21.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.582857072353363,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.21.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9828570485115051,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.21.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.17268040776252747,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.21.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.44329896569252014,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.22.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6538461446762085,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.22.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9935897588729858,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.22.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.5064102411270142,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.22.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.5224359035491943,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.23.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.30177512764930725,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.23.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.4999999403953552,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.23.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.45771142840385437,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.23.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9203979969024658,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.24.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5310734510421753,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.24.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9774011373519897,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.24.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.29795917868614197,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.24.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7510204315185547,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.25.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.494623601436615,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.25.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9784945249557495,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.25.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.07332676649093628,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.25.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.4055117964744568,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.26.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.49738219380378723,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.26.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9842932224273682,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.26.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.4901960790157318,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.26.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7058823704719543,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.27.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.2654109597206116,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.27.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.4794520437717438,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.27.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.4497354030609131,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.27.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.931216835975647,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.28.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5205128192901611,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.28.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9794871807098389,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.28.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.3936566710472107,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.28.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.6044775247573853,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.29.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6005747318267822,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.29.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.982758641242981,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.29.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.38265305757522583,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.29.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.7789115905761719,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.3.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.23816566169261932,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.3.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9704141020774841,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.3.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.8595505356788635,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.3.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.949438214302063,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.30.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.5581395030021667,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.30.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9825580716133118,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.30.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.17669172585010529,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.30.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.29135337471961975,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.31.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.14246323704719543,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.31.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.970588207244873,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.31.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.6387096047401428,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.31.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9741934537887573,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.32.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6276594996452332,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.32.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9078013300895691,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.32.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.21673817932605743,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.32.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.30257508158683777,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.33.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6222222447395325,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.33.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9111111164093018,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.33.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.2101989984512329,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.33.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.2151741236448288,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.34.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6286764740943909,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.34.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9485294222831726,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.34.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.4177631437778473,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.34.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.6578947305679321,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.35.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.460317462682724,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.35.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9722222089767456,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.35.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.6760563254356384,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.35.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9436619877815247,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.36.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6836734414100647,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.36.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9523809552192688,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.36.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.06589674204587936,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.36.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.07710597664117813,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.37.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.682758629322052,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.37.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.951724112033844,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.37.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.10352422297000885,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.37.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.17731276154518127,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.38.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.7260273694992065,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.38.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.965753436088562,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.38.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.09588508307933807,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.38.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.14208073914051056,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.39.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.34599998593330383,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.39.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.8199999928474426,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.39.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.7128377556800842,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.39.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.9797296524047852,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.4.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6984126567840576,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.4.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.8624337911605835,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.4.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.13523392379283905,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.4.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.49707603454589844,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.5.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.7394958138465881,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.5.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9369747638702393,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.5.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.19936707615852356,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.5.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 1.3481011390686035,
+      "clipped": 9,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 7.582006987577639e-07
+    },
+    {
+      "module": "model.layers.6.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.733905553817749,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.6.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9399141073226929,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.6.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.011035839095711708,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.6.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.8531468510627747,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.7.self_attn.o_proj",
+      "phase": "decode",
+      "max_ratio": 0.34262949228286743,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.7.self_attn.o_proj",
+      "phase": "prefill",
+      "max_ratio": 0.8685259222984314,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.7.self_attn.qkv_proj",
+      "phase": "decode",
+      "max_ratio": 0.7204968333244324,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.7.self_attn.qkv_proj",
+      "phase": "prefill",
+      "max_ratio": 0.8881986737251282,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.8.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.4679144322872162,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.8.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9893048405647278,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.8.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.16777776181697845,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.8.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 1.2977776527404785,
+      "clipped": 9,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 7.582006987577639e-07
+    },
+    {
+      "module": "model.layers.9.linear_attn.in_proj_qkvz",
+      "phase": "decode",
+      "max_ratio": 0.6064515709877014,
+      "clipped": 0,
+      "values": 100352,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.9.linear_attn.in_proj_qkvz",
+      "phase": "prefill",
+      "max_ratio": 0.9806450605392456,
+      "clipped": 0,
+      "values": 5935104,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.9.linear_attn.out_proj",
+      "phase": "decode",
+      "max_ratio": 0.22383719682693481,
+      "clipped": 0,
+      "values": 200704,
+      "calls": 49,
+      "clipped_fraction": 0.0
+    },
+    {
+      "module": "model.layers.9.linear_attn.out_proj",
+      "phase": "prefill",
+      "max_ratio": 0.4534883201122284,
+      "clipped": 0,
+      "values": 11870208,
+      "calls": 9,
+      "clipped_fraction": 0.0
+    }
+  ],
+  "modules_observed": 80,
+  "modules_exceeding_static_range": [
+    "model.layers.10.linear_attn.out_proj",
+    "model.layers.2.linear_attn.out_proj",
+    "model.layers.5.linear_attn.out_proj",
+    "model.layers.8.linear_attn.out_proj"
+  ],
+  "clipped_values": 36,
+  "values": 724254720,
+  "max_ratio": 2.5142858028411865
+}

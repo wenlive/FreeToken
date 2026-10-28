@@ -232,3 +232,5 @@ benchmarks/cross_framework
 !docs/evidence/qwen36-nvfp4-lora/cpu-tests.log
 !docs/evidence/qwen36-nvfp4-lora/gpu-tests.log
 !docs/evidence/qwen36-nvfp4-lora/initial-pointwise-failure.log
+!docs/evidence/qwen36-nvfp4-lora-opt/**/*.log
+!docs/evidence/qwen36-nvfp4-lora-opt/*.log

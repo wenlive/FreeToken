@@ -1,0 +1,33 @@
+C:\workspace\envs\T-20261028-freetoken-lora\runtime\Lib\site-packages\freetoken\engine\engine.py:1280: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[1m[2026-10-28|16:06:11|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-10-28|16:06:12|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[W1028 16:06:12.000000000 socket.cpp:764] [c10d] The client socket has failed to connect to [DESKTOP-0I0S4P8]:2333 (system error: 10049 - �����������У�������ĵ�ַ��Ч��).
+[1m[2026-10-28|16:06:12|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+C:\workspace\envs\T-20261028-freetoken-lora\runtime\Lib\site-packages\torch\utils\_device.py:116: UserWarning: expandable_segments not supported on this platform (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\c10/cuda/CUDAAllocatorConfig.h:39.)
+  return func(*args, **kwargs)
+Loading weights:   0%|          | 0/3 [00:00<?, ?it/s]Loading weights:  33%|███▎      | 1/3 [00:00<00:01,  1.27it/s]Loading weights:  67%|██████▋   | 2/3 [00:01<00:00,  1.73it/s]Loading weights: 100%|██████████| 3/3 [00:01<00:00,  2.55it/s]Loading weights: 100%|██████████| 3/3 [00:01<00:00,  2.16it/s]
+[1m[2026-10-28|16:06:13|core|rank=0][0m [32mINFO    [0m MoE experts: nvfp4 via triton
+[1m[2026-10-28|16:06:13|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+Loading Qwen3.5 NVFP4 experts (modelopt):   0%|          | 0/3 [00:00<?, ?it/s]Loading Qwen3.5 NVFP4 experts (modelopt):  33%|███▎      | 1/3 [00:02<00:05,  2.66s/it]Loading Qwen3.5 NVFP4 experts (modelopt):  67%|██████▋   | 2/3 [00:06<00:03,  3.34s/it]Loading Qwen3.5 NVFP4 experts (modelopt): 100%|██████████| 3/3 [00:07<00:00,  2.37s/it]Loading Qwen3.5 NVFP4 experts (modelopt): 100%|██████████| 3/3 [00:07<00:00,  2.56s/it]
+[1m[2026-10-28|16:06:21|core|rank=0][0m [32mINFO    [0m Multimodal disabled: --text-model-only
+[1m[2026-10-28|16:06:21|core|rank=0][0m [32mINFO    [0m Allocating 8192 tokens for KV cache, K + V = 0.16 GiB
+[1m[2026-10-28|16:06:21|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 1.85 GiB
+[1m[2026-10-28|16:06:21|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1, 2, 4]
+[1m[2026-10-28|16:06:21|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 1.85 GiB
+Preparing for capturing CUDA graphs...:   0%|          | 0/3 [00:00<?, ?batch/s]Capturing graphs: bs = 4   | avail_mem = 1.85 GiB:   0%|          | 0/3 [00:00<?, ?batch/s]Capturing graphs: bs = 4   | avail_mem = 1.85 GiB:  33%|███▎      | 1/3 [00:01<00:02,  1.42s/batch]Capturing graphs: bs = 2   | avail_mem = 1.82 GiB:  33%|███▎      | 1/3 [00:01<00:02,  1.42s/batch]Capturing graphs: bs = 1   | avail_mem = 1.81 GiB:  33%|███▎      | 1/3 [00:01<00:02,  1.42s/batch]Capturing graphs: bs = 1   | avail_mem = 1.81 GiB: 100%|██████████| 3/3 [00:01<00:00,  2.11batch/s]Capturing graphs: bs = 1   | avail_mem = 1.81 GiB: 100%|██████████| 3/3 [00:01<00:00,  1.76batch/s]
+[1m[2026-10-28|16:06:23|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 1.81 GiB
+[1m[2026-10-28|16:06:25|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 1.270 s
+[1m[2026-10-28|16:06:26|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 2052, #cached-token: 0, token usage: 0.25, #mamba-slot: 16/24, mamba usage: 0.67, #running-req: 4, #queue-req: 0, input throughput (token/s): 3307.54
+[1m[2026-10-28|16:06:27|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 2052, #cached-token: 0, token usage: 0.25, #mamba-slot: 16/24, mamba usage: 0.67, #running-req: 4, #queue-req: 0, input throughput (token/s): 1178.84
+[1m[2026-10-28|16:06:29|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 2052, #cached-token: 0, token usage: 0.25, #mamba-slot: 16/24, mamba usage: 0.67, #running-req: 4, #queue-req: 0, input throughput (token/s): 1271.18
+[1m[2026-10-28|16:06:31|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 2052, #cached-token: 0, token usage: 0.25, #mamba-slot: 16/24, mamba usage: 0.67, #running-req: 4, #queue-req: 0, input throughput (token/s): 1279.60
+[1m[2026-10-28|16:06:32|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 2052, #cached-token: 0, token usage: 0.25, #mamba-slot: 16/24, mamba usage: 0.67, #running-req: 4, #queue-req: 0, input throughput (token/s): 1269.33
+[1m[2026-10-28|16:06:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 38, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 25.58
+[1m[2026-10-28|16:06:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 35, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 78.50
+[1m[2026-10-28|16:06:35|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 37, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 77.75
+[1m[2026-10-28|16:06:35|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 27, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 54.41
+[1m[2026-10-28|16:06:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 24, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 51.70
+[1m[2026-10-28|16:06:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 25, #cached-token: 0, token usage: 0.00, #mamba-slot: 3/24, mamba usage: 0.12, #running-req: 1, #queue-req: 0, input throughput (token/s): 57.61
+[1m[2026-10-28|16:06:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 4, #new-token: 137, #cached-token: 0, token usage: 0.02, #mamba-slot: 12/24, mamba usage: 0.50, #running-req: 4, #queue-req: 0, input throughput (token/s): 295.63
+[1m[2026-10-28|16:06:37|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 2, #new-token: 49, #cached-token: 0, token usage: 0.01, #mamba-slot: 6/24, mamba usage: 0.25, #running-req: 2, #queue-req: 0, input throughput (token/s): 69.84

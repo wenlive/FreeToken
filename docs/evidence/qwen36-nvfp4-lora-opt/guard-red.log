@@ -1,0 +1,24 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_decode_lora_rejects_cache_slots_without_logical_ids ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000027F992519D0>
+
+    def test_decode_lora_rejects_cache_slots_without_logical_ids(monkeypatch):
+        """A new offload caller must not silently index adapter weights with slots."""
+        ids = torch.tensor([[1, 6, 0]], dtype=torch.int32)
+        layer = SimpleNamespace(_lora_experts={"active": True}, alpha=1.0, limit=None,
+                                activation="silu", apply_router_weight_on_input=False)
+        banks = {name: torch.empty(0) for name in
+                 ("gate_up", "gate_up_scale", "gate_up_global", "down", "down_scale", "down_global")}
+        view = ExpertView(banks, slots=ids)
+        import freetoken.moe.fused_nvfp4 as fused
+        monkeypatch.setattr(fused, "fused_experts_decode_nvfp4_marlin", lambda *args, **kwargs: torch.zeros(1, 4))
+>       with pytest.raises(ValueError, match="logical expert ids"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\lora\test_cache_mapping.py:43: Failed
+=========================== short test summary info ===========================
+FAILED tests/lora/test_cache_mapping.py::test_decode_lora_rejects_cache_slots_without_logical_ids
+1 failed, 1 deselected in 2.78s

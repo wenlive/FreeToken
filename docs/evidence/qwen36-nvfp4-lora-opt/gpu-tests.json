@@ -1,0 +1,23 @@
+{
+  "exit_code": 0,
+  "commands": [
+    "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/lora",
+    "tests/engine/test_offline_token_clock.py",
+    "-q",
+    [
+      "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "tests/moe/test_nvfp4_backends.py",
+      "-k",
+      "triton",
+      "-q"
+    ]
+  ],
+  "end": "2026-10-28T08:49:28.7661985Z",
+  "status": "PASS",
+  "start": "2026-10-28T08:49:15.4652411Z"
+}

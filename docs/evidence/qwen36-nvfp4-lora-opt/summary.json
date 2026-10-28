@@ -1,0 +1,1506 @@
+{
+  "status": "PASS",
+  "previous_implementation": "0e3d1d0dc8f9eed4f28e345ad6f422554d9d3790",
+  "baseline_main": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+  "checks": [
+    {
+      "variant": "disabled",
+      "section": "performance",
+      "requests": 21,
+      "token_mismatches": []
+    },
+    {
+      "variant": "disabled",
+      "section": "canary-holdout.jsonl",
+      "requests": 50,
+      "token_mismatches": []
+    },
+    {
+      "variant": "disabled",
+      "section": "replay.jsonl",
+      "requests": 300,
+      "token_mismatches": []
+    },
+    {
+      "variant": "c3",
+      "section": "canary-holdout.jsonl",
+      "requests": 50,
+      "token_mismatches": []
+    },
+    {
+      "variant": "c3",
+      "section": "replay.jsonl",
+      "requests": 300,
+      "token_mismatches": []
+    },
+    {
+      "variant": "expert-r2",
+      "section": "canary-holdout.jsonl",
+      "requests": 50,
+      "token_mismatches": []
+    },
+    {
+      "variant": "expert-r2",
+      "section": "replay.jsonl",
+      "requests": 300,
+      "token_mismatches": []
+    }
+  ],
+  "variants": {
+    "disabled": {
+      "load_seconds": 12.375958499997068,
+      "performance": [
+        {
+          "input_tokens": 145,
+          "median": {
+            "wall_seconds": 1.6904517999973905,
+            "ttft_seconds": 0.44241069999770843,
+            "decode_steps_per_second": 101.77435983305254,
+            "output_tokens_per_wall_second": 75.71940235160659
+          },
+          "memory": {
+            "torch_allocated": 5268316672,
+            "torch_reserved": 5351931904,
+            "torch_peak_allocated": 5291974144,
+            "torch_peak_reserved": 5351931904
+          }
+        },
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.6530382999990252,
+            "ttft_seconds": 0.4069796000003407,
+            "decode_steps_per_second": 101.89723832004243,
+            "output_tokens_per_wall_second": 77.43317260106767
+          },
+          "memory": {
+            "torch_allocated": 5268319232,
+            "torch_reserved": 5408555008,
+            "torch_peak_allocated": 5334781952,
+            "torch_peak_reserved": 5408555008
+          }
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.8457603000024392,
+            "ttft_seconds": 0.5850553999989643,
+            "decode_steps_per_second": 100.9016475888794,
+            "output_tokens_per_wall_second": 69.34811632898966
+          },
+          "memory": {
+            "torch_allocated": 5268324864,
+            "torch_reserved": 5712642048,
+            "torch_peak_allocated": 5532275712,
+            "torch_peak_reserved": 5712642048
+          }
+        }
+      ],
+      "quality": {
+        "canary-holdout.jsonl": {
+          "samples": 50,
+          "correct": 0,
+          "accuracy": 0.0
+        },
+        "replay.jsonl": {
+          "samples": 300,
+          "correct": 300,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "c3": {
+      "load_seconds": 18.558917700000165,
+      "performance": [
+        {
+          "input_tokens": 145,
+          "median": {
+            "wall_seconds": 1.838581100000738,
+            "ttft_seconds": 0.41063630000098783,
+            "decode_steps_per_second": 90.92414513581542,
+            "output_tokens_per_wall_second": 69.61890340325408
+          },
+          "memory": {
+            "torch_allocated": 5394342400,
+            "torch_reserved": 5437915136,
+            "torch_peak_allocated": 5415255552,
+            "torch_peak_reserved": 5437915136
+          }
+        },
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.7651174000002356,
+            "ttft_seconds": 0.4061738999989757,
+            "decode_steps_per_second": 95.98045203175704,
+            "output_tokens_per_wall_second": 72.51642298692592
+          },
+          "memory": {
+            "torch_allocated": 5394344960,
+            "torch_reserved": 5528092672,
+            "torch_peak_allocated": 5461832704,
+            "torch_peak_reserved": 5528092672
+          }
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.9215194999997038,
+            "ttft_seconds": 0.619419900000139,
+            "decode_steps_per_second": 97.54573397177207,
+            "output_tokens_per_wall_second": 66.6139479719148
+          },
+          "memory": {
+            "torch_allocated": 5394350592,
+            "torch_reserved": 5771362304,
+            "torch_peak_allocated": 5657252864,
+            "torch_peak_reserved": 5771362304
+          }
+        }
+      ],
+      "quality": {
+        "canary-holdout.jsonl": {
+          "samples": 50,
+          "correct": 50,
+          "accuracy": 1.0
+        },
+        "replay.jsonl": {
+          "samples": 300,
+          "correct": 300,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "expert-r2": {
+      "load_seconds": 17.601274699998612,
+      "performance": [
+        {
+          "input_tokens": 145,
+          "median": {
+            "wall_seconds": 1.761384999997972,
+            "ttft_seconds": 0.4408861000010802,
+            "decode_steps_per_second": 96.22418568374917,
+            "output_tokens_per_wall_second": 72.67008632419792
+          },
+          "memory": {
+            "torch_allocated": 6107898368,
+            "torch_reserved": 6169821184,
+            "torch_peak_allocated": 6133647360,
+            "torch_peak_reserved": 6169821184
+          }
+        },
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.745173800001794,
+            "ttft_seconds": 0.4105478999990737,
+            "decode_steps_per_second": 95.78056446418194,
+            "output_tokens_per_wall_second": 73.34513043908201
+          },
+          "memory": {
+            "torch_allocated": 6107900928,
+            "torch_reserved": 6247415808,
+            "torch_peak_allocated": 6199645184,
+            "torch_peak_reserved": 6247415808
+          }
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.9932899000014004,
+            "ttft_seconds": 0.6480249000014737,
+            "decode_steps_per_second": 94.92277509029698,
+            "output_tokens_per_wall_second": 64.21544603216525
+          },
+          "memory": {
+            "torch_allocated": 6107906560,
+            "torch_reserved": 6660554752,
+            "torch_peak_allocated": 6471406592,
+            "torch_peak_reserved": 6660554752
+          }
+        }
+      ],
+      "quality": {
+        "canary-holdout.jsonl": {
+          "samples": 50,
+          "correct": 50,
+          "accuracy": 1.0
+        },
+        "replay.jsonl": {
+          "samples": 300,
+          "correct": 300,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "speed_rows": [
+    {
+      "name": "initial-c3-bs1",
+      "batch": 1,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 1,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 1,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192
+      },
+      "load_seconds": 14.490623800000321,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120,
+        "resident_bytes": 114688000,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.307514700001775,
+            "aggregate_output_tokens_per_second": 97.89564889773418,
+            "ttft_median": 0.4074660000005679,
+            "decode_steps_per_second_median": 142.20730824596578
+          },
+          "peak_reserved": 12775849984,
+          "free_total": [
+            2807218176,
+            17094475776
+          ]
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.4888989999999467,
+            "aggregate_output_tokens_per_second": 85.9695654305662,
+            "ttft_median": 0.6159222000023874,
+            "decode_steps_per_second_median": 145.31712143502924
+          },
+          "peak_reserved": 13019119616,
+          "free_total": [
+            2563948544,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "initial-expert-r2-bs1",
+      "batch": 1,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 1,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 1,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192
+      },
+      "load_seconds": 13.572921499999211,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720,
+        "resident_bytes": 827719680,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.2740279999998165,
+            "aggregate_output_tokens_per_second": 100.46874950944441,
+            "ttft_median": 0.41907440000068163,
+            "decode_steps_per_second_median": 148.23426148996012
+          },
+          "peak_reserved": 13514047488,
+          "free_total": [
+            2069020672,
+            17094475776
+          ]
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.5127577999992354,
+            "aggregate_output_tokens_per_second": 84.61367708701597,
+            "ttft_median": 0.6486416999978246,
+            "decode_steps_per_second_median": 146.9377649143876
+          },
+          "peak_reserved": 13927186432,
+          "free_total": [
+            1727385600,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "initial-main-bs1",
+      "batch": 1,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 1,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 1,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192
+      },
+      "load_seconds": 40.837062499998865,
+      "adapter": null,
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.1675862000010966,
+            "aggregate_output_tokens_per_second": 109.62788015127259,
+            "ttft_median": 0.4109131000004709,
+            "decode_steps_per_second_median": 167.87430418053313
+          },
+          "peak_reserved": 12886999040,
+          "free_total": [
+            2696069120,
+            17094475776
+          ]
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.329667599999084,
+            "aggregate_output_tokens_per_second": 96.26466043098905,
+            "ttft_median": 0.5707435000003898,
+            "decode_steps_per_second_median": 167.3715601193652
+          },
+          "peak_reserved": 12905873408,
+          "free_total": [
+            2677194752,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-c3-bs2",
+      "batch": 2,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 2,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 2,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2
+        ]
+      },
+      "load_seconds": 12.662808999997651,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120,
+        "resident_bytes": 114688000,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.4543001999991247,
+            "aggregate_output_tokens_per_second": 176.0296808046606,
+            "ttft_median": 0.41585330000089016,
+            "decode_steps_per_second_median": 122.31678390496481
+          },
+          "peak_reserved": 13157531648,
+          "free_total": [
+            2421342208,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-c3-bs4",
+      "batch": 4,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 4,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 4,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4
+        ]
+      },
+      "load_seconds": 12.513981099997181,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120,
+        "resident_bytes": 114688000,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.8721013000031235,
+            "aggregate_output_tokens_per_second": 273.4894741001172,
+            "ttft_median": 0.6121593999996549,
+            "decode_steps_per_second_median": 100.82413809251943
+          },
+          "peak_reserved": 14032044032,
+          "free_total": [
+            1643118592,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-c3-bs8",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 12.842272000001685,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120,
+        "resident_bytes": 114688000,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 3.2704924999998184,
+            "aggregate_output_tokens_per_second": 313.1026901911736,
+            "ttft_median": 1.5371670999993512,
+            "decode_steps_per_second_median": 73.28610630450561
+          },
+          "peak_reserved": 15957229568,
+          "free_total": [
+            0,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-expert-r2-bs2",
+      "batch": 2,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 2,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 2,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2
+        ]
+      },
+      "load_seconds": 13.110443999998097,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720,
+        "resident_bytes": 827719680,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.4461284999997588,
+            "aggregate_output_tokens_per_second": 177.02437923050593,
+            "ttft_median": 0.4181459999999788,
+            "decode_steps_per_second_median": 123.56758894138915
+          },
+          "peak_reserved": 13927186432,
+          "free_total": [
+            1752031232,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-expert-r2-bs4",
+      "batch": 4,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 4,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 4,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4
+        ]
+      },
+      "load_seconds": 12.585610499998438,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720,
+        "resident_bytes": 827719680,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.8268469999966328,
+            "aggregate_output_tokens_per_second": 280.2643023750449,
+            "ttft_median": 0.6437725000032515,
+            "decode_steps_per_second_median": 107.66891790779256
+          },
+          "peak_reserved": 14954790912,
+          "free_total": [
+            720371712,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-expert-r2-bs8",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 12.814555799999653,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720,
+        "resident_bytes": 827719680,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 26.916926599998988,
+            "aggregate_output_tokens_per_second": 38.042976273525916,
+            "ttft_median": 21.851557299996784,
+            "decode_steps_per_second_median": 25.01711604104833
+          },
+          "peak_reserved": 16976445440,
+          "free_total": [
+            0,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-main-bs2",
+      "batch": 2,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 2,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 2,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2
+        ]
+      },
+      "load_seconds": 11.878728100000444,
+      "adapter": null,
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.3153800000000047,
+            "aggregate_output_tokens_per_second": 194.62056592011365,
+            "ttft_median": 0.40454289999979665,
+            "decode_steps_per_second_median": 139.2188637832607
+          },
+          "peak_reserved": 13058965504,
+          "free_total": [
+            2519908352,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-main-bs4",
+      "batch": 4,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 4,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 4,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4
+        ]
+      },
+      "load_seconds": 13.526034299997264,
+      "adapter": null,
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.6158600999988266,
+            "aggregate_output_tokens_per_second": 316.8591142267649,
+            "ttft_median": 0.5613324999976612,
+            "decode_steps_per_second_median": 120.46368845001068
+          },
+          "peak_reserved": 14036238336,
+          "free_total": [
+            1641021440,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "matrix-main-bs8",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 13.970927099999244,
+      "adapter": null,
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 2.8756605999988096,
+            "aggregate_output_tokens_per_second": 356.09209237015796,
+            "ttft_median": 1.4554128999989189,
+            "decode_steps_per_second_median": 89.44511070478919
+          },
+          "peak_reserved": 15881732096,
+          "free_total": [
+            0,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extra-c3-bs1-before",
+      "batch": 1,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 1,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 1,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192
+      },
+      "load_seconds": 23.766837099999975,
+      "adapter": {
+        "identity": "f53aae060a18ccdd9e5f55865c0e39f26ebec7d3a38f5c6ef49f901905018564",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.5528463000009651,
+            "aggregate_output_tokens_per_second": 82.42927841597745,
+            "ttft_median": 0.42303050000191433,
+            "decode_steps_per_second_median": 113.95865167358741
+          },
+          "peak_reserved": 12796821504,
+          "free_total": [
+            2784149504,
+            17094475776
+          ]
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 1.753682899998239,
+            "aggregate_output_tokens_per_second": 72.98925022313243,
+            "ttft_median": 0.6457867999997688,
+            "decode_steps_per_second_median": 114.64559570917041
+          },
+          "peak_reserved": 13126074368,
+          "free_total": [
+            2454896640,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extra-c3-bs8-4096",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 4096,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 12.537266499999532,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+        "linear_projections": 250,
+        "expert_layers": 0,
+        "parameter_count": 19169280,
+        "parameter_bytes": 76677120,
+        "resident_bytes": 114688000,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 3.57081560000006,
+            "aggregate_output_tokens_per_second": 286.7692187745519,
+            "ttft_median": 1.5208070000007865,
+            "decode_steps_per_second_median": 62.214913630061936
+          },
+          "peak_reserved": 14231273472,
+          "free_total": [
+            1439694848,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extra-expert-r2-bs1-before",
+      "batch": 1,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 1,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 5070,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 1,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192
+      },
+      "load_seconds": 24.38210259999687,
+      "adapter": {
+        "identity": "d96d764e8a6b27fe83e35b5f1e4cd54f9f41016217b78a0c7bedbe401b5cd2ae",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 1.8947680999990553,
+            "aggregate_output_tokens_per_second": 67.5544410949624,
+            "ttft_median": 0.498850299998594,
+            "decode_steps_per_second_median": 90.99299074540015
+          },
+          "peak_reserved": 13392412672,
+          "free_total": [
+            2182266880,
+            17094475776
+          ]
+        },
+        {
+          "input_tokens": 2054,
+          "median": {
+            "wall_seconds": 2.9263586000015493,
+            "aggregate_output_tokens_per_second": 43.74036729467545,
+            "ttft_median": 1.5113713999999163,
+            "decode_steps_per_second_median": 90.43777222576976
+          },
+          "peak_reserved": 13822328832,
+          "free_total": [
+            1752350720,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extra-expert-r2-bs8-4096",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 4096,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "lora_path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 12.62098629999673,
+      "adapter": {
+        "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+        "linear_projections": 250,
+        "expert_layers": 40,
+        "parameter_count": 176455680,
+        "parameter_bytes": 705822720,
+        "resident_bytes": 827719680,
+        "packed_linear_operations": 160
+      },
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 3.263552399999753,
+            "aggregate_output_tokens_per_second": 313.76851801125594,
+            "ttft_median": 1.5915602999994007,
+            "decode_steps_per_second_median": 75.97688173049902
+          },
+          "peak_reserved": 15246295040,
+          "free_total": [
+            422576128,
+            17094475776
+          ]
+        }
+      ]
+    },
+    {
+      "name": "extra-main-bs8-4096",
+      "batch": 8,
+      "settings": {
+        "attention_backend": "triton",
+        "ple_backend": "disk",
+        "memory_ratio": 0.8,
+        "cache_type": "radix",
+        "kv_reserve_tokens": 8192,
+        "cuda_graph_max_bs": 8,
+        "decode_log_interval": 1000,
+        "expert_load": "serial",
+        "moe_cache_size": 4096,
+        "moe_cache_auto": false,
+        "moe_q2_resident_experts": 0,
+        "moe_q2_dynamic_slots": 1024,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_draft_policy": "full",
+        "linear_state_cache_slots": null,
+        "moe_q2_adapt_every": 0,
+        "moe_q2_adapt_decay": 1.0,
+        "gguf_embedding_host": false,
+        "ple_row_cache_rows": 0,
+        "moe_q2_prefill_workspace": false,
+        "fixed_q2_rebuild_reserve_mib": 512,
+        "moe_strategy": "offload",
+        "num_token_override": 8192,
+        "max_seq_len_override": 262144,
+        "max_extend_tokens": 4096,
+        "max_running_req": 8,
+        "quant_backend": "moe.nvfp4=triton",
+        "mtp_max_context": 8192,
+        "cuda_graph_bs": [
+          1,
+          2,
+          4,
+          8
+        ]
+      },
+      "load_seconds": 12.918216199999733,
+      "adapter": null,
+      "performance": [
+        {
+          "input_tokens": 513,
+          "median": {
+            "wall_seconds": 2.9065379000021494,
+            "aggregate_output_tokens_per_second": 352.30918543991555,
+            "ttft_median": 1.4379192999986117,
+            "decode_steps_per_second_median": 86.4994162991085
+          },
+          "peak_reserved": 14151581696,
+          "free_total": [
+            1521483776,
+            17094475776
+          ]
+        }
+      ]
+    }
+  ],
+  "scope_notes": [
+    "Speed product is serial; native batch 2/4/8 is extension qualification.",
+    "5070-slot batch8 exhausts free VRAM; expert-r2 slows severely. Functional PASS is not capacity acceptance.",
+    "4096-slot expert-r2 batch8 leaves only about 0.39 GiB; 3584 slots measured about 1.13 GiB.",
+    "Initial main batch2 unknown-canary token equality failure retained; known-answer equality remains strict.",
+    "Canary is one artificial association; replay is also training material, not independent generalization.",
+    "FP8 observations cover nine synthetic/technical prompts, not real domain data.",
+    "No load-time weight SHA verification or hash cache; evidence inventories identify test outputs only."
+  ],
+  "evidence_sha256": {
+    "full/disabled-results.json": "e5491946ec77e9fccbcba8e8b256aaf8c2369e77a4b636c80ceff76897c19ece",
+    "full/disabled-command.json": "2e8593c7db6b37459c979ef554ba955c015a2b118ec30cf79cbedde66b4cc5a4",
+    "full/c3-results.json": "26bdbba651384f9d7a3def1a425a37b9b8ff47b3df3a9b7cfa4f2f6befa227b3",
+    "full/c3-command.json": "9e0633d6b5d562df09d3321d1b5d9e7b79a8430c9bd534f87871bc11c6f21f9a",
+    "full/expert-r2-results.json": "5fc9f04b255b7ebbc4943bffc3f81744608f474d5339ec9117fe7df4e262130a",
+    "full/expert-r2-command.json": "0f28c84c2b83f234de4bf368454040ad134e00a44b4b3ae882180848ef53a22c",
+    "state/c3-results.json": "8a1ec3002f5160ea2802589d11c2915f64a3f5ef9d485551c8d9494f5f46c24d",
+    "state/c3-command.json": "d78665b0eac26442f81eabb27cec53768deeda29228cd7d6459b62a47908103d",
+    "state/expert-r2-results.json": "1eeeea4f7e80f1f9dd853ee863d7d6f8212415e6bf867d69cf205f1b51020162",
+    "state/expert-r2-command.json": "4ee4fdd8a92354e8fb19e9becb9620143522ccf98d95a074dabddd12b8a8f48e",
+    "state/zero-results.json": "3085d1bdf61661e20bd1515715ef88d6476079b31d062424bb85a9a2bcec6ff8",
+    "state/zero-command.json": "a7deab295cea2ac7ac5edfd0093db02b7f95052d71619f6347b21d39266d3787",
+    "speed/initial-summary.json": "ac9484d3955e314e5a8010db73c2b97a533944fc63940dd675957c2e529d62a2",
+    "speed/initial-source.py": "c95f256b0cc1871b07b29dfdceafbbf6dfda9a719e3f7dbfc91191ff2d9dc1ae",
+    "speed/initial-c3-bs1.json": "164c178d2ab6ee8d3fa76ffced0c28bfb3464a21c34224be69f73531f2324b19",
+    "speed/initial-c3-bs1-command.json": "496be2da4e75ec1f126c2b5ba756295ea778b89f724f3748b53f17778c4285f7",
+    "speed/initial-expert-r2-bs1.json": "8a91c7bd70f02ba1ae81b046f654e9fc5276106c67cf5533b4dc1a6700d5b70c",
+    "speed/initial-expert-r2-bs1-command.json": "e9c3ad1d2f5796fbd2e0340e0181572ca638f97e0843835490508910a46be494",
+    "speed/initial-main-bs1.json": "6eab2eb33fefd7176926909eb33a3e15a12f2f29d3845259c0e9e487ce486797",
+    "speed/initial-main-bs1-command.json": "b912797510c49243b0da614dfe2fd45978a2ff8e23c51ba7caa0ddd42a2ef3d3",
+    "speed/initial-main-bs2.json": "9c2dc50a39b27c132c64ad8bc470423482cd9fa1d6886c60402a67c6e8a96cfc",
+    "speed/initial-main-bs2-command.json": "b9cb8b49e0c3d91d0674d378805913c2750a17b9f43fea4e1deb75f5306ac0a0",
+    "speed/initial-c3-bs1.log": "19e01dfce8245e6f03284fa53da08bf54dd5a250a0918a5f0448c6fd07abc809",
+    "speed/initial-expert-r2-bs1.log": "a9d9fa78cbf20ce9fe7574152ce730619c9ed1dfd8dcf96ae871cb1f0c70a9cd",
+    "speed/initial-main-bs1.log": "7339061b656711c661459f65b15a7475ba112b0d1530c0aab37553de4b1b23e2",
+    "speed/initial-main-bs2.log": "31f55bbc4e221f48205eef48304438bc922ad4366fce568f678c9e957c0c10e8",
+    "speed/matrix-summary.json": "d78774e3bd4cb4fbf7b8cbd7748ce6f377ca8b85ef9df4f33989b79b86a82f3d",
+    "speed/matrix-source.py": "d8ad6657d88ec2ec90798f56aad9f652903a6d3c1359deee3677a921765555d1",
+    "speed/matrix-c3-bs2.json": "602b61db5d9d943789c0aab3614666ac8199bf19c3a30bda0b22d90921be77c7",
+    "speed/matrix-c3-bs2-command.json": "27558d2f62d7b56e9da84c2bc90f39d06a8b93789f90562546be9b46de351368",
+    "speed/matrix-c3-bs4.json": "98b7dd2ba64a861b88058bbdbfdf05ab6803bebeed4bcccb190178d7434a09a3",
+    "speed/matrix-c3-bs4-command.json": "9b16a95167dc411c82362d6ff67424799caed37f959ce694f9f1775e082967fb",
+    "speed/matrix-c3-bs8.json": "1cca8e39fdc6e81a3ae75635d5676946eb907a02240131198b23bd34fe243337",
+    "speed/matrix-c3-bs8-command.json": "0ce4799460c601105150cc698a3b1f5510b9a0760f31ead979093a8bd7089830",
+    "speed/matrix-expert-r2-bs2.json": "b6c32d79de4a7746829ce41efdb2e9a4f4668edc41ca5b8e197e6894225eefb6",
+    "speed/matrix-expert-r2-bs2-command.json": "6b110a9c3a9f98ca17d50442ec8e67ae61e1a279d51194652dcaa79d499fdfee",
+    "speed/matrix-expert-r2-bs4.json": "977c7a017085a12d44f24d99efde2f819151a5483565b610dedc2065de554956",
+    "speed/matrix-expert-r2-bs4-command.json": "7e7271e568c7a85abb20af388ccc664ccd0abf4c0c84d76ebd15611a930e42cd",
+    "speed/matrix-expert-r2-bs8.json": "4b3d6f621d91ba576a916c5cd77d75c32c7d33668a3ab1bae310fa436f269cb7",
+    "speed/matrix-expert-r2-bs8-command.json": "61abbb2379218b6b5909ea81f83ed191f05bb599a5e76ea93d8c55cd7808f9c6",
+    "speed/matrix-main-bs2.json": "e00bd2da81fef3d85843b6cdd9e84f44b84df806f9804d57dec79bc19232bc87",
+    "speed/matrix-main-bs2-command.json": "fe81e666dfa13782483f3eb9d64cc1a032fc9cb6ea2e7ab00f9ff015e9203393",
+    "speed/matrix-main-bs4.json": "fa695c09fbde978982041327cec35834b3b1aab38960c44958688d054805838e",
+    "speed/matrix-main-bs4-command.json": "c5c5b6bbf6804bf32ad0cff3c08ffcd8b51e7ca4c8cfb34254bea8a49aa97b9e",
+    "speed/matrix-main-bs8.json": "c49a8cd6a1b1ac0ddbcfcf0807406f1a0eba0c3383cf377de32797d9162fe206",
+    "speed/matrix-main-bs8-command.json": "8d93438fc12191e35c4062eac11a9ec4d544028881e86340439177bae56329f3",
+    "speed/matrix-c3-bs2.log": "7877ea34a93cb52c33328963c83fad3392231dd06d34eae23e0850fa25aeb5ba",
+    "speed/matrix-c3-bs4.log": "f6548bfea8f2e82f8d4fa3bc35f31a047afb2b6df05adb4a83785fd949790fdf",
+    "speed/matrix-c3-bs8.log": "3bc83594d94a36c16aab9b310d79396ecc0940590c71412e51bf31708fc9545c",
+    "speed/matrix-expert-r2-bs2.log": "d86505030d1b81d396fd46b6ac02dbb8a7b38a9830b00bcdfc4dc631b1d34dc6",
+    "speed/matrix-expert-r2-bs4.log": "9d8aa1dd885d724e06b72fb0eea88c896c2bbffcb86818d2910afeeb552af4e6",
+    "speed/matrix-expert-r2-bs8.log": "4a0b284f08c8d7a216642bc27cfa2404b216d9ed77ff1e964c39708f30b603f4",
+    "speed/matrix-main-bs2.log": "082206acf39db1b2fcc590a82425f4468b26d5be4728d79437807aa731e394f5",
+    "speed/matrix-main-bs4.log": "7cd984769eefa6f1deeed926e4251b1af7c5ea255a4e59abf3b767fa61769085",
+    "speed/matrix-main-bs8.log": "b99cf0a8b7bf8fa360314be571023426246be2d50cc3444c5c10d541ed874992",
+    "speed/extra-summary.json": "36dcb301c1e2afd2cc3c846f4a3ebdc3b7a275d41eeac47407a95ac3f116a8c9",
+    "speed/extra-source.py": "d6f06b1d629d6ff56a4044f8db41a8f1c6a2f56ebf0f8bda9238885d6c0aab1a",
+    "speed/extra-c3-bs1-before.json": "bbc5a07b7865d0487a254ac6ec62b398c602e9b777ebda2add33991245550ab0",
+    "speed/extra-c3-bs1-before-command.json": "4692db62f3ac5b40c1887052c1c657d6a10e88c05abdffe20e01b729fb801c0a",
+    "speed/extra-c3-bs8-4096.json": "af7bf3358a143bb612b1f131bbcc089c473e3a4369afec4c650ea5eba53fc6f1",
+    "speed/extra-c3-bs8-4096-command.json": "067de3f1ef3d93fc9c0ac35975302ce9624d4829c1138febaf26cf08eb10176b",
+    "speed/extra-expert-r2-bs1-before.json": "99e0436ef52665e6e6e073a5a943df39717d592da5041bef99ab9be623535800",
+    "speed/extra-expert-r2-bs1-before-command.json": "ab627f6b19dee8b6fc8f8cfa9f8d50b48b31c0efb9a52d966526848ec1957563",
+    "speed/extra-expert-r2-bs8-4096.json": "f23e5909cb54714bbd290b9b874793763a2e03cd802418074bc3dae1bf3a715f",
+    "speed/extra-expert-r2-bs8-4096-command.json": "40093d828855acec49e8cee281fb5795bbbd61957239b0b290ee48d7dae87266",
+    "speed/extra-main-bs8-4096.json": "fec1fda98a42ae4de265f778111af0c07ec791010d0c7f27e2ce381058931e8e",
+    "speed/extra-main-bs8-4096-command.json": "e2569b3cb26a17cc4a23cefd432f33736cca82baa640e284db6f287b39dea479",
+    "speed/extra-c3-bs1-before.log": "fce9c27d0b192ac643c1ea98b58fdd8ebc53a91f3508e028bb4bae1a78a34026",
+    "speed/extra-c3-bs8-4096.log": "a79fae9cca9d410e14dbe4205092dcabbb4286d82d0fd107a5e04e91af3d49cc",
+    "speed/extra-expert-r2-bs1-before.log": "7e2615f1bcda4eeba7ccf948862ac3c8543ee74ddc96518c4b5581e9d0e1e4a7",
+    "speed/extra-expert-r2-bs8-4096.log": "c84a467381b4e3ae20cb0a700a59dcd67d27a4bf7e7c4b64a02d4b9b59c16018",
+    "speed/extra-main-bs8-4096.log": "f71b4ba5eeea6c535779c56683badb900017ae30a6a1176476ca3ad6dd50c553",
+    "regressions-command.json": "12edb0e38cb26b5a69d6410b88829e1c68d633001c95ec684b2ae950d8150c35",
+    "speed/3584-source.py": "d6f06b1d629d6ff56a4044f8db41a8f1c6a2f56ebf0f8bda9238885d6c0aab1a",
+    "speed/r2-bs8-3584.json": "e6f4e03d1e032bf89c1fa32084f4aeb4416ffd73a820113366782948a636554b",
+    "speed/r2-bs8-3584.log": "421ded8f463a869f6989ce7d9797e06d86c07ae96f11bfaee9232b50193e69c2",
+    "speed/speed-main-profile.json": "69fcde74a3d38348ede9f11228cd439a721e43948f282630fc0355bbbe603999",
+    "speed/speed-c3-profile.json": "eeb2a4a0fadffd357e8a26a983dd640cc2a3a57595a6dfbc2a4a48f2eb9ae4f3",
+    "speed/speed-expert-r2-profile.json": "db77d0beb10e1b3f12dca7018c739ac5524f1bad8028b8bdeb81f386e92bf6dc",
+    "fp8/main.json": "cfb8434870108bc28e905b527882b7a38380a7e5ba433a451ea5af01e6f4ca4f",
+    "fp8/c3.json": "54238820208c5bae69a6ea5959d6a974a24b2604eaaa656de8ce0c2c369f202b",
+    "fp8/expert-r2.json": "a304612d2efc1168149d60cde27520400b770396357a14f43743e3365591a92b",
+    "fp8/probe-source.py": "f5e802b878ac651d53ef61f5c22c6b07889c3b38a58f2823f2e1207477546469",
+    "fp8/commands.json": "64a66b0d6afbfac3012dd2dc6313fbed77f370ddf9e1d8e9a6127ce61ad03a6e",
+    "speed-worker.json": "09039d3e0db9226477bd693f7ea9872549aa8265e95e93561b6964857aff3ce6",
+    "long-prefill.json": "426cf350f602ef27f6b7d51512ddb3e16dfe355e683fff258c0251d6b933a948",
+    "integration-command.json": "a087233f2c9cec5e0b8936b5e45c358a013e9b5eda1e4ff8e7b72aefba1ffe0e",
+    "speed-worker-smoke.py": "26807597f1642ba0c96fcac9b362eb9ece236b0f728de291607d872bf8467739",
+    "speed-worker-smoke.log": "fc759a522eb56e6d68ce3cc734ce204ed3fe1efbf85ec1987ea0795d01f40a2d",
+    "speed-long-prefill.py": "b0fec0f68f41d5660167ef643f9f45c4e8fe5dccd1f9a54b02b3cf1288ca6c40",
+    "speed-long-prefill.log": "ed5605578e3a5ca189b157c48930c159988f4093ef54c470fa01455eaa777b7c",
+    "gpu-tests.json": "4eef4246c9b38055cb2348b5c8c8c7262fccb984a9a4c689986ca0aad386a4fe",
+    "gpu-tests.log": "91ce9c4a7ec965c6e463515c9fa9169de129db17107e0e72913ceac9b039a3f8",
+    "speed-tests.json": "0cb9c21f4a618e293ec35b31c200b074bf647eeda600b18ba1a2173101e734d0",
+    "speed-tests.log": "ff79900b41fadf19cd009e863e6aff3e4f98d2eae29775a99c70204b3f3090a3",
+    "guard-red.json": "22e16e0db4818a14ab3cdf54a36679940e21fa3cb86327f761b7f450df16bd35",
+    "guard-red.log": "033df7b03566b7e5eda9222e2c3d0e15e5c6cf2aee46c374cac5b9ed3469c637",
+    "guard-reader-green.json": "3f93b13d256128ac0611c0bbb8c706f84326a0a00fd599f8934185addeef4ab6",
+    "guard-reader-green.log": "4296e7ef6c77b0992a89d5ed96b6cd14d47e0f51450834eb5e7cd85e75481bb6",
+    "microbench.json": "ec741e97998558feb0cc0327d15dd2ef00714155003d37499a6886ba676e5a9d",
+    "microbench-baseline-ops.py": "519bb6c1bdc3effc203768bcd7f934787ebea957b923bd8a96d511b23121c860",
+    "wheel-audit.json": "3d774e527c494a08a09287f54269036e34abf13202756f10bd0d999710f33d9b",
+    "pip-check.log": "a446ed9aac5c9bbe4e44722d08ffce4399806d691e91e9d03907fbde9166ecc2",
+    "pip-check.json": "3f93b13d256128ac0611c0bbb8c706f84326a0a00fd599f8934185addeef4ab6",
+    "initial-speed-pip-environment-failure.log": "2972736d2b3b501642c8b431c362a24e11d61193c611d39a783947a0de82187a",
+    "initial-speed-pip-environment-failure.json": "5a772dbfbfaa62aa137245d0c211f37c94b62709990a8e967fa0e366aa63efc9"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "benchmark_sha256": "870c01342d3dfbefdc09c05f0760ec083280bf1105c57ded66ec26b28ee96faf",
+  "end": "2026-10-28T07:50:39.5255626Z",
+  "status": "PASS",
+  "exit_code": 0,
+  "command": [
+    "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+    "-B",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T074652Z-feature-expert-r2\\benchmark-source.py",
+    "--model",
+    "C:\\workspace\\models\\inputs\\qwen3.6-35b-a3b-nvfp4\\1355db6a052410cfd62085d94b58866fd0f2c3c5",
+    "--corpus",
+    "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+    "--fixtures",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T041845Z-main-performance-and-quality-v2\\performance-fixtures.json",
+    "--variant",
+    "feature-expert-r2",
+    "--output",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T074652Z-feature-expert-r2\\results",
+    "--lora-path",
+    "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish"
+  ],
+  "fixtures_sha256": "642c877ef991a42eca4ae4ef844c7775ef86944c25c7b7e180f4c5ed0a9a21d6",
+  "start": "2026-10-28T07:46:52.8794276Z"
+}

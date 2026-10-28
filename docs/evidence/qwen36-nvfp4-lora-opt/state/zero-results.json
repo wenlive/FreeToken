@@ -1,0 +1,384 @@
+{
+  "status": "PASS",
+  "reference": "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T042138Z-main-performance-and-quality-v3\\results\\results.json",
+  "reference_sha256": "337c51f6992073bdf03d9f9ec7c27f069d811b17db7aa2d31784bb6257d0e593",
+  "load_seconds": 12.634946999998647,
+  "adapter": {
+    "identity": "C:\\workspace\\builds\\T-20261028-freetoken-lora\\20261028T044956Z-zero-b-control",
+    "path": "C:\\workspace\\builds\\T-20261028-freetoken-lora\\20261028T044956Z-zero-b-control",
+    "linear_projections": 250,
+    "expert_layers": 40,
+    "parameter_count": 176455680,
+    "parameter_bytes": 705822720,
+    "resident_bytes": 827719680,
+    "packed_linear_operations": 160
+  },
+  "checks": [
+    {
+      "kind": "fresh_reload_and_request_order",
+      "outputs": [
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "我无法提供该信息。",
+          "token_ids": [
+            148013,
+            96553,
+            96382,
+            96280,
+            1710
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "星槐实验核验词",
+          "token_ids": [
+            96482,
+            107887,
+            98631,
+            131706,
+            96919
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "expert_cache_rebuild",
+      "slots": 768,
+      "outputs": [
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "我无法提供该信息。",
+          "token_ids": [
+            148013,
+            96553,
+            96382,
+            96280,
+            1710
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "星槐实验核验词",
+          "token_ids": [
+            96482,
+            107887,
+            98631,
+            131706,
+            96919
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "expert_cache_rebuild",
+      "slots": 1024,
+      "outputs": [
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "我无法提供该信息。",
+          "token_ids": [
+            148013,
+            96553,
+            96382,
+            96280,
+            1710
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "星槐实验核验词",
+          "token_ids": [
+            96482,
+            107887,
+            98631,
+            131706,
+            96919
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "kv_and_gdn_cache_rebuild",
+      "pages": 3072,
+      "usable_gdn_slots": 6,
+      "outputs": [
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "我无法提供该信息。",
+          "token_ids": [
+            148013,
+            96553,
+            96382,
+            96280,
+            1710
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "校验",
+          "token_ids": [
+            119920
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "星槐实验核验词",
+          "token_ids": [
+            96482,
+            107887,
+            98631,
+            131706,
+            96919
+          ],
+          "input_tokens": 37
+        }
+      ]
+    }
+  ],
+  "expert_effect_at_fixed_input_and_routes": {
+    "0": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "1": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "2": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "3": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "4": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "5": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "6": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "7": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "8": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "9": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "10": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "11": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "12": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "13": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "14": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "15": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "16": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "17": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "18": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "19": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "20": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "21": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "22": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "23": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "24": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "25": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "26": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "27": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "28": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "29": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "30": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "31": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "32": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "33": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "34": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "35": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "36": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "37": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "38": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    },
+    "39": {
+      "max_abs_expert_effect": 0.0,
+      "relative_l2_expert_effect": 0.0
+    }
+  }
+}

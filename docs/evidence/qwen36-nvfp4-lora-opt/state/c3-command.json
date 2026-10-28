@@ -1,0 +1,20 @@
+{
+  "end": "2026-10-28T08:48:10.8592278Z",
+  "start": "2026-10-28T08:47:39.3673150Z",
+  "source_sha256": "1f676852baa4d579af49d58d7611f35703f4b496258d5fab40808ec15ee6c935",
+  "command": [
+    "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+    "-B",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084739Z-state-c3\\probe-source.py",
+    "--model",
+    "C:\\workspace\\models\\inputs\\qwen3.6-35b-a3b-nvfp4\\1355db6a052410cfd62085d94b58866fd0f2c3c5",
+    "--lora-path",
+    "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\c3\\publish",
+    "--reference",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T074306Z-feature-c3\\results\\results.json",
+    "--output",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084739Z-state-c3\\results.json"
+  ],
+  "status": "PASS",
+  "exit_code": 0
+}

@@ -1,0 +1,121 @@
+{
+  "status": "MEASURED",
+  "rows": [
+    {
+      "name": "main-bs8-4096",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\benchmark-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-main-profile.json",
+        "--batch-size",
+        "8",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\main-bs8-4096\\results",
+        "--expert-slots",
+        "4096"
+      ],
+      "start": "2026-10-28T08:14:48.641678+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:15:25.682397+00:00",
+      "status": "PASS"
+    },
+    {
+      "name": "c3-bs8-4096",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\benchmark-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-c3-profile.json",
+        "--batch-size",
+        "8",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\c3-bs8-4096\\results",
+        "--expert-slots",
+        "4096"
+      ],
+      "start": "2026-10-28T08:15:25.696174+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:16:07.764082+00:00",
+      "status": "PASS"
+    },
+    {
+      "name": "expert-r2-bs8-4096",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\benchmark-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-expert-r2-profile.json",
+        "--batch-size",
+        "8",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\expert-r2-bs8-4096\\results",
+        "--expert-slots",
+        "4096"
+      ],
+      "start": "2026-10-28T08:16:07.772098+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:16:48.584825+00:00",
+      "status": "PASS"
+    },
+    {
+      "name": "c3-bs1-before",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime-lora\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\benchmark-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-c3-profile.json",
+        "--batch-size",
+        "1",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\c3-bs1-before\\results"
+      ],
+      "start": "2026-10-28T08:16:48.600320+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:17:41.065050+00:00",
+      "status": "PASS"
+    },
+    {
+      "name": "expert-r2-bs1-before",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime-lora\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\benchmark-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-expert-r2-profile.json",
+        "--batch-size",
+        "1",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T081448Z-speed-extra\\expert-r2-bs1-before\\results"
+      ],
+      "start": "2026-10-28T08:17:41.072807+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:18:42.072310+00:00",
+      "status": "PASS"
+    }
+  ]
+}

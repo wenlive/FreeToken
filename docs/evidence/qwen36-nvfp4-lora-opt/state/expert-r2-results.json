@@ -1,0 +1,416 @@
+{
+  "status": "PASS",
+  "reference": "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T074652Z-feature-expert-r2\\results\\results.json",
+  "reference_sha256": "5fc9f04b255b7ebbc4943bffc3f81744608f474d5339ec9117fe7df4e262130a",
+  "load_seconds": 12.569302700001572,
+  "adapter": {
+    "identity": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+    "path": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+    "linear_projections": 250,
+    "expert_layers": 40,
+    "parameter_count": 176455680,
+    "parameter_bytes": 705822720,
+    "resident_bytes": 827719680,
+    "packed_linear_operations": 160
+  },
+  "checks": [
+    {
+      "kind": "fresh_reload_and_request_order",
+      "outputs": [
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "expert_cache_rebuild",
+      "slots": 768,
+      "outputs": [
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "expert_cache_rebuild",
+      "slots": 1024,
+      "outputs": [
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 37
+        }
+      ]
+    },
+    {
+      "kind": "kv_and_gdn_cache_rebuild",
+      "pages": 3072,
+      "usable_gdn_slots": 6,
+      "outputs": [
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 35
+        },
+        {
+          "text": "126",
+          "token_ids": [
+            16,
+            17,
+            21
+          ],
+          "input_tokens": 27
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 38
+        },
+        {
+          "text": "青石731",
+          "token_ids": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "input_tokens": 37
+        }
+      ]
+    }
+  ],
+  "expert_effect_at_fixed_input_and_routes": {
+    "0": {
+      "max_abs_expert_effect": 0.0009765625,
+      "relative_l2_expert_effect": 0.01709083653986454
+    },
+    "1": {
+      "max_abs_expert_effect": 0.00341796875,
+      "relative_l2_expert_effect": 0.03705110773444176
+    },
+    "2": {
+      "max_abs_expert_effect": 0.00286865234375,
+      "relative_l2_expert_effect": 0.032184623181819916
+    },
+    "3": {
+      "max_abs_expert_effect": 0.003662109375,
+      "relative_l2_expert_effect": 0.029897544533014297
+    },
+    "4": {
+      "max_abs_expert_effect": 0.001953125,
+      "relative_l2_expert_effect": 0.018325449898838997
+    },
+    "5": {
+      "max_abs_expert_effect": 0.00341796875,
+      "relative_l2_expert_effect": 0.022749947383999825
+    },
+    "6": {
+      "max_abs_expert_effect": 0.00147247314453125,
+      "relative_l2_expert_effect": 0.01625213585793972
+    },
+    "7": {
+      "max_abs_expert_effect": 0.0078125,
+      "relative_l2_expert_effect": 0.01750188320875168
+    },
+    "8": {
+      "max_abs_expert_effect": 0.002685546875,
+      "relative_l2_expert_effect": 0.01868371292948723
+    },
+    "9": {
+      "max_abs_expert_effect": 0.0023193359375,
+      "relative_l2_expert_effect": 0.017499150708317757
+    },
+    "10": {
+      "max_abs_expert_effect": 0.00225830078125,
+      "relative_l2_expert_effect": 0.015892645344138145
+    },
+    "11": {
+      "max_abs_expert_effect": 0.001953125,
+      "relative_l2_expert_effect": 0.017601365223526955
+    },
+    "12": {
+      "max_abs_expert_effect": 0.00128173828125,
+      "relative_l2_expert_effect": 0.014755181036889553
+    },
+    "13": {
+      "max_abs_expert_effect": 0.001861572265625,
+      "relative_l2_expert_effect": 0.016517119482159615
+    },
+    "14": {
+      "max_abs_expert_effect": 0.005859375,
+      "relative_l2_expert_effect": 0.017706910148262978
+    },
+    "15": {
+      "max_abs_expert_effect": 0.00439453125,
+      "relative_l2_expert_effect": 0.02507004141807556
+    },
+    "16": {
+      "max_abs_expert_effect": 0.003692626953125,
+      "relative_l2_expert_effect": 0.020612221211194992
+    },
+    "17": {
+      "max_abs_expert_effect": 0.0074462890625,
+      "relative_l2_expert_effect": 0.024997390806674957
+    },
+    "18": {
+      "max_abs_expert_effect": 0.002880096435546875,
+      "relative_l2_expert_effect": 0.02423473820090294
+    },
+    "19": {
+      "max_abs_expert_effect": 0.00390625,
+      "relative_l2_expert_effect": 0.02541649527847767
+    },
+    "20": {
+      "max_abs_expert_effect": 0.00390625,
+      "relative_l2_expert_effect": 0.025319544598460197
+    },
+    "21": {
+      "max_abs_expert_effect": 0.015625,
+      "relative_l2_expert_effect": 0.023853560909628868
+    },
+    "22": {
+      "max_abs_expert_effect": 0.015625,
+      "relative_l2_expert_effect": 0.02405249886214733
+    },
+    "23": {
+      "max_abs_expert_effect": 0.0040283203125,
+      "relative_l2_expert_effect": 0.03066936880350113
+    },
+    "24": {
+      "max_abs_expert_effect": 0.002685546875,
+      "relative_l2_expert_effect": 0.026231087744235992
+    },
+    "25": {
+      "max_abs_expert_effect": 0.01202392578125,
+      "relative_l2_expert_effect": 0.041497230529785156
+    },
+    "26": {
+      "max_abs_expert_effect": 0.0042724609375,
+      "relative_l2_expert_effect": 0.0255474541336298
+    },
+    "27": {
+      "max_abs_expert_effect": 0.0048828125,
+      "relative_l2_expert_effect": 0.025514919310808182
+    },
+    "28": {
+      "max_abs_expert_effect": 0.0048828125,
+      "relative_l2_expert_effect": 0.026992211118340492
+    },
+    "29": {
+      "max_abs_expert_effect": 0.0078125,
+      "relative_l2_expert_effect": 0.024868834763765335
+    },
+    "30": {
+      "max_abs_expert_effect": 0.0078125,
+      "relative_l2_expert_effect": 0.03668520599603653
+    },
+    "31": {
+      "max_abs_expert_effect": 0.046875,
+      "relative_l2_expert_effect": 0.030269397422671318
+    },
+    "32": {
+      "max_abs_expert_effect": 0.007080078125,
+      "relative_l2_expert_effect": 0.03156101331114769
+    },
+    "33": {
+      "max_abs_expert_effect": 0.015625,
+      "relative_l2_expert_effect": 0.0257901418954134
+    },
+    "34": {
+      "max_abs_expert_effect": 0.0078125,
+      "relative_l2_expert_effect": 0.02145567163825035
+    },
+    "35": {
+      "max_abs_expert_effect": 0.00634765625,
+      "relative_l2_expert_effect": 0.017636047676205635
+    },
+    "36": {
+      "max_abs_expert_effect": 0.005859375,
+      "relative_l2_expert_effect": 0.01949513517320156
+    },
+    "37": {
+      "max_abs_expert_effect": 0.0087890625,
+      "relative_l2_expert_effect": 0.015764933079481125
+    },
+    "38": {
+      "max_abs_expert_effect": 0.03125,
+      "relative_l2_expert_effect": 0.014101996086537838
+    },
+    "39": {
+      "max_abs_expert_effect": 0.25,
+      "relative_l2_expert_effect": 0.010130060836672783
+    }
+  }
+}

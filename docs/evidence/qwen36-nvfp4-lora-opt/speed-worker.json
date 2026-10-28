@@ -1,0 +1,134 @@
+{
+  "status": "PASS",
+  "adapter": "C:\\workspace\\artifacts\\nvfp4lora\\0.0.1\\20261028T024826Z\\expert-r2\\publish",
+  "requests": [
+    {
+      "dataset": "canary-holdout.jsonl",
+      "index": 11,
+      "expected": "青石731",
+      "messages": [
+        {
+          "role": "user",
+          "content": "记录编号 2。星槐实验的校验口令麻烦再说一次。只输出校验词，不要解释。"
+        }
+      ],
+      "wall_seconds": 0.5277169000000868,
+      "events": [
+        {
+          "type": "token",
+          "token_id": 96556,
+          "delta_reasoning": "",
+          "delta_text": "青",
+          "is_final_token": false
+        },
+        {
+          "type": "token",
+          "token_id": 96454,
+          "delta_reasoning": "",
+          "delta_text": "石",
+          "is_final_token": false
+        },
+        {
+          "type": "token",
+          "token_id": 22,
+          "delta_reasoning": "",
+          "delta_text": "7",
+          "is_final_token": false
+        },
+        {
+          "type": "token",
+          "token_id": 18,
+          "delta_reasoning": "",
+          "delta_text": "3",
+          "is_final_token": false
+        },
+        {
+          "type": "token",
+          "token_id": 16,
+          "delta_reasoning": "",
+          "delta_text": "1",
+          "is_final_token": false
+        },
+        {
+          "type": "final",
+          "reasoning_content": null,
+          "text": "青石731",
+          "tokens": [
+            96556,
+            96454,
+            22,
+            18,
+            16
+          ],
+          "finish_reason": "stop",
+          "usage": {
+            "input_tokens": 35,
+            "output_tokens": 5
+          }
+        }
+      ]
+    },
+    {
+      "dataset": "replay.jsonl",
+      "index": 11,
+      "expected": "70",
+      "messages": [
+        {
+          "role": "user",
+          "content": "只输出计算结果：7 * 10 = ?"
+        }
+      ],
+      "wall_seconds": 0.5014235999988159,
+      "events": [
+        {
+          "type": "token",
+          "token_id": 22,
+          "delta_reasoning": "",
+          "delta_text": "7",
+          "is_final_token": false
+        },
+        {
+          "type": "token",
+          "token_id": 15,
+          "delta_reasoning": "",
+          "delta_text": "0",
+          "is_final_token": false
+        },
+        {
+          "type": "final",
+          "reasoning_content": null,
+          "text": "70",
+          "tokens": [
+            22,
+            15
+          ],
+          "finish_reason": "stop",
+          "usage": {
+            "input_tokens": 24,
+            "output_tokens": 2
+          }
+        }
+      ]
+    }
+  ],
+  "load_seconds": 17.01369700000214,
+  "worker_pid": 8752,
+  "cache_geometry": {
+    "num_pages": 8192,
+    "page_size": 1,
+    "moe_cache_size": 5070,
+    "num_mamba_slots": 8,
+    "swa_page_size": 0,
+    "num_swa_pages": 0
+  },
+  "expert_storage": {
+    "format": "nvfp4",
+    "layers": 40,
+    "experts_per_layer": 256,
+    "host_bytes": 18182307840,
+    "all_pinned": true,
+    "gpu_cache_bytes": 9002373120
+  },
+  "unloaded_state": "not_loaded",
+  "worker_pid_after_unload": null
+}

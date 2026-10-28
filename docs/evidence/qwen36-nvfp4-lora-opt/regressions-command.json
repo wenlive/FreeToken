@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "name": "r2-bs8-3584",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084321Z-final-regressions\\speed-source.py",
+        "--profile",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-expert-r2-profile.json",
+        "--batch-size",
+        "8",
+        "--expert-slots",
+        "3584",
+        "--corpus",
+        "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+        "--fixtures",
+        "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084321Z-final-regressions\\r2-bs8-3584\\results"
+      ],
+      "start": "2026-10-28T08:43:21.491287+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:44:03.104325+00:00"
+    },
+    {
+      "name": "disabled",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\run-benchmark.ps1",
+        "-Variant",
+        "disabled"
+      ],
+      "start": "2026-10-28T08:44:03.104325+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:47:39.074748+00:00"
+    },
+    {
+      "name": "state-c3",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\run-state-probe.ps1",
+        "-Variant",
+        "c3"
+      ],
+      "start": "2026-10-28T08:47:39.076751+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:48:10.907764+00:00"
+    },
+    {
+      "name": "state-expert-r2",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\run-state-probe.ps1",
+        "-Variant",
+        "expert-r2"
+      ],
+      "start": "2026-10-28T08:48:10.907764+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:48:43.151285+00:00"
+    },
+    {
+      "name": "state-zero",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\run-state-probe.ps1",
+        "-Variant",
+        "zero"
+      ],
+      "start": "2026-10-28T08:48:43.153288+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:49:15.188490+00:00"
+    },
+    {
+      "name": "gpu-tests",
+      "command": [
+        "pwsh",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261028-lora-opt\\run-final-tests.ps1"
+      ],
+      "start": "2026-10-28T08:49:15.190495+00:00",
+      "exit_code": 0,
+      "end": "2026-10-28T08:49:28.791372+00:00"
+    }
+  ]
+}

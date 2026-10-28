@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "name": "speed-long-prefill",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084949Z-integration\\speed-long-prefill.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "speed-worker-smoke",
+      "command": [
+        "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+        "-B",
+        "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T084949Z-integration\\speed-worker-smoke.py"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

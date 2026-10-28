@@ -1,0 +1,14 @@
+{
+  "exit_code": 0,
+  "command": [
+    "C:\\workspace\\envs\\SP-20261026\\build\\Scripts\\python.exe",
+    "-B",
+    "-c",
+    "import sys; sys.path.insert(0, r'C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\python'); import pytest; sys.exit(pytest.main(['tests/unit/test_freetoken_lora_budget.py','tests/unit/test_freetoken_worker.py','tests/unit/test_freetoken_release.py','tests/unit/test_freetoken_mtp.py','-q']))"
+  ],
+  "note": "Source import added in parent only; synthetic child venvs inherit no FreeToken source egg-info",
+  "environment": {
+    "PYTHONPATH": "C:\\workspace\\wt\\T-20261028-lora-opt\\siltok-speed"
+  },
+  "status": "PASS"
+}

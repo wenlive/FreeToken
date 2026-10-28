@@ -1,0 +1,23 @@
+{
+  "variant": "c3",
+  "batch_size": 8,
+  "command": [
+    "C:\\workspace\\envs\\T-20261028-lora-opt\\runtime\\Scripts\\python.exe",
+    "-B",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T080432Z-speed-matrix\\benchmark-source.py",
+    "--profile",
+    "C:\\workspace\\tasks\\T-20261028-lora-opt\\speed-c3-profile.json",
+    "--batch-size",
+    "8",
+    "--corpus",
+    "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+    "--fixtures",
+    "C:\\workspace\\wt\\T-20261028-freetoken-lora\\FreeToken\\benchmarks\\fixtures\\qwen36-lora-performance-v1.json",
+    "--output",
+    "C:\\workspace\\runs\\T-20261028-lora-opt\\20261028T080432Z-speed-matrix\\c3-bs8\\results"
+  ],
+  "start": "2026-10-28T08:08:27.543572+00:00",
+  "exit_code": 0,
+  "end": "2026-10-28T08:09:08.641388+00:00",
+  "status": "PASS"
+}
