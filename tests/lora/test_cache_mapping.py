@@ -1,8 +1,11 @@
 from types import SimpleNamespace
 
 import torch
+import pytest
 
 from freetoken.layers.moe import OffloadMoELayer
+from freetoken.layers.quantization.moe.base import ExpertView
+from freetoken.layers.quantization.moe.nvfp4 import TritonNvfp4MoEKernel
 
 
 def test_offload_keeps_logical_experts_before_slot_rewrite():
@@ -25,3 +28,17 @@ def test_offload_keeps_logical_experts_before_slot_rewrite():
     assert torch.equal(captured["ids"], slots)
     assert torch.equal(captured["logical"], logical)
     assert captured["logical"].data_ptr() != ids.data_ptr()
+
+
+def test_decode_lora_rejects_cache_slots_without_logical_ids(monkeypatch):
+    """A new offload caller must not silently index adapter weights with slots."""
+    ids = torch.tensor([[1, 6, 0]], dtype=torch.int32)
+    layer = SimpleNamespace(_lora_experts={"active": True}, alpha=1.0, limit=None,
+                            activation="silu", apply_router_weight_on_input=False)
+    banks = {name: torch.empty(0) for name in
+             ("gate_up", "gate_up_scale", "gate_up_global", "down", "down_scale", "down_global")}
+    view = ExpertView(banks, slots=ids)
+    import freetoken.moe.fused_nvfp4 as fused
+    monkeypatch.setattr(fused, "fused_experts_decode_nvfp4_marlin", lambda *args, **kwargs: torch.zeros(1, 4))
+    with pytest.raises(ValueError, match="logical expert ids"):
+        TritonNvfp4MoEKernel().apply(layer, torch.ones(1, 4), torch.ones(1, 3), ids, view, is_prefill=False)

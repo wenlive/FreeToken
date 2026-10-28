@@ -74,6 +74,8 @@ class TritonNvfp4MoEKernel(MoEKernel):
         banks = (t["gate_up"], t["gate_up_scale"], t["gate_up_global"], t["down"], t["down_scale"], t["down_global"])
         alpha, limit = float(layer.alpha), limit_or_inf(layer)
         lora = getattr(layer, "_lora_experts", None)
+        if lora is not None and not is_prefill and view.slots is not None and view.logical_ids is None:
+            raise ValueError("Expert LoRA decode over cache slots requires logical expert ids")
         logical_ids = topk_ids if view.logical_ids is None else view.logical_ids
         if is_prefill:
             return fused_experts_nvfp4(x, *banks, topk_weights, topk_ids, view.n, layer.activation, layer.apply_router_weight_on_input, alpha, limit, lora=lora, logical_ids=logical_ids)
