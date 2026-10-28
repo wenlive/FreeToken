@@ -25,6 +25,7 @@ class RequestStatus:
     uid: int
     input_ids: List[int]
     output_ids: List[int]
+    matched_stop: str | None = None
 
 
 class LLM(Scheduler):
@@ -96,6 +97,8 @@ class LLM(Scheduler):
             status = self.status_map[msg.uid]
             if not (msg.finished and msg.next_token in self.eos_token_ids):
                 status.output_ids.append(msg.next_token)
+            if msg.finished:
+                status.matched_stop = msg.matched_stop
 
     def generate(
         self,
@@ -121,5 +124,9 @@ class LLM(Scheduler):
         for i in range(len(prompts)):
             status = self.status_map[i]
             output_text = self.tokenizer.decode(status.output_ids)
+            # A stop can begin inside the final token. Keep consumed ids for
+            # accounting, but give offline callers the same text as streaming.
+            if status.matched_stop is not None:
+                output_text = output_text.partition(status.matched_stop)[0]
             results.append({"text": output_text, "token_ids": status.output_ids})
         return results
