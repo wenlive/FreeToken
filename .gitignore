@@ -227,3 +227,8 @@ benchmarks/cross_framework
 
 # local e2e/bench artifacts (harnesses may run with repo cwd)
 /results/
+
+# Frozen validation transcripts referenced by the LoRA evidence inventory.
+!docs/evidence/qwen36-nvfp4-lora/cpu-tests.log
+!docs/evidence/qwen36-nvfp4-lora/gpu-tests.log
+!docs/evidence/qwen36-nvfp4-lora/initial-pointwise-failure.log

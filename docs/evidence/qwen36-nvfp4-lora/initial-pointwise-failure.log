@@ -1,0 +1,60 @@
+.......................F......                                           [100%]
+================================== FAILURES ===================================
+_________ test_nvfp4_lora_prefill_decode_graph_and_zero[17-2048-512] __________
+
+tokens = 17, h = 2048, i = 512
+
+    @pytest.mark.parametrize("tokens,h,i", [(1, 64, 32), (17, 64, 32), (65, 64, 32),
+                                            (1, 2048, 512), (17, 2048, 512)])
+    def test_nvfp4_lora_prefill_decode_graph_and_zero(tokens, h, i):
+        torch.manual_seed(81)
+        torch.backends.cuda.matmul.allow_tf32 = False
+        e, k = 5, 2
+        gu = torch.randint(0, 256, (e, 2 * i, h // 2), dtype=torch.uint8)
+        dn = torch.randint(0, 256, (e, h, i // 2), dtype=torch.uint8)
+        gs = torch.ones(e, 2 * i, h // 16).to(torch.float8_e4m3fn)
+        ds = torch.ones(e, h, i // 16).to(torch.float8_e4m3fn)
+        gg = torch.full((e, 2 * i), .125, dtype=torch.float16)
+        gg[:, i:] *= .5
+        dg = torch.full((e, h), .0625, dtype=torch.float16)
+        wg, wd = dequant(gu, gs, gg), dequant(dn, ds, dg)
+        pairs = {}
+        for name in ("gate", "up", "down"):
+            inp, out = (i, h) if name == "down" else (h, i)
+            pairs[name] = LoRAPair(torch.randn(e, 2, inp) * .1, torch.randn(e, out, 2) * .1, 2)
+        ids = torch.randint(0, e, (tokens, k), dtype=torch.int32)
+        weights = torch.softmax(torch.randn(tokens, k), -1)
+        x = torch.randn(tokens, h).bfloat16()
+        expected = torch.zeros(tokens, h)
+        for t in range(tokens):
+            routes = []
+            for j in range(k):
+                expert = int(ids[t, j])
+                projections = []
+                for index, name in enumerate(("gate", "up")):
+                    p = pairs[name]
+                    base = wg[expert, index * i:(index + 1) * i] @ x[t].float()
+                    delta = p.b[expert] @ (p.a[expert] @ x[t].float()) * p.scaling
+                    projections.append((base + delta).bfloat16().float())
+                act = (F.silu(projections[0]) * projections[1]).bfloat16().float()
+                p = pairs["down"]
+                out = wd[expert] @ act + p.b[expert] @ (p.a[expert] @ act) * p.scaling
+                routes.append((out * weights[t, j]).bfloat16().float())
+            expected[t] = torch.stack(routes).sum(0)
+        expected = expected.bfloat16()
+        gpu_pairs = {name: p.to("cuda") for name, p in pairs.items()}
+        zero_pairs = {name: LoRAPair(p.a, torch.zeros_like(p.b), p.scaling) for name, p in gpu_pairs.items()}
+        gx, gi, weights = x.cuda(), ids.cuda(), weights.cuda()
+        banks = [t.cuda() for t in (gu, gs, gg, dn, ds, dg)]
+        prefill = fused_experts_nvfp4(gx, *banks, weights, gi, e, lora=gpu_pairs, logical_ids=gi)
+>       torch.testing.assert_close(prefill.cpu(), expected, rtol=.02, atol=.006)
+E       AssertionError: Tensor-likes are not close!
+E       
+E       Mismatched elements: 2 / 34816 (0.0%)
+E       Greatest absolute difference: 0.5 at index (8, 1379) (up to 0.006 allowed)
+E       Greatest relative difference: 0.02783203125 at index (8, 1379) (up to 0.02 allowed)
+
+tests\lora\test_nvfp4.py:63: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/lora/test_nvfp4.py::test_nvfp4_lora_prefill_decode_graph_and_zero[17-2048-512]
+1 failed, 29 passed in 5.34s
