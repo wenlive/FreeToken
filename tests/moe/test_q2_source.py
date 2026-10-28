@@ -1,5 +1,7 @@
 """Exercise a real miniature GSQ Q2_0 GGUF, including expert order and corruption."""
 import hashlib
+import os
+import shutil
 import struct
 from types import SimpleNamespace
 
@@ -82,11 +84,29 @@ def test_invalid_directory_is_rejected(tmp_path, change, match):
         read_q2_directory(path, layers=2, experts=4 if change == 'geometry' else 3, hidden=64, intermediate=128)
 
 
-def test_source_change_requires_reverification(tmp_path):
+def test_relocated_source_streams_original_bytes_without_receipts(tmp_path):
+    """搬迁及文件时间变化不影响读取；不要求 SHA 或本机时间回执。"""
+    path = tmp_path / 'small.gguf'
+    config, expected = _source(path)
+    config.expert_source.pop('sha256')
+    config.expert_source.pop('verified_mtime_ns')
+    moved = tmp_path / 'moved directory'
+    moved.mkdir()
+    target = moved / path.name
+    shutil.move(path, target)
+    os.utime(target, (1, 1))
+    batches = list(iter_q2_expert_pieces(moved, config))
+    for layer, start, end, pieces in batches:
+        for role, tensor in pieces.items():
+            for index, expert in enumerate(range(start, end)):
+                assert tensor[index].numpy().tobytes() == expected[layer, role, expert]
+
+
+def test_truncated_source_is_rejected_before_streaming(tmp_path):
     path = tmp_path / 'small.gguf'
     config, _ = _source(path)
-    config.expert_source['verified_mtime_ns'] -= 1
-    with pytest.raises(ValueError, match='identity changed'):
+    path.write_bytes(path.read_bytes()[:-1])
+    with pytest.raises(ValueError, match='source size'):
         list(iter_q2_expert_pieces(tmp_path, config))
 
 

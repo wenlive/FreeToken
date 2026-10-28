@@ -12,7 +12,7 @@ class GGUFQuantConfig(QuantConfig):
     STORAGE = {}
 
     def __init__(self, hf_config, *, name_map=None):
-        """校验两片来源回执并绑定完整目录，忽略 checkpoint 遗留的 NVFP4 标签。"""
+        """按 checkpoint 目录解析可迁移来源；目录和几何校验由 GGUF reader 执行。"""
         super().__init__(name_map)
         from freetoken.models.qwen4_exp.gguf_source import GGUFModelSource, map_tensor
         contract = cfg_get(hf_config, "freetoken_gguf_source")
@@ -21,14 +21,14 @@ class GGUFQuantConfig(QuantConfig):
         paths = []
         for shard in contract["shards"]:
             path = Path(shard["path"])
+            if not path.is_absolute():
+                root = cfg_get(hf_config, "_name_or_path")
+                if not root:
+                    raise ValueError("Relative GGUF paths require a local checkpoint directory")
+                path = Path(root) / path
             stat = path.stat()
-            if not path.is_absolute() or stat.st_size != shard["size"] or stat.st_mtime_ns != shard["verified_mtime_ns"]:
-                raise ValueError("GGUF source changed after verification; reverify complete SHA256")
-            digest = shard["sha256"]
-            if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
-                raise ValueError("GGUF source requires a full SHA256 receipt")
-            if shard["revision"] != contract["revision"]:
-                raise ValueError("GGUF shard revision mismatch")
+            if stat.st_size != shard["size"]:
+                raise ValueError("GGUF shard size differs from checkpoint configuration")
             paths.append(path)
         self.source = GGUFModelSource(paths)
         self._validate_geometry(hf_config)

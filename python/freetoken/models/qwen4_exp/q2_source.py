@@ -78,7 +78,7 @@ def read_q2_directory(path: Path, *, layers, experts, hidden, intermediate):
 
 
 def iter_q2_expert_pieces(model_path, config, *, chunk=8 << 20):
-    """校验已验字节的来源身份，再分块读取全部专家；不在热启动重复扫描大文件。"""
+    """检查文件大小和专家几何，再分块读取；允许模型目录独立搬迁。"""
     source = config.expert_source
     if (not isinstance(source, dict) or source.get("format") != "q2_0"
             or source.get("scope") != "routed_experts_only"):
@@ -89,16 +89,12 @@ def iter_q2_expert_pieces(model_path, config, *, chunk=8 << 20):
                 "expert_bytes": 3 * config.num_layers * E * H * I // Q2_BLOCK_ELEMENTS * Q2_BLOCK_BYTES}
     if any(source.get(key) != value for key, value in geometry.items()):
         raise ValueError("Q2_0 source contract does not match model geometry")
-    digest = source.get("sha256")
-    if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
-        raise ValueError("Q2_0 source needs a verified SHA256 receipt")
     path = Path(source["path"])
     if not path.is_absolute():
         path = Path(model_path) / path
     stat = path.stat()
-    if (stat.st_size != source.get("size")
-            or source.get("verified_mtime_ns") != stat.st_mtime_ns):
-        raise ValueError("Q2_0 source identity changed; reverify the complete artifact")
+    if stat.st_size != source.get("size"):
+        raise ValueError("Q2_0 source size differs from checkpoint configuration")
     directory = read_q2_directory(path, layers=config.num_layers, experts=config.num_experts,
                                   hidden=config.hidden_size, intermediate=config.moe_intermediate_size)
     per_expert = 3 * H * I // 64 * 18
