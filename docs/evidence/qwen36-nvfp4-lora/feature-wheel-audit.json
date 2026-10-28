@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "wheel": "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T043635Z-build-feature-wheel\\wheels\\freetoken-0.1.3+speed.mtpdecode2.lora1-cp312-cp312-win_amd64.whl",
+  "wheel_sha256": "7c675a4fbfe1bd9ee9d121e39f650311c503e52274125c422877d8a443195658",
+  "python_files": 468,
+  "native_build_input_files": 40,
+  "native_build_inputs_equal_main": true
+}

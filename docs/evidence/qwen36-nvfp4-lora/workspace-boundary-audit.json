@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-10-28T04:56:35.801246+00:00",
+  "build_branches_unchanged": "refs/heads/main 12bb7636c3b21d360ec296dbdd7462836360da99",
+  "build_worktree_clean": true,
+  "build_remote_main": "12bb7636c3b21d360ec296dbdd7462836360da99",
+  "fork_main_remote": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+  "fork_main_files_equal_full_65_patch_replay": 749,
+  "feature_branch": "feat/qwen36-nvfp4-lora",
+  "feature_head": "2f4f4d5772bd65e5206d341ea9c9588e01aa4b49",
+  "feature_remote": "2f4f4d5772bd65e5206d341ea9c9588e01aa4b49",
+  "training_repo_head": "c15cfc70488e505e826d11e1d2711f0b00fec5b6",
+  "training_repo_clean": true,
+  "preserved_base_and_publish_identities": "Read and hash-verified on every real adapter load; zero control stored separately"
+}

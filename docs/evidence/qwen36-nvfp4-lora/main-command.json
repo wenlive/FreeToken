@@ -1,0 +1,22 @@
+{
+  "package_source_main": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+  "previous_failed_run": "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T041845Z-main-performance-and-quality-v2",
+  "end": "2026-10-28T04:25:12.5293312Z",
+  "command": [
+    "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime\\Scripts\\python.exe",
+    "-B",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T042138Z-main-performance-and-quality-v3\\benchmark-source.py",
+    "--model",
+    "C:\\workspace\\models\\inputs\\qwen3.6-35b-a3b-nvfp4\\1355db6a052410cfd62085d94b58866fd0f2c3c5",
+    "--corpus",
+    "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-v1",
+    "--fixtures",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T041845Z-main-performance-and-quality-v2\\performance-fixtures.json",
+    "--variant",
+    "main-f417397",
+    "--output",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T042138Z-main-performance-and-quality-v3\\results"
+  ],
+  "exit_code": 0,
+  "status": "PASS"
+}

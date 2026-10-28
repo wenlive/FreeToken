@@ -1,0 +1,40 @@
+{
+  "fixture": {
+    "tokens": 17,
+    "hidden": 2048,
+    "intermediate": 512,
+    "experts": 5,
+    "top_k": 2,
+    "seed": 81
+  },
+  "fixture_source_sha256": "e9bace38a7eb3abb3fe3b3cefa8d642aabdb2d1282aa4e5eb790fec2da6649eb",
+  "unconditioned_final": {
+    "relative_l2": 0.00010212134657194838,
+    "max_abs": 4.0,
+    "max_reference": 1552.0,
+    "different_elements": 13,
+    "total": 34816
+  },
+  "first_accumulator_fp32": {
+    "relative_l2": 1.1226875074044074e-07,
+    "max_abs": 1.9073486328125e-05,
+    "max_reference": 69.2549819946289,
+    "different_elements": 24430,
+    "total": 34816
+  },
+  "first_accumulator_bf16": {
+    "relative_l2": 1.2703450011031236e-05,
+    "max_abs": 0.03125,
+    "max_reference": 69.5,
+    "different_elements": 2,
+    "total": 34816
+  },
+  "first_boundary_conditioned_final": {
+    "relative_l2": 9.859954298008233e-05,
+    "max_abs": 4.0,
+    "max_reference": 1552.0,
+    "different_elements": 6,
+    "total": 34816
+  },
+  "note": "Diagnostic preserves the original independent CPU reference and its pointwise failure."
+}

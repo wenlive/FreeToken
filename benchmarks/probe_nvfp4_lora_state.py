@@ -71,6 +71,16 @@ def main():
         result["checks"].append({"kind": "fresh_reload_and_request_order", "outputs": [generate(row) for row in selected]})
         TritonNvfp4MoEKernel.apply = original_apply
         result["expert_effect_at_fixed_input_and_routes"] = expert_audit
+        expected_layers = llm.engine.lora_info["expert_layers"] if llm.engine.lora_info else 0
+        if len(expert_audit) != expected_layers:
+            raise AssertionError("Did not observe every adapted expert layer")
+        if args.lora_path:
+            manifest = json.loads((Path(args.lora_path) / "manifest.json").read_text(encoding="utf-8"))
+            zero_control = manifest.get("test_control", {}).get("kind") == "all-lora-B-zero"
+            effects = [row["max_abs_expert_effect"] for row in expert_audit.values()]
+            if (zero_control and any(value != 0 for value in effects)
+                    or not zero_control and any(value <= 0 for value in effects)):
+                raise AssertionError("Expert effect does not match the real/zero adapter control")
         save()
         identity = llm.engine.model.__dict__.get("_lora_identity")
         for size in (768, 1024):

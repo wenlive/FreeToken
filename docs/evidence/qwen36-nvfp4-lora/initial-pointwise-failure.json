@@ -1,0 +1,14 @@
+{
+  "start": "2026-10-28T04:57:36.0316517Z",
+  "exit_code": 1,
+  "status": "FAIL",
+  "end": "2026-10-28T04:57:42.3132964Z",
+  "commands": [
+    "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime-lora\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/lora",
+    "tests/engine/test_offline_token_clock.py",
+    "-q"
+  ]
+}

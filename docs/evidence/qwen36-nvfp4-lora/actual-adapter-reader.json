@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "c3",
+    "identity": "f53aae060a18ccdd9e5f55865c0e39f26ebec7d3a38f5c6ef49f901905018564",
+    "linear": 250,
+    "expert_layers": 0,
+    "parameters": 19169280,
+    "bytes": 76677120,
+    "seconds": 11.25186609999946
+  },
+  {
+    "kind": "expert-r2",
+    "identity": "d96d764e8a6b27fe83e35b5f1e4cd54f9f41016217b78a0c7bedbe401b5cd2ae",
+    "linear": 250,
+    "expert_layers": 40,
+    "parameters": 176455680,
+    "bytes": 705822720,
+    "seconds": 11.872785099999419
+  }
+]

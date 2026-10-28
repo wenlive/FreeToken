@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "source_sha256": "1f676852baa4d579af49d58d7611f35703f4b496258d5fab40808ec15ee6c935",
+  "command": [
+    "C:\\workspace\\envs\\T-20261028-freetoken-lora\\runtime-lora\\Scripts\\python.exe",
+    "-B",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T045652Z-state-zero\\probe-source.py",
+    "--model",
+    "C:\\workspace\\models\\inputs\\qwen3.6-35b-a3b-nvfp4\\1355db6a052410cfd62085d94b58866fd0f2c3c5",
+    "--lora-path",
+    "C:\\workspace\\builds\\T-20261028-freetoken-lora\\20261028T044956Z-zero-b-control",
+    "--reference",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T042138Z-main-performance-and-quality-v3\\results\\results.json",
+    "--output",
+    "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T045652Z-state-zero\\results.json"
+  ],
+  "start": "2026-10-28T04:56:52.0582931Z",
+  "end": "2026-10-28T04:57:34.5134416Z",
+  "exit_code": 0
+}
