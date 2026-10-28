@@ -48,7 +48,16 @@ class _LinearTPImpl(BaseOP):
         self.quant_method.finalize(self)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.quant_method.apply(self, x)
+        return self._apply_with_lora(x)
+
+    def _apply_with_lora(self, x: torch.Tensor) -> torch.Tensor:
+        y = self.quant_method.apply(self, x)
+        parts = getattr(self, "_lora_parts", None)
+        if parts is not None:
+            from freetoken.lora.ops import linear_residual
+
+            y = linear_residual(x, y, parts)
+        return y
 
 
 class LinearReplicated(_LinearTPImpl):
@@ -148,7 +157,7 @@ class LinearOProj(_LinearTPImpl):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        y = self.quant_method.apply(self, x)
+        y = self._apply_with_lora(x)
         if self._tp_size > 1:
             y = self._comm.all_reduce(y)
         return y
@@ -175,7 +184,7 @@ class LinearRowParallel(_LinearTPImpl):
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        y = self.quant_method.apply(self, x)
+        y = self._apply_with_lora(x)
         if self._tp_size > 1:
             y = self._comm.all_reduce(y)
         return y
