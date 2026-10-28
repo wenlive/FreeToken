@@ -13,6 +13,7 @@ import triton.language as tl
 @triton.jit
 def _qsa_sparse_paged_gqa_splitk_kernel(
     q_ptr,
+    draft_positions_ptr,
     k_cache_ptr,
     v_cache_ptr,
     indices_ptr,
@@ -46,6 +47,7 @@ def _qsa_sparse_paged_gqa_splitk_kernel(
     NUM_TILES: tl.constexpr,
     BLOCK_M: tl.constexpr,
     BLOCK_N: tl.constexpr,
+    DENSE_DRAFT: tl.constexpr,
 ) -> None:
     # row * stride can overflow int32 for large row counts.
     row = tl.program_id(0).to(tl.int64)
@@ -73,8 +75,15 @@ def _qsa_sparse_paged_gqa_splitk_kernel(
     softmax_scale_log2: tl.constexpr = (HEAD_DIM**-0.5) * 1.4426950408889634
 
     # Dynamic bounds avoid padded main-loop iterations for uneven splits.
-    split_tile_start = split_id * NUM_TILES // NUM_SPLITS
-    split_tile_end = (split_id + 1) * NUM_TILES // NUM_SPLITS
+    if DENSE_DRAFT:
+        # 私有草稿 columns 是连续位置；只遍历当前 cell 已存在的 KV。
+        last_position = tl.load(draft_positions_ptr + row)
+        live_tiles = tl.minimum(NUM_TILES, tl.cdiv(last_position + 1, BLOCK_N))
+        split_tile_start = split_id * live_tiles // NUM_SPLITS
+        split_tile_end = (split_id + 1) * live_tiles // NUM_SPLITS
+    else:
+        split_tile_start = split_id * NUM_TILES // NUM_SPLITS
+        split_tile_end = (split_id + 1) * NUM_TILES // NUM_SPLITS
     for tile in range(split_tile_start, split_tile_end):
         columns = tile * BLOCK_N + column_offsets
         logical_token = tl.load(
@@ -91,6 +100,8 @@ def _qsa_sparse_paged_gqa_splitk_kernel(
             & (logical_token >= 0)
             & (logical_page < PAGE_TABLE_WIDTH)
         )
+        if DENSE_DRAFT:
+            valid &= logical_token <= last_position
         physical_page = tl.load(
             block_table_ptr
             + safe_request.to(tl.int64) * stride_table_req
@@ -239,9 +250,13 @@ def qsa_sparse_paged_attention(
     block_table: torch.Tensor,
     token_to_req: torch.Tensor,
     out: torch.Tensor | None = None,
-    *, num_stages: int = 2,
+    *, num_stages: int = 2, draft_positions: torch.Tensor | None = None,
 ) -> torch.Tensor:
-    """Run sparse GQA directly over paged BF16 K/V caches."""
+    """执行分页 GQA；draft_positions 仅用于连续 columns 的私有 MTP KV。
+
+    主模型保持原稀疏索引及固定 FP32 归约；草稿按 GPU cell 限制可见位置，
+    将有效 KV 均分给更多 split，仍使用 FP32 KV 和 tf32x3 计算。
+    """
 
     if q.ndim != 3 or k_cache.ndim != 4 or v_cache.shape != k_cache.shape:
         raise ValueError("QSA sparse attention received invalid Q/K/V shapes")
@@ -262,6 +277,9 @@ def qsa_sparse_paged_attention(
     assert q.stride(2) == k_cache.stride(3) == v_cache.stride(3) == 1
     assert logical_indices.stride(1) == block_table.stride(1) == 1
     assert token_to_req.stride(0) == 1
+    if draft_positions is not None and (draft_positions.shape != (q.shape[0],)
+            or draft_positions.dtype != torch.int32 or draft_positions.device != q.device):
+        raise ValueError("Dense draft positions must be device int32 with one cell per query")
     if out is None:
         out = torch.empty_like(q)
     assert out.shape == q.shape and out.dtype == q.dtype and out.stride(2) == 1
@@ -290,6 +308,8 @@ def qsa_sparse_paged_attention(
         # Keep the reduction independent of batching and prefix-cache hit length.
         # Small attention rounding changes can cross downstream Q8 boundaries.
         block_n, target_splits, partial_warps = 32, 8, 4
+    if draft_positions is not None:
+        block_n, target_splits, partial_warps = 32, 64, 4
     num_tiles = triton.cdiv(logical_indices.shape[1], block_n)
     # Avoid empty splits when the selection width is smaller than the profile.
     max_useful_splits = 1 << (num_tiles.bit_length() - 1)
@@ -314,6 +334,7 @@ def qsa_sparse_paged_attention(
     partial_grid = (q.shape[0], k_cache.shape[2], num_splits)
     _qsa_sparse_paged_gqa_splitk_kernel[partial_grid](
         q,
+        draft_positions,
         k_cache,
         v_cache,
         logical_indices,
@@ -347,6 +368,7 @@ def qsa_sparse_paged_attention(
         NUM_TILES=num_tiles,
         BLOCK_M=block_m,
         BLOCK_N=block_n,
+        DENSE_DRAFT=draft_positions is not None,
         num_warps=partial_warps,
         num_stages=num_stages,
     )

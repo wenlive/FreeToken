@@ -65,9 +65,10 @@ class DraftGraphs:
             torch.cuda.synchronize()
 
     def attend(self, q, positions):
-        """Mask future/private speculative cells on device before paged FP32 attention."""
-        indices = torch.where(self.columns <= positions[0], self.columns, -1).to(torch.int32)
-        return qsa_sparse_paged_attention(q.reshape(1, 24, 256), self.keys, self.values, indices, self.table, self.mapping, num_stages=1).reshape(1, 24, 1, 256)
+        """在草稿注意力内屏蔽未来 cell，省去索引张量并按有效长度分配工作。"""
+        return qsa_sparse_paged_attention(q.reshape(1, 24, 256), self.keys, self.values,
+            self.columns, self.table, self.mapping, num_stages=1,
+            draft_positions=positions).reshape(1, 24, 1, 256)
 
     def chain(self, residual, token, cell, count):
         """Launch one draft chain and read its candidates once on the host."""
