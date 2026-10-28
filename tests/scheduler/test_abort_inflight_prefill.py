@@ -35,6 +35,23 @@ from freetoken.scheduler.utils import PendingReq
 UID = 2
 
 
+def test_context_clipping_does_not_shrink_another_request_with_shared_sampling():
+    """Offline batches can share one SamplingParams; each prompt owns its clipped budget."""
+    from freetoken.message import UserMsg
+
+    _, _, _, _, pm, _, scheduler = _setup()
+    scheduler.engine = SimpleNamespace(max_seq_len=64, encoder_cache=None)
+    shared = SamplingParams(max_tokens=32)
+    long = UserMsg(uid=10, input_ids=torch.arange(56, dtype=torch.int32), sampling_params=shared)
+    short = UserMsg(uid=11, input_ids=torch.arange(8, dtype=torch.int32), sampling_params=shared)
+    Scheduler._process_one_msg(scheduler, long)
+    Scheduler._process_one_msg(scheduler, short)
+    pending = {req.uid: req for req in pm.pending_list}
+    assert pending[10].output_len == 8
+    assert pending[11].output_len == 32
+    assert shared.max_tokens == 32
+
+
 def _pool(num_slots=16):
     g = LinearGatedDeltaGroupConfig(
         name="linear", layer_ids=(0,), num_key_heads=2, num_value_heads=4,

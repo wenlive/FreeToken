@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from dataclasses import replace
 
 from typing import TYPE_CHECKING, List, NamedTuple, NoReturn, Set, Tuple, TypeAlias
 
@@ -446,9 +447,7 @@ class Scheduler(SchedulerIOMixin):
         self.send_result(reply)
 
     def _match_stop_str(self, req: Req) -> str | None:
-        """First stop string present in this request's generated tail, else None. Decodes
-        only a short suffix (bounded by the longest stop string's char length, so a stop of
-        N chars spans at most N tokens) to keep the per-step cost small."""
+        """Find the earliest stop in the generated tail, including byte-fallback tokens."""
         prompt_len = req.max_device_len - req.output_len
         return _match_stop_tail(self.tokenizer, req.sampling_params.stop_strs,
                                 req.input_ids, prompt_len)
@@ -548,7 +547,9 @@ class Scheduler(SchedulerIOMixin):
                 )
                 return
             if msg.sampling_params.max_tokens > max_output_len:
-                msg.sampling_params.max_tokens = max_output_len
+                # Offline batches can share SamplingParams. Clip only this
+                # request, without changing later prompts or caller state.
+                msg = replace(msg, sampling_params=replace(msg.sampling_params, max_tokens=max_output_len))
                 logger.warning_rank0(
                     f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
                 )
@@ -947,12 +948,19 @@ def _match_stop_tail(tokenizer, stop_strs, history, prompt_len):
     """Use the same output-only suffix for native tokens and speculative bundles."""
     if len(history) <= prompt_len:
         return None
-    max_chars = max(len(value) for value in stop_strs)
-    suffix = history[max(prompt_len, len(history) - max_chars - 1):]
+    # A Unicode character can span several byte-level tokens. Keep enough bytes,
+    # plus one boundary token, instead of assuming one token per character.
+    max_bytes = max(len(value.encode('utf-8')) for value in stop_strs)
+    suffix = history[max(prompt_len, len(history) - max_bytes - 1):]
     if isinstance(suffix, torch.Tensor):
         suffix = suffix.tolist()
     tail = tokenizer.decode(suffix)
-    return next((value for value in stop_strs if value in tail), None)
+    matched, first = None, len(tail)
+    for value in stop_strs:
+        position = tail.find(value)
+        if 0 <= position < first:
+            matched, first = value, position
+    return matched
 
 
 def _make_mrope_positions(batch: Batch, device: torch.device) -> torch.Tensor:
