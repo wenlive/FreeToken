@@ -1,0 +1,79 @@
+{
+  "scope": "Independent inference reference environment, not dense acceptance",
+  "reference_wheel_sha256": "c88677566e49ce41d5288c705f1606e3d788d5bedaff9c50c7ee1cf1cb2500ec",
+  "reference_wheel": "C:\\workspace\\artifacts\\freetoken\\0.1.3+speed.mtpdecode2.lora2\\20261028T085456Z\\freetoken-0.1.3+speed.mtpdecode2.lora2-cp312-cp312-win_amd64.whl",
+  "python": "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+  "steps": [
+    {
+      "command": [
+        "C:\\Users\\PC\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
+        "venv",
+        "--offline",
+        "--seed",
+        "--python",
+        "C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer"
+      ],
+      "exit_code": 0,
+      "step": "venv"
+    },
+    {
+      "command": [
+        "C:\\Users\\PC\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
+        "pip",
+        "install",
+        "--offline",
+        "--python",
+        "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+        "--no-deps",
+        "C:\\workspace\\tools\\downloads\\speed-packaging\\torch-2.11.0+cu130-cp312-cp312-win_amd64.whl",
+        "C:\\workspace\\artifacts\\freetoken\\0.1.3+speed.mtpdecode2.lora2\\20261028T085456Z\\freetoken-0.1.3+speed.mtpdecode2.lora2-cp312-cp312-win_amd64.whl"
+      ],
+      "exit_code": 0,
+      "step": "torch-reference-wheel"
+    },
+    {
+      "command": [
+        "C:\\Users\\PC\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
+        "pip",
+        "install",
+        "--offline",
+        "--python",
+        "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+        "--no-deps",
+        "torchvision==0.26.0+cu130",
+        "--index-url",
+        "https://download.pytorch.org/whl/cu130"
+      ],
+      "exit_code": 0,
+      "step": "torchvision"
+    },
+    {
+      "command": [
+        "C:\\Users\\PC\\AppData\\Local\\Microsoft\\WinGet\\Packages\\astral-sh.uv_Microsoft.Winget.Source_8wekyb3d8bbwe\\uv.exe",
+        "pip",
+        "install",
+        "--offline",
+        "--python",
+        "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+        "--no-deps",
+        "-r",
+        "C:\\workspace\\runs\\T-20261028-freetoken-lora\\20261028T035730Z-prepare-inference-environment\\requirements-pypi.txt"
+      ],
+      "exit_code": 0,
+      "step": "pinned-dependencies"
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+        "-m",
+        "pip",
+        "check"
+      ],
+      "exit_code": 0,
+      "step": "pip-check"
+    }
+  ],
+  "end": "2026-10-29T11:01:54.5450329Z",
+  "status": "PASS"
+}

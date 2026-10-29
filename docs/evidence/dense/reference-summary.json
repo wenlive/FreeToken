@@ -1,0 +1,12 @@
+{
+  "dense_acceptance": "NOT RUN",
+  "scope": "Reused MoE LoRA foundation only; no dense inference acceptance",
+  "seconds": 31.42,
+  "source_commit": "bc047ba7ab3945e987969c47858ca7e838f09445",
+  "test_log": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T110354Z-freetoken-reference-tests-text\\results\\pytest.log",
+  "tests": 40,
+  "test_log_sha256": "62c9f953c142776801bb53473cc2f24432992fa7f2e7db68901d3bf5c6d3cc91",
+  "source_comparison": "All package source text identical after only CRLF normalization; both raw hashes recorded",
+  "initial_source_check": "Failed before tests because 6 new Python files used CRLF checkout bytes instead of wheel LF bytes; failure retained",
+  "status": "PASS"
+}

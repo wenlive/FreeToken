@@ -22,6 +22,16 @@ No dense adapter, complete-model inference, throughput or quality result is
 claimed here. Commands, snapshots and measured outcomes will be linked when
 they exist. Large model files, checkpoints and logs stay outside Git.
 
+The reused foundation passed all 40 existing LoRA tests in the new isolated
+inference environment. This includes existing GPU operator and graph-replay
+checks, not a dense model inference run. The installed reference wheel's Python
+source text matches this checkout; six new files differ only in CRLF/LF checkout
+bytes, and both raw hashes are retained. The initial strict raw-source check
+failed before running tests and remains in its own run. See the
+[reference summary](evidence/dense/reference-summary.json),
+[test manifest](evidence/dense/reference-test-manifest.json), and
+[environment manifest](evidence/dense/reference-environment-manifest.json).
+
 The owner's current instructions explicitly authorize commits and final pushes
 to this independent fork branch. No PR or upstream issue is requested. This
 authorization overrides the inherited AGENTS instruction against agent pushes
