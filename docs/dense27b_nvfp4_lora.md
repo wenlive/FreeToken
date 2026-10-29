@@ -22,6 +22,19 @@ No dense adapter, complete-model inference, throughput or quality result is
 claimed here. Commands, snapshots and measured outcomes will be linked when
 they exist. Large model files, checkpoints and logs stay outside Git.
 
+The dense publish reader and flat-MLP binding are now implemented. The engine
+dispatches explicitly by layout, while the legacy `read_adapter` continues to
+reject the dense layout. Dense startup validates both PEFT file hashes, all
+three original checkpoint shards, declared metadata and tokenizer identities.
+It binds gate/up to separate output segments of the existing fused projection;
+GDN qkv/z and full-attention q/k/v use their existing segment geometry. The
+FP32 residual operators are unchanged. CPU-only contract and binding tests pass:
+29 tests, including the legacy cases and rejection of altered bytes, wrong
+targets, missing pairs, MoE binding and repeated binding. See the
+[CPU evidence](evidence/dense/dense-contract-cpu-summary.json).
+This still does not qualify complete-model inference. The source is tested
+through its explicit `PYTHONPATH`; the installed reference wheel is unchanged.
+
 The reused foundation passed all 40 existing LoRA tests in the new isolated
 inference environment. This includes existing GPU operator and graph-replay
 checks, not a dense model inference run. The installed reference wheel's Python

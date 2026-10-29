@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "scope": "CPU-only dense contract and binding; complete-model inference not yet qualified",
+  "tests": 29,
+  "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T132851Z-freetoken-dense-contract-cpu",
+  "manifest_sha256": "f837b85d1738a2442c5b134a134c7e6cf0b64a93f16121f265c8832aa855c0d8",
+  "legacy_dense_rejection": "PASS",
+  "dependencies_changed": false,
+  "installed_reference_wheel_changed": false
+}

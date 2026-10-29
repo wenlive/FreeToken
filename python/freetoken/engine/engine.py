@@ -340,11 +340,11 @@ class Engine:
         _adjust_config(config)
         adapter = None
         if config.lora_path is not None:
-            from freetoken.lora import read_adapter
+            from freetoken.lora import read_runtime_adapter
             from freetoken.lora.bind import validate_runtime
 
             validate_runtime(config)
-            adapter = read_adapter(config.lora_path, config.model_path)
+            adapter = read_runtime_adapter(config.lora_path, config.model_path)
         torch.manual_seed(42)
         self.stream = torch.cuda.Stream()
         torch.cuda.set_stream(self.stream)

@@ -91,3 +91,41 @@ def test_bind_rejects_tf32_without_changing_process_setting(monkeypatch):
     with pytest.raises(ValueError, match="IEEE matmul"):
         bind_adapter(model, bundle, "cpu")
     assert torch.backends.cuda.matmul.allow_tf32 is True
+
+
+def test_dense_flat_mlp_and_attention_bind_without_expert_mutation():
+    model = Qwen3_5ForCausalLM.__new__(Qwen3_5ForCausalLM)
+    gdn = NS(_split_in_proj=True, conv_dim=6, value_dim=4,
+             in_proj_qkvz=fake_linear(4, 10), out_proj=fake_linear(4, 4))
+    attn = NS(_qkv_split=[8, 2, 2], qkv_proj=fake_linear(4, 12), o_proj=fake_linear(4, 4))
+    def mlp():
+        return NS(gate_up_proj=fake_linear(4, 6), down_proj=fake_linear(3, 4))
+    layers = [NS(_is_linear=True, linear_attn=gdn, mlp=mlp()), NS(_is_linear=False, self_attn=attn, mlp=mlp())]
+    model.model = NS(layers=NS(op_list=layers))
+    pairs = {
+        "model.layers.0.linear_attn.in_proj_qkv": LoRAPair(torch.ones(2, 4), torch.ones(6, 2), 2),
+        "model.layers.0.linear_attn.in_proj_z": LoRAPair(torch.ones(2, 4), torch.full((4, 2), 3.), 2),
+        "model.layers.0.mlp.gate_proj": LoRAPair(torch.ones(2, 4), torch.full((3, 2), 4.), 2),
+        "model.layers.0.mlp.up_proj": LoRAPair(torch.ones(2, 4), torch.full((3, 2), 5.), 2),
+        "model.layers.1.self_attn.q_proj": LoRAPair(torch.ones(2, 4), torch.ones(8, 2), 2),
+        "model.layers.1.mlp.down_proj": LoRAPair(torch.ones(2, 3), torch.ones(4, 2), 2),
+    }
+    bundle = AdapterBundle(Path("."), "dense", {"layout_version": "nvfp4-lora-dense-v1"}, pairs, {}, 0, 0)
+    report = bind_adapter(model, bundle, "cpu")
+    assert report["linear_projections"] == 6 and report["packed_linear_operations"] == 4
+    packed = layers[0].mlp.gate_up_proj._lora_linear
+    assert packed.segments == ((0, 3, 2), (3, 6, 2))
+    assert torch.equal(packed.b[:3, :2], torch.full((3, 2), 8.))
+    assert torch.equal(packed.b[3:, 2:], torch.full((3, 2), 10.))
+    assert torch.count_nonzero(packed.b[:3, 2:]) == torch.count_nonzero(packed.b[3:, :2]) == 0
+    with pytest.raises(ValueError, match="immutable"):
+        bind_adapter(model, bundle, "cpu")
+
+
+def test_dense_binding_rejects_moe_before_installing_residuals():
+    model = Qwen3_5ForCausalLM.__new__(Qwen3_5ForCausalLM)
+    model.model = NS(layers=NS(op_list=[NS(mlp=NS(shared_expert=NS()))]))
+    bundle = AdapterBundle(Path("."), "dense", {"layout_version": "nvfp4-lora-dense-v1"}, {}, {}, 0, 0)
+    with pytest.raises(ValueError, match="MoE"):
+        bind_adapter(model, bundle, "cpu")
+    assert not hasattr(model, "_lora_identity")

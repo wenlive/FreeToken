@@ -16,6 +16,10 @@ def validate_runtime(config) -> None:
 
 
 def bind_adapter(model, bundle: AdapterBundle, device) -> dict:
+    if bundle.manifest.get("layout_version") == "nvfp4-lora-dense-v1":
+        from .dense_bind import bind_dense_adapter
+
+        return bind_dense_adapter(model, bundle, device)
     from freetoken.models.qwen3_5_moe.model import Qwen3_5ForCausalLM
     from freetoken.layers.quantization.moe.nvfp4 import TritonNvfp4MoEKernel
 
