@@ -282,6 +282,7 @@ class OffloadMoELayer(MoELayer):
             return executor.decode(self.layer_id, hidden_states, topk_weights, topk_ids)
         if cache.decode_target == "hybrid":
             return self._decode_hybrid(cache, hidden_states, topk_weights, topk_ids)
+        logical_ids = topk_ids.clone() if getattr(self, "_lora_experts", None) is not None else None
         cache.ensure_experts(self.layer_id, topk_ids)
         cache.copy_missing()
         return self._expert_gemm(
@@ -293,6 +294,7 @@ class OffloadMoELayer(MoELayer):
             n=None,
             alphas=cache.alphas_for_slots(self.layer_id),
             is_prefill=False,
+            logical_ids=logical_ids,
         )
 
     def decode_with_shared(self, hidden_states, router_logits, shared_forward):
@@ -441,13 +443,14 @@ class OffloadMoELayer(MoELayer):
         n: int | None,
         alphas: tuple[torch.Tensor, torch.Tensor] | None,
         is_prefill: bool,
+        logical_ids: torch.Tensor | None = None,
     ) -> torch.Tensor:
         if self.quant_method is not None:
             from freetoken.moe.legacy_format import canonical_role  # legacy_format imports this package
 
             view = ExpertView(
                 {canonical_role(name): t for name, t in zip(cache.bank_schema, views)},
-                slots=None if n is not None else topk_ids, n=n, alphas=alphas,
+                slots=None if n is not None else topk_ids, n=n, alphas=alphas, logical_ids=logical_ids,
             )
             return self.quant_method.apply(
                 hidden_states, topk_weights, topk_ids, view, layer=self, is_prefill=is_prefill

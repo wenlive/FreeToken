@@ -638,6 +638,9 @@ def parse_args(
         ),
     )
 
+    parser.add_argument("--lora-path", default=None,
+                        help="Validated nvfp4-lora-v1 artifact; one immutable adapter for this engine.")
+
     parser.add_argument(
         "--ple-backend",
         default=ServerArgs.ple_backend,

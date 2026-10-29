@@ -338,6 +338,13 @@ class Engine:
 
         self.device = bind_assigned_gpu(config.tp_info.rank)
         _adjust_config(config)
+        adapter = None
+        if config.lora_path is not None:
+            from freetoken.lora import read_adapter
+            from freetoken.lora.bind import validate_runtime
+
+            validate_runtime(config)
+            adapter = read_adapter(config.lora_path, config.model_path)
         torch.manual_seed(42)
         self.stream = torch.cuda.Stream()
         torch.cuda.set_stream(self.stream)
@@ -364,6 +371,13 @@ class Engine:
         with torch.device("meta"), torch_dtype(config.dtype):
             self.model = create_model(config.model_config)
         self._load_weights(config)
+        self.lora_info = None
+        if adapter is not None:
+            from freetoken.lora.bind import bind_adapter
+
+            self.lora_info = bind_adapter(self.model, adapter, self.device)
+            logger.info_rank0(f"LoRA loaded: {self.lora_info}")
+            del adapter
         self._host_tables_bytes = 0
         if config.gguf_embedding_host:
             if not hasattr(self.model, 'place_input_embedding'):

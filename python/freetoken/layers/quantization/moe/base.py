@@ -85,6 +85,7 @@ class ExpertView:
     slots: torch.Tensor | None = None
     n: int | None = None
     alphas: tuple[torch.Tensor, torch.Tensor] | None = None
+    logical_ids: torch.Tensor | None = None
 
 
 def fused_piece(pieces: dict[str, torch.Tensor], role: str) -> torch.Tensor:

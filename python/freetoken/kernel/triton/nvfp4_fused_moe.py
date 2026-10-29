@@ -55,6 +55,7 @@ def _decode_nvfp4_moe_kernel(
     topk_weights_ptr,  # [M, TOP_K] fp32
     topk_ids_ptr,      # [M, TOP_K] int32 -> cache slot
     lut_ptr,           # [16] fp32
+    delta_ptr,
     total_routes,
     N,
     K,
@@ -69,6 +70,7 @@ def _decode_nvfp4_moe_kernel(
     BLOCK_SIZE_KB: tl.constexpr,  # bytes processed per K-iter (covers 2*KB k-values)
     TOP_K: tl.constexpr,
     A_ROW_IS_ROUTE: tl.constexpr,
+    HAS_LORA: tl.constexpr,
     MUL_ROUTED_WEIGHT: tl.constexpr,
     compute_type: tl.constexpr,
 ):
@@ -123,6 +125,9 @@ def _decode_nvfp4_moe_kernel(
     g = tl.load(global_ptr + slot * stride_ge + offs_n * stride_gn, mask=n_mask, other=0.0).to(tl.float32)
     accumulator = accumulator * g
 
+    if HAS_LORA:
+        accumulator += tl.load(delta_ptr + route_id * N + offs_n, mask=n_mask, other=0.0)
+
     if MUL_ROUTED_WEIGHT:
         weight = tl.load(topk_weights_ptr + token_id * stride_tw_m + route_k * stride_tw_k)
         accumulator = accumulator * weight
@@ -165,6 +170,7 @@ def _decode_nvfp4_marlin_kernel(
     c_ptr,             # [M, TOP_K, N] output (compute dtype)
     topk_weights_ptr,  # [M, TOP_K] fp32
     topk_ids_ptr,      # [M, TOP_K] int32 -> cache slot
+    delta_ptr,
     total_routes,
     N,
     K,
@@ -180,6 +186,7 @@ def _decode_nvfp4_marlin_kernel(
     UNROLL: tl.constexpr,         # tiles per loop trip
     TOP_K: tl.constexpr,
     A_ROW_IS_ROUTE: tl.constexpr,
+    HAS_LORA: tl.constexpr,
     A_WIDE: tl.constexpr,         # activation rows are contiguous bf16/fp16, 16-byte aligned
     MUL_ROUTED_WEIGHT: tl.constexpr,
     compute_type: tl.constexpr,
@@ -284,6 +291,9 @@ def _decode_nvfp4_marlin_kernel(
     g = tl.load(global_ptr + slot * stride_ge + offs_n * stride_gn, mask=n_mask, other=0.0).to(tl.float32)
     accumulator = accumulator * g
 
+    if HAS_LORA:
+        accumulator += tl.load(delta_ptr + route_id * N + offs_n, mask=n_mask, other=0.0)
+
     if MUL_ROUTED_WEIGHT:
         weight = tl.load(topk_weights_ptr + token_id * stride_tw_m + route_k * stride_tw_k)
         accumulator = accumulator * weight
@@ -304,6 +314,7 @@ def _prefill_nvfp4_moe_kernel(
     expert_ids_ptr,    # cache slot per M-block
     num_tokens_post_padded_ptr,
     lut_ptr,
+    delta_ptr,
     N,
     K,
     EM,
@@ -318,6 +329,7 @@ def _prefill_nvfp4_moe_kernel(
     BLOCK_SIZE_N: tl.constexpr,
     BLOCK_SIZE_KB: tl.constexpr,
     GROUP_SIZE_M: tl.constexpr,
+    HAS_LORA: tl.constexpr,
     MUL_ROUTED_WEIGHT: tl.constexpr,
     top_k: tl.constexpr,
     compute_type: tl.constexpr,
@@ -378,6 +390,10 @@ def _prefill_nvfp4_moe_kernel(
 
     g = tl.load(global_ptr + slot * stride_ge + offs_bn * stride_gn).to(tl.float32)
     accumulator = accumulator * g[None, :]
+
+    if HAS_LORA:
+        accumulator += tl.load(delta_ptr + offs_token[:, None] * N + offs_bn[None, :],
+                               mask=token_mask[:, None], other=0.0)
 
     if MUL_ROUTED_WEIGHT:
         moe_weight = tl.load(topk_weights_ptr + offs_token * stride_tw, mask=token_mask, other=0)
