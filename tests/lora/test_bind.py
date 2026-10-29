@@ -129,3 +129,10 @@ def test_dense_binding_rejects_moe_before_installing_residuals():
     with pytest.raises(ValueError, match="MoE"):
         bind_adapter(model, bundle, "cpu")
     assert not hasattr(model, "_lora_identity")
+
+
+def test_dense_runtime_accepts_resolved_fused_strategy():
+    config = NS(model_config=NS(is_moe=False), tp_info=NS(size=1), use_dummy_weight=False,
+                moe_strategy='fused', moe_cpu_layers=None, mtp_runtime_path=None,
+                moe_q2_resident_experts=0, mm=NS(text_model_only=True))
+    validate_runtime(config)

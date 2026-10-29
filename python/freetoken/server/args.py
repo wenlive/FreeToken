@@ -639,7 +639,9 @@ def parse_args(
     )
 
     parser.add_argument("--lora-path", default=None,
-                        help="Validated nvfp4-lora-v1 artifact; one immutable adapter for this engine.")
+                        help="Validated MoE or dense NVFP4 LoRA artifact; one immutable adapter per engine.")
+    parser.add_argument("--dense-layer-streaming", action="store_true",
+                        help="Stream packed Qwen dense layers from pinned RAM; requires --cuda-graph-max-bs 0.")
 
     parser.add_argument(
         "--ple-backend",

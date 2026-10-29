@@ -9,10 +9,12 @@ from .ops import pack_experts, pack_linear
 
 
 def validate_runtime(config) -> None:
-    if (config.tp_info.size != 1 or config.use_dummy_weight or config.moe_strategy != "offload"
+    dense = getattr(getattr(config, "model_config", None), "is_moe", True) is False
+    strategy = "fused" if dense else "offload"
+    if (config.tp_info.size != 1 or config.use_dummy_weight or config.moe_strategy != strategy
             or config.moe_cpu_layers or config.mtp_runtime_path is not None
             or config.moe_q2_resident_experts or not config.mm.text_model_only):
-        raise ValueError("LoRA currently requires single-GPU text-only offload without CPU experts or MTP")
+        raise ValueError("LoRA currently requires single-GPU text-only dense or MoE offload without CPU experts or MTP")
 
 
 def bind_adapter(model, bundle: AdapterBundle, device) -> dict:

@@ -1,0 +1,816 @@
+{
+  "status": "PASS",
+  "scope": "Actual complete 64-layer Qwen3.8-27B FreeToken inference with the one-step qualification adapter only; final functional adapter not yet trained",
+  "runs": {
+    "freetoken-real": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T133958Z-freetoken-real-dense-qualification",
+      "status": "FAIL",
+      "exit_code": 1,
+      "manifest_sha256": "1388984655c7f8c62c5704a4f6a5ba8f1ec7d04bc1cd608c43bee4106d414cdd"
+    },
+    "freetoken-real-fixed": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134156Z-freetoken-real-dense-controls-fixed",
+      "status": "PASS",
+      "exit_code": 0,
+      "manifest_sha256": "d4c0949425a38a45e1500c5522547ffd1bb7b503de069b08d3ec317f94f2f1dd"
+    },
+    "freetoken-real-reload": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134341Z-freetoken-real-dense-fresh-reload",
+      "status": "PASS",
+      "exit_code": 0,
+      "manifest_sha256": "09be5ae98d105e8b68b20deec2721d1c5455752086629ae640411d0c8856a776"
+    },
+    "freetoken-reload-monitor": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134351Z-freetoken-dense-reload-monitor",
+      "status": "PASS",
+      "exit_code": 0,
+      "manifest_sha256": "f4ac007cc8439ba4d17ba6753d2f62b51ddc63a7f3870005a04e937af8a6c7cc"
+    },
+    "freetoken-stream-final-tests": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134524Z-freetoken-dense-stream-final-tests",
+      "status": "PASS",
+      "exit_code": 0,
+      "manifest_sha256": "dcdf1f142b540a39dfe118af5dec662a0c9400c9ee8c9178cdc5a2f73af860b7"
+    }
+  },
+  "source_tests": 54,
+  "real_controls": {
+    "status": "PASS",
+    "scope": "Complete 27B FreeToken streamed inference using the supplied publication",
+    "model": "C:\\workspace\\models\\inputs\\qwen3.8-27b-nvfp4\\319f741cce68d7914884900c138a1fbb70a42f30",
+    "adapter": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish",
+    "settings": {
+      "moe_strategy": "fused",
+      "dense_layer_streaming": true,
+      "max_running_req": 1,
+      "memory_ratio": 0.7,
+      "num_token_override": 2048,
+      "max_seq_len_override": 2048,
+      "max_extend_tokens": 512,
+      "cuda_graph_max_bs": 0,
+      "cache_type": "naive",
+      "lora_path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish"
+    },
+    "benchmark_sha256": "4ba263b909b970b581e5e02fc4434fd15db666c03814969428ba93a2de2250d3",
+    "load_seconds": 28.99908010000945,
+    "binding": {
+      "identity": "3077f3f055c3db55aaa515f050267dd6e11f33395883bac18b3197601455aebc",
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish",
+      "linear_projections": 400,
+      "expert_layers": 0,
+      "parameter_count": 108789760,
+      "parameter_bytes": 435159040,
+      "resident_bytes": 657457152,
+      "packed_linear_operations": 256
+    },
+    "streaming": {
+      "layers": 64,
+      "packed_host_payload_bytes": 16903096320,
+      "packed_host_all_pinned": true,
+      "gpu_slot_bytes": 267000512,
+      "slot_count": 1,
+      "copies": 128,
+      "copy_bytes": 33806192640,
+      "cuda_graphs": false
+    },
+    "host_allocator_after_load": {
+      "active_bytes.allocated": 17179869758,
+      "active_bytes.current": 17179869766,
+      "active_bytes.freed": -8,
+      "active_bytes.peak": 17179869763,
+      "active_requests.allocated": 297,
+      "active_requests.current": 289,
+      "active_requests.freed": 8,
+      "active_requests.peak": 292,
+      "allocated_bytes.allocated": 17179869213,
+      "allocated_bytes.current": 17179869213,
+      "allocated_bytes.freed": 0,
+      "allocated_bytes.peak": 17179869213,
+      "allocations.allocated": 68,
+      "allocations.current": 68,
+      "allocations.freed": 0,
+      "allocations.peak": 68,
+      "host_alloc_time.avg": 30215,
+      "host_alloc_time.count": 68,
+      "host_alloc_time.max": 37457,
+      "host_alloc_time.min": 11,
+      "host_alloc_time.total": 2054682,
+      "host_free_time.avg": 0,
+      "host_free_time.count": 0,
+      "host_free_time.max": 0,
+      "host_free_time.min": 0,
+      "host_free_time.total": 0,
+      "num_host_alloc": 68,
+      "num_host_free": 0
+    },
+    "outputs": [
+      {
+        "question": "What is 1+1? Answer with one digit only.",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          3710,
+          369,
+          220,
+          16,
+          10,
+          16,
+          30,
+          21134,
+          440,
+          799,
+          15262,
+          1132,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 1.390625,
+        "adapter_relative_logit_L2": 0.06536006182432175,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.5154590000020107,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.2058211999974446,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.1492934000125388,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.1471527000103379,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.131578200001968,
+            "forward_calls": 3
+          }
+        }
+      },
+      {
+        "question": "中国的首都是哪里？只回答城市名称。",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          96328,
+          102357,
+          96878,
+          99549,
+          10992,
+          96227,
+          97913,
+          97035,
+          98436,
+          1710,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 0.8125,
+        "adapter_relative_logit_L2": 0.07306969165802002,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1301222999900347,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1583122000010917,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.147268400003668,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1470433000067715,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1279549000028055,
+            "forward_calls": 3
+          }
+        }
+      },
+      {
+        "question": "Translate 你好 into English. Give only the translation.",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          26583,
+          220,
+          109266,
+          1083,
+          6163,
+          13,
+          20052,
+          1132,
+          279,
+          14053,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 0.921875,
+        "adapter_relative_logit_L2": 0.055895522236824036,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1287268000014592,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1502986999985296,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1646286000031978,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1499078999913763,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1270270999957575,
+            "forward_calls": 3
+          }
+        }
+      }
+    ],
+    "banks_unchanged": true,
+    "streaming_after_requests": {
+      "layers": 64,
+      "packed_host_payload_bytes": 16903096320,
+      "packed_host_all_pinned": true,
+      "gpu_slot_bytes": 267000512,
+      "slot_count": 1,
+      "copies": 3008,
+      "copy_bytes": 794445527040,
+      "cuda_graphs": false
+    },
+    "memory": {
+      "allocated": 4708139520,
+      "reserved": 5414846464,
+      "peak_allocated": 5199308288,
+      "peak_reserved": 5414846464,
+      "free": 10277093376
+    }
+  },
+  "fresh_process": {
+    "status": "PASS",
+    "scope": "Complete 27B FreeToken streamed inference using the supplied publication",
+    "model": "C:\\workspace\\models\\inputs\\qwen3.8-27b-nvfp4\\319f741cce68d7914884900c138a1fbb70a42f30",
+    "adapter": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish",
+    "settings": {
+      "moe_strategy": "fused",
+      "dense_layer_streaming": true,
+      "max_running_req": 1,
+      "memory_ratio": 0.7,
+      "num_token_override": 2048,
+      "max_seq_len_override": 2048,
+      "max_extend_tokens": 512,
+      "cuda_graph_max_bs": 0,
+      "cache_type": "naive",
+      "lora_path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish"
+    },
+    "benchmark_sha256": "4ba263b909b970b581e5e02fc4434fd15db666c03814969428ba93a2de2250d3",
+    "load_seconds": 28.52294179999444,
+    "binding": {
+      "identity": "3077f3f055c3db55aaa515f050267dd6e11f33395883bac18b3197601455aebc",
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T130041Z-d6-real-mechanism-step1\\results\\publish",
+      "linear_projections": 400,
+      "expert_layers": 0,
+      "parameter_count": 108789760,
+      "parameter_bytes": 435159040,
+      "resident_bytes": 657457152,
+      "packed_linear_operations": 256
+    },
+    "streaming": {
+      "layers": 64,
+      "packed_host_payload_bytes": 16903096320,
+      "packed_host_all_pinned": true,
+      "gpu_slot_bytes": 267000512,
+      "slot_count": 1,
+      "copies": 128,
+      "copy_bytes": 33806192640,
+      "cuda_graphs": false
+    },
+    "host_allocator_after_load": {
+      "active_bytes.allocated": 17179869758,
+      "active_bytes.current": 17179869766,
+      "active_bytes.freed": -8,
+      "active_bytes.peak": 17179869763,
+      "active_requests.allocated": 297,
+      "active_requests.current": 289,
+      "active_requests.freed": 8,
+      "active_requests.peak": 292,
+      "allocated_bytes.allocated": 17179869213,
+      "allocated_bytes.current": 17179869213,
+      "allocated_bytes.freed": 0,
+      "allocated_bytes.peak": 17179869213,
+      "allocations.allocated": 68,
+      "allocations.current": 68,
+      "allocations.freed": 0,
+      "allocations.peak": 68,
+      "host_alloc_time.avg": 25634,
+      "host_alloc_time.count": 68,
+      "host_alloc_time.max": 36427,
+      "host_alloc_time.min": 4,
+      "host_alloc_time.total": 1743148,
+      "host_free_time.avg": 0,
+      "host_free_time.count": 0,
+      "host_free_time.max": 0,
+      "host_free_time.min": 0,
+      "host_free_time.total": 0,
+      "num_host_alloc": 68,
+      "num_host_free": 0
+    },
+    "outputs": [
+      {
+        "question": "What is 1+1? Answer with one digit only.",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          3710,
+          369,
+          220,
+          16,
+          10,
+          16,
+          30,
+          21134,
+          440,
+          799,
+          15262,
+          1132,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 1.390625,
+        "adapter_relative_logit_L2": 0.06536006182432175,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.4738419999921462,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.2132172999990871,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.1886349999986123,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.1490461999928812,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "2",
+              "token_ids": [
+                17
+              ]
+            },
+            "wall_seconds": 1.137941499997396,
+            "forward_calls": 3
+          }
+        }
+      },
+      {
+        "question": "中国的首都是哪里？只回答城市名称。",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          96328,
+          102357,
+          96878,
+          99549,
+          10992,
+          96227,
+          97913,
+          97035,
+          98436,
+          1710,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 0.8125,
+        "adapter_relative_logit_L2": 0.07306969165802002,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1329981000017142,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1600920999917435,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1466024999972433,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1465537000040058,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "北京",
+              "token_ids": [
+                98116
+              ]
+            },
+            "wall_seconds": 1.1287860000011278,
+            "forward_calls": 3
+          }
+        }
+      },
+      {
+        "question": "Translate 你好 into English. Give only the translation.",
+        "prompt_tokens": [
+          248045,
+          846,
+          198,
+          26583,
+          220,
+          109266,
+          1083,
+          6163,
+          13,
+          20052,
+          1132,
+          279,
+          14053,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "checks": {
+          "zero_B_logits_E2": true,
+          "repeat_enabled_logits_E2": true,
+          "repeat_disabled_logits_E2": true,
+          "adapter_logits_effect_nonzero": true,
+          "base_semantic_sanity": true
+        },
+        "adapter_max_abs_logit_effect": 0.921875,
+        "adapter_relative_logit_L2": 0.055895522236824036,
+        "modes": {
+          "disabled": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1638819000072544,
+            "forward_calls": 3
+          },
+          "zero_B": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.150215500005288,
+            "forward_calls": 3
+          },
+          "enabled": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1472817000030773,
+            "forward_calls": 3
+          },
+          "enabled_repeat": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.15080499999749,
+            "forward_calls": 3
+          },
+          "disabled_repeat": {
+            "answer": {
+              "text": "Hello",
+              "token_ids": [
+                9419
+              ]
+            },
+            "wall_seconds": 1.1446480000013253,
+            "forward_calls": 3
+          }
+        }
+      }
+    ],
+    "banks_unchanged": true,
+    "streaming_after_requests": {
+      "layers": 64,
+      "packed_host_payload_bytes": 16903096320,
+      "packed_host_all_pinned": true,
+      "gpu_slot_bytes": 267000512,
+      "slot_count": 1,
+      "copies": 3008,
+      "copy_bytes": 794445527040,
+      "cuda_graphs": false
+    },
+    "memory": {
+      "allocated": 4708139520,
+      "reserved": 5414846464,
+      "peak_allocated": 5199308288,
+      "peak_reserved": 5414846464,
+      "free": 10277093376
+    },
+    "fresh_process_all_answers_and_logits_E2": true
+  },
+  "whole_card_monitor": {
+    "status": "PASS",
+    "scope": "Read-only whole-card polling; sampling may miss sub-second transients",
+    "watched_run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134341Z-freetoken-real-dense-fresh-reload",
+    "watched_exit_code": 0,
+    "watched_status": "PASS",
+    "samples": 60,
+    "minimum_free_MiB": 9838,
+    "maximum_used_MiB": 6158,
+    "errors": []
+  },
+  "external_logits": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134156Z-freetoken-real-dense-controls-fixed\\results\\inference\\logits-0.pt",
+      "sha256": "21efc03b45ee390790006863047f8139ec359697546bd2103b8b2489d06371b4",
+      "bytes": 2485860
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134156Z-freetoken-real-dense-controls-fixed\\results\\inference\\logits-1.pt",
+      "sha256": "f6eb7b0861631a9970e966164380e18354eb4cb3ce180aa3db281388a03d3a02",
+      "bytes": 2485860
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134156Z-freetoken-real-dense-controls-fixed\\results\\inference\\logits-2.pt",
+      "sha256": "f6d17bbb7033a9fabf9a62f9777144c9a749d4403cfc073a12e6146b31d743c6",
+      "bytes": 2485860
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134341Z-freetoken-real-dense-fresh-reload\\results\\inference\\logits-0.pt",
+      "sha256": "21efc03b45ee390790006863047f8139ec359697546bd2103b8b2489d06371b4",
+      "bytes": 2485860
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134341Z-freetoken-real-dense-fresh-reload\\results\\inference\\logits-1.pt",
+      "sha256": "f6eb7b0861631a9970e966164380e18354eb4cb3ce180aa3db281388a03d3a02",
+      "bytes": 2485860
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261029T134341Z-freetoken-real-dense-fresh-reload\\results\\inference\\logits-2.pt",
+      "sha256": "f6d17bbb7033a9fabf9a62f9777144c9a749d4403cfc073a12e6146b31d743c6",
+      "bytes": 2485860
+    }
+  ],
+  "original_failed_control": {
+    "status": "FAIL",
+    "checks": {
+      "zero_B_logits_E2": true,
+      "repeat_enabled_logits_E2": true,
+      "repeat_disabled_logits_E2": false,
+      "adapter_logits_effect_nonzero": true,
+      "base_semantic_sanity": true
+    },
+    "cause": "Harness matched only disabled, not disabled_repeat. The captured disabled_repeat logits equal enabled bytewise. Fixed only mode selection; original failure is retained.",
+    "wrapper_log_error": "Native C++ log contains mixed-encoding bytes; print uses errors=replace after preserving original log."
+  },
+  "numerical_policy": "Existing FreeToken W4A16 NVFP4 and W8A8 FP8 kernels, FP16 runtime NVFP4 globals and unchanged FP32 LoRA residuals. No whole-engine E2 claim vs training BF16 arithmetic.",
+  "limits": [
+    "Eager single-stream single-GPU text only; no CUDA graphs or parallel calls",
+    "Three short greedy sanity prompts; not a quality benchmark or throughput campaign",
+    "Final trained adapter and Qwen3.6 inference still require qualification",
+    "No new dependencies, native Windows; installed reference wheel unchanged, explicit source PYTHONPATH"
+  ]
+}

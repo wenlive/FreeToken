@@ -1,51 +1,78 @@
 # Dense 27B NVFP4 LoRA inference
 
-Work in progress, requested by the fork owner on 2026-10-29. This branch starts
-from `wenlive/FreeToken` main `f417397f339050e6f400e75db0f1e6acbc40f13a`.
-It is separate from the training branch
-`siltok-ai/nvfp4lora:feat/dense27b-lora` and preserves the original fork main.
+Complete Qwen3.8-27B streamed inference works on native Windows and an RTX5070Ti
+16GB with the one-step qualification adapter. This is an intermediate result:
+the final functional100-step adapter and the Qwen3.6 campaign remain pending.
+No branch has been pushed yet.
 
-The first implementation step reuses the exact Python adapter infrastructure and
-LoRA tests from `feat/qwen36-nvfp4-lora` at
-`b354e6df87108143d1277f62520ce070806e03a2`. That implementation was qualified
-for MoE in the previous task. Copying its source is not a new inference result.
-The original MoE reader still rejects `nvfp4-lora-dense-v1` at this step.
+This independent `feat/dense27b-nvfp4-lora` branch starts from the owner's fork
+main `f417397f339050e6f400e75db0f1e6acbc40f13a`. The initial Python LoRA
+foundation is copied exactly from the earlier MoE feature at `b354e6d`;
+the [40-test reference evidence](evidence/dense/reference-summary.json) records
+that baseline. The training branch is `siltok-ai/nvfp4lora:feat/dense27b-lora`.
+Speed and fork main are unchanged.
 
-Remaining work includes a separate dense publish contract, gate/up/down segment
-mapping, the original NVFP4 base identity, actual memory admission, adapter
-on/off and zero-B controls, fresh-process reload, and real text generation.
-The existing resident dense model is larger than this machine's 16GB GPU;
-complete-model inference cannot be claimed from operator tests. A bounded dense
-layer streaming path must be qualified if needed for this hardware.
+## Runtime
 
-No dense adapter, complete-model inference, throughput or quality result is
-claimed here. Commands, snapshots and measured outcomes will be linked when
-they exist. Large model files, checkpoints and logs stay outside Git.
+The engine dispatches explicitly by publish layout. The original MoE
+`read_adapter` continues to reject `nvfp4-lora-dense-v1`. The separate dense
+reader verifies the two PEFT file hashes, base identity, fixed revision, all
+three deployment shard hashes, metadata and tokenizer identities at startup.
+The binder maps dense gate/up, GDN qkv/z and attention q/k/v into the existing
+fused operators, retaining their segment boundaries and FP32 residuals.
 
-The dense publish reader and flat-MLP binding are now implemented. The engine
-dispatches explicitly by layout, while the legacy `read_adapter` continues to
-reject the dense layout. Dense startup validates both PEFT file hashes, all
-three original checkpoint shards, declared metadata and tokenizer identities.
-It binds gate/up to separate output segments of the existing fused projection;
-GDN qkv/z and full-attention q/k/v use their existing segment geometry. The
-FP32 residual operators are unchanged. CPU-only contract and binding tests pass:
-29 tests, including the legacy cases and rejection of altered bytes, wrong
-targets, missing pairs, MoE binding and repeated binding. See the
-[CPU evidence](evidence/dense/dense-contract-cpu-summary.json).
-This still does not qualify complete-model inference. The source is tested
-through its explicit `PYTHONPATH`; the installed reference wheel is unchanged.
+`--dense-layer-streaming --cuda-graph-max-bs 0` enables bounded inference.
+The existing checkpoint reader loads CPU tensors; existing quant finalizers
+process one layer at a time. Finalized packed bytes reside in64 pinned CPU
+banks. Each layer copies to one shared CUDA slot on the compute stream before
+its original forward. Stream ordering prevents overwriting a live reader.
+Shared generated RoPE caches remain resident and are excluded from these banks.
+The inference engine retains its existing embedding/head policy; the training
+CPU embedding and training numerical policy are unchanged.
 
-The reused foundation passed all 40 existing LoRA tests in the new isolated
-inference environment. This includes existing GPU operator and graph-replay
-checks, not a dense model inference run. The installed reference wheel's Python
-source text matches this checkout; six new files differ only in CRLF/LF checkout
-bytes, and both raw hashes are retained. The initial strict raw-source check
-failed before running tests and remains in its own run. See the
-[reference summary](evidence/dense/reference-summary.json),
-[test manifest](evidence/dense/reference-test-manifest.json), and
-[environment manifest](evidence/dense/reference-environment-manifest.json).
+This opt-in path supports one GPU, eager execution and text only. CUDA graphs,
+other architectures, MoE layers and calls from another CUDA stream are rejected.
+It retains the existing FreeToken W4A16 NVFP4 / W8A8 FP8 kernels and FP16 runtime
+NVFP4 globals. It does not claim whole-engine E2 equivalence to training BF16
+arithmetic. There are no new dependencies or quantization kernels.
+
+## Measured qualification
+
+[Actual-run evidence](evidence/dense/streamed-real-qualification-summary.json)
+contains source snapshots, exact commands, the original failed harness and the
+passing reruns. Large checkpoints, raw logits and logs remain outside Git with
+hashes. Tests use the source through explicit `PYTHONPATH`; the installed
+reference wheel is unchanged.
+
+| Check | Result |
+| --- | --- |
+| Source LoRA regression |54 tests pass, including the original40 and dense reader/binding/streaming controls |
+| Real base |RadixArk/Qwen3.8-27B-NVFP4@319f741cce68d7914884900c138a1fbb70a42f30; startup verifies original3 shard hashes |
+| Actual adapter |400 source projections,800 tensors,108,789,760 FP32 elements;435,159,040B source /657,457,152B fused resident factors |
+| Streaming |64 banks,16,903,096,320B packed payload; physical pinned allocator16GiB plus29 auxiliary bytes; one267,000,512B GPU slot |
+| Greedy sanity |2,北京,Hello; each request uses the checkpoint's non-thinking template |
+| Zero B |Complete first-step vocabulary logits byte-E2 vs disabled adapter for all3 prompts |
+| Repeat |Enabled and disabled answers/logits byte-E2 across reordered controls |
+| Adapter effect |Nonzero on all3 prompts; relative logit L2 0.06536/0.07307/0.05590 |
+| Fresh process |All3 prompts x5 modes: answers and full first-step vocabulary logits byte-E2 |
+| Frozen banks |All64 bank SHA256 values unchanged after requests |
+| GPU |First passing run peak allocated5,199,308,288B/reserved5,414,846,464B; fresh-run whole-card minimum9838MiB free |
+
+The first real harness incorrectly left `disabled_repeat` enabled. Captured
+logits prove that it equals the enabled case bytewise. Only the mode selector
+was fixed; the original run remains FAIL. The log printer also handles native
+mixed-encoding output while preserving original log bytes. Neither change
+alters inference arithmetic or the streaming implementation.
+
+The reusable native validation entry is `benchmarks/check_dense_lora.py`:
+`--model <original-checkpoint> --adapter <publish> --output <new-directory>`.
+A new process with `--reference <previous-output>` verifies byte-E2 reload.
+Use the isolated inference environment and this checkout's `python` directory
+on `PYTHONPATH`. Exact recorded commands and package/source identities are in
+the evidence manifests. This short sanity run is not a quality or throughput
+benchmark. Final trained-adapter verification remains required.
 
 The owner's current instructions explicitly authorize commits and final pushes
-to this independent fork branch. No PR or upstream issue is requested. This
-authorization overrides the inherited AGENTS instruction against agent pushes
-for this owner's fork only; it does not authorize publishing upstream.
+to this independent fork branch. This overrides the inherited AGENTS restriction
+for this owner's fork only. No PR, upstream issue or upstream publication is
+requested.

@@ -562,6 +562,14 @@ class Engine:
         return tp_cpu_group
 
     def _load_weights(self, config: EngineConfig) -> None:
+        if config.dense_layer_streaming:
+            from freetoken.lora.dense_stream import load_streamed_dense_weights
+
+            with _weight_load_context():
+                self.dense_streaming_info = load_streamed_dense_weights(
+                    self.model, config, self.device, _materialize_loaded_weight_state_dict)
+            logger.info_rank0(f"Dense layer streaming: {self.dense_streaming_info}")
+            return
         if config.active_encoders and not config.use_dummy_weight and ftw_lacks_vision(config.model_path):
             raise ValueError(
                 f"{config.model_path} holds no vision encoder tensors: it was converted by a build before this "

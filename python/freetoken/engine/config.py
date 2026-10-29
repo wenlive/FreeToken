@@ -34,6 +34,7 @@ class EngineConfig:
     quant_backend: str | None = None
     # One immutable adapter per engine; all request and prefix caches share it.
     lora_path: str | None = None
+    dense_layer_streaming: bool = False
     # PLE table backend: "disk" (default) reads rows from the checkpoint files per fill, "pinned" preloads the table into page-locked host RAM.
     ple_backend: str = "disk"
     ple_row_cache_rows: int = 0
