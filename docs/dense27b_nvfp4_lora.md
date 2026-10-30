@@ -1,8 +1,8 @@
 # Dense 27B NVFP4 LoRA inference
 
-Complete Qwen3.8-27B streamed inference works on native Windows and an RTX5070Ti
-16GB with the one-step qualification adapter. This is an intermediate result:
-the final functional100-step adapter and the Qwen3.6 campaign remain pending.
+Complete Qwen3.8-27B streamed inference passes with the actual100-step adapter on
+native Windows and an RTX5070Ti16GB, including full-corpus, cache-rebuild and
+fresh-process E2 checks. The Qwen3.6 short campaign remains pending.
 No branch has been pushed yet.
 
 This independent `feat/dense27b-nvfp4-lora` branch starts from the owner's fork
@@ -36,7 +36,7 @@ It retains the existing FreeToken W4A16 NVFP4 / W8A8 FP8 kernels and FP16 runtim
 NVFP4 globals. It does not claim whole-engine E2 equivalence to training BF16
 arithmetic. There are no new dependencies or quantization kernels.
 
-## Measured qualification
+## Historical one-step qualification
 
 [Actual-run evidence](evidence/dense/streamed-real-qualification-summary.json)
 contains source snapshots, exact commands, the original failed harness and the
@@ -70,23 +70,44 @@ A new process with `--reference <previous-output>` verifies byte-E2 reload.
 Use the isolated inference environment and this checkout's `python` directory
 on `PYTHONPATH`. Exact recorded commands and package/source identities are in
 the evidence manifests. This short sanity run is not a quality or throughput
-benchmark. Final trained-adapter verification remains required.
+benchmark. The actual100-step campaign is recorded below.
 
-The final native campaign is prepared with `--corpus <the matching dense corpus>`
-and an explicit `--batch-size` (planned4). It compares disabled/enabled outputs
+The final native campaign uses `--corpus <the matching dense corpus>`
+and explicit `--batch-size 4`. It compares disabled/enabled outputs
 on all50 heldout canaries and300 replay questions, verifies corpus hashes and
 base identity, and checks all answers again in a fresh process. The native
-Qwen3.8 final check will receive `--minimum-canary-accuracy 0.9`, matching the
+Qwen3.8 final check uses `--minimum-canary-accuracy 0.9`, matching the
 owner's approved dense canary target; enabled replay exact matches must not
 decrease relative to this native engine's disabled baseline. These are
-preregistered final checks, not results. Native exact answer counts are reported
+preregistered checks; Qwen3.8 has now passed them. Native exact answer counts are reported
 separately from the training NLL gate, since answer match rate is not NLL.
 
 `--check-cache-rebuild` additionally changes KV/GDN capacities and restores the
 original capacities while the scheduler is idle. The three saved enabled
 answers and vocabulary logits must remain byte-E2, the adapter identity must
 stay fixed, and the raw CPU bank hashes must stay unchanged. This integration
-check is prepared for the final campaign and has not run at this commit.
+check passes in both actual Qwen3.8 final-adapter processes.
+
+## Actual Qwen3.8 100-step adapter
+
+[Final-adapter evidence](evidence/dense/qwen38-final-summary.json) records two
+fresh processes and the actual training publication. Adapter SHA256 is
+`206ea21afe34cecb4cfd9d87e62fd1ff003b9a1c8a035de8a87f9db7943258d2`.
+
+| Check | Result |
+| --- | --- |
+| Native holdout | Disabled0/50, enabled50/50 |
+| Native replay | Disabled300/300, enabled300/300 |
+| Adapter controls | Three prompts x disabled/zero-B/enabled/repeats; zero B equals disabled byte-E2 and enabled has nonzero logit effect |
+| New process | All700 quality answer records and three prompts' complete first-step vocabulary logits byte-E2 |
+| Cache rebuild | KV pages1536/GDN slots16, then original2048/4; answers/logits E2 and adapter identity unchanged |
+| Frozen source | All64 packed CPU bank hashes unchanged |
+| GPU first process | Peak allocated5,179,500,032B/reserved5,679,087,616B |
+
+Only summaries and manifests enter Git. Raw700-answer records, full logits,
+weights and logs remain outside Git with SHA256. The qualification ran while
+fixed-source CPU acquisition could proceed; wall times are not an inference
+speed benchmark. Qwen3.6 and the final combined summary remain unfinished.
 
 The owner's current instructions explicitly authorize commits and final pushes
 to this independent fork branch. This overrides the inherited AGENTS restriction
