@@ -232,8 +232,11 @@ penalties. The HumanEval grader passes all 50 canonical solutions. Dataset commi
 and license hashes, prompts, token ids and per-case grading are recorded.
 Official HF using the same NVFP4 checkpoint also scores **47/50 GSM8K** and
 **49/50 HumanEval**. All 100 tokenized prompts match. Four per-case judgments
-differ across the two implementations, with equal aggregate scores. The official
-BF16/FP8 comparisons remain in progress; quantization loss is not yet established.
+differ across the two implementations, with equal aggregate scores. Official
+BF16 scores **48/50 GSM8K** and **48/50 HumanEval** with the same 100 tokenized
+prompts and protocol. Native NVFP4 differs by -2 and +2 percentage points,
+respectively. FP8 and token-cap sensitivity comparisons remain in progress;
+the final quantization decision is pending those results.
 The [HumanEval failure audit](evidence/clover-nvfp4/quality-failure-audit.json)
 confirms a raw-token indentation error in the native case and an unsorted
 two-pointer algorithm in the HF case. Grades and original outputs are preserved.
