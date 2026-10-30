@@ -42,6 +42,11 @@ def _read_shard_odirect_parallel(path: str, workers: int, chunk: int) -> mmap.mm
     threads): the kernel issues the parallel preads at high queue depth. DMA bypasses the
     page cache, so there's nothing to drop afterwards."""
     size = os.path.getsize(path)
+    if not hasattr(os, "O_DIRECT") or not hasattr(os, "preadv"):
+        # Windows has neither POSIX direct I/O nor preadv. A copy-on-write map
+        # preserves the writable buffer contract without modifying the shard.
+        with open(path, "rb") as source:
+            return mmap.mmap(source.fileno(), 0, access=mmap.ACCESS_COPY)
     asize = ((size + _ODIRECT_BLK - 1) // _ODIRECT_BLK) * _ODIRECT_BLK
     buf = mmap.mmap(-1, asize)
     mv = memoryview(buf)
@@ -87,7 +92,7 @@ def iter_expert_tensors_parallel(
     Peak host memory is ~(prefetch+1) shards + the banks the caller fills. Order is
     shard-then-header order (NOT global), so the consumer must place by ``name``.
     """
-    from freetoken.models.loader import safetensors_weight_map
+    from freetoken.models.loader import drop_page_cache, safetensors_weight_map
     from freetoken.utils.hf import download_hf_weight
 
     model_path = download_hf_weight(model_path)  # resolve hub id -> local (parity w/ serial)
@@ -107,12 +112,7 @@ def iter_expert_tensors_parallel(
             for shard in shard_list:
                 path = os.path.join(model_path, shard)
                 if drop_cache:
-                    try:
-                        fd = os.open(path, os.O_RDONLY)
-                        os.posix_fadvise(fd, 0, 0, os.POSIX_FADV_DONTNEED)
-                        os.close(fd)
-                    except OSError:
-                        pass
+                    drop_page_cache(path)
                 buf = _read_shard_odirect_parallel(path, workers, chunk)  # overlaps placement
                 n = struct.unpack("<Q", bytes(buf[:8]))[0]
                 hdr = json.loads(bytes(buf[8:8 + n]))
