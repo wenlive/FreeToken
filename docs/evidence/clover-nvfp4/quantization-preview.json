@@ -1,0 +1,59 @@
+{
+  "scope": "Official HF, Count first all-mask block only; not an aggregate downstream quality claim",
+  "cases": [
+    {
+      "width": 8,
+      "precision": "nvfp4",
+      "argmax_agreement": 1.0,
+      "mean_kl": 0.006938267033547163,
+      "bf16_above095": 6,
+      "quant_above095": 5,
+      "quant_logits_sha256": "971b5e762a86ed172878eb1fe39d1e138fe344e904b2b8b50b50cdc42250f774"
+    },
+    {
+      "width": 8,
+      "precision": "fp8",
+      "argmax_agreement": 1.0,
+      "mean_kl": 0.008328469470143318,
+      "bf16_above095": 6,
+      "quant_above095": 3,
+      "quant_logits_sha256": "278f034371c06be09701625ec4f6c36d09c7a9bc0fc92075141ea7e6845b832a"
+    },
+    {
+      "width": 16,
+      "precision": "nvfp4",
+      "argmax_agreement": 0.875,
+      "mean_kl": 0.04446686804294586,
+      "bf16_above095": 7,
+      "quant_above095": 9,
+      "quant_logits_sha256": "acbcdf5565a71f661b96b51c33ee50aef927328fccdf467204487cfe0e216ee8"
+    },
+    {
+      "width": 16,
+      "precision": "fp8",
+      "argmax_agreement": 0.9375,
+      "mean_kl": 0.032735973596572876,
+      "bf16_above095": 7,
+      "quant_above095": 3,
+      "quant_logits_sha256": "f3b42e23553e009f19b939d60702c61b7bfeb16f56dccd2998092e45b8c040d6"
+    },
+    {
+      "width": 32,
+      "precision": "nvfp4",
+      "argmax_agreement": 0.875,
+      "mean_kl": 0.11456428468227386,
+      "bf16_above095": 9,
+      "quant_above095": 8,
+      "quant_logits_sha256": "f5940013ed3c010063ec470ae3534354fa6d6902ca570ba8e9bbb30fbc443553"
+    },
+    {
+      "width": 32,
+      "precision": "fp8",
+      "argmax_agreement": 0.84375,
+      "mean_kl": 0.09441480785608292,
+      "bf16_above095": 9,
+      "quant_above095": 6,
+      "quant_logits_sha256": "23204cf6e976fe062c76b0589c0c8f0f49f5aacc610698b4699f16762a2f8d73"
+    }
+  ]
+}

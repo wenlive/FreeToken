@@ -5,6 +5,7 @@ for them; other checkpoints of the same architectures work too.
 
 | Model | HF checkpoints |
 |---|---|
+| Clover-35B-A3B-Preview | [DiffuSpace/Clover-35B-A3B-Preview](https://huggingface.co/DiffuSpace/Clover-35B-A3B-Preview); [local routed-expert NVFP4 conversion and qualified Windows configuration](clover-nvfp4.md). Causal is the default; experimental selfspec and LowConfidence modes use the Python API. |
 | DeepSeek-V4.1-Flash | [deepseek-ai/DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) |
 | DeepSeek-V4 | [deepseek-ai/DeepSeek-V4-Flash-0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) |
 | GLM-5.3-Flash | [RedHatAI/GLM-5.3-Flash-NVFP4](https://huggingface.co/RedHatAI/GLM-5.3-Flash-NVFP4) |

@@ -184,5 +184,6 @@
     }
   ],
   "raw_results_sha256": "c07de824c5885ac04c8c93184cecf09bb08452293e348ec2eb0ba37d1ae3fec1",
+  "cpu_reported_isa": "scalar",
   "scope": "Actual checkpoint banks, fixed synthetic routes, five layers; median 15 trials after 3 warmups; all misses vs all hits; not end-to-end"
 }
