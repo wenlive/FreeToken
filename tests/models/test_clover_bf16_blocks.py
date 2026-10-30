@@ -33,6 +33,11 @@ def block_pair(request):
     layer=request.param
     prefix=f'model.layers.{layer}'
     config=parse_config(cfg)
+    previous_rope_device=rotary._ROPE_DEVICE
+    def restore_rope():
+        rotary.set_rope_device(previous_rope_device)
+        rotary.get_rope.cache_clear()
+    request.addfinalizer(restore_rope)
     rotary.set_rope_device(torch.device('cuda'))
     rotary.get_rope.cache_clear()
     with torch.device('meta'),torch_dtype(torch.bfloat16):

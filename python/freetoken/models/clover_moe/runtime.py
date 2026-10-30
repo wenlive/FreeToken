@@ -198,19 +198,35 @@ class CloverRuntime:
                 hypothetical.commit(inputs[row + 1 : row + 2].long())
         return scores
 
-    def _snapshot_boundary(self, req, position, committed, delivered, limit, anchor_id):
+    def _snapshot_boundary(
+        self,
+        req,
+        position,
+        committed,
+        delivered,
+        limit,
+        anchor_id,
+        *,
+        emitted_start=None,
+    ):
         if req.mamba_ping_pong is None:
+            return
+        anchor = req.toolcall_anchor_len
+        if anchor is not None and req.mamba_last_track_seqlen == anchor:
+            # The cache manager donates this frozen anchor when the request ends.
             return
         boundary = ((position + committed) // 64) * 64
         if boundary <= position:
             boundary = None
-        anchor = req.toolcall_anchor_len
         if anchor is None and anchor_id is not None:
             for index, token in enumerate(delivered):
                 if token == anchor_id and not (
                     index == len(delivered) - 1 and limit.finished
                 ):
-                    anchor = position + index + 2
+                    # Selfspec keeps one pending input before the emitted tokens;
+                    # denoise has already flushed it and starts at the clean prefix.
+                    start = position + 1 if emitted_start is None else emitted_start
+                    anchor = start + index + 1
                     req.toolcall_anchor_len = anchor
                     break
         if (
@@ -393,7 +409,13 @@ class CloverRuntime:
             with self.engine.ctx.forward_batch(verify):
                 self.engine.model.forward()
             self._snapshot_boundary(
-                req, old_device, len(tokens) - 1, delivered, limit, anchor_id
+                req,
+                old_device,
+                len(tokens) - 1,
+                delivered,
+                limit,
+                anchor_id,
+                emitted_start=old_device,
             )
             self.transactions.commit(
                 self.engine.linear_state_pool,

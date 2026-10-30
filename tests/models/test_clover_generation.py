@@ -125,3 +125,68 @@ def test_lowconfidence_strict_threshold_fallback_and_frozen_positions():
     assert steps == [1, 7] and block.tolist() == [0] + [1] * 7
     assert calls[0].tolist() == [3] * 8 and calls[1].tolist() == [0] + [3] * 7
     assert state.length == 0  # tentative tokens never enter the repetition history
+
+
+@pytest.mark.parametrize("mode", ["selfspec", "denoise"])
+def test_tool_anchor_uses_the_emitted_tokens_absolute_position(mode):
+    from freetoken.models.clover_moe.runtime import CloverRuntime
+
+    runtime = object.__new__(CloverRuntime)
+    pool = SimpleNamespace(
+        conv_states=torch.zeros(2, 4, 1), recurrent_states=torch.zeros(2, 4, 1, 1)
+    )
+    runtime.engine = SimpleNamespace(
+        config=SimpleNamespace(page_size=64), linear_state_pool=pool
+    )
+    runtime.transactions = SimpleNamespace(
+        conv=torch.arange(32.0).reshape(2, 16, 1),
+        recurrent=torch.arange(32.0).reshape(2, 16, 1, 1),
+    )
+    req = SimpleNamespace(
+        mamba_ping_pong=[1, 2],
+        mamba_next_track_idx=0,
+        mamba_last_track_seqlen=None,
+        toolcall_anchor_len=None,
+    )
+    # The anchor ends absolute prefix 64 in both cases. Selfspec has an input at
+    # position 60; denoise starts emitting directly at position 60.
+    anchor_index = 2 if mode == "selfspec" else 3
+    delivered = [0] * (7 if mode == "selfspec" else 8)
+    delivered[anchor_index] = 99
+    kwargs = {} if mode == "selfspec" else {"emitted_start": 60}
+    runtime._snapshot_boundary(
+        req, 60, 7, delivered, SimpleNamespace(finished=False), 99, **kwargs
+    )
+    assert req.toolcall_anchor_len == req.mamba_last_track_seqlen == 64
+    assert req.mamba_next_track_idx == 1
+    torch.testing.assert_close(pool.conv_states[:, 1], runtime.transactions.conv[:, 3])
+    torch.testing.assert_close(
+        pool.recurrent_states[:, 1], runtime.transactions.recurrent[:, 3]
+    )
+
+
+def test_tool_anchor_snapshot_survives_later_block_boundaries():
+    from freetoken.models.clover_moe.runtime import CloverRuntime
+
+    runtime = object.__new__(CloverRuntime)
+    pool = SimpleNamespace(
+        conv_states=torch.full((2, 4, 1), 7.0),
+        recurrent_states=torch.full((2, 4, 1, 1), 11.0),
+    )
+    runtime.engine = SimpleNamespace(
+        config=SimpleNamespace(page_size=64), linear_state_pool=pool
+    )
+    runtime.transactions = SimpleNamespace(
+        conv=torch.zeros(2, 16, 1), recurrent=torch.zeros(2, 16, 1, 1)
+    )
+    req = SimpleNamespace(
+        mamba_ping_pong=[1, 2],
+        mamba_next_track_idx=1,
+        mamba_last_track_seqlen=64,
+        toolcall_anchor_len=64,
+    )
+    runtime._snapshot_boundary(
+        req, 124, 8, [0] * 8, SimpleNamespace(finished=False), 99
+    )
+    assert req.mamba_last_track_seqlen == 64 and req.mamba_next_track_idx == 1
+    assert torch.all(pool.conv_states == 7) and torch.all(pool.recurrent_states == 11)
