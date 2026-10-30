@@ -230,8 +230,10 @@ The native checkpoint scores **47/50 GSM8K** and **49/50 HumanEval** on the fixe
 first-50 subsets, greedy causal, thinking disabled, 512-token cap and checkpoint
 penalties. The HumanEval grader passes all 50 canonical solutions. Dataset commit
 and license hashes, prompts, token ids and per-case grading are recorded.
-Official same-arithmetic NVFP4/BF16/FP8 comparisons remain in progress; these
-native scores alone do not complete the quantization quality gate.
+Official HF using the same NVFP4 checkpoint also scores **47/50 GSM8K** and
+**49/50 HumanEval**. All 100 tokenized prompts match. Four per-case judgments
+differ across the two implementations, with equal aggregate scores. The official
+BF16/FP8 comparisons remain in progress; quantization loss is not yet established.
 All three native GSM8K misses reached the 512-token cap. A 1024-token sensitivity
 run is queued for capped cases in each precision; EOS-terminated cases can be
 reused because the larger unused cap cannot change their forward arithmetic.
