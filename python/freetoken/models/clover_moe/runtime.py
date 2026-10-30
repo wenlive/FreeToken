@@ -58,6 +58,10 @@ class CloverRuntime:
         self.states.clear()
 
     def before_native(self, batch):
+        if batch.is_prefill:
+            # A previous W32 window owns ~2 GiB. Release it before a new prompt's
+            # full-layer prefill workspace, then allocate lazily at verification.
+            self.transactions = None
         return None
 
     def after_native(self, batch, native_state):
@@ -226,6 +230,8 @@ class CloverRuntime:
         req.mamba_next_track_idx = 1 - req.mamba_next_track_idx
 
     def _require_block_backend(self, manager):
+        if self.engine.config.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
         if not manager.is_hybrid:
             raise ValueError("Clover block generation requires the hybrid_radix cache")
         cache = self.engine.moe_offload_cache
@@ -326,6 +332,7 @@ class CloverRuntime:
     def _advance_without_sampling(self, batch):
         """Commit prompt or pending boundary token without inventing an output."""
         engine = self.engine
+        self.before_native(batch)
         use_graph = engine.graph_runner.can_use_cuda_graph(batch)
         with (
             engine.ctx.forward_batch(batch),

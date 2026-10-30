@@ -113,4 +113,4 @@ def test_full_bf16_preview_block_matches_official(block_pair,monkeypatch,width):
     actual=moe_preview(native.mlp,mixed,ctx)+residual
     error=float((actual.float()-expected[0].float()).norm()/expected.float().norm())
     print(json.dumps(dict(layer=layer,width=width,relative_l2=error)))
-    assert error < .02
+    assert error < .01

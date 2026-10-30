@@ -4,7 +4,8 @@ import re
 from freetoken.layers.quantization import QuantKind, get_quant_config
 from freetoken.models.nvfp4_banks import Nvfp4ExpertSourceSpec
 from freetoken.models.loader import ShardReader
-from freetoken.models.qwen3_5_moe.weight import _is_gemma_norm, iter_weights as _qwen_weights, iter_weights_parallel
+from freetoken.models.qwen3_5_moe.weight import _is_gemma_norm, iter_weights as _qwen_weights
+from freetoken.models.qwen3_5_moe.weight import iter_weights_parallel as iter_weights_parallel
 
 
 def iter_weights(model_path, device, *, include_moe_experts, include_non_moe, include_vision=True):

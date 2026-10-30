@@ -48,12 +48,61 @@ def main():
     parser.add_argument("--cache-slots", type=int, default=4096)
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
+    parser.add_argument("--capture-first-logits", action="store_true")
+    parser.add_argument(
+        "--bf16-dense-baseline",
+        action="store_true",
+        help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
+    )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     modes = parse_modes(args.modes)
     selected = args.prompts.split(",")
     if any(name not in PROMPTS for name in selected):
         raise ValueError("Unknown prompt name")
+    if args.bf16_dense_baseline:
+        from dataclasses import replace
+        from freetoken.models.register import _MODEL_REGISTRY
+        from freetoken.utils import cached_load_hf_config
+
+        hf = cached_load_hf_config(args.model)
+        for architecture in hf.architectures:
+            spec = _MODEL_REGISTRY[architecture]
+            _MODEL_REGISTRY[architecture] = replace(
+                spec,
+                unquantized_modules=spec.unquantized_modules
+                + (
+                    "*.self_attn.*",
+                    "*.linear_attn.*",
+                    "*.mlp.shared_expert.*",
+                    "lm_head",
+                ),
+            )
+        # The regular loader keeps FP8 qkv|z separate from BF16 b|a. A forced
+        # all-BF16 benchmark fuses them, so dequantize each stored part first.
+        # This process-local adapter never changes the production Qwen loader.
+        from freetoken.models.qwen3_5_moe import weight as qwen_weight
+
+        original_reader = qwen_weight._DenseReader
+
+        class Bf16BenchmarkReader(original_reader):
+            def _emit(self, target, parts, stored):
+                if stored is not None and self.scheme(target) is None:
+                    parts = [
+                        {
+                            "weight": qwen_weight._dequant(
+                                stored, self._check(target, stored, part)
+                            )
+                        }
+                        if part["weight"].dtype
+                        not in (torch.bfloat16, torch.float16, torch.float32)
+                        else {"weight": part["weight"]}
+                        for part in parts
+                    ]
+                    stored = None
+                return super()._emit(target, parts, stored)
+
+        qwen_weight._DenseReader = Bf16BenchmarkReader
     started = time.perf_counter()
     llm = LLM(
         args.model,
@@ -81,6 +130,7 @@ def main():
             warmups=args.warmups,
             repeats=args.repeats,
             penalties="disabled" if args.no_penalties else "checkpoint defaults",
+            bf16_dense_baseline=args.bf16_dense_baseline,
         ),
         prompts={},
         runs=[],
@@ -98,6 +148,15 @@ def main():
 
     llm.send_result = receive
     cache = llm.engine.moe_offload_cache
+    captured = []
+    sample = llm.engine.sampler.sample
+
+    def capture(logits, arguments):
+        if args.capture_first_logits and not captured:
+            captured.append(logits[0].detach().float().cpu())
+        return sample(logits, arguments)
+
+    llm.engine.sampler.sample = capture
     per_expert = expert_bytes(cache)
     result["expert_payload_bytes"] = per_expert
 
@@ -129,8 +188,11 @@ def main():
                 rows = []
                 for repeat in range(args.warmups + args.repeats):
                     arrivals.clear()
+                    captured.clear()
                     cache.reset_stats()
-                    llm.engine.mtp_runtime.rounds.clear()
+                    runtime = llm.engine.mtp_runtime
+                    if runtime is not None and hasattr(runtime, "rounds"):
+                        runtime.rounds.clear()
                     torch.cuda.synchronize()
                     start = time.perf_counter()
                     answer = llm.generate(
@@ -151,7 +213,13 @@ def main():
                     moved = (
                         stats["missing_per_layer"] * stats["layer_calls"] * per_expert
                     )
-                    rounds = list(llm.engine.mtp_runtime.rounds)
+                    rounds = (
+                        list(runtime.rounds)
+                        if runtime is not None and hasattr(runtime, "rounds")
+                        else []
+                    )
+                    if captured:
+                        torch.save(captured[0], args.output / f"{name}-first-logits.pt")
                     count = len(answer["token_ids"])
                     first_burst = sum(stamp == times[0] for stamp in times)
                     row = dict(
@@ -167,6 +235,7 @@ def main():
                         ttft_seconds=times[0],
                         token_arrival_seconds=times,
                         first_burst_tokens=first_burst,
+                        expert_stats=stats,
                         decode_tokens_per_second=(len(times) - first_burst)
                         / (times[-1] - times[0])
                         if times[-1] > times[0]
@@ -175,7 +244,7 @@ def main():
                         expert_miss_rate=stats["miss_rate"],
                         expert_cache_hit_rate=1 - stats["miss_rate"],
                         decode_expert_copy_payload_bytes=int(round(moved)),
-                        copy_metric="algorithmic H2D expert payload; excludes prefill and bus overhead",
+                        copy_metric="algorithmic H2D expert payload for union/decode calls, including sparse prefill; excludes full-layer transfers and bus overhead",
                         rounds=rounds,
                         tokens_per_round=statistics.mean(
                             r["emitted_tokens"] for r in rounds
