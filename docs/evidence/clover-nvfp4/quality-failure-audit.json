@@ -1,0 +1,40 @@
+{
+  "scope": "Audit only; original outputs and grades preserved",
+  "cases": [
+    {
+      "backend": "native",
+      "index": 12,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 40, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 19, in main\n    tree=ast.parse(code)\n         ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ast.py\", line 52, in parse\n    return compile(source, filename, mode, flags,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<unknown>\", line 17\n    longest_str = strings[0]\n                            ^\nIndentationError: unindent does not match any outer indentation level\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-v1\\results.json",
+      "source_sha256": "208656a76e929e2707e0be009491e744aeacdb3c9e5a82f79ea51001b9fb0d47",
+      "reason": "Raw first token is unindented if; both standard concatenation and the grader separator fail parsing",
+      "first_token_id": 331,
+      "parsing": [
+        {
+          "separator": "''",
+          "valid": false,
+          "error": "IndentationError"
+        },
+        {
+          "separator": "'\\n'",
+          "valid": false,
+          "error": "IndentationError"
+        }
+      ]
+    },
+    {
+      "backend": "hf-nvfp4",
+      "index": 40,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 71, in <module>\n  File \"<humaneval>\", line 62, in check\nAssertionError\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-nvfp4-first50-v1\\results.json",
+      "source_sha256": "690612cdead4c8fed2b4f0f1506fe177855568a60bd539f44d586ad1349adc6c",
+      "reason": "The two-pointer implementation never sorts the input; behavioral assertion fails"
+    }
+  ]
+}

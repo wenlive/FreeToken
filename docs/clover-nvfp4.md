@@ -234,6 +234,9 @@ Official HF using the same NVFP4 checkpoint also scores **47/50 GSM8K** and
 **49/50 HumanEval**. All 100 tokenized prompts match. Four per-case judgments
 differ across the two implementations, with equal aggregate scores. The official
 BF16/FP8 comparisons remain in progress; quantization loss is not yet established.
+The [HumanEval failure audit](evidence/clover-nvfp4/quality-failure-audit.json)
+confirms a raw-token indentation error in the native case and an unsorted
+two-pointer algorithm in the HF case. Grades and original outputs are preserved.
 All three native GSM8K misses reached the 512-token cap. A 1024-token sensitivity
 run is queued for capped cases in each precision; EOS-terminated cases can be
 reused because the larger unused cap cannot change their forward arithmetic.
