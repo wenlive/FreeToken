@@ -13,6 +13,12 @@ on-demand expert storage; they are correctness oracles, not serving benchmarks.
 datasets with `fetch_clover_eval_data.py`. All model paths must already exist.
 See [the Clover guide](../docs/clover-nvfp4.md) for settings, measurements and limits.
 
+`check_qwen4_mtp.py` runs the existing local Flash-Next GGUF/MTP bundle with MTP
+OFF or ON. `--code-root` selects and verifies the imported checkout, allowing a
+matched frozen-main/feature regression. It hashes protected model metadata and
+requires actual draft rounds with four reserved slots; each mode needs a separate
+process. This is a compatibility check, with the qualified per-mode resources.
+
 **`bench_decode_moe.py`** — bs=1 decode tok/s of a served MoE model. Spawns `ft serve`
 per backend and times token arrivals over streamed `/v1/chat/completions`, so numbers
 include the full serving path. AIME-25 prompt, checkpoint-recommended sampling.
