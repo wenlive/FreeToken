@@ -35,6 +35,58 @@
       "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-nvfp4-first50-v1\\results.json",
       "source_sha256": "690612cdead4c8fed2b4f0f1506fe177855568a60bd539f44d586ad1349adc6c",
       "reason": "The two-pointer implementation never sorts the input; behavioral assertion fails"
+    },
+    {
+      "backend": "hf-bf16",
+      "index": 32,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 72, in main\n    tree = ast.parse(code)\n           ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ast.py\", line 52, in parse\n    return compile(source, filename, mode, flags,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<unknown>\", line 25\n    ```python\n    ^\nSyntaxError: invalid syntax\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-bf16-first50-v1\\results.json",
+      "source_sha256": "9bff7f72114edfb529f4dc5e42b716ead3161031e8b6eab05401145a8ac97196",
+      "reason": "The 512-token cap truncates a fenced function before completion; 1024-token sensitivity is pending"
+    },
+    {
+      "backend": "hf-bf16",
+      "index": 40,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 70, in <module>\n  File \"<humaneval>\", line 61, in check\nAssertionError\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-bf16-first50-v1\\results.json",
+      "source_sha256": "9bff7f72114edfb529f4dc5e42b716ead3161031e8b6eab05401145a8ac97196",
+      "reason": "The two-pointer implementation never sorts the input; behavioral assertion fails"
+    },
+    {
+      "backend": "hf-fp8",
+      "index": 32,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 78, in <module>\n  File \"<humaneval>\", line 75, in check\nAssertionError\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-fp8-first50-v1\\results.json",
+      "source_sha256": "5da0d35da41b52a73e6bac7ed1585f8f3a66047b2a208ae109dfa7c8b9e350f6",
+      "reason": "Binary search assumes the polynomial is increasing; a negative leading coefficient reverses the sign test",
+      "counterexample": {
+        "coefficients": [
+          -1,
+          -1
+        ],
+        "expected_root": -1,
+        "actual_root": 1000000.0
+      }
+    },
+    {
+      "backend": "hf-fp8",
+      "index": 40,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 70, in <module>\n  File \"<humaneval>\", line 61, in check\nAssertionError\n"
+      },
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-fp8-first50-v1\\results.json",
+      "source_sha256": "5da0d35da41b52a73e6bac7ed1585f8f3a66047b2a208ae109dfa7c8b9e350f6",
+      "reason": "The two-pointer implementation never sorts the input; behavioral assertion fails"
     }
   ]
 }

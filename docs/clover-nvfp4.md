@@ -6,8 +6,9 @@ architecture. Routed experts use NVFP4 W4A16, group 16; all other parameters sta
 BF16. The measured tensor payload is 23,017,708,416 bytes (21.44 GiB).
 
 The checkpoint and three decoding modes run on Windows, RTX 5070 Ti 16 GB and
-Ryzen 7 9700X / 64 GB RAM. Downstream BF16/FP8 quality qualification is still in
-progress. Treat block decoding as experimental: changing the BF16 batch shape
+Ryzen 7 9700X / 64 GB RAM. Initial BF16/NVFP4/FP8 first-50 quality comparisons are
+complete; token-cap sensitivity and recipe checks remain in progress. Treat block
+decoding as experimental: changing the BF16 batch shape
 can change near-tied argmax decisions even with exact acceptance.
 
 ## Convert local weights
@@ -230,20 +231,29 @@ also only approximate: JSON W16 reaches 4.19 and is still slower than causal.
 
 ## Downstream quality gate
 
-The native checkpoint scores **47/50 GSM8K** and **49/50 HumanEval** on the fixed
-first-50 subsets, greedy causal, thinking disabled, 512-token cap and checkpoint
-penalties. The HumanEval grader passes all 50 canonical solutions. Dataset commit
-and license hashes, prompts, token ids and per-case grading are recorded.
-Official HF using the same NVFP4 checkpoint also scores **47/50 GSM8K** and
-**49/50 HumanEval**. All 100 tokenized prompts match. Four per-case judgments
-differ across the two implementations, with equal aggregate scores. Official
-BF16 scores **48/50 GSM8K** and **48/50 HumanEval** with the same 100 tokenized
-prompts and protocol. Native NVFP4 differs by -2 and +2 percentage points,
-respectively. FP8 and token-cap sensitivity comparisons remain in progress;
-the final quantization decision is pending those results.
+The fixed first-50 subsets use greedy causal decoding, thinking disabled, a
+512-token cap and checkpoint penalties. The HumanEval grader passes all 50
+canonical solutions. Dataset commit and license hashes, prompts, token ids and
+per-case grading are recorded.
+
+| Runtime / routed weights | GSM8K | HumanEval |
+|---|---:|---:|
+| FreeToken / NVFP4 | 47/50 | 49/50 |
+| Official HF / same NVFP4 checkpoint | 47/50 | 49/50 |
+| Official HF / BF16 | 48/50 | 48/50 |
+| Official HF / per-channel FP8 | 48/50 | 48/50 |
+
+All 100 tokenized prompts, dataset sources and protocols match across the four
+conditions. Four per-case judgments differ between native and HF NVFP4, with
+equal aggregate scores. NVFP4 differs from BF16 by -2 and +2 percentage points,
+respectively; these initial subset results do not trigger the design's roughly
+3-point quality-drop gate. The final quantization decision remains pending cap
+sensitivity and the causal/preview recipe checks.
 The [HumanEval failure audit](evidence/clover-nvfp4/quality-failure-audit.json)
-confirms a raw-token indentation error in the native case and an unsorted
-two-pointer algorithm in the HF case. Grades and original outputs are preserved.
+classifies raw-token indentation, truncation and algorithm errors across all four
+conditions. The FP8 polynomial solver fails a probe with a negative leading
+coefficient: it returns 1,000,000 instead of -1 for coefficients [-1, -1].
+Grades and original outputs are preserved.
 All three native GSM8K misses reached the 512-token cap. A 1024-token sensitivity
 run is queued for capped cases in each precision; EOS-terminated cases can be
 reused because the larger unused cap cannot change their forward arithmetic.

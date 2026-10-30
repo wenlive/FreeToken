@@ -1,5 +1,5 @@
 {
-  "state": "pending FP8 and token-cap sensitivity comparison",
+  "state": "pending token-cap sensitivity comparison",
   "warning": "Fixed first-50 subsets; native score alone does not establish quantization loss",
   "runs": [
     {
@@ -159,6 +159,60 @@
       },
       "raw_results": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-bf16-first50-v1\\results.json",
       "raw_results_sha256": "9bff7f72114edfb529f4dc5e42b716ead3161031e8b6eab05401145a8ac97196"
+    },
+    {
+      "backend": "hf",
+      "precision": "fp8",
+      "state": "complete",
+      "protocol": {
+        "tokens": 512,
+        "limit": 50,
+        "selection": "first N unshuffled",
+        "thinking": false,
+        "temperature": 0,
+        "penalties": "checkpoint defaults",
+        "grader": "GSM final number; HumanEval restricted subprocess 5s"
+      },
+      "sources": [
+        {
+          "repository": "openai/grade-school-math",
+          "commit": "3101c7d5072418e28b9008a6636bde82a006892c",
+          "path": "grade_school_math/data/test.jsonl",
+          "url": "https://raw.githubusercontent.com/openai/grade-school-math/3101c7d5072418e28b9008a6636bde82a006892c/grade_school_math/data/test.jsonl",
+          "raw_sha256": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "decoded_sha256": "3730d312f6e3440559ace48831e51066acaca737f6eabec99bccb9e4b3c39d14",
+          "source_rows": 1319,
+          "selection": "first 50, unshuffled",
+          "license_sha256": "86bbb73e855821d7c401912fd4bf82e34313e6e3b6fd6f909f2b6cc9e209a53b"
+        },
+        {
+          "repository": "openai/human-eval",
+          "commit": "b9453e8f1865df0a0057a1383767caa400acfbcf",
+          "path": "data/HumanEval.jsonl.gz",
+          "url": "https://raw.githubusercontent.com/openai/human-eval/b9453e8f1865df0a0057a1383767caa400acfbcf/data/HumanEval.jsonl.gz",
+          "raw_sha256": "b796127e635a67f93fb35c04f4cb03cf06f38c8072ee7cee8833d7bee06979ef",
+          "decoded_sha256": "1d49078ba3e2b196b9344535bef34a43021f038fad9561d6ee7c53450609a6a2",
+          "source_rows": 164,
+          "selection": "first 50, unshuffled",
+          "license_sha256": "bcba3de214851cce46ed5af42d6698044616eeace887c3231bc7a20474ab639e"
+        }
+      ],
+      "summary": {
+        "gsm8k": {
+          "completed": 50,
+          "correct": 48,
+          "score": 0.96,
+          "capped": 5
+        },
+        "humaneval": {
+          "completed": 50,
+          "correct": 48,
+          "score": 0.96,
+          "capped": 0
+        }
+      },
+      "raw_results": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-fp8-first50-v1\\results.json",
+      "raw_results_sha256": "5da0d35da41b52a73e6bac7ed1585f8f3a66047b2a208ae109dfa7c8b9e350f6"
     }
   ],
   "same_nvfp4_comparison": {
@@ -240,6 +294,28 @@
       "better_indices": [
         32
       ],
+      "worse_indices": []
+    },
+    {
+      "candidate": "hf-fp8",
+      "baseline": "hf-bf16",
+      "dataset": "gsm8k",
+      "all_50_prompt_ids_and_hashes_equal": true,
+      "score_delta_pp": 0,
+      "better_indices": [
+        12
+      ],
+      "worse_indices": [
+        8
+      ]
+    },
+    {
+      "candidate": "hf-fp8",
+      "baseline": "hf-bf16",
+      "dataset": "humaneval",
+      "all_50_prompt_ids_and_hashes_equal": true,
+      "score_delta_pp": 0,
+      "better_indices": [],
       "worse_indices": []
     }
   ]
