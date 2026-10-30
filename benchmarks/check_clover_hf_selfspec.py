@@ -7,6 +7,7 @@ Replay here is an oracle implementation detail, never a serving benchmark.
 
 import argparse
 import copy
+import hashlib
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -38,7 +39,20 @@ def main():
     )
     eos = set(gen.eos_token_id)
     native = json.loads(args.native_results.read_text(encoding="utf-8"))
-    result = dict(state="running", cases=[])
+    result = dict(
+        state="running",
+        checkpoint=str(args.checkpoint),
+        source=str(args.source),
+        settings=dict(
+            token_cap=args.tokens,
+            prompts=args.prompts.split(","),
+            widths=[8, 16],
+            temperature=0,
+            penalties="checkpoint defaults",
+            accept_rule="exact",
+        ),
+        cases=[],
+    )
 
     def save():
         (args.output / "results.json").write_text(
@@ -125,6 +139,10 @@ def main():
                 state.commit(torch.tensor(new, device="cuda"))
             row = dict(
                 prompt=name,
+                prompt_ids=ids,
+                prompt_sha256=hashlib.sha256(
+                    json.dumps(ids, separators=(",", ":")).encode()
+                ).hexdigest(),
                 width=width,
                 token_ids=response,
                 rounds=rounds,

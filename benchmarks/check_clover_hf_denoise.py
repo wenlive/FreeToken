@@ -1,6 +1,7 @@
 """Unmodified official LowConfidence generate with bounded quantized experts."""
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import time
@@ -32,7 +33,21 @@ def main():
     )
     namespace = vars(official_modules(args.source)[0])
     native = json.loads(args.native_results.read_text(encoding="utf-8"))
-    result = dict(state="running", precision=args.precision, cases=[])
+    result = dict(
+        state="running",
+        precision=args.precision,
+        checkpoint=str(args.checkpoint),
+        source=str(args.source),
+        settings=dict(
+            token_cap=args.tokens,
+            prompts=args.prompts.split(","),
+            widths=list(map(int, args.widths.split(","))),
+            temperature=0,
+            threshold=0.95,
+            penalties="checkpoint defaults",
+        ),
+        cases=[],
+    )
     raw = json.loads((args.checkpoint / "generation_config.json").read_text())
 
     def save():
@@ -95,6 +110,10 @@ def main():
                     pending = [True] * width
             row = dict(
                 prompt=name,
+                prompt_ids=ids,
+                prompt_sha256=hashlib.sha256(
+                    json.dumps(ids, separators=(",", ":")).encode()
+                ).hexdigest(),
                 width=width,
                 token_ids=tokens,
                 blocks=blocks,
