@@ -1,0 +1,36 @@
+{
+  "scope": "Legacy linear-state slots, MTP prefix sharing and rejected-tail recycling; no full model loaded",
+  "passed": 41,
+  "skipped": 0,
+  "warnings": 1,
+  "source_commit": "a8bae1b3e1c5b2b3e7449f5c3de3dd4e22ba8277",
+  "command": [
+    "C:\\workspace\\envs\\T-20261030-clover-nvfp4\\runtime\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/kvcache/test_linear_state_pool_alloc.py",
+    "tests/kvcache/test_mtp_pool.py",
+    "tests/scheduler/test_hybrid_cache_manager.py"
+  ],
+  "manifest": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261030T214158Z-legacy-mtp-pool-and-prefix-cpu-regression\\manifest.json",
+    "sha256": "f4f6d70fae744462538e8134f0db994dad1b7619100982f2c16ef4a4a3e250fe"
+  },
+  "stdout": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261030T214158Z-legacy-mtp-pool-and-prefix-cpu-regression\\stdout.log",
+    "sha256": "a008b4f5e330f68ec9bc6e946e4b56c7b02e9cde33b4ccbb8e522fa636796d13"
+  },
+  "device_scope": "CPU cases plus both explicit CUDA parameterizations in test_mtp_pool.py",
+  "visibility_audit": {
+    "visible": "",
+    "parsed": [],
+    "available": true,
+    "count": 0
+  },
+  "visibility_source": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261030T214300Z-cpu-regression-device-visibility-audit\\stdout.log",
+    "sha256": "d2a6b3b6a905fef7fbb7208aa5360193ef2ac9e267f0e425b330846370952dd4"
+  },
+  "note": "The run name originally intended CPU-only execution. On this Windows build empty CUDA_VISIBLE_DEVICES gives device_count=0 but is_available=True; the CUDA cases therefore execute. Do not describe this as CPU-only."
+}

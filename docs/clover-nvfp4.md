@@ -142,6 +142,10 @@ repository's numerical kernel bodies. The latest focused Qwen4/MTP, Qwen3.5,
 NVFP4, copy and Clover run passes: **260 passed, 146 skipped, 47 subtests passed**.
 Skips include unavailable optional backends and weight-gated tests. This does not
 turn the unrelated historical broad-suite failures into passing results.
+A separate [pool/prefix regression](evidence/clover-nvfp4/legacy-pool-regression.json)
+passes all 41 cases, including both CUDA parameterizations. It exercises the
+original four reserved MTP slots, shared prefixes and rejected-tail recycling.
+The real Flash-Next main-versus-feature comparison remains queued.
 
 ## Short-prompt offload
 
