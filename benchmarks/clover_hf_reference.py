@@ -41,13 +41,17 @@ class ExpertStorage:
         self.config = json.loads((self.root / "config.json").read_text(encoding="utf-8"))
         self.device, self.limit, self.precision = device, cache_bytes, precision
         self.cache = OrderedDict()
+        self.handles = {}
         self.bytes = 0
         self.reads = self.hits = 0
 
     def read(self, name, selection=None):
-        with safetensors.safe_open(self.root / self.weight_map[name], framework="pt", device="cpu") as handle:
-            tensor = handle.get_tensor(name) if selection is None else handle.get_slice(name)[selection]
-            return tensor.to(self.device)
+        filename = self.weight_map[name]
+        if filename not in self.handles:
+            self.handles[filename] = safetensors.safe_open(self.root / filename, framework='pt',device='cpu')
+        handle = self.handles[filename]
+        tensor = handle.get_tensor(name) if selection is None else handle.get_slice(name)[selection]
+        return tensor.to(self.device)
 
     def projection(self, layer, expert, projection):
         key = layer, expert, projection
@@ -95,7 +99,7 @@ class ExpertIndex:
         return self.storage.projection(self.layer, expert, self.projection)
 
 
-def load_official(source, checkpoint, *, device="cuda", cache_bytes=256 << 20, precision="nvfp4"):
+def load_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30, precision="nvfp4"):
     source, checkpoint = Path(source), Path(checkpoint)
     model_code, config_code, _ = official_modules(source)
     raw_config = json.loads((source / "config.json").read_text(encoding="utf-8"))

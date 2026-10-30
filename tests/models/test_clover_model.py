@@ -104,7 +104,7 @@ def test_clover_dense_buffers_and_auxiliaries_match_checkpoint(checkpoint):
     assert set(actual) == set(buffers)
     for name, tensor in actual.items():
         assert tensor.shape == buffers[name].shape
-    torch.testing.assert_close(actual["model.norm.weight"], raw["model.norm.weight"] + 1., rtol=0, atol=0)
+    torch.testing.assert_close(actual["model.norm.weight"], raw["model.norm.weight"], rtol=0, atol=0)
     key = "model.layers.0.linear_attn.conv_right_weight"
     torch.testing.assert_close(actual[key], raw[key], rtol=0, atol=0)
 
