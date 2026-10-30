@@ -86,6 +86,12 @@ _MINIMAX_M3_PROCESSOR = "freetoken.mm.processors.minimax_m3:MiniMaxM3MMProcessor
 _MINIMAX_M3_ENCODERS = (EncoderSpec("vision", "vision_config", ("image",)),)
 
 _MODEL_REGISTRY: dict[str, ModelSpec] = {
+    "CloverMoeModelLM": ModelSpec(
+        "freetoken.models.clover_moe",
+        "CloverMoeModelLM",
+        packed_modules_mapping=_QWEN3_5_PACKED,
+        unquantized_modules=_QWEN3_5_UNQUANTIZED,
+    ),
     "LlamaForCausalLM": ModelSpec(
         "freetoken.models.llama",
         "LlamaForCausalLM",
