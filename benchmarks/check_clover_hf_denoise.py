@@ -1,7 +1,6 @@
 """Unmodified official LowConfidence generate with bounded quantized experts."""
 
 import argparse
-import copy
 import json
 from pathlib import Path
 import time
@@ -22,13 +21,18 @@ def main():
     parser.add_argument("--tokens", type=int, default=64)
     parser.add_argument("--prompts", default="Count,Sky")
     parser.add_argument("--widths", default="8,16,32")
+    parser.add_argument(
+        "--precision", choices=["nvfp4", "bf16", "fp8"], default="nvfp4"
+    )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
-    model, storage = load_official(args.source, args.checkpoint)
+    model, storage = load_official(
+        args.source, args.checkpoint, precision=args.precision
+    )
     namespace = vars(official_modules(args.source)[0])
     native = json.loads(args.native_results.read_text(encoding="utf-8"))
-    result = dict(state="running", cases=[])
+    result = dict(state="running", precision=args.precision, cases=[])
     raw = json.loads((args.checkpoint / "generation_config.json").read_text())
 
     def save():
