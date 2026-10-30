@@ -72,6 +72,16 @@ on `PYTHONPATH`. Exact recorded commands and package/source identities are in
 the evidence manifests. This short sanity run is not a quality or throughput
 benchmark. Final trained-adapter verification remains required.
 
+The final native campaign is prepared with `--corpus <the matching dense corpus>`
+and an explicit `--batch-size` (planned4). It compares disabled/enabled outputs
+on all50 heldout canaries and300 replay questions, verifies corpus hashes and
+base identity, and checks all answers again in a fresh process. The native
+Qwen3.8 final check will receive `--minimum-canary-accuracy 0.9`, matching the
+owner's approved dense canary target; enabled replay exact matches must not
+decrease relative to this native engine's disabled baseline. These are
+preregistered final checks, not results. Native exact answer counts are reported
+separately from the training NLL gate, since answer match rate is not NLL.
+
 The owner's current instructions explicitly authorize commits and final pushes
 to this independent fork branch. This overrides the inherited AGENTS restriction
 for this owner's fork only. No PR, upstream issue or upstream publication is

@@ -17,7 +17,14 @@ def main():
     parser.add_argument('--adapter', required=True, type=Path)
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--reference', type=Path)
+    parser.add_argument('--corpus', type=Path)
+    parser.add_argument('--batch-size', type=int, default=1)
+    parser.add_argument('--minimum-canary-accuracy', type=float)
     args = parser.parse_args()
+    if args.batch_size < 1:
+        parser.error('batch-size must be positive')
+    if args.minimum_canary_accuracy is not None and (not args.corpus or not 0 <= args.minimum_canary_accuracy <= 1):
+        parser.error('minimum-canary-accuracy requires corpus and a value in [0,1]')
     args.output.mkdir(parents=True, exist_ok=False)
     import torch
     from freetoken.core import SamplingParams
@@ -28,7 +35,7 @@ def main():
 
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    settings = dict(moe_strategy='fused', dense_layer_streaming=True, max_running_req=1,
+    settings = dict(moe_strategy='fused', dense_layer_streaming=True, max_running_req=args.batch_size,
                     memory_ratio=.70, num_token_override=2048, max_seq_len_override=2048,
                     max_extend_tokens=512, cuda_graph_max_bs=0, cache_type='naive',
                     lora_path=str(args.adapter))
@@ -79,13 +86,14 @@ def main():
             finally:
                 for op, packed in zip(ops, original):
                     op._lora_linear = packed
-        logits = []
+        logits, capture_logits = [], True
         original_forward = llm.engine.model.forward
         def forward():
             output = original_forward()
             if not torch.isfinite(output).all():
                 raise FloatingPointError('Nonfinite real dense inference logits')
-            logits.append(output[0].detach().cpu().contiguous())
+            if capture_logits:
+                logits.append(output[0].detach().cpu().contiguous())
             return output
         llm.engine.model.forward = forward
         cases = [('What is 1+1? Answer with one digit only.', '2'),
@@ -122,6 +130,51 @@ def main():
                 result['outputs'] = outputs
                 save()
                 assert all(checks.values()), checks
+            if args.corpus:
+                corpus = json.loads((args.corpus / 'manifest.json').read_text(encoding='utf-8'))
+                artifact = json.loads((args.adapter / 'manifest.json').read_text(encoding='utf-8'))
+                assert corpus['base'] == artifact['base'], 'Quality corpus belongs to another base'
+                for name, digest in corpus['files'].items():
+                    assert hashlib.sha256((args.corpus / name).read_bytes()).hexdigest() == digest
+                result['quality'] = {}
+                result['corpus_manifest_sha256'] = hashlib.sha256((args.corpus / 'manifest.json').read_bytes()).hexdigest()
+                capture_logits = False
+                logits.clear()
+                for mode in ['disabled', 'enabled']:
+                    result['quality'][mode] = {}
+                    for name in ['canary-holdout.jsonl', 'replay.jsonl']:
+                        rows = [json.loads(line) for line in (args.corpus / name).read_text(encoding='utf-8').splitlines() if line.strip()]
+                        records = []
+                        for start in range(0, len(rows), args.batch_size):
+                            selected = rows[start:start + args.batch_size]
+                            assert all(row['messages'][-1]['role'] == 'assistant' for row in selected)
+                            prompts = [llm.tokenizer.apply_chat_template(row['messages'][:-1], tokenize=True,
+                                add_generation_prompt=True, enable_thinking=False, return_dict=False) for row in selected]
+                            with factors(mode):
+                                answers = llm.generate(prompts, SamplingParams(temperature=0, max_tokens=8))
+                            for offset, (row, answer) in enumerate(zip(selected, answers, strict=True)):
+                                expected = row['messages'][-1]['content']
+                                records.append({'sample_id': start + offset, 'expected': expected,
+                                    'correct': answer['text'].strip() == expected.strip(), **answer})
+                            result['quality'][mode][name] = {'status': 'MEASURING', 'samples': len(records),
+                                'correct': sum(row['correct'] for row in records), 'records': records}
+                            save()
+                            print(f'quality {mode} {name}: {len(records)}/{len(rows)}', flush=True)
+                        result['quality'][mode][name].update(status='MEASURED',
+                            accuracy=sum(row['correct'] for row in records) / len(records))
+                result['quality_adapter_canary_improvement'] = (
+                    result['quality']['enabled']['canary-holdout.jsonl']['correct']
+                    > result['quality']['disabled']['canary-holdout.jsonl']['correct'])
+                result['quality_replay_exact_matches_preserved'] = (
+                    result['quality']['enabled']['replay.jsonl']['correct']
+                    >= result['quality']['disabled']['replay.jsonl']['correct'])
+                result['native_minimum_canary_accuracy'] = args.minimum_canary_accuracy
+                result['native_canary_threshold_met'] = (args.minimum_canary_accuracy is None or
+                    result['quality']['enabled']['canary-holdout.jsonl']['accuracy'] >= args.minimum_canary_accuracy)
+                save()
+                assert result['quality_adapter_canary_improvement'], 'Native adapter did not improve heldout canary answers'
+                assert result['quality_replay_exact_matches_preserved'], 'Native adapter reduced exact replay answer matches'
+                assert result['native_canary_threshold_met'], 'Native adapter did not meet the supplied canary target'
         result['banks_unchanged'] = before_hashes == manager.hashes()
         result['streaming_after_requests'] = manager.inventory()
         result['memory'] = {'allocated': torch.cuda.memory_allocated(), 'reserved': torch.cuda.memory_reserved(),
@@ -138,6 +191,12 @@ def main():
                             and torch.equal(new_logits[mode].view(torch.uint8), old_logits[mode].view(torch.uint8)) for mode in new_logits))
             result['fresh_process_all_answers_and_logits_E2'] = all(checks)
             assert all(checks)
+            if args.corpus:
+                quality_equal = all(
+                    result['quality'][mode][name]['records'] == reference['quality'][mode][name]['records']
+                    for mode in ['disabled', 'enabled'] for name in ['canary-holdout.jsonl', 'replay.jsonl'])
+                result['fresh_process_all_quality_answers_E2'] = quality_equal
+                assert quality_equal, 'Fresh native engine changed corpus answers'
         assert result['banks_unchanged']
         result['status'] = 'PASS'
         save()
