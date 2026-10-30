@@ -10,8 +10,9 @@
 # permissions and limitations under the License.
 # Source: DiffuSpace/Clover-35B-A3B-Preview@4b0402b65e523d0183a14c431955438714cb16ff
 # Paths: sampling_clover_moe.py; modeling_clover_moe.py (generate control flow)
-# Local changes: provenance header and native LowConfidence loop appended;
-# reference penalty and confidence functions are retained unchanged.
+# Local changes: native LowConfidence loop; bitwise-equivalent dense repetition
+# on small CUDA rows avoids boolean-index synchronization. Reference operation
+# order, length/thinking biases and confidence functions are retained.
 """Response-only penalties for Clover block LowConfidence generation.
 
 Presence, frequency and repetition use committed response history.
@@ -22,6 +23,9 @@ All state belongs to one generate request; prompt tokens are never accumulated.
 import math
 
 import torch
+
+
+_DENSE_REPETITION = True  # benchmark-only opt-out; keep W32's smaller workspace
 
 
 PENALTY_DEFAULTS = {
@@ -114,12 +118,27 @@ class CloverPenaltyState:
         if gen.presence_penalty:
             logits.sub_(seen * gen.presence_penalty)
         if gen.repetition_penalty != 1:
-            values = logits[:, seen]
-            logits[:, seen] = torch.where(
-                values < 0,
-                values * gen.repetition_penalty,
-                values / gen.repetition_penalty,
-            )
+            if (
+                _DENSE_REPETITION
+                and logits.is_cuda
+                and logits.dtype == torch.float32
+                and logits.shape[0] <= 16
+            ):
+                # Boolean indexing synchronizes to size its nonzero result.
+                # Full-row arithmetic keeps the same scalar operations on GPU.
+                scaled = torch.where(
+                    logits < 0,
+                    logits * gen.repetition_penalty,
+                    logits / gen.repetition_penalty,
+                )
+                logits.copy_(torch.where(seen[None, :], scaled, logits))
+            else:
+                values = logits[:, seen]
+                logits[:, seen] = torch.where(
+                    values < 0,
+                    values * gen.repetition_penalty,
+                    values / gen.repetition_penalty,
+                )
         positions = self.length + torch.arange(
             1, logits.shape[0] + 1, device=logits.device
         )

@@ -190,3 +190,56 @@ def test_tool_anchor_snapshot_survives_later_block_boundaries():
     )
     assert req.mamba_last_track_seqlen == 64 and req.mamba_next_track_idx == 1
     assert torch.all(pool.conv_states == 7) and torch.all(pool.recurrent_states == 11)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("width", [1, 8, 16, 32])
+@pytest.mark.parametrize("biases", [False, True])
+def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
+    import os
+    from pathlib import Path
+    import runpy
+
+    location = os.environ.get("CLOVER_HF_SOURCE")
+    if not location:
+        pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
+    harness = runpy.run_path(
+        str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py")
+    )
+    sampling = harness["official_modules"](Path(location))[2]
+    gen = SimpleNamespace(
+        **{
+            **PENALTY_DEFAULTS,
+            "presence_penalty": 0.9,
+            "frequency_penalty": 0.2,
+            "repetition_penalty": 1.05,
+            "dllm_length_penalty": 2.0 if biases else 0.0,
+            "dllm_length_penalty_start": 510,
+            "dllm_length_penalty_window": 8,
+            "dllm_think_end_bias": 3.0 if biases else 0.0,
+            "dllm_think_end_start": 510,
+            "dllm_think_end_window": 8,
+            "dllm_think_end_token_id": 4,
+        }
+    )
+    native, reference = [
+        kind(gen, 248832, "cuda", [0, 5])
+        for kind in (CloverPenaltyState, sampling.CloverPenaltyState)
+    ]
+    torch.manual_seed(width)
+    history = torch.randint(8, 8192, (512,), device="cuda")
+    history[:4] = torch.tensor([8, 8, 9, 10], device="cuda")
+    native.commit(history)
+    reference.commit(history)
+    logits = torch.randn(width, 248832, device="cuda")
+    logits[:, 151669] = -float("inf")
+    logits[:, 8:11] = torch.tensor([-0.0, 1e20, -1e20], device="cuda")
+    block = torch.full((width,), 151669, device="cuda", dtype=torch.int32)
+    expected = reference.apply(logits.clone(), block, 151669)
+    actual = native.apply(logits.clone(), block, 151669)
+    torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+    if biases:
+        block[-1] = 4
+        expected = reference.apply(logits.clone(), block, 151669)
+        actual = native.apply(logits.clone(), block, 151669)
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)

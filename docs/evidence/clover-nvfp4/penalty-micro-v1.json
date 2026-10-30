@@ -1,0 +1,45 @@
+{
+  "scope": "Concurrent correctness oracle active; paired micro timings only, not serving rates",
+  "rows": [
+    {
+      "width": 1,
+      "bitwise_equal": true,
+      "indexed_ms": 0.5926500161876902,
+      "dense_ms": 0.2018000086536631
+    },
+    {
+      "width": 8,
+      "bitwise_equal": true,
+      "indexed_ms": 0.6207499973243102,
+      "dense_ms": 0.2460999967297539
+    },
+    {
+      "width": 16,
+      "bitwise_equal": true,
+      "indexed_ms": 0.6334500067168847,
+      "dense_ms": 0.30800001695752144
+    },
+    {
+      "width": 32,
+      "bitwise_equal": true,
+      "indexed_ms": 0.6285499985096976,
+      "dense_ms": 0.6054999976186082
+    }
+  ],
+  "raw_results": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\penalty-ab-v1\\results.json",
+  "raw_results_sha256": "4495cb515d56526ae7c55964bd1e389defe7a7af93c8655234f9823b9b45368e",
+  "reference_source_sha256": "91fb811c2967aacf513bcd6789ba4c288a32faf3371027050c4fef54a4ee8ca3",
+  "candidate_source_sha256": "a266a219529252d4efd2e9638f865a4cc4c4fddb0e451d249547c75710158069",
+  "settings": {
+    "vocab": 248832,
+    "history": 512,
+    "dtype": "float32",
+    "presence_penalty": 0.9,
+    "repetition_penalty": 1.05,
+    "measured_trials": 40,
+    "warmups": 10,
+    "order": "alternating paired"
+  },
+  "pinned_hf_parity": "8 CUDA cases bitwise equal, including frequency/presence and length/thinking biases",
+  "serving_ab": "pending GPU-alone full five-prompt matrix; do not infer model speedup from micro timing"
+}

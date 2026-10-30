@@ -108,6 +108,11 @@ the existing MTP implementation. Verify metadata defaults to four rows; only
 Clover explicitly widens it. The scheduler caches a final-prefill token bundle
 after the whole bundle reaches the host. Normal one-token prefill has the same
 behavior. CPU executor capacity is enlarged only for Clover.
+Clover currently drains host response history before the next scheduling step
+to apply its checkpoint penalties. Ordinary Qwen without MTP keeps its overlap
+schedule. Small CUDA repetition rows use dense pointwise arithmetic to avoid
+boolean-index synchronization; W32 retains the smaller original workspace.
+Eight CUDA cases, including length/thinking biases, match official HF bitwise.
 
 Validation includes 15 GPU operator tests, 14 actual BF16 GDN mixer cases, and
 six complete actual BF16 decoder blocks (GDN/full attention plus all 256 experts)
@@ -160,6 +165,7 @@ passes on the 16 GB GPU.
 warmups and five measured repetitions per prompt/mode, a 256-token cap, actual
 EOS stopping, checkpoint penalties and 4096 expert-cache slots. These are offline
 scheduler measurements, excluding startup. Causal steady decode is 99-115 tok/s.
+The expert LRU persists across warmups and trials; these are warm-cache requests.
 End-to-end tok/s and TTFT include prompt processing. A response delivered entirely
 in one block has no meaningful steady decode interval.
 
