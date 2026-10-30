@@ -81,11 +81,24 @@ def main():
         action="store_true",
         help="Validate protocol and skip recorded cases",
     )
+    parser.add_argument(
+        "--extend-from",
+        type=Path,
+        help="Larger token cap: reuse EOS-terminated cases, rerun only capped cases",
+    )
     args = parser.parse_args()
+    if args.resume and args.extend_from:
+        parser.error("--resume and --extend-from are mutually exclusive")
+    if not 1 <= args.limit <= 50 or args.tokens < 1:
+        parser.error(
+            "The fixed subset contains 50 cases; limit must be 1..50 and tokens positive"
+        )
     args.output.mkdir(parents=True, exist_ok=args.resume)
     previous = (
         json.loads((args.output / "results.json").read_text(encoding="utf-8"))
         if args.resume
+        else json.loads(args.extend_from.read_text(encoding="utf-8"))
+        if args.extend_from
         else None
     )
     torch.set_num_threads(4)
@@ -184,19 +197,56 @@ def main():
     )
     if previous:
         for key in ("backend", "precision", "checkpoint", "protocol", "sources"):
-            if previous[key] != result[key]:
+            expected = previous[key]
+            if key == "protocol" and args.extend_from:
+                if (
+                    args.tokens <= previous["protocol"]["tokens"]
+                    or previous["state"] != "complete"
+                ):
+                    raise ValueError(
+                        "Extend only a completed run to a larger token cap"
+                    )
+                expected = {**expected, "tokens": args.tokens}
+            if expected != result[key]:
                 raise ValueError(f"Cannot resume with different {key}")
         if previous.get("datasets", "gsm8k,humaneval") != args.datasets:
             raise ValueError("Cannot resume with different datasets")
-        result["cases"] = previous["cases"]
-        result["summary"] = previous["summary"]
+        result["cases"] = [
+            row
+            for row in previous["cases"]
+            if not args.extend_from
+            or len(row["token_ids"]) < previous["protocol"]["tokens"]
+        ]
+        if not args.extend_from:
+            result["summary"] = previous["summary"]
+            if "extension" in previous:
+                result["extension"] = previous["extension"]
+        else:
+            result["extension"] = dict(
+                source=str(args.extend_from),
+                sha256=hashlib.sha256(args.extend_from.read_bytes()).hexdigest(),
+                old_token_cap=previous["protocol"]["tokens"],
+                reused_eos_cases=len(result["cases"]),
+                reason="Only the cap changes; post-EOS unused iterations cannot affect a completed sequence",
+            )
         result["segments"] = previous.get("segments", []) + [
-            dict(resumed_cases=len(previous["cases"]))
+            dict(resumed_cases=len(result["cases"]))
         ]
     result["datasets"] = args.datasets
     completed = {(r["dataset"], r["index"]): r for r in result["cases"]}
     if len(completed) != len(result["cases"]):
         raise ValueError("Duplicate recorded case ids")
+
+    def summarize():
+        for dataset in args.datasets.split(","):
+            selected = [r for r in result["cases"] if r["dataset"] == dataset]
+            if selected:
+                result["summary"][dataset] = dict(
+                    completed=len(selected),
+                    correct=sum(r["correct"] for r in selected),
+                    score=sum(r["correct"] for r in selected) / len(selected),
+                    capped=sum(len(r["token_ids"]) >= args.tokens for r in selected),
+                )
 
     def save():
         temporary = args.output / "results.tmp"
@@ -205,6 +255,7 @@ def main():
         )
         temporary.replace(args.output / "results.json")
 
+    summarize()
     save()
     try:
         for dataset in args.datasets.split(","):
@@ -266,13 +317,18 @@ def main():
                     grade=grade,
                     seconds=time.perf_counter() - begun,
                 )
+                if args.extend_from:
+                    prior = next(
+                        r
+                        for r in previous["cases"]
+                        if r["dataset"] == dataset and r["index"] == index
+                    )
+                    row["extension_prefix_matches"] = (
+                        answer["token_ids"][: len(prior["token_ids"])]
+                        == prior["token_ids"]
+                    )
                 result["cases"].append(row)
-                selected = [r for r in result["cases"] if r["dataset"] == dataset]
-                result["summary"][dataset] = dict(
-                    completed=len(selected),
-                    correct=sum(r["correct"] for r in selected),
-                    score=sum(r["correct"] for r in selected) / len(selected),
-                )
+                summarize()
                 save()
                 print(
                     json.dumps(
@@ -287,6 +343,9 @@ def main():
                     ),
                     flush=True,
                 )
+        result["cases"].sort(
+            key=lambda r: (args.datasets.split(",").index(r["dataset"]), r["index"])
+        )
         result.update(state="complete", elapsed_seconds=time.perf_counter() - started)
         save()
     finally:
