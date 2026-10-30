@@ -1,9 +1,9 @@
 # Dense 27B NVFP4 LoRA inference
 
-Complete Qwen3.8-27B streamed inference passes with the actual100-step adapter on
-native Windows and an RTX5070Ti16GB, including full-corpus, cache-rebuild and
-fresh-process E2 checks. The Qwen3.6 short campaign remains pending.
-No branch has been pushed yet.
+Complete Qwen3.8-27B and Qwen3.6-27B streamed inference passes on native Windows
+and an RTX5070Ti16GB, using the actual100-step and10-step training publications.
+Both pass full-corpus, cache-rebuild and fresh-process E2 checks. Final branch
+publication and its exact HEAD are reported with the task delivery.
 
 This independent `feat/dense27b-nvfp4-lora` branch starts from the owner's fork
 main `f417397f339050e6f400e75db0f1e6acbc40f13a`. The initial Python LoRA
@@ -107,7 +107,31 @@ fresh processes and the actual training publication. Adapter SHA256 is
 Only summaries and manifests enter Git. Raw700-answer records, full logits,
 weights and logs remain outside Git with SHA256. The qualification ran while
 fixed-source CPU acquisition could proceed; wall times are not an inference
-speed benchmark. Qwen3.6 and the final combined summary remain unfinished.
+speed benchmark.
+
+## Actual Qwen3.6 10-step adapter and complete acceptance
+
+[Qwen3.6 evidence](evidence/dense/qwen36-final-summary.json) uses the original
+nvidia/Qwen3.6-27B-NVFP4@0893e1606ff3d5f97a441f405d5fc541a6bdf404 checkpoint
+and its own regenerated replay corpus. Adapter SHA256 is
+`552dc8992fa1ffe924e3160c2d123f69fab2b7ee232f6058457b8ac36cdbdf85`.
+This is the design's actual10-step short campaign, without claiming optional100.
+
+| Check | Result |
+| --- | --- |
+| Native holdout | Disabled0/50, enabled50/50 |
+| Native replay | Disabled300/300, enabled300/300 |
+| Native controls | All3 prompts x5 modes pass; zero B and repeats byte-E2, enabled logits change |
+| Fresh process | All700 quality records and complete first-step vocabulary logits byte-E2 |
+| Cache rebuild | Both capacity changes preserve answers/logits byte-E2 and adapter identity |
+| Frozen banks | All64 hashes unchanged |
+
+[Combined acceptance](evidence/dense/final-dense-summary.json) binds both actual
+publications and both pairs of independent native processes. The final source
+regression passes54 tests, including all40 original MoE LoRA tests. Only Python
+integration and opt-in streaming are added; the existing inference numerical
+policy and kernels remain in use. The default path, graph restrictions and
+reconstruction limits are described above.
 
 The owner's current instructions explicitly authorize commits and final pushes
 to this independent fork branch. This overrides the inherited AGENTS restriction

@@ -1,0 +1,469 @@
+{
+  "status": "PASS",
+  "scope": "qwen36 final trained adapter only; the other model and overall delivery are separate",
+  "final_training_adapter": true,
+  "training_global_step": 10,
+  "runs": {
+    "final": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10",
+      "manifest_sha256": "08dd9654a0f914ffc1ad1d2646f2e69fe91df7ae098950457a213a1336fd530e",
+      "native_manifest_sha256": "649dd2576407ccdb4938fcb4f23f51f5c84eb80ab32eedb647f17e1fbb1d31af",
+      "source_commit": "713a3dab02b99e7537709b511bacfa32f1a7abbc",
+      "memory": {
+        "allocated": 5170020352,
+        "reserved": 5679087616,
+        "peak_allocated": 5179499520,
+        "peak_reserved": 5679087616,
+        "free": 10012852224
+      },
+      "whole_card_monitor": {
+        "status": "PASS",
+        "scope": "Read-only whole-card polling; sampling may miss sub-second transients",
+        "watched_run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10",
+        "watched_exit_code": 0,
+        "watched_status": "PASS",
+        "samples": 304,
+        "minimum_free_MiB": 7726,
+        "maximum_used_MiB": 8270,
+        "errors": []
+      },
+      "quality": {
+        "disabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 0,
+            "accuracy": 0.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        },
+        "enabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 50,
+            "accuracy": 1.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        }
+      },
+      "cache_rebuilds": [
+        {
+          "pages": 1536,
+          "usable_GDN_slots": 16,
+          "all_answers_and_logits_E2": true,
+          "adapter_identity_unchanged": true
+        },
+        {
+          "pages": 2048,
+          "usable_GDN_slots": 4,
+          "all_answers_and_logits_E2": true,
+          "adapter_identity_unchanged": true
+        }
+      ],
+      "prompt_controls": [
+        {
+          "question": "What is 1+1? Answer with one digit only.",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            3710,
+            369,
+            220,
+            16,
+            10,
+            16,
+            30,
+            21134,
+            440,
+            799,
+            15262,
+            1132,
+            13,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 7.328125,
+          "adapter_relative_logit_L2": 0.6903078556060791
+        },
+        {
+          "question": "中国的首都是哪里？只回答城市名称。",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            96328,
+            102357,
+            96878,
+            99549,
+            10992,
+            96227,
+            97913,
+            97035,
+            98436,
+            1710,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 10.75,
+          "adapter_relative_logit_L2": 0.850681483745575
+        },
+        {
+          "question": "Translate 你好 into English. Give only the translation.",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            26583,
+            220,
+            109266,
+            1083,
+            6163,
+            13,
+            20052,
+            1132,
+            279,
+            14053,
+            13,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 7.546875,
+          "adapter_relative_logit_L2": 0.4604831337928772
+        }
+      ]
+    },
+    "final-reload": {
+      "run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh",
+      "manifest_sha256": "00ae935c123c003b0bd01d06f91636351d5d7d3a6e3bbe1c03f798e5bc685f8b",
+      "native_manifest_sha256": "ce5d323a4501482224286f936c68c02e431932dc93bb4a383c2df33f9a92be03",
+      "source_commit": "713a3dab02b99e7537709b511bacfa32f1a7abbc",
+      "memory": {
+        "allocated": 5170020352,
+        "reserved": 5679087616,
+        "peak_allocated": 5179499520,
+        "peak_reserved": 5679087616,
+        "free": 10012852224
+      },
+      "whole_card_monitor": {
+        "status": "PASS",
+        "scope": "Read-only whole-card polling; sampling may miss sub-second transients",
+        "watched_run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh",
+        "watched_exit_code": 0,
+        "watched_status": "PASS",
+        "samples": 324,
+        "minimum_free_MiB": 7726,
+        "maximum_used_MiB": 8270,
+        "errors": []
+      },
+      "quality": {
+        "disabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 0,
+            "accuracy": 0.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        },
+        "enabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 50,
+            "accuracy": 1.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        }
+      },
+      "cache_rebuilds": [
+        {
+          "pages": 1536,
+          "usable_GDN_slots": 16,
+          "all_answers_and_logits_E2": true,
+          "adapter_identity_unchanged": true
+        },
+        {
+          "pages": 2048,
+          "usable_GDN_slots": 4,
+          "all_answers_and_logits_E2": true,
+          "adapter_identity_unchanged": true
+        }
+      ],
+      "prompt_controls": [
+        {
+          "question": "What is 1+1? Answer with one digit only.",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            3710,
+            369,
+            220,
+            16,
+            10,
+            16,
+            30,
+            21134,
+            440,
+            799,
+            15262,
+            1132,
+            13,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 7.328125,
+          "adapter_relative_logit_L2": 0.6903078556060791
+        },
+        {
+          "question": "中国的首都是哪里？只回答城市名称。",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            96328,
+            102357,
+            96878,
+            99549,
+            10992,
+            96227,
+            97913,
+            97035,
+            98436,
+            1710,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 10.75,
+          "adapter_relative_logit_L2": 0.850681483745575
+        },
+        {
+          "question": "Translate 你好 into English. Give only the translation.",
+          "prompt_tokens": [
+            248045,
+            846,
+            198,
+            26583,
+            220,
+            109266,
+            1083,
+            6163,
+            13,
+            20052,
+            1132,
+            279,
+            14053,
+            13,
+            248046,
+            198,
+            248045,
+            74455,
+            198,
+            248068,
+            271,
+            248069,
+            271
+          ],
+          "checks": {
+            "zero_B_logits_E2": true,
+            "repeat_enabled_logits_E2": true,
+            "repeat_disabled_logits_E2": true,
+            "adapter_logits_effect_nonzero": true,
+            "base_semantic_sanity": true
+          },
+          "adapter_max_abs_logit_effect": 7.546875,
+          "adapter_relative_logit_L2": 0.4604831337928772
+        }
+      ]
+    }
+  },
+  "zero_B_controls": true,
+  "fresh_process_reload_E2": true,
+  "all_700_quality_records_fresh_E2": true,
+  "streaming": {
+    "layers": 64,
+    "packed_host_payload_bytes": 16903094272,
+    "packed_host_all_pinned": true,
+    "gpu_slot_bytes": 267000480,
+    "slot_count": 1,
+    "copies": 128,
+    "copy_bytes": 33806188544,
+    "cuda_graphs": false
+  },
+  "binding": {
+    "identity": "fb9c5b73bbdf6d2e11af7cb193baeb60c5fc507e8e0c5a6464a277c9e1f6ac21",
+    "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T050306Z-qwen36-short10\\results\\publish",
+    "linear_projections": 400,
+    "expert_layers": 0,
+    "parameter_count": 108789760,
+    "parameter_bytes": 435159040,
+    "resident_bytes": 657457152,
+    "packed_linear_operations": 256
+  },
+  "host_allocator_after_load": {
+    "active_bytes.allocated": 17179869758,
+    "active_bytes.current": 17179869766,
+    "active_bytes.freed": -8,
+    "active_bytes.peak": 17179869763,
+    "active_requests.allocated": 297,
+    "active_requests.current": 289,
+    "active_requests.freed": 8,
+    "active_requests.peak": 292,
+    "allocated_bytes.allocated": 17179869213,
+    "allocated_bytes.current": 17179869213,
+    "allocated_bytes.freed": 0,
+    "allocated_bytes.peak": 17179869213,
+    "allocations.allocated": 68,
+    "allocations.current": 68,
+    "allocations.freed": 0,
+    "allocations.peak": 68,
+    "host_alloc_time.avg": 32362,
+    "host_alloc_time.count": 68,
+    "host_alloc_time.max": 43029,
+    "host_alloc_time.min": 7,
+    "host_alloc_time.total": 2200645,
+    "host_free_time.avg": 0,
+    "host_free_time.count": 0,
+    "host_free_time.max": 0,
+    "host_free_time.min": 0,
+    "host_free_time.total": 0,
+    "num_host_alloc": 68,
+    "num_host_free": 0
+  },
+  "publication": {
+    "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T050306Z-qwen36-short10\\results\\publish",
+    "files_sha256": {
+      "adapter_model.safetensors": "552dc8992fa1ffe924e3160c2d123f69fab2b7ee232f6058457b8ac36cdbdf85",
+      "adapter_config.json": "ad5b4174e618d80182ac32c8ca7d78bbcf4fb56fc03f3c6bdf3c88d46cb28edc",
+      "manifest.json": "32fb7377f8ad73f111f932b26ffa1b81a7da8187256a7132941e297f2a8d6c02"
+    }
+  },
+  "native_quality_scope": "Exact generated answer counts, not training NLL or a domain evaluation; no whole-engine bit equality to the BF16 training model",
+  "performance_scope": "Integration qualification; fixed-revision CPU download/preprocessing could run concurrently, so wall times are not an inference speed benchmark",
+  "raw_external_evidence": {
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10\\results\\inference\\results.json": {
+      "bytes": 179838,
+      "sha256": "dcd67c74ab013ccb2ca7af8e221f809481c4dfb4563c52a794f8be9b800f5c5d"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10\\results\\inference\\logits-0.pt": {
+      "bytes": 2485860,
+      "sha256": "76b836b7f55de703e1b5ae676f27599f1b00556f1ac6817ee2c4ee9b96871228"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10\\results\\inference\\logits-1.pt": {
+      "bytes": 2485860,
+      "sha256": "d666394365fbe8b87bb4d9fdeca10d865d0b9b81d28bad416860ba57c2f89803"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10\\results\\inference\\logits-2.pt": {
+      "bytes": 2485860,
+      "sha256": "e52e4544951b08d68a14f603988220e90b3876953edc8b4dafa459fe1ed9e631"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh\\results\\inference\\results.json": {
+      "bytes": 179940,
+      "sha256": "5eb23e13ad2d0d575fecd93d2b514b1b78b76785d4b097b12c48774334293e06"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh\\results\\inference\\logits-0.pt": {
+      "bytes": 2485860,
+      "sha256": "76b836b7f55de703e1b5ae676f27599f1b00556f1ac6817ee2c4ee9b96871228"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh\\results\\inference\\logits-1.pt": {
+      "bytes": 2485860,
+      "sha256": "d666394365fbe8b87bb4d9fdeca10d865d0b9b81d28bad416860ba57c2f89803"
+    },
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T052633Z-freetoken-qwen36-final-fresh\\results\\inference\\logits-2.pt": {
+      "bytes": 2485860,
+      "sha256": "e52e4544951b08d68a14f603988220e90b3876953edc8b4dafa459fe1ed9e631"
+    }
+  }
+}

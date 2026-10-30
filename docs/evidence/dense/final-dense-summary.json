@@ -1,0 +1,118 @@
+{
+  "status": "PASS",
+  "final_training_adapter": true,
+  "qwen38_complete_model": true,
+  "qwen36_complete_model": true,
+  "zero_B_controls": true,
+  "fresh_process_reload_E2": true,
+  "source_LoRA_tests": 54,
+  "models": {
+    "qwen38": {
+      "summary": "qwen38-final-summary.json",
+      "summary_sha256": "e0c2274b64a24d7bdca77b2d3af594d76d8fb93154c8ad7feceb0523caddee34",
+      "actual_training_steps": 100,
+      "publication": {
+        "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T020753Z-d6-functional100\\results\\publish",
+        "files_sha256": {
+          "adapter_model.safetensors": "206ea21afe34cecb4cfd9d87e62fd1ff003b9a1c8a035de8a87f9db7943258d2",
+          "adapter_config.json": "1111cbd577b79bac6b52db575e359b129245d3b9f28770516c776664d163d64e",
+          "manifest.json": "cb0c05974b46b1a4907b2b63f8047b274642b0a59e143e46e71a24bae145a4d6"
+        }
+      },
+      "native_quality": {
+        "disabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 0,
+            "accuracy": 0.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        },
+        "enabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 50,
+            "accuracy": 1.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        }
+      },
+      "memory": {
+        "allocated": 5170020864,
+        "reserved": 5679087616,
+        "peak_allocated": 5179500032,
+        "peak_reserved": 5679087616,
+        "free": 10012852224
+      },
+      "fresh_reload_E2": true,
+      "cache_rebuilds_E2": true
+    },
+    "qwen36": {
+      "summary": "qwen36-final-summary.json",
+      "summary_sha256": "6cdfb08db25f459d12db0342f24986c5e28f1dd03c48a8bfeb3526715a913488",
+      "actual_training_steps": 10,
+      "publication": {
+        "path": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T050306Z-qwen36-short10\\results\\publish",
+        "files_sha256": {
+          "adapter_model.safetensors": "552dc8992fa1ffe924e3160c2d123f69fab2b7ee232f6058457b8ac36cdbdf85",
+          "adapter_config.json": "ad5b4174e618d80182ac32c8ca7d78bbcf4fb56fc03f3c6bdf3c88d46cb28edc",
+          "manifest.json": "32fb7377f8ad73f111f932b26ffa1b81a7da8187256a7132941e297f2a8d6c02"
+        }
+      },
+      "native_quality": {
+        "disabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 0,
+            "accuracy": 0.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        },
+        "enabled": {
+          "canary-holdout.jsonl": {
+            "status": "MEASURED",
+            "samples": 50,
+            "correct": 50,
+            "accuracy": 1.0
+          },
+          "replay.jsonl": {
+            "status": "MEASURED",
+            "samples": 300,
+            "correct": 300,
+            "accuracy": 1.0
+          }
+        }
+      },
+      "memory": {
+        "allocated": 5170020352,
+        "reserved": 5679087616,
+        "peak_allocated": 5179499520,
+        "peak_reserved": 5679087616,
+        "free": 10012852224
+      },
+      "fresh_reload_E2": true,
+      "cache_rebuilds_E2": true
+    }
+  },
+  "source_test_run": "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T053402Z-d7-freetoken-tests",
+  "source_test_manifest_sha256": "f429b7ee17d0735789a7709b1bca2e97438d40affcea252922a53e1ec51e4e9e",
+  "scope": "Native Windows, complete64-layer streamed models; Q38 actual100 and Q36 actual10 adapters. No domain quality or whole-engine E2 equivalence to training BF16 claim."
+}

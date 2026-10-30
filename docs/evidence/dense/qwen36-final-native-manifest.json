@@ -1,0 +1,1955 @@
+{
+  "status": "PASS",
+  "command": [
+    "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+    "-B",
+    "benchmarks/check_dense_lora.py",
+    "--model",
+    "C:\\workspace\\models\\inputs\\qwen3.6-27b-nvfp4\\0893e1606ff3d5f97a441f405d5fc541a6bdf404",
+    "--adapter",
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T050306Z-qwen36-short10\\results\\publish",
+    "--output",
+    "C:\\workspace\\runs\\T-20261029-nvfp4-dense\\20261030T051748Z-freetoken-qwen36-final10\\results\\inference",
+    "--corpus",
+    "C:\\workspace\\data\\datasets\\nvfp4lora\\canary-replay-qwen36-27b-v1",
+    "--batch-size",
+    "4",
+    "--check-cache-rebuild"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261029-nvfp4-dense\\FreeToken",
+  "python": "C:\\workspace\\envs\\T-20261029-nvfp4-dense\\infer\\Scripts\\python.exe",
+  "source_files": [
+    {
+      "path": "benchmarks/check_dense_lora.py",
+      "sha256": "bdbd5a8fa7b353a105b3c18487d34a81eaf6962d9a70ac2c8a39bae401f426b3"
+    },
+    {
+      "path": "python/freetoken/__init__.py",
+      "sha256": "095e182f33349d2b2e7ea32694b3de3ca403ceed972342f3cab7d2dd0419e1ee"
+    },
+    {
+      "path": "python/freetoken/__main__.py",
+      "sha256": "f8277c921cec0265b5a2f315dd2cd796ed72c84415a27794b17b6ad2a0194595"
+    },
+    {
+      "path": "python/freetoken/attention/__init__.py",
+      "sha256": "3267f8ff79a692ed22bc0d0caffe3bdbdeec31ff840f55977d0518fc03c52e06"
+    },
+    {
+      "path": "python/freetoken/attention/base.py",
+      "sha256": "01476d5482c89166bc3e2e4c307b0aeadbdca639a7cee2ae15cf379f1d463679"
+    },
+    {
+      "path": "python/freetoken/attention/dsa.py",
+      "sha256": "99016027df3b0683e6f5da81a640bee0145c6ca7addfe2f2fb42e934734e11cb"
+    },
+    {
+      "path": "python/freetoken/attention/dsa_indexer.py",
+      "sha256": "a8bab0af0ca2b42ffa4e6ac959d8e0cac1cfcd23fc8d9bff7cbe25ef4b599fde"
+    },
+    {
+      "path": "python/freetoken/attention/dsa_indexer_kpool.py",
+      "sha256": "0524afef3909ef5aa3f1d5c19b410ba02882c229a3a8f27afa477be5fa73bf5f"
+    },
+    {
+      "path": "python/freetoken/attention/dsv41_sparse.py",
+      "sha256": "2f8a4a253062939faaecd999d4c0dea65f1df360e0e3c4ac5d9ce595ca3286db"
+    },
+    {
+      "path": "python/freetoken/attention/dsv4_compress.py",
+      "sha256": "2f538745f0acfb49b62d176f32844aa961408fd36f16428780bb56107723538b"
+    },
+    {
+      "path": "python/freetoken/attention/dsv4_indexer.py",
+      "sha256": "7917db7dda6d0f4cc76ffdc206fd7fb7ad78128b7c7f7694538f75f4f2f1f4f2"
+    },
+    {
+      "path": "python/freetoken/attention/dsv4_sparse.py",
+      "sha256": "b2b2de2b26821c85efc1db42597b8c708a1890c606973f84b768ac2f6b63cf7b"
+    },
+    {
+      "path": "python/freetoken/attention/fa.py",
+      "sha256": "7ce1b3e3418c2bdee180634fa4b23f24312d6a68fa718bfb161c90cd1c37865d"
+    },
+    {
+      "path": "python/freetoken/attention/fi.py",
+      "sha256": "7f778dc97ec47c155b1056f498fa0a57d293fd108995298ecddc85d534a25626"
+    },
+    {
+      "path": "python/freetoken/attention/linear.py",
+      "sha256": "d41409c00681dd090ee907a9f300a0da851f5aa4bd95be98f75a2cc77a8ecbe2"
+    },
+    {
+      "path": "python/freetoken/attention/m3_sparse.py",
+      "sha256": "4a7cce96e18d6187dd11e9d47975042445303ff9b0074f07a3f70680cf01eb37"
+    },
+    {
+      "path": "python/freetoken/attention/qsa_sparse.py",
+      "sha256": "1bbe996ccb901fc511fde370aebdc188cd59b22cf2fe1d7927b89836ef08988a"
+    },
+    {
+      "path": "python/freetoken/attention/triton.py",
+      "sha256": "89f58a234e4033443d58d416523ccb4e743737f09b055085abfcd7d11a152d99"
+    },
+    {
+      "path": "python/freetoken/attention/trtllm.py",
+      "sha256": "caee2e61d560d92ddf9a97887069eea341e5e822dc7209262cdbf77be4f36ae7"
+    },
+    {
+      "path": "python/freetoken/attention/utils.py",
+      "sha256": "caaaeb074c8caadc072e8711202703b2d4e09e5a095cd3ec29287c8f99ee2502"
+    },
+    {
+      "path": "python/freetoken/benchmark/client.py",
+      "sha256": "8b73d2dd664a8ed703c2ed7956e8ce0ff42f837187419337ae0fa2b9831d59bf"
+    },
+    {
+      "path": "python/freetoken/benchmark/perf.py",
+      "sha256": "e09ca8fcb535610cc084a63276ea0f8ef8e2f92449c00ceb48dd58c6bf253725"
+    },
+    {
+      "path": "python/freetoken/cache_report.py",
+      "sha256": "1968ae1a27157056dab6ecb64fea5613a92874fe80025be7a10c893b793d9319"
+    },
+    {
+      "path": "python/freetoken/checkpoint/__init__.py",
+      "sha256": "bc0291ddebfe476c9c1681ea1e42ef205cf70a6c6cb2a615954286e2cedb85e9"
+    },
+    {
+      "path": "python/freetoken/checkpoint/__main__.py",
+      "sha256": "cbf919ade2583828bb083fb61eccf5dc72f72e7f7cc4040b590cf114c67e1057"
+    },
+    {
+      "path": "python/freetoken/checkpoint/convert.py",
+      "sha256": "b248e8d6700a2c8e7f0a559168372dba64ada82e46adcd621e82b49953d70c45"
+    },
+    {
+      "path": "python/freetoken/checkpoint/ftw.py",
+      "sha256": "25d2c4b196b3ecd7ee191cc4e62306d4d1dffd84fdeae071fa5e469edd6db0f4"
+    },
+    {
+      "path": "python/freetoken/checkpoint/gguf_reader.py",
+      "sha256": "99519dc2d4704ad758d9029c1614407d38b9ca64f0be7448b31cb7f7c828d87d"
+    },
+    {
+      "path": "python/freetoken/cli.py",
+      "sha256": "54de5ecee4e7ea6bdd9f17b81b156ee23e1f6e825d8d0e812d5de4e100125001"
+    },
+    {
+      "path": "python/freetoken/control_cli.py",
+      "sha256": "37e5884a410e4a287eb7b1976555796740ece883e3c91db4c4fa91da138ca289"
+    },
+    {
+      "path": "python/freetoken/core.py",
+      "sha256": "bc446c9db5ee950c4068544f796d1a3e24ee861f56d7ba768de90145d23d2569"
+    },
+    {
+      "path": "python/freetoken/daemon/__init__.py",
+      "sha256": "cbff5f99786c28f4a15458f86a306d8c5854e766295729c175c7808a5fce5d18"
+    },
+    {
+      "path": "python/freetoken/daemon/__main__.py",
+      "sha256": "cf98e8d8e1fde286323c21737d8334428052d431c19a5126471696ff66067081"
+    },
+    {
+      "path": "python/freetoken/daemon/accounting.py",
+      "sha256": "092ce6b2c8d69806460eadf26f60a2c803dd38600b3f6d91ae6949fba00d2284"
+    },
+    {
+      "path": "python/freetoken/daemon/app.py",
+      "sha256": "c528f3a7823c936bbdfd86ca849de9feb8a122a8eaa99ada5a1cd8752b28db26"
+    },
+    {
+      "path": "python/freetoken/daemon/checkpoint.py",
+      "sha256": "7cd33af53371e80c45d503a3d9546e58b3855e8dcdcf7e52e08c38490b6a9917"
+    },
+    {
+      "path": "python/freetoken/daemon/client.py",
+      "sha256": "1193654216ad1916e8d51f8027d5a0c9d241eaa350ad4e5f797196fd1c8d8b9e"
+    },
+    {
+      "path": "python/freetoken/daemon/logfmt.py",
+      "sha256": "433eeb05ccd3b8cf1be70f2d4a25d9203158d2d206d2300c072203b48aaa30cf"
+    },
+    {
+      "path": "python/freetoken/daemon/logring.py",
+      "sha256": "88607906e298f281430ae7007d30e9184d41c5ffc58e5073485f020018625ed2"
+    },
+    {
+      "path": "python/freetoken/daemon/metrics.py",
+      "sha256": "0d9d8897683231dab2aee31962023475029722075bcc759fe2f7daf39f47cea3"
+    },
+    {
+      "path": "python/freetoken/daemon/osproc.py",
+      "sha256": "9b1edd1cab4266f1187426b88d90dfa09866aa247392d8d949809bef9769eede"
+    },
+    {
+      "path": "python/freetoken/daemon/pidfile.py",
+      "sha256": "acb1c25ae90662dea7e90b5155c4dc11f21c0faac2dbefb542eb4fd8f2bef91c"
+    },
+    {
+      "path": "python/freetoken/daemon/proxy.py",
+      "sha256": "f21f9ff30c36fe81ff63c7b64bb7261dbd492712e96ea638e6553d11382ae900"
+    },
+    {
+      "path": "python/freetoken/daemon/serve_manager.py",
+      "sha256": "89536853bd33296c1c2ea07ccb6120a9d893a02e16da82f8892a80cec13008f5"
+    },
+    {
+      "path": "python/freetoken/daemon/server.py",
+      "sha256": "a2cbadbbee222f09382f18f768a71742a67fac06694d99e3503079e41f61d76c"
+    },
+    {
+      "path": "python/freetoken/daemon/tailer.py",
+      "sha256": "0fcb94d1f365ddcc58699642cf23a8fa8cdcafc2691e63296f644695a4f277aa"
+    },
+    {
+      "path": "python/freetoken/daemon/version.py",
+      "sha256": "8ff7c64745f3c1beeb20d9de6023e39b22a19e41acb559c236ec4ea68a01d7b2"
+    },
+    {
+      "path": "python/freetoken/distributed/__init__.py",
+      "sha256": "62d66be9b37cf4e04be260b771a1c9daf69542163e030338a2a4b79188fdc757"
+    },
+    {
+      "path": "python/freetoken/distributed/impl.py",
+      "sha256": "3dc6e26ab78f6ba333c10c75f24e368e40cde714e329e254ad918ca7cf22e2ba"
+    },
+    {
+      "path": "python/freetoken/distributed/info.py",
+      "sha256": "60cbe19f38894a715605abe2e54a53aaa0e5c2ae2977f080a727b1b62994dbd6"
+    },
+    {
+      "path": "python/freetoken/engine/__init__.py",
+      "sha256": "a43e8ccb6fbe502106dcf4f78cb5da6b410d33ed0f92ff9a873a33c9d685525c"
+    },
+    {
+      "path": "python/freetoken/engine/cache_budget.py",
+      "sha256": "fd91b3f018ccf01d41df02d4048baa2f83c30a887dd41643351cfe362fcc85c4"
+    },
+    {
+      "path": "python/freetoken/engine/config.py",
+      "sha256": "a8c29b1770750b63947fc25b9f30cd1fa5ca1a92d6910e4155071ba8658f8b82"
+    },
+    {
+      "path": "python/freetoken/engine/engine.py",
+      "sha256": "aaf6c09ed0dca87088a5c25148c271c01e00d07fbeb141c960a12b02cc332722"
+    },
+    {
+      "path": "python/freetoken/engine/graph.py",
+      "sha256": "fb37df398a8ce065178bc31b3d15f33b99daea9aad7fd446918ee914683b0dab"
+    },
+    {
+      "path": "python/freetoken/engine/sample.py",
+      "sha256": "b526681ef0aa58a2f8d53f8e9bd3eb2558426984103ea76b7c2c9b2b8c1282e0"
+    },
+    {
+      "path": "python/freetoken/env.py",
+      "sha256": "ee3b31a6828850bdbdc5cb2577dba1d352da1af52e35e92c41c0b23c30a5af99"
+    },
+    {
+      "path": "python/freetoken/gpu_select.py",
+      "sha256": "cce5fb32770e645c754ef135de37a74db4a68c9aa4764d80649b3f9544d2bb18"
+    },
+    {
+      "path": "python/freetoken/kernel/__init__.py",
+      "sha256": "a435c33897be66bcebd762bb3566ad0c5918c31e6d017960b9ab19c2a2ddcc0a"
+    },
+    {
+      "path": "python/freetoken/kernel/__main__.py",
+      "sha256": "15e963e7ca38ec9070be5c74a4858e6e061af8abd4c4c562661bf52fa7a4d82d"
+    },
+    {
+      "path": "python/freetoken/kernel/_toolchain.py",
+      "sha256": "bbc393a41977e107f14e7c4e2f9ef059b93abcf7a7eae8024d396053a9a9ba42"
+    },
+    {
+      "path": "python/freetoken/kernel/aot.py",
+      "sha256": "e6049c393470c8618819f4d105dcfac166a92d083f6bb49c8363a5914d8bef52"
+    },
+    {
+      "path": "python/freetoken/kernel/aot_models.py",
+      "sha256": "6563a6651afd4d2182fb528740506bd89a6d10c6c8218152b1f97c6aa7efd828"
+    },
+    {
+      "path": "python/freetoken/kernel/backend.py",
+      "sha256": "8077c26f3f0725fdbfcd78432eac9e59fd9c741f70bf28ae34a7a031f02cca08"
+    },
+    {
+      "path": "python/freetoken/kernel/batch_memcpy.py",
+      "sha256": "13a03a22709145c7263a5cf9e52e3015606ee102323345692d24cc9e1346da4a"
+    },
+    {
+      "path": "python/freetoken/kernel/causal_conv1d.py",
+      "sha256": "a8533839c5f57ae711eb5e821ee77f1ea243af994a092965d25b89e404eecb3e"
+    },
+    {
+      "path": "python/freetoken/kernel/fast_index_copy.py",
+      "sha256": "55df690527f93d11c9dbaeb16defdfeeb5254c6afb50a86b2515500405a59620"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/__init__.py",
+      "sha256": "527308ce08e2c12b549ef72126b122be671ce55f77d04a75c6a2d3d48d29f4e8"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/chunk.py",
+      "sha256": "03a3407d7ae0eeb6d03c336ea1a5014fbc2909744ee0fe1ed389e61469b0184b"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/chunk_delta_h.py",
+      "sha256": "645b6638d223938f4b58747563d1d120a9da1db97984c7d3dc183686757296ae"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/chunk_fwd.py",
+      "sha256": "857ad01e058616ba236e1bf7b20bafa7f776548fba0c57be6a99749e08c2958e"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/chunk_o.py",
+      "sha256": "3ad20f22faf89d95d3b08df3112a81ee22275bb39d7bf9e0e424ef16f591b8ea"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/cumsum.py",
+      "sha256": "d2138a59fb54e4ed74c0f8c60d430801e78281f6cf69079e348880041ad9709d"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/fused_recurrent.py",
+      "sha256": "2b0d4734cdaa2bfd073431ecc64cb8007ae4139fb8593f0fa9be257d3534554f"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/fused_sigmoid_gating_recurrent.py",
+      "sha256": "5b274bcefaeb81514c5c445b16ded21dfe25292848ac76086a623b0f7066d044"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/index.py",
+      "sha256": "54c4ffe5244b04e8275e92c394e505c78c396d1b7c743cddb25e2eeb344ceae9"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/kda.py",
+      "sha256": "c73e2918a39eb550c8eb48e255725f55777d6c6675b1d1dc1167d96f73ed2d12"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/kda_chunk_delta_h.py",
+      "sha256": "82171c56fbec0eee383648cd3c4b434191fb8b7b0866cadfc197f1dfedadfb22"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/l2norm.py",
+      "sha256": "8dad24beefa6621d1f70c7d560fa87b05cb3ba7d6df01215b401823c5751b102"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/layernorm_gated.py",
+      "sha256": "d0806e5935e03e8315fb38a6a1ef7b5223e69a60330f66dfbec8102885947cfa"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/op.py",
+      "sha256": "d8501a5159ee87138d563786221e2137ddbb2437564c3467e2b61679938649f9"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/solve_tril.py",
+      "sha256": "850d6dd4b6cafacf49c09d1cbf7f0fd8fc287c45cd57f6736bbd2f30462ed1d8"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/utils.py",
+      "sha256": "453fd2ff806a74263dddca7c145479e13c60bae2ce36161a09478f510e5fdab9"
+    },
+    {
+      "path": "python/freetoken/kernel/fla/wy_fast.py",
+      "sha256": "404565b80c07e05f50f3bb40c03086e0e6f29d858a5a2e9b113e2a6cd5aa8559"
+    },
+    {
+      "path": "python/freetoken/kernel/gguf.py",
+      "sha256": "4825dd5375aacfa341f1e9488d91a9682edf40b9a9890496f9e81228c680a230"
+    },
+    {
+      "path": "python/freetoken/kernel/gguf_native.py",
+      "sha256": "07e2882776a744021f24c3acd0c9ff079512eb68e79992401e3ec8b198812cfe"
+    },
+    {
+      "path": "python/freetoken/kernel/gguf_quant.py",
+      "sha256": "fe06a7a823f556ac7f95bb1b8c7292edf700a47e7601d0348d6ff72ea038ac0c"
+    },
+    {
+      "path": "python/freetoken/kernel/index.py",
+      "sha256": "58f2dffa42ca333da04f959917c4ed7d4d94fd64f1848c580513deb3d784b2ab"
+    },
+    {
+      "path": "python/freetoken/kernel/moe_impl.py",
+      "sha256": "7ee990f7f67285634bb65df8c885e93e09b09561a3edb528113b3b715d30e47a"
+    },
+    {
+      "path": "python/freetoken/kernel/pinned.py",
+      "sha256": "c92a3ed504984b645e4bcbf77ab8122e235b9b2e91bb75d71cda768c4ec533a3"
+    },
+    {
+      "path": "python/freetoken/kernel/pynccl.py",
+      "sha256": "56492fe97dab369884c8fdf17feb9b5d77867e354d6b1b8115a700f10831b511"
+    },
+    {
+      "path": "python/freetoken/kernel/radix.py",
+      "sha256": "270fc8c713ca0227e8edb4eda17fab7bb88e889235cf5fbadcec0a5c26d23879"
+    },
+    {
+      "path": "python/freetoken/kernel/row_store.py",
+      "sha256": "382075c3ed0e4d1e5f39e23cc69e3bc339869af1b9470e799de948451b7b3219"
+    },
+    {
+      "path": "python/freetoken/kernel/store.py",
+      "sha256": "60c44d7f82ca07c52bfa73167a65998577e0c567676e20bab02e3cb9b0d845bb"
+    },
+    {
+      "path": "python/freetoken/kernel/tensor.py",
+      "sha256": "811a74739ca66f3bc627abe56880aef21b751995332119eab43c7ab860d5da1c"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/activation.py",
+      "sha256": "f54059bf7ad2a852be2f80d51cd66ea2f7a085b28e700ac02ac6d371cbb744e8"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/attention.py",
+      "sha256": "9eb0d79616220745ba9a1240f04eef5419b8ea34d20f169cf31aeea70b586b8d"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/autotune_cache.py",
+      "sha256": "18057363f452addd302e19a2cc3d5e6866b2240adda24f578d004afaed0ff5c1"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/causal_conv1d_triton.py",
+      "sha256": "c38b61c38bbb289da50fe1b52dbf592cde8ae16517c7d3cd6070debaca7deda2"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/decode_moe.py",
+      "sha256": "6b87b15422b1f27a7e9279c903a9fa2a06933453ce1caf02cf78d9b59f29959e"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/df11.py",
+      "sha256": "df5c0cfe2c96b8b917c93fb21282bd54ba731fdd281a9bfe43ae45783f082e85"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/df11_decode.py",
+      "sha256": "5d57b3e9b048a3808967e4c122d3bd17a99b09dfdb9a710ab2e033ebabcfd740"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/bf16_linear.py",
+      "sha256": "99612e899bb3a04c7e63d8e8d42883f59cf2e8b830637e0e07681d77fd0215f5"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/compress.py",
+      "sha256": "12b630bdb849bb0fd12423c3102f52b4708657ae8952809584432b2b373096f1"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/fp8_linear.py",
+      "sha256": "879c1915a075abf73ab9b4865c76f8aa9cf89b8b82521eb3f85b05ad7efb6435"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/fused_moe.py",
+      "sha256": "a5b7d7449b45633d05400140291bb1fefc19905a8612e39cb66c4d4ab6939e21"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/hadamard.py",
+      "sha256": "a2f90b1d1e6c2f14a392d305894324ff5b2ce89aca006fd0f26794116c27ab40"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/hc.py",
+      "sha256": "9f61edd07f378d0d88586f43f2bea70ded935c5d785cbfa7cb8ee407f405c170"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/indexer.py",
+      "sha256": "4141a6675073c83750fd6212b56c02e9349a70d8fd589737368c1f62bfbd9d85"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/norm.py",
+      "sha256": "f58a7e5d2ac3d8107145be1c639505021dcbcb5d431aa183cbad670a35b89220"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/rope.py",
+      "sha256": "314ef09b6bd3c2819f6901b469c3c415a0a1034beb3dd5e2d5b33c7b2d1dc9c1"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/router.py",
+      "sha256": "4c9fb654171976d2959b50aec24136cc7f85758d3bac91c475978a4e971b1262"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/sinkhorn.py",
+      "sha256": "8c70042e488d0891fb8717760509a4517f636e6443381cd09603d83ffba786be"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/sparse_attn.py",
+      "sha256": "b7e8f4b582960c42d496449a31cc7e734b00421af7bb4d2ce510bc0ed5a3fed6"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv4/swiglu.py",
+      "sha256": "1d97e201f9a3a5d37ecc2deda726854c27b44814e57c681296a2948b68a4e7b5"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/__init__.py",
+      "sha256": "45fb44f3d2a5a0c4608352887addbee3059fed94c1ef959a654499da44d9635e"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/indexer.py",
+      "sha256": "98b7f89dc9cd0b372cc4b4232ef4c26e004e4e1f4dd49c52539dfec31c2920ca"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/pack.py",
+      "sha256": "19738d2537bd966a0b3c88b0b633e447ee0c6a31d87a5e09d8c4dc3dc297a98b"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/row_format.py",
+      "sha256": "6402dbcede4ab058e9c4f45fa3def2670d2b5557f567c2ac25c3d1b8773944c4"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/sparse_attn.py",
+      "sha256": "cfea7a64ece218731f0de08ad52fdf819e0b90c8980a3b136a0d4c1dadb57168"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/dsv41/topk.py",
+      "sha256": "3490e026a035a439ae9f1ac4f9172a128e6441ec8b54ba6e0dce7cde03445c13"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/e4m3_compat.py",
+      "sha256": "56c76565bd01775b699a9a79b864e8cc9424b56b812c6afdcab5d4991c2b84b8"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/fp8_block_linear.py",
+      "sha256": "4718abee2b52ce78f32ee86b19949d54c6e54e0a77246afa3056122bc615c164"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/fp8_blockscale_moe.py",
+      "sha256": "6dfe6b20881efb14e688690e495c03d64cb2a7413bbc8ed1689fdc2606f5a818"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/fp8_pertensor_linear.py",
+      "sha256": "4ff47caf4155086059059b98baf79fbe936cadd13e6e23eab7c18d395681d8c3"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/fused_moe.py",
+      "sha256": "47982a05980efe8c53ee510ec28bf71c0849f4399154acd3031261924c31e8c3"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/gemma4_fused.py",
+      "sha256": "459ca43359076450d41840ca6ef5e4c404fb9024111cde509032874fd9e62a55"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/gguf_gdn.py",
+      "sha256": "5b773af57bedac338ac568eb1f38ee2e1a3f8094c67e7c2ba137a09e13c4b81f"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/gguf_gdn_compact.py",
+      "sha256": "4e3209881d275a9db7c62977ef9cea6a15e16d05307afc935365cb3f4eb7dae8"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/gguf_gdn_conv.py",
+      "sha256": "3da941a949c9c42a40d8ad2bc677767b84b6f4ed993e4309d070bd4f000ff5b6"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/glm_dsa_sparse.py",
+      "sha256": "b5cb03bba3a6bb36bf3e5f244e1fcffefb50b02071aa117e83754a78a66dee5d"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/hc.py",
+      "sha256": "155003ebd2c5eb707c55d33cbe175a5de0c65d91a3b26d9b7ebb49b70ff0d3d9"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/kpool_compress.py",
+      "sha256": "daffb6ca04ca63da9a997da6582e24fcc9469449aca18d636e4541fde8d911a7"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/mhc.py",
+      "sha256": "f7a43fc429eb9141d94fa784dbb7a74279104462d0f3cf78a327c1dbb820c05e"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/minimax_m3_sparse.py",
+      "sha256": "5806b57e1cf0f99f03abd4bfa31b339446d4531f4e37cba70316e5b175159216"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/moe_align.py",
+      "sha256": "6d36f891c97db3feeb53c1f3b8f220a6ab60a0b85441f36b606b98491616781f"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/moe_router.py",
+      "sha256": "f4974ee9a6c5808910712d209c17c28b0b9c196a83c87c849b5f7edb155f1ee6"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/moe_shared_gate.py",
+      "sha256": "d416801dc1cc7ba9dff694eb6ac6cca55edce3f0ff1d78ee5725ff9238163de8"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/mtp_metadata.py",
+      "sha256": "66e8dd1162ef6e8d2745de133263955ead005926c303d00e6410e22df540a542"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/mxfp4_moe.py",
+      "sha256": "ee28d57a7b43538eaf8ecd933718e7afb9ab6dc28d361911cb5c13b06529e338"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/mxfp8_linear.py",
+      "sha256": "3fcb82a13f20dc9d22ca1e7846b66535c9f42fc16cdc5346e474a709ae1893b8"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/norm.py",
+      "sha256": "cb39789e7a338ddb53a41baf8acb14c1de89d4bdace1f7d6f17017d4b616d08d"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/nvfp4_dequant.py",
+      "sha256": "2c4b894d87541ed0ae041e440fa56fbb12a652f04d7ef709f3bceae32865c6f0"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/nvfp4_fused_moe.py",
+      "sha256": "0c46ff05b81744af00b55885b909026ae755a226775bb605dab02de385ae2e2f"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/nvfp4_linear.py",
+      "sha256": "124e5bde49573e7ecc3a137855ae72f8c58ece2255a9ff9f096dd36c1a57028a"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/ple.py",
+      "sha256": "9babcc7eb717fd59d021fd582763424487a2e81eee002705aa3ee0e50ba4d5f3"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/__init__.py",
+      "sha256": "5cd3507a7036a9d36fcd4c3e7570ac736294d4b5179f34ec87b08ed37a081001"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/attend.py",
+      "sha256": "db16200f510d01cdb436498cae5a78e9284e305bb51f776fb30c18a3e66dd055"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/compress.py",
+      "sha256": "37c82ae91878f2de59973051e923db6d281948ea5c9febce9e8337a329624d1a"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/expand.py",
+      "sha256": "fee77d98a128806153dd8ffcf1ab443f271e2719f3cd3b2423248880abbed6ef"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/score.py",
+      "sha256": "974f85259eb67c0ae275939d63d69ca365d22a0dd0d6ea797b3dc6b0a42a7d3e"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/qsa/topk.py",
+      "sha256": "ba5073b84120738b607b007038b754f739332d884f037a69713be2dd71b27a47"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/rope.py",
+      "sha256": "8f538226ba44834fc6f866b9b59127d04dbb638b7f39c1e09af196e719d1335a"
+    },
+    {
+      "path": "python/freetoken/kernel/triton/sampling.py",
+      "sha256": "e32bcb300008cfc5a010da806cd95ef93e9302c4c89ea7b124a140e00e81ba39"
+    },
+    {
+      "path": "python/freetoken/kernel/utils.py",
+      "sha256": "45f627505d87688e17acad0633a9e50022604669deaeae61eb659626ec79299b"
+    },
+    {
+      "path": "python/freetoken/kvcache/__init__.py",
+      "sha256": "3e586c96d5e04de7264d40b464f49bbd393ce3171306a830a4fc763177b955bb"
+    },
+    {
+      "path": "python/freetoken/kvcache/base.py",
+      "sha256": "6ed421866515557d57f0e71eb74aea41dc4775553c666be8a720ec168c5a60d0"
+    },
+    {
+      "path": "python/freetoken/kvcache/bsa_pool.py",
+      "sha256": "b84237f8541ae812d11ce3255d3aa180a90d0ff54edf5e0babc27ee42208a2be"
+    },
+    {
+      "path": "python/freetoken/kvcache/cache_status.py",
+      "sha256": "638ad63bbe3b8f8cad4942bea02008c2dbe95b3ba363a080603a809c0899c061"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsa_pool.py",
+      "sha256": "3372c92e7ee09fac2c5b5f13a4c77806540fc1fdb3bbc0a81be31ca24c23e927"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/__init__.py",
+      "sha256": "c481194888c63d23cfb71cfea7d6e6c2e6a7be090564f393efc5f4a825321307"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/v41_cost_model.py",
+      "sha256": "60f62773c21e05b062a7650aefe513bd5742f62cb6c1a22b150266126c9cf6aa"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/v41_pool.py",
+      "sha256": "d8d89cb68f9afe2ec0ed4be025550ffc72b3d397ff0fc76b12ca3e0da96e9110"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/v41_row_format.py",
+      "sha256": "2b80110b42048f90b7695958876532ce7b29a0284f8e8fe2fc94392fbaa20aba"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/v4_cost_model.py",
+      "sha256": "1e71c93a310359f0a408f14b5801fb8ad91c6079b5989036f4bfdcd8b3858cd8"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/v4_pool.py",
+      "sha256": "a5c440c3859baee8d5ff2bf6ccac24c5a90ff3043d7afda6f0770125d136d8a1"
+    },
+    {
+      "path": "python/freetoken/kvcache/dsv4/window_tier.py",
+      "sha256": "93d0a6f3f86b7c1ab50f8da228c98a573da7ad4ab4bc8ad3029598b7ac6b8006"
+    },
+    {
+      "path": "python/freetoken/kvcache/hybrid_radix_cache.py",
+      "sha256": "f3b2f7a75879c3524b51c04783ea622872905c4eb70ea5909a6110bfa78b3405"
+    },
+    {
+      "path": "python/freetoken/kvcache/hybrid_swa_pool.py",
+      "sha256": "de80fdac3cc132fab47fbc0e16436da8da9ffd4f8b741ff2ffd67494396995a5"
+    },
+    {
+      "path": "python/freetoken/kvcache/linear_state_pool.py",
+      "sha256": "b17d1b89efd97b53e53ada78e691763bf9ffbb867e44d0068c3ce47d9408a806"
+    },
+    {
+      "path": "python/freetoken/kvcache/mha_pool.py",
+      "sha256": "205c0837a81e19139e8196a800b2e88ce9b2ece5c1c104ea0b54ae51291bde19"
+    },
+    {
+      "path": "python/freetoken/kvcache/mtp_pool.py",
+      "sha256": "d4ec8927a81dd1ba30742a09c16a291c44b0d7edd3c088380a09663c888328db"
+    },
+    {
+      "path": "python/freetoken/kvcache/naive_cache.py",
+      "sha256": "c1e8ee16776c3f4e1d91a7571e6fecee07de2670ebc2b785a9361b1c4b12355e"
+    },
+    {
+      "path": "python/freetoken/kvcache/qsa_pool.py",
+      "sha256": "5ef90072bdbec5a3ec1845668cece02faf370ba13caffe98ab27d05d832ce74b"
+    },
+    {
+      "path": "python/freetoken/kvcache/radix_cache.py",
+      "sha256": "c35b6f8c5365ccaa22f57008ae93431a2fda7e3502f2260d00670c33117ef25e"
+    },
+    {
+      "path": "python/freetoken/kvcache/swa_radix_cache.py",
+      "sha256": "7e13197a635857659476eeef1370cf17678b8e90b2b76a7e39db4bfdf29c6a21"
+    },
+    {
+      "path": "python/freetoken/launch.py",
+      "sha256": "a803f4794f3409a8b1da9479c68453754bc0dc820586d5b5b023829ba9044b21"
+    },
+    {
+      "path": "python/freetoken/layers/__init__.py",
+      "sha256": "7f4c5af2c9f5613d5b481dc72a7bfcd8c7870ccdda74bd29c3d343e55769f179"
+    },
+    {
+      "path": "python/freetoken/layers/activation.py",
+      "sha256": "05616cf65ec2056aa9a81e39fc5812bd323ca2e5b516ac4ba692a3072fb2f294"
+    },
+    {
+      "path": "python/freetoken/layers/base.py",
+      "sha256": "2080bdf735c51592199cc9dd6322eb0b40fb1ed38ca39375b56b600dbf151037"
+    },
+    {
+      "path": "python/freetoken/layers/embedding.py",
+      "sha256": "e53d5a173fddb1cbce891565be8c160ec2a3db0fd73fa250eb9e5d6645036329"
+    },
+    {
+      "path": "python/freetoken/layers/gguf.py",
+      "sha256": "6b849db6dbbdfa79ee868e4ef4d61649c58b3d90e0386b609adb0440bf0d86b3"
+    },
+    {
+      "path": "python/freetoken/layers/linear.py",
+      "sha256": "4dd8b4f2f6878c070e81f618293ef1a8380e23e9c922c8457fd5bc4d0ff1eade"
+    },
+    {
+      "path": "python/freetoken/layers/mhc.py",
+      "sha256": "440914eb42de2970f4aab1337a5d91c29abe840729a71ffcdf45e6639e130834"
+    },
+    {
+      "path": "python/freetoken/layers/moe.py",
+      "sha256": "7ffd249decd4b0b224d8f1144b49e9b001bc400fd42b599837f6b3132389b093"
+    },
+    {
+      "path": "python/freetoken/layers/norm.py",
+      "sha256": "8bcb09d0a0c1482474581e2b40fae086078a3582489e8a741a5e22905ed27d07"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/__init__.py",
+      "sha256": "f69d71b362f565fb9de001b4732df74971c9c1e675597a9b0d66a58bd4820cec"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/__init__.py",
+      "sha256": "82ba3319631b961c1d28a581a4cbba73a569c49c834154222ea187d2e997fc80"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/base.py",
+      "sha256": "c324d79dce816b0d1a7330ec1728e8517c43782be2a7805d914540d51540fb31"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/compressed_tensors.py",
+      "sha256": "031e88be80085703bbf6f697e6b9dfc55e03089a7fffd4036dc7a405dd1417ef"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/fp8.py",
+      "sha256": "a1fe80ee91dd242092fcaec7b7f2f6a4a799f5d041277afaa10440b9e68b4430"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/gguf.py",
+      "sha256": "1801e0716f473779686b977c00bfbb6faa7b68302a8edc2f0b82a219ff1ea68a"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/modelopt.py",
+      "sha256": "53d4e29a38e42515c85e37b2a043f90616b626452653329fd5544980312617c2"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/configs/mxfp4.py",
+      "sha256": "b35eec58a496600459435b03464daa09b902901f2710d2146fe3642c7042be14"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/__init__.py",
+      "sha256": "051d1c8dcd974f3586d0a1f050d13348822d378ce8bc2c5a253dda9bf95ec7c1"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/base.py",
+      "sha256": "88f3c97dfe2d4cf05983ab8da55f892d17b8ff2bdb4600e7b488c9c2deaef8e3"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/fp8_block.py",
+      "sha256": "8d15572bbafef8418f78dac541ebdd560b0c6dc90f6392b9b19e32fba2c6fdd2"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/fp8_tensor.py",
+      "sha256": "7bebf5a08009081087f4bad48110922bbd3e8b24e7ca88c5cf24ede82aed23b8"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/gguf.py",
+      "sha256": "2dd9471e49ead52b55bfb185a9de1c286515512cae82a953482f4a33b5b794c4"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/mxfp8.py",
+      "sha256": "80f1c64c8126d1e347aac38c88b6a251d41fa8ec98913b97fdaa68dd4af12b10"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/nvfp4.py",
+      "sha256": "010e99c56d507a585460a6a0300df85031fd279b7043c9ed09e3837d2b05e1ee"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/linear/unquantized.py",
+      "sha256": "580f5dc0c72c27cccac1be4ee26ab50db0d223523860665e2bd9fbf04bcfadf3"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/method.py",
+      "sha256": "15e8b8b8ce559f08b50f4cc5267f9531eea8ec3bf36838e19154bcdd45e1f245"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/__init__.py",
+      "sha256": "477af9d6f1462c32c365cf30916125a23c88cb5aaf0d6b97b19bd4feda946b8e"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/base.py",
+      "sha256": "02be53756a9b5bc76cdec6414e883ed0c3df3f10154d66bdd10541d911868ed1"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/fp8_block.py",
+      "sha256": "f6f57c32e1ed91cecb2400d3392e0e5b96279728cba44474faacdb39a60c1105"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/mxfp4.py",
+      "sha256": "4a8551e8998d521ae1f53f1c5d3039d960f7d44125fa1280e2811678754b967b"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/mxfp8.py",
+      "sha256": "1bc3a4cb8f89a93fe891965414ba772d107704d8c861741fbcfbe69a764f554a"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/nvfp4.py",
+      "sha256": "67423593f819f2763b104f8c02987200abdd4775a72ccf2e16210ff634d7bbe6"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/q2_0.py",
+      "sha256": "91b525ed7def0dd35c262c415698f203063a7f4d0d041e2ef7b31f3c43ffde5b"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/moe/unquantized.py",
+      "sha256": "26f5fa103ba93c4dc886b667f8cae1f4b868d1f26b2a2024af965e010ef52710"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/names.py",
+      "sha256": "8465618c55e4273b008f528be52de4a901374273a1c0133b1c82c64e94e5addd"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/quant_backend.py",
+      "sha256": "17428b5f521e3297688e31dd2036b63283ed85c3c5e11b240ef58d23b1f97017"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/registry.py",
+      "sha256": "2a6d893ad1eb09f31495bfbec9e0e3d5bcedd08a2894d8feed1483632857e154"
+    },
+    {
+      "path": "python/freetoken/layers/quantization/scheme.py",
+      "sha256": "1d526207d66596ecbe8692a6e40138eee85df8f6f2914000366715b5b29e6dc3"
+    },
+    {
+      "path": "python/freetoken/layers/rotary.py",
+      "sha256": "37da14ad4ee72da9ae43a4db921a2c8459fbe90fb0b3ed9e475d700022a2f98d"
+    },
+    {
+      "path": "python/freetoken/llm/__init__.py",
+      "sha256": "9aa944ea58bb685ac202b1ce39951095f0d91c7b51919a5654b5c276bce1aaf4"
+    },
+    {
+      "path": "python/freetoken/llm/llm.py",
+      "sha256": "5cb3b2b363db188218061cf9cd94b4dd4eb1c51e15b686665da7ce775e587409"
+    },
+    {
+      "path": "python/freetoken/lora/__init__.py",
+      "sha256": "3d2aaf1ffbfff36089931ee06d94731d1c2ae0339a25046e4d28bdf5a4d8fd7d"
+    },
+    {
+      "path": "python/freetoken/lora/bind.py",
+      "sha256": "32682ba0d02f2b879058941861f062c83235a5a1a2be1265d6d716bcc1e8143e"
+    },
+    {
+      "path": "python/freetoken/lora/dense_bind.py",
+      "sha256": "3293ebb0ce42593ec47edeb3ceafc2ff7a876800e27245fab52848dde7331ac7"
+    },
+    {
+      "path": "python/freetoken/lora/dense_manifest.py",
+      "sha256": "464e44fa30d311ef20925f98fab4e30bcae222885b5f8209694bf84fb7338c76"
+    },
+    {
+      "path": "python/freetoken/lora/dense_stream.py",
+      "sha256": "58f9050dc2e7dcee5743c513e28ad3679ace68b216314f006c35114a1d0afc7d"
+    },
+    {
+      "path": "python/freetoken/lora/kernels.py",
+      "sha256": "c129565e5448388793596f6ec22ff33040f0b3f83126fb0d60fe60215238b1d9"
+    },
+    {
+      "path": "python/freetoken/lora/manifest.py",
+      "sha256": "1459013b2124e652c15bf16b14b1eab1bdfa27c354b0f034423a6c71b610707b"
+    },
+    {
+      "path": "python/freetoken/lora/ops.py",
+      "sha256": "38fd3b790cae912309377853c52d306781d19448edb2802417dc2cea94d445d8"
+    },
+    {
+      "path": "python/freetoken/lora_memory.py",
+      "sha256": "50baf6e86562e66a29f6a923013b44c534beb13277a2bcd4dc206f8d4bc3cfbc"
+    },
+    {
+      "path": "python/freetoken/message/__init__.py",
+      "sha256": "6ec3c647e6aa22a278220ae9aa8dfb7ed08dde2d1cb414c1866163874a029cfa"
+    },
+    {
+      "path": "python/freetoken/message/backend.py",
+      "sha256": "607972877f3dea768dc9a478d8ffd84a92b5213d3cdbdf618cd03c70069aed2f"
+    },
+    {
+      "path": "python/freetoken/message/frontend.py",
+      "sha256": "3a067037d8008a1b38c0a07dbf5f9041e8cbfa951d37bca00ae7dc25c2fdcb6a"
+    },
+    {
+      "path": "python/freetoken/message/tokenizer.py",
+      "sha256": "b9ebc8873432f8026c97f6f6221df8ede75511c6716e1ae16e01d87083ed0326"
+    },
+    {
+      "path": "python/freetoken/message/utils.py",
+      "sha256": "8ed1f8a3088edcecbf05f2b3e15f5b4898376976c60cda64de8407159aa736ce"
+    },
+    {
+      "path": "python/freetoken/mm/__init__.py",
+      "sha256": "cb11f0e3ace1cbf86fc577476548f1cb29dc64e024f87cd8bd16d43ed7402bc0"
+    },
+    {
+      "path": "python/freetoken/mm/config.py",
+      "sha256": "0ef82407572cd7abefe260218b7ddbcf34410c89ae8df2cec871aea5991c7490"
+    },
+    {
+      "path": "python/freetoken/mm/encoder_cache.py",
+      "sha256": "4afa228affb23cacc3239ea10712691a39bb6226c390aff12b839f06dcef8641"
+    },
+    {
+      "path": "python/freetoken/mm/media.py",
+      "sha256": "7bc309a8c78ccff846b99cab14b58119ba4da394fdfd54cfc2bd4f29d1de906b"
+    },
+    {
+      "path": "python/freetoken/mm/processor.py",
+      "sha256": "18290fe96d37a788190fd0a30666899fa4f77c426648c6bc8c3e28c172be42d9"
+    },
+    {
+      "path": "python/freetoken/mm/processors/deepseek_v41.py",
+      "sha256": "d06c1841858806beffdcb8fadaa2e7fe89f00dc96c87a7fc913ce86d09f61206"
+    },
+    {
+      "path": "python/freetoken/mm/processors/gemma4.py",
+      "sha256": "e01275e23ea3de31279496ded4cbaf5c2472e36c2247213b14b8229e695d0892"
+    },
+    {
+      "path": "python/freetoken/mm/processors/glm5_next.py",
+      "sha256": "63dd9c4787f48e4ef692dd6d4e7a23a3724cd0d9ca27612b34fd5cb0bd8f2168"
+    },
+    {
+      "path": "python/freetoken/mm/processors/minimax_m3.py",
+      "sha256": "c499cf28a42d986d7134b765e7bc28e20e843e77a0e09ab1aedebfe6e09e3e51"
+    },
+    {
+      "path": "python/freetoken/mm/processors/muse_glimmer.py",
+      "sha256": "c01db9fcb22e29cc95853fb394593c79825510058590dceb8b0dc2a1c235fa1f"
+    },
+    {
+      "path": "python/freetoken/mm/processors/qwen_vl.py",
+      "sha256": "766bd087db97d01e0be9850c3f840c7a29ae54f4dc3b939ab7a99166a75977a4"
+    },
+    {
+      "path": "python/freetoken/models/__init__.py",
+      "sha256": "c520dd0ab3ae3903a9bc36a7d0d43d67c5625b4805fd9b707b72357be4a40ec6"
+    },
+    {
+      "path": "python/freetoken/models/blocks.py",
+      "sha256": "0a81dc9e97623cd634233ac1e083e8b822d4d8955cc565bc4b78ec3ea86a6ef0"
+    },
+    {
+      "path": "python/freetoken/models/config.py",
+      "sha256": "bcf14b7423a3452f5438d703970b29dcb35b4378c9de2d32d7c778aa08124811"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/__init__.py",
+      "sha256": "82aa8b39d1aa53d8efa70c67584b657d29cffdac292d3ed87e56ee69ba987f7d"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/args.py",
+      "sha256": "212199bd655ba5dc3a8c4540f98fc94c962ec341333d38f26d73d959e00408bf"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/attention.py",
+      "sha256": "ecfdd9763216492600a0d0320973d0e10f2117433b795ce794ae4e3002b94af1"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/compress.py",
+      "sha256": "bd861c0e8c461ed921065e27b502c63191312b26facfa634720a6407de104842"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/config.py",
+      "sha256": "00b85c23e1c22dae3756a5d39ce44b2f079077de35325a329fe08716831d5b37"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/layers.py",
+      "sha256": "85b510d4b1312b45f31da81ffc1f7ffbd285dc26a2e57503c36b308a01ce664f"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/model.py",
+      "sha256": "1a42056435d25cd63e726ebdb75ee9ff01b7534fb320ea60790e9be91370a0b0"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/moe.py",
+      "sha256": "491b2a7e6c69fea6a73bbce5c744f86334c94413632020635f4e00e8c598f9a5"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/ops.py",
+      "sha256": "94135318047493156e4e79147e8160da27c880382736b4d0cfa4ec8ada771a62"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v4/weight.py",
+      "sha256": "9003b47d3156838f0f6105f229e2d8b650cc2c09a0160495a2ab85b6cd54a3f9"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/__init__.py",
+      "sha256": "a313235a9f7e638c6acc45f53357585859da3ee7e2686ef29dccacc99ee0cc3a"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/args.py",
+      "sha256": "939a955651ba5c947e0132a5ef688c97f9a2f948399bd5ef9ab5530e944d239e"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/attention.py",
+      "sha256": "73945bb8d0a975e9852d21a1b68722e6ed15854d7e0685a12862963098b9acb0"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/compressor.py",
+      "sha256": "bfcc73d8ed09b9fce0e9c53e4630e104ec0d2af2c653ca6408ea1b9037662215"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/config.py",
+      "sha256": "018d654b98b8992d04517fb5bfbc4fbe1ce58fa7b9ee3fc0e385f4b7c84f7a73"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/engram.py",
+      "sha256": "0d20161637be9da4021047b11ef6f70ec6bc22d8db35b76eadc866c5b352b420"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/engram_table.py",
+      "sha256": "91425c7a3ebfcda4c988341348219c22b65edc71d4bc51a866f467fa8f285472"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/indexer.py",
+      "sha256": "c591484bcb439acbcce495477c706b9670b51d0202126e053ada4dbef036c1e2"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/model.py",
+      "sha256": "80829fac0b0a1e17ed694e6b2ed6250aff3e309202a1a89340a5e4baa7e7561f"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/moe.py",
+      "sha256": "b3a7469b2eb666a7209d2802106fdaa3d4ccb225971c670feb24cb77467736fa"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/rope.py",
+      "sha256": "aa246df35f09f56d7d6adcd10707509ae837a91de0a0cb3c07a3e60f13076ffb"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/vision.py",
+      "sha256": "178e1bb372caadf86a44736176bd8dca4161b9fa0637f4f3d3d6cde9fe73d91b"
+    },
+    {
+      "path": "python/freetoken/models/deepseek_v41/weight.py",
+      "sha256": "6693e13f04f5098151c654976f58ead7422d1782aa51ade1ec0480cdbb5b6792"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/__init__.py",
+      "sha256": "0991c237bf01f240ba823876c2ba2357616cc4963da973596f0602308debcf73"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/attention.py",
+      "sha256": "dd33897ba85bf8dec71657047bf012ccd98339b63650c963be1af9ff9e9c14f3"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/config.py",
+      "sha256": "8d7ec4cd15340e48ce02fa849dbac44976bf7ae26c936053a3ae3a1014ddf677"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/gguf.py",
+      "sha256": "8ac8e7ee7ee56e9093e8417d802e2a62fb1395fc24b71b55e94dde9348b231bf"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/model.py",
+      "sha256": "571c178be63e4852ba9854eef9c2e8e008c479a47a00519d0de86336b4cfec6b"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/moe.py",
+      "sha256": "0515f92f5a3b79a825cb8fb14f3568ec39bcf884f96ff2401a85b48634afd28d"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/vision.py",
+      "sha256": "955774ecbef325de94b251fc33eb483e2813a1bcef427fa73afb0f560192db48"
+    },
+    {
+      "path": "python/freetoken/models/gemma4/weight.py",
+      "sha256": "9f0dd1c379344d0af154860afb925d224e88e86cb7f92ef2b2bb39d93fca6a59"
+    },
+    {
+      "path": "python/freetoken/models/gguf/__init__.py",
+      "sha256": "e02c08fdb6d865bbaa391158d37954c0950a2aa885b4a20412ede1e816525b2a"
+    },
+    {
+      "path": "python/freetoken/models/gguf/config.py",
+      "sha256": "b02e9f9a5c134a0752e7036145b840d10fdad1d84f4e6add1bb1313916bb7f7f"
+    },
+    {
+      "path": "python/freetoken/models/gguf/dequant.py",
+      "sha256": "b877dd5ecb1cdf7463e7989dc323e6e8b071dfd82b083ca8bf2c6354eb9ee133"
+    },
+    {
+      "path": "python/freetoken/models/gguf/reader.py",
+      "sha256": "293bdbf1eb9b2bce2f19607aa1e6b95dd417bea69f3bf17696a11069fc1b3d7c"
+    },
+    {
+      "path": "python/freetoken/models/gguf/tokenizer.py",
+      "sha256": "41d7eff3283e6c2da96aaf9030cb3bf49ebc221c91e75cbaefbf0af0fab5962e"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/__init__.py",
+      "sha256": "9ba5ac8515b17bcd02f1128296209997dff14601fa925725126c3d96fb0b6ab8"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/attention.py",
+      "sha256": "2bc681221c192ac26cb945de4a6fd44502aeba910cb6492847d49aa8a28ed5f3"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/config.py",
+      "sha256": "1719e14dd4677114218c51e6e9e6ebb35e83da299a7da391610bbee1641b4a86"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/df11_embedding.py",
+      "sha256": "c2b79b0ddea82b657b2cb758678230fcf827bfa4ecf4e0ed826809816caf19a4"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/df11_linear.py",
+      "sha256": "569b179971589872efa2846ba35d50993e973fda9b14938a1e0622ac03f13c58"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/mlp.py",
+      "sha256": "11400d64b0d006f247d1ca243ca9c75d5421d16582970d66cd59932125d2328e"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/model.py",
+      "sha256": "ffc74675369791cfca36ba24872333af29328c11cb5c63a3334f8ab738be2b62"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/moe.py",
+      "sha256": "ec141aeb136fad7e9b86154f416b164dbd4df6382a826a126623044ece21fba9"
+    },
+    {
+      "path": "python/freetoken/models/glm4_moe/weight.py",
+      "sha256": "0917865d743746993922702484fbdbfd533c8bf8bc5f6b986d121baeddd5a696"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/__init__.py",
+      "sha256": "4d1e8b7ca2aa5666bdb557e55dc2e92f6b75b85fd2bf1f275d3ed1c9298a2e40"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/args.py",
+      "sha256": "b802187e855d6c4b3cb6e1a0e709515b73e9b68a418bcea784d2f2c042786866"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/attention.py",
+      "sha256": "bed50200a40d1e9628eac4696a477c2a4edb6b1e6ad8a3667d633da2c0f14120"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/config.py",
+      "sha256": "c478999467d726647bda65fcfb64aa83e9cbc52147e960de847a925d6fdccc43"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/kda.py",
+      "sha256": "247391432938cc1f34d90891298f9510110cd7843d964eda1ed3488d6f7e0b2e"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/mlp.py",
+      "sha256": "409e09173e722bbcd3c28deb9f421b1f472ea68809067ad628adaab5b9dcb5d7"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/model.py",
+      "sha256": "88d886a9ff23fafd06d30af3d13bc49dfa0f4b6d4db540657ee9d3885d955e13"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/moe.py",
+      "sha256": "07746138d90c4e39525aa8a49036601212a5d17b4fa7673f517fdd428cdd1674"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/vision.py",
+      "sha256": "aef47ac38a74daa11bdeca1fc6e62588fdf900d97ec78caecbc0519785efffa4"
+    },
+    {
+      "path": "python/freetoken/models/glm5_next/weight.py",
+      "sha256": "d89b470b2177607e92dc14bc9e576ccaa49627579d7ccb6f4fb80d106483141d"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/__init__.py",
+      "sha256": "b1bbd8de559c5962165a47bc82f7b82efcca8695704a0923270a69113c18cd3e"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/args.py",
+      "sha256": "0944168f8b3eb20db80cfc9524bde7d43d4a463ea67fb3b3cdae2decac2d1c3e"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/attention.py",
+      "sha256": "92660bf02123950381309763f264bfba006b890fe0517037d33ec9f68f48f093"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/config.py",
+      "sha256": "af65c9f3a14974332c85b7ab96734698a72a5df4020bc39bd5da3b95f04ef1af"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/mlp.py",
+      "sha256": "5a1ec65f52e09d6ec5719c858f0e3a016d4e193397ce106bee39edb8fe5d4235"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/model.py",
+      "sha256": "7c74b681dd1f8b3c180f465d58c9226c4543a9b7eea9928795994fbb4b011601"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/moe.py",
+      "sha256": "53f946b4e4ded860708be36f6e0f2d4e528eb0f7e1f7268d18702a05d68776b4"
+    },
+    {
+      "path": "python/freetoken/models/glm_moe_dsa/weight.py",
+      "sha256": "e135f4b0f25a0b01780e09aa51335c4c279ee41948559bb925e1f76c5b85f174"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/__init__.py",
+      "sha256": "b792f029c61da08e5c86d1a2c7fd27e50ee12a2c07008ec5524fd73bb7da95d9"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/attention.py",
+      "sha256": "03348c6dfebad699e13d6a6825d043a37e317797211aebacc562920993f15cc5"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/config.py",
+      "sha256": "2a3e9ca2a4fa52ccaf691a99e0b4f492bfd6cdc37f23917b51d696aa4a28dc3b"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/model.py",
+      "sha256": "e17caa6c06472b882c4903117767d9db4ec289706e6c01fac14db5e7a8aa7762"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/moe.py",
+      "sha256": "d9747cb89512f3dd2578397a599ddec7372b4f884f52ec25fc7fea4b405c2b9f"
+    },
+    {
+      "path": "python/freetoken/models/gpt_oss/weight.py",
+      "sha256": "803ec9541080f06fd39c8579f8834ecea405212c7e787e4704d066b3a5933f3c"
+    },
+    {
+      "path": "python/freetoken/models/llama/__init__.py",
+      "sha256": "8c2b20e58202f0d25a925e347bc8037d7a7aa7c02053a20904e747f990a387bf"
+    },
+    {
+      "path": "python/freetoken/models/llama/attention.py",
+      "sha256": "5a35f47c6152b189a0481e8b3eeb247ce4a834d43f3611a882a028741e911704"
+    },
+    {
+      "path": "python/freetoken/models/llama/config.py",
+      "sha256": "25e205f2c337c51e0394c583f4e8e0b206b2c36073cb57c90f1fe6f2b5367bbc"
+    },
+    {
+      "path": "python/freetoken/models/llama/model.py",
+      "sha256": "926ffe118302c340d6d5253afb1bba08614552eea90eca750310b2191a87ea88"
+    },
+    {
+      "path": "python/freetoken/models/llama/weight.py",
+      "sha256": "3a42743c54ebf4a52c7dddc0eae5c9b6055aec56cd42904cc0c1f04158c455f2"
+    },
+    {
+      "path": "python/freetoken/models/loader.py",
+      "sha256": "6132b13f0e2dd5f64639dea18b8bee68ac15e2d5d7f61936a27e774c50cbc435"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/__init__.py",
+      "sha256": "aadd77fa6162c1531c7bcf2461729d3b676df06606bdc998dd10299a5df736d9"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/attention.py",
+      "sha256": "698e2a28a60e78951f62a7be76100a57e1f443702d426b41b2b059ee35d92e67"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/config.py",
+      "sha256": "b1d0f869e4db95e29e1e56f777ff03e470dd3c739022ac36f61093e0456c6e54"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/model.py",
+      "sha256": "0d8cf1d3f0b804648a3a4654b57508c0fe9d7b525b9296a79e63470fe9c2a335"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/moe.py",
+      "sha256": "a83df177e3fe4f727da24c790246b8d76062de16685f90da0c7da1de26b28b91"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m2/weight.py",
+      "sha256": "301ea42d863860a1a8dd93d3fef64696e0641721b88c831268ac3b0c01e0d54c"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/__init__.py",
+      "sha256": "b865599c83ec2564d191c124cfb2d3a90a3b6109654bcfaacbac381865bd1b73"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/args.py",
+      "sha256": "6fa2799aeac4efb849fa9ab7eb6d35f670fa027ce6751685533f8da98bddd2ae"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/attention.py",
+      "sha256": "ba5053961e7c66c0d5309e15cae5b9ecb13292347c4987da17c3a0d8cf0852a6"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/config.py",
+      "sha256": "7367b8be904bdffaff0ef847d517f21363f43e1605d606bc7be93cb48665415b"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/mlp.py",
+      "sha256": "abdd288eb5024e80df3c08dc83dbe5faa1970a544489cab5d23804bc444295b0"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/model.py",
+      "sha256": "287ebef403c32c2f2eca65ab7fe867f41bdcb95e5b1f00283b5bd4f21ce9652c"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/moe.py",
+      "sha256": "f55fadbdaac19b18d96cdae1602319710ef3e6defa2e497cbc315b6f3c5a6cf5"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/vision.py",
+      "sha256": "7d3bafca4e5c50913d2f6972c12596ffe724d05e708c8190f369b2f473721943"
+    },
+    {
+      "path": "python/freetoken/models/minimax_m3/weight.py",
+      "sha256": "82325e82808f40c1e884609bfaadbdf8629c23fb285a247e0c6f9f4e0610f9d0"
+    },
+    {
+      "path": "python/freetoken/models/mistral/__init__.py",
+      "sha256": "9f7e3e78154548a14f755262606c5dac3d715363672d28540c5018c2e101fbad"
+    },
+    {
+      "path": "python/freetoken/models/mistral/attention.py",
+      "sha256": "9a7f16750faf86f172995b03e03ec055ee2c4d322867c7e67ecbaa257d81dccf"
+    },
+    {
+      "path": "python/freetoken/models/mistral/config.py",
+      "sha256": "395352a5f779051138ee01c41dfa8259a5d5ab6099b957f4415c7822aa9780da"
+    },
+    {
+      "path": "python/freetoken/models/mistral/model.py",
+      "sha256": "f757075cd1d6138a0437d5b743ecc3e672f882f51aa638e007315e72817004dc"
+    },
+    {
+      "path": "python/freetoken/models/mistral/weight.py",
+      "sha256": "dded1e5b65e5ca8157ba190f5e227bc8f16670621fb2215c1672af3e08fd8c88"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/__init__.py",
+      "sha256": "e0cc43126015a27f627e3a56b749c1e4f4ad6655a44867b3086312a0bf16872d"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/attention.py",
+      "sha256": "a002814bee7a99aab2822675d11843db41cd7896ed5cfe39f9253654c8919106"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/config.py",
+      "sha256": "91b6249033d86ba1d58689b001728387c752f4dbddd772b11a2e09ba9042e95e"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/model.py",
+      "sha256": "f8ea71093b9a24970c724a9003f3b4e691dc88f1bb6f466f2b9bc090af223005"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/vision.py",
+      "sha256": "655a0b11e4687f687c821f7788eb8b0d1d48fb0ecfd4118781049748d47b092b"
+    },
+    {
+      "path": "python/freetoken/models/muse_glimmer/weight.py",
+      "sha256": "8adbf433ec8cff6e6a4a25124a6a186ecdc1d92ba009da8ebbbe0c05a0d498fd"
+    },
+    {
+      "path": "python/freetoken/models/nvfp4_banks.py",
+      "sha256": "f8096d709174fe69e99b520caf3f0f1f8368681892c725fa87f624133e92f420"
+    },
+    {
+      "path": "python/freetoken/models/qwen2/__init__.py",
+      "sha256": "1cf410bc74f528150ec4b63f4e103a79bd5f2b8c34333f1e882c53a7131acade"
+    },
+    {
+      "path": "python/freetoken/models/qwen2/attention.py",
+      "sha256": "d14865d78d2ed82f1b6c13e5f51d14eb1c24634b7218a4cf7a19ec210ea36f03"
+    },
+    {
+      "path": "python/freetoken/models/qwen2/config.py",
+      "sha256": "ebc01bd7e1c057ad479b07d83e2e0428e48fb7838237b39d9289ba50bdd7b4e6"
+    },
+    {
+      "path": "python/freetoken/models/qwen2/model.py",
+      "sha256": "0318e6e7c185bce04e57d45398d1a6b6fb931ea704032ddcae7054e0b5326940"
+    },
+    {
+      "path": "python/freetoken/models/qwen2/weight.py",
+      "sha256": "688655f9537625bb5a29aa9d85247a1b276f8eaca3bb5d291aa8be5a54b5799f"
+    },
+    {
+      "path": "python/freetoken/models/qwen3/__init__.py",
+      "sha256": "6852606e31fab9451d43f4c7094984fe1cd2407d6d321c88ed5d2acd69484916"
+    },
+    {
+      "path": "python/freetoken/models/qwen3/attention.py",
+      "sha256": "6bc8757fb033cc0667c03ef6eaf236c24b06d641ef8f70af18ad436d4340669c"
+    },
+    {
+      "path": "python/freetoken/models/qwen3/config.py",
+      "sha256": "cd945e28d5fffe0f286d568a1197fc69411722a94d49cdd74e2e216cc14b3ebb"
+    },
+    {
+      "path": "python/freetoken/models/qwen3/model.py",
+      "sha256": "79a2d2e54f73e017a491919546d61a04a731587c1878bc0b4442c1e0cee406de"
+    },
+    {
+      "path": "python/freetoken/models/qwen3/weight.py",
+      "sha256": "9f93356de01214886862c2d1b4a59b64686c2f6d0e023e517c401f79d736c36a"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/__init__.py",
+      "sha256": "6b0f97283665893f1f00316940e927f3bacd4bf58e291fa9124372dd97b0e17e"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/attention.py",
+      "sha256": "b9761186f38ca01a06f8d2ac2e5ef3c541571cea4df7698230c3669b51c16825"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/config.py",
+      "sha256": "f85e4071554ded594e9e679fa89a24feacb6f07451386f0ec7e4eb7be3585e20"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/gdn.py",
+      "sha256": "faafd10620a67149ee3e80a31d64b5247134f0d0337bbff5fdd8794ce68f2d91"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/gdn_kernels.py",
+      "sha256": "92314cc9f24911c4f4533a2c70938f4c3a64ecc2eac5b5484c4c58d012b6dee4"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/gdn_reference.py",
+      "sha256": "dcd5548889d1cd07c8c871b2186abce3dc7d210b22e07dfb30a2bb22040bd0cb"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/model.py",
+      "sha256": "323b0c4076974d32ac2011bb89e59723df52f6d060e1e75d858284b3b90ec119"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/moe.py",
+      "sha256": "6b39be95546e6a9c1c03929ea4a1e2184888c288432d97d99aa9fa0e5b8abd8b"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_5_moe/weight.py",
+      "sha256": "f64988df5dd7204247efc1d417d9d042681d3ea7d68e424f3f4ee717c10a250b"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/__init__.py",
+      "sha256": "aa433d5a835141db4bc267f1d8c360325a0891b0b829e832168edb262098dacb"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/attention.py",
+      "sha256": "b812aa76dd24f5430d0d7d2a324e058f239ea06a289a2edcbda424146b41ccc5"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/config.py",
+      "sha256": "3fa421b8c18fe5ef69967effbfd39c4761b89af63edf71d653278518ef496dc7"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/model.py",
+      "sha256": "2e832c41c82069aed9e6f67fff16a59807f072e14db0b1f5f01d03b9dc73a984"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/moe.py",
+      "sha256": "0fb468ba863b3b32e69f6978944a757f4c6c970fd41adaa42aea4d9c70e40872"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_moe/weight.py",
+      "sha256": "cd9ef1042acfe7315288c61492d4f25f54d588c980e660af31c82a99a9045255"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_vl/__init__.py",
+      "sha256": "abceafdda7d927188d8d9d9136b96cf88d8be611caf64b46f81bafa1bb011488"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_vl/config.py",
+      "sha256": "918aa6b04a57db5ded444d340ca3ecdc0119ab05a23d5c7a9b7a75a2874c2e77"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_vl/model.py",
+      "sha256": "e8e9a8e7e6b55676835592a3d4b52678fb1ab35d5f6c8f182d0dd2fba3fe552a"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_vl/vision.py",
+      "sha256": "11bddfef7a181aad20cebc83577a955cdd73788c8f9bcea8f5e96ac908c82a09"
+    },
+    {
+      "path": "python/freetoken/models/qwen3_vl/weight.py",
+      "sha256": "403297c50961a287c4c7c6038cc7ffc0ee3c1e97ae4dac2ebfe99aba5fb47a50"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/__init__.py",
+      "sha256": "43a7812a33adee1607dc3e8028dd361cfea2f4b0cdc74585c5a971335f765845"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/attention.py",
+      "sha256": "e512148461e47a3b2e9d3befa3b869a02d6aa7d25ea8db094fe910e8b686322c"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/config.py",
+      "sha256": "64a1765ef01f4b012d4368281cf312cdab3ea63a0664afd3214ad98a6c25b126"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/gdn.py",
+      "sha256": "1b6e4430ba34cba63d372a83727dff9876833ba614effadd24263e07500b73f6"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/gdn_reference.py",
+      "sha256": "2d1f073c3a5e86d1ed1e275b43ec238d8325e88f903ff8a0d36555be8e5440e3"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/gguf_source.py",
+      "sha256": "82969c94e7105a3af3ec26406ff9e5c2ec5acc8921aee25841e5c89944fd8639"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/gguf_weight.py",
+      "sha256": "bc48ec9a1ec81b3ef99a7928368be4bc362b62a7627970cb1c5ece29e0458aaf"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/hc.py",
+      "sha256": "d48ee7441b09c29451960d7be1f8bc253b53ff7d011a68b6338fb7f696e6a7c7"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/model.py",
+      "sha256": "3ae88783e9964043e94219132b30f256831f416d79fb6c215c070cb6bba97c6a"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/moe.py",
+      "sha256": "8c9b3f461e4d3c61e1ed234ee447acdd1b9b4e52c6b6231db42c39591de1838f"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_draft_graph.py",
+      "sha256": "5d6b30909ab26cf81c677b4282bfa8dec5bd202f5de18f6289dc2cdf7b560d36"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_draft_policy.py",
+      "sha256": "2da000ed2b797cffa302db7ec6fc3c0bf346e662932b4e750fa39fca03240b5a"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_draft_vocab.py",
+      "sha256": "810bea1403b6bffc594f8252257fabeca9c1fd459ba55eef0534ffd1b8b0a57a"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_drafter.py",
+      "sha256": "c2d60b48eb7342ebfc6db227b3661c876a4eb3623629431be219060eafe932ba"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_runtime.py",
+      "sha256": "f7041bf509908c9f26f94a559f850b9cd074047fa52532f9f45e4bf387a7dfd7"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/mtp_state.py",
+      "sha256": "c1e729eabf598e8ae4ab0b754ffe3eb310fe740d79a8fe59b66ef956c671172d"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/ple.py",
+      "sha256": "30647d38f682475fddb3799e67a06b1138da667b1c4194b6dae95ff24d93021f"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/ple_disk.py",
+      "sha256": "700f781bcb7cb1f85549c834464c8719d4bbee8b17505342e0165cb627704efb"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/q2_source.py",
+      "sha256": "0f1724aa0f7da2701eb6f68930405d97a580f6cce522826a4d5b6362b03ad172"
+    },
+    {
+      "path": "python/freetoken/models/qwen4_exp/weight.py",
+      "sha256": "52b9dd0da7957a8168ec2dd18f58874927fb53fa299d0b867a1bec757321e5c1"
+    },
+    {
+      "path": "python/freetoken/models/register.py",
+      "sha256": "ba4fdb529a8cc1985197483e76ed917919b5e7d1f2c1b03471e33a3ba969ed6a"
+    },
+    {
+      "path": "python/freetoken/models/weight.py",
+      "sha256": "9180128ae3c7ab996b2dc11c41d429c72ec84d79303ed6ca9b7fdf4c4370182d"
+    },
+    {
+      "path": "python/freetoken/models/weight_stream.py",
+      "sha256": "2fb708e5a769c5abd179895e865fabac4bf1bd7bd19cf0aa76400aa0320c91b5"
+    },
+    {
+      "path": "python/freetoken/moe/__init__.py",
+      "sha256": "1124f5109eb60aa19991e90baf11660a50f81d3bd11914996141e63af9d13351"
+    },
+    {
+      "path": "python/freetoken/moe/bench_profile.py",
+      "sha256": "fb6d2e85ff7a8163b7369454e2bd62ed4ae2b5b686301804b023d7f52f1859cf"
+    },
+    {
+      "path": "python/freetoken/moe/benchbw.py",
+      "sha256": "4349efd9cb1ff625e30e9832e264062e76ffe3aeaf9f16dd4c56572578d5baaf"
+    },
+    {
+      "path": "python/freetoken/moe/cpu_executor.py",
+      "sha256": "15cf3f3238b3992f6f26eb78fcc4e0e69513ddba5a5c2bc9b2e014af1db5164a"
+    },
+    {
+      "path": "python/freetoken/moe/expert_banks.py",
+      "sha256": "88885f6082de7db2840b8ece8706345e29aa040b9e64e9fe679a2d7c8a742cda"
+    },
+    {
+      "path": "python/freetoken/moe/expert_pieces.py",
+      "sha256": "86d8495aa217ad0e2b65261796d08ff20990090bd45e46817d5d02853c5b103d"
+    },
+    {
+      "path": "python/freetoken/moe/fused.py",
+      "sha256": "77dc99242d111f62e6dd0750368b972077f893f9e28919c9241c056a69ded113"
+    },
+    {
+      "path": "python/freetoken/moe/fused_ds_fp4.py",
+      "sha256": "878314d2e0744c7de73a9c35558ef414a89327d3e6afeca873aadef48d24245f"
+    },
+    {
+      "path": "python/freetoken/moe/fused_fp8_block.py",
+      "sha256": "9a398b9d6e1805ea0ed11050c7b1838d9fa729ae713754af9490ddddddd0b5b7"
+    },
+    {
+      "path": "python/freetoken/moe/fused_mxfp4.py",
+      "sha256": "7b573a77c67cc7253b11f6d3278d9088bada62e414045f35fef25b4c2f207901"
+    },
+    {
+      "path": "python/freetoken/moe/fused_nvfp4.py",
+      "sha256": "e7826115b7c88a1afba4ba5f6bb9088b109af38acc0ffc31f31683cadb820da1"
+    },
+    {
+      "path": "python/freetoken/moe/fused_q2_0.py",
+      "sha256": "2bec188976edb45e22387b650224b02e35bd8f182db3a98b0c566392dabd0769"
+    },
+    {
+      "path": "python/freetoken/moe/fused_q2_q8.py",
+      "sha256": "3605adf7736e08b0f0c8d8dacc6a3bdcd4a47aa72e4be36dc6a498908ac387ad"
+    },
+    {
+      "path": "python/freetoken/moe/fused_q4_0.py",
+      "sha256": "66b0d0029a20692271a5aa84c68bd9c6bea7f5ba90e815b7574f1928dbbee4fe"
+    },
+    {
+      "path": "python/freetoken/moe/host_banks.py",
+      "sha256": "f4c5c2e27c6dce3030fbccc8c69499ee0f634a31c3a551f452e8eeba5ea53253"
+    },
+    {
+      "path": "python/freetoken/moe/legacy_format.py",
+      "sha256": "0ae90f8e1bddf6882a05a75b4d20b91fd2d0e89b7a7bf18c28af0bc37a71a53e"
+    },
+    {
+      "path": "python/freetoken/moe/offload_cache.py",
+      "sha256": "9f3f748923fc72ea511efad7b39099231f052711ecfae7f1ed2ac3d5177da766"
+    },
+    {
+      "path": "python/freetoken/moe/offload_kernels.py",
+      "sha256": "946d139e794c70d0b97073f0b29964de425392ee947a3fd437e5eabb475921fc"
+    },
+    {
+      "path": "python/freetoken/moe/prefill_workspace.py",
+      "sha256": "3dc1f55db9647d4e3274177578cd6c68c434d8255b2f0e530e8912143cd5e623"
+    },
+    {
+      "path": "python/freetoken/moe/q2_adaptive.py",
+      "sha256": "29be020015e0d9886b5f79d0a86466603e4a227584dc0fa5715a6910efa7e483"
+    },
+    {
+      "path": "python/freetoken/moe/q2_residency.py",
+      "sha256": "bb5baeb5f082ffde952ca8f2101edeafee94e8022b7d1a67e85cbef8ae58288c"
+    },
+    {
+      "path": "python/freetoken/scheduler/__init__.py",
+      "sha256": "072869edea1a74c09ddff68bffcc908a5cff8b1ae4c8ddf58f2d313f43684063"
+    },
+    {
+      "path": "python/freetoken/scheduler/cache.py",
+      "sha256": "ecded3604aec053588e18b7a878eed5f2b25f4e76e626cc323a8fa82a4eee03e"
+    },
+    {
+      "path": "python/freetoken/scheduler/config.py",
+      "sha256": "b4bdb66cb9b9d22017894a14f7a7c617060e3e697be98e6cf50a5430f705517e"
+    },
+    {
+      "path": "python/freetoken/scheduler/decode.py",
+      "sha256": "e217db8851553475300c71ee6d5883568020942c0e6c1e1707b8da22c722bb6f"
+    },
+    {
+      "path": "python/freetoken/scheduler/io.py",
+      "sha256": "316d37d28dbd41f9e81899e40ca718cc3d6a5307d25dff56475fee71d9d88a06"
+    },
+    {
+      "path": "python/freetoken/scheduler/mm.py",
+      "sha256": "4909a159b84b86883436333a438c41530f066191a80d1850b2f9dfdb4e6c063b"
+    },
+    {
+      "path": "python/freetoken/scheduler/prefill.py",
+      "sha256": "12fa6d7dc74d464ea85aa5d21e484c239b34ca7ffe07e9c9124251f93ad22a84"
+    },
+    {
+      "path": "python/freetoken/scheduler/scheduler.py",
+      "sha256": "20f212d935e06555b005f3d0e4981d2af5b22982fa543bd68833b6738864d227"
+    },
+    {
+      "path": "python/freetoken/scheduler/status.py",
+      "sha256": "be7e61428cc93c170c02972949b4250447f710c2643efe3b94dc1034e45487bd"
+    },
+    {
+      "path": "python/freetoken/scheduler/table.py",
+      "sha256": "7664d1c59bd3bf8b65ddb984c09bf43a2b75b0ffe3578d487c46642b1bab4824"
+    },
+    {
+      "path": "python/freetoken/scheduler/utils.py",
+      "sha256": "9a32d025dbdfc7f39760fa3518289d0ea1d7df703122670650436713acec5756"
+    },
+    {
+      "path": "python/freetoken/server/__init__.py",
+      "sha256": "d325bcf572a81fa998700838087a13a56585bfd879224b19891271ec29caadbe"
+    },
+    {
+      "path": "python/freetoken/server/access_log_filter.py",
+      "sha256": "234cfd635e8189fecad5e95e81cc006c7758a82a4332400f8e1e8e6bd356e1a1"
+    },
+    {
+      "path": "python/freetoken/server/accounting.py",
+      "sha256": "1599f236e1c4297ff38286f9fba81ea844a913bae7184239c2db0de948727604"
+    },
+    {
+      "path": "python/freetoken/server/anthropic_api.py",
+      "sha256": "96e83f989c60c1a11b7f1f9ef4d3f8ec6d76aa9e1985e9e87990e09364cbef58"
+    },
+    {
+      "path": "python/freetoken/server/anthropic_models.py",
+      "sha256": "d0bf81c7ffc295eea049ac86a7c05bb15ecbd44c0b8223eb28cf24a09ffe34e3"
+    },
+    {
+      "path": "python/freetoken/server/api_models.py",
+      "sha256": "43d22ffdf1125b0f52e8a737e579891b783cfc83180c1b46105c8be1b2bdbace"
+    },
+    {
+      "path": "python/freetoken/server/api_server.py",
+      "sha256": "6b778e253ead37773d0bdea902ae943634e9283d6735f754a8261547e4011add"
+    },
+    {
+      "path": "python/freetoken/server/args.py",
+      "sha256": "aab6ef47543f4e3432380a42ac1deb89d119f365210f059494ca66e8293cbca8"
+    },
+    {
+      "path": "python/freetoken/server/control_api.py",
+      "sha256": "217cd758ae7431885fa4f7a3f262551c5badf4fa8207f669f8225aa76842e7ac"
+    },
+    {
+      "path": "python/freetoken/server/function_call_parser.py",
+      "sha256": "4d068805796ef05a48a6270bb236460942cc9762cc5001f6ef49e5ea7256b1af"
+    },
+    {
+      "path": "python/freetoken/server/generation.py",
+      "sha256": "1ccad3f57776b54ace2fad28319bcad6912748572b8ef620473e8a84ebbc38df"
+    },
+    {
+      "path": "python/freetoken/server/launch.py",
+      "sha256": "fd86845c9486c24b86bb270634e005ed70794af9def79658b6557e4712f3a56d"
+    },
+    {
+      "path": "python/freetoken/server/model_meta.py",
+      "sha256": "74cc5a2cd29824596703c9a830e7ed3ae69599a7c6719d394ed8e0d37fe37acf"
+    },
+    {
+      "path": "python/freetoken/server/openai_api.py",
+      "sha256": "7f03aad5221a131e0a235a27ea8533a2bfde07a41aa136134a68609fcee5646c"
+    },
+    {
+      "path": "python/freetoken/server/reasoning_parser.py",
+      "sha256": "c33d05a91f585de34913206e2bb9954aabad16b71a89bd56d5285d140ae18812"
+    },
+    {
+      "path": "python/freetoken/server/request_logger.py",
+      "sha256": "12caa2760970839abb3566a915161469cb997c4b845dffa18570b6a729d74efc"
+    },
+    {
+      "path": "python/freetoken/server/request_ring.py",
+      "sha256": "1898f5302ca2c5887ff33589e0d02b202011367c18c822b865d2d9b4de7e1d7e"
+    },
+    {
+      "path": "python/freetoken/server/responses_api.py",
+      "sha256": "7d5b8d0e7ece0a35cac5abee42ef15c23493aa2b0ff7f7fcb20531a3d8885921"
+    },
+    {
+      "path": "python/freetoken/server/stats.py",
+      "sha256": "3be1a3617004920e20cc9d20fb00cad3eb98f956ae67eea2f4418487fde5a2c5"
+    },
+    {
+      "path": "python/freetoken/server/supervisor.py",
+      "sha256": "ef4c88e8122296e5ea58ad8c9c05434e66e43d18bf8e65125635407617dd5e03"
+    },
+    {
+      "path": "python/freetoken/shell/__init__.py",
+      "sha256": "a4eacb78b53b953c9735a181c5da3fcd8d79981639416a9f497f7063ba381e11"
+    },
+    {
+      "path": "python/freetoken/shell/__main__.py",
+      "sha256": "d215e4272d99fef459ca19586ceed8c155691b94585f616f246595e54545f2a0"
+    },
+    {
+      "path": "python/freetoken/shell/client.py",
+      "sha256": "06de7e686067f06dfad694ded94fa2feb39e2966496abc0f46a4d51c142f45ee"
+    },
+    {
+      "path": "python/freetoken/shell/render.py",
+      "sha256": "aafdb914cc3f4a4b9bb4e1c323f2f488760340278174018fd746ee8bca7fd15d"
+    },
+    {
+      "path": "python/freetoken/shell/tui.py",
+      "sha256": "2cb58bea8b0921436f73d78e540e80d28599acf78b7f1ebfb9f44f616950a0fe"
+    },
+    {
+      "path": "python/freetoken/tokenizer/__init__.py",
+      "sha256": "d73c7b290f786d43019f8e959acf2dd51a50f995bbc77a8ff53aeb92becae6db"
+    },
+    {
+      "path": "python/freetoken/tokenizer/detokenize.py",
+      "sha256": "ca3541ac7406fcd4f3c522703c11dec0c993f275141a6395548dd0ce01abec0c"
+    },
+    {
+      "path": "python/freetoken/tokenizer/effort.py",
+      "sha256": "9240ee77774ba5839d85fbde6901264475cd609dcd188b501d840061f6ba856e"
+    },
+    {
+      "path": "python/freetoken/tokenizer/inline_system.py",
+      "sha256": "b40a1804a1ec5f47d299f2ce49d791429ab83721b667aacd0b1afae237bbbb6e"
+    },
+    {
+      "path": "python/freetoken/tokenizer/server.py",
+      "sha256": "04d1759e1f97b8a252bac49c542a245a234199ba6f03b73a80a4766fd6603269"
+    },
+    {
+      "path": "python/freetoken/tokenizer/tokenize.py",
+      "sha256": "6b4f5503580a1859d2665156bae2105b7fc69208e95f45e9cdb8b3c97cfccc47"
+    },
+    {
+      "path": "python/freetoken/utils/__init__.py",
+      "sha256": "ef4e6e9c1775e3e9d2e48f0ecf2c60b3c73b0673d017b9ae1d78016bf0878523"
+    },
+    {
+      "path": "python/freetoken/utils/arch.py",
+      "sha256": "69782c655bf3512f35a6321b5c562d52a208e9d4793c6968915e1e155ec4e4a7"
+    },
+    {
+      "path": "python/freetoken/utils/hf.py",
+      "sha256": "01474b9a7e56ab47a4030f7800a60a96f31cca428b27f80e7436c1b7d16842af"
+    },
+    {
+      "path": "python/freetoken/utils/logger.py",
+      "sha256": "a850e03bdd28931669b07737eb55768661336b6af1b68ee605c45e10731c3d75"
+    },
+    {
+      "path": "python/freetoken/utils/misc.py",
+      "sha256": "b2103a048d7938c1c277189a291d0f7d8a4c5577e680e6294f1a1b8053d5f1e4"
+    },
+    {
+      "path": "python/freetoken/utils/mp.py",
+      "sha256": "4c8e386494be6998bfad914246cdd79469dee605d632314c1a2416a6a3dd59c3"
+    },
+    {
+      "path": "python/freetoken/utils/progress.py",
+      "sha256": "66ed976caeb74ab32e8df415380a21234aa61a08c24e6303cc83142e352391da"
+    },
+    {
+      "path": "python/freetoken/utils/registry.py",
+      "sha256": "712349271c7b4f3f9221b3c458dca126a621f256492b832c07c0961d5936925d"
+    },
+    {
+      "path": "python/freetoken/utils/torch_utils.py",
+      "sha256": "ceb30b13dd724a5f5489ae80275d940ec62e78bdb91a445f2f64d239a565097c"
+    },
+    {
+      "path": "python/freetoken/version.py",
+      "sha256": "ab2363646ebf825ca9dd14ead9ec74280deb4aaa3d52449f6d52162cb6ca87c5"
+    },
+    {
+      "path": "tests/lora/test_bind.py",
+      "sha256": "83be7f15fb49a752d5dd6e2b090f4be570d89ebbe4f9df16c7e713c1840530ec"
+    },
+    {
+      "path": "tests/lora/test_cache_mapping.py",
+      "sha256": "02c3779435f604fe564fc181b9d5ec9b5bafa378c15dea9b2577f7dc0826b2dc"
+    },
+    {
+      "path": "tests/lora/test_dense_manifest.py",
+      "sha256": "19b04a0259fa9e29f0c9d672f85aa62cc5f785a85e1469daf907572e986dba40"
+    },
+    {
+      "path": "tests/lora/test_dense_stream.py",
+      "sha256": "5bbf33f224f4046971356ed88c5f8f69795f72f29a712541d0dc5117ac48b0a2"
+    },
+    {
+      "path": "tests/lora/test_manifest.py",
+      "sha256": "7a7fdf0b8f2a54e4ed11aaec3a9eeaf547caf6d8c527fd7678303cdc49f91455"
+    },
+    {
+      "path": "tests/lora/test_memory.py",
+      "sha256": "34cae4cc5b362ba9653b36c15147aca48e639b1ffab53dabff6b3ebff8178798"
+    },
+    {
+      "path": "tests/lora/test_nvfp4.py",
+      "sha256": "a8cad427aae2b93e2821f87345dde98b1a9c82a6fe23d16834d6ebeeb8e24f34"
+    },
+    {
+      "path": "tests/lora/test_ops.py",
+      "sha256": "3a698c99f5e908a72ecd61353ab905bdd23eac6f2858a19abb3f838232ee1330"
+    }
+  ],
+  "git_head": "713a3dab02b99e7537709b511bacfa32f1a7abbc",
+  "git_status": [],
+  "child_pid": 12352,
+  "exit_code": 0
+}
