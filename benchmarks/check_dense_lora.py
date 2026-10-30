@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--corpus', type=Path)
     parser.add_argument('--batch-size', type=int, default=1)
     parser.add_argument('--minimum-canary-accuracy', type=float)
+    parser.add_argument('--check-cache-rebuild', action='store_true')
     args = parser.parse_args()
     if args.batch_size < 1:
         parser.error('batch-size must be positive')
@@ -175,6 +176,27 @@ def main():
                 assert result['quality_adapter_canary_improvement'], 'Native adapter did not improve heldout canary answers'
                 assert result['quality_replay_exact_matches_preserved'], 'Native adapter reduced exact replay answer matches'
                 assert result['native_canary_threshold_met'], 'Native adapter did not meet the supplied canary target'
+        if args.check_cache_rebuild:
+            original_pages = llm.engine.num_pages
+            original_slots = llm.engine.linear_state_pool.num_slots - 1
+            identity = llm.engine.model._lora_identity
+            result['cache_rebuilds'] = []
+            capture_logits = True
+            with torch.inference_mode():
+                for pages, slots in [(1536, max(16, original_slots + 2)), (original_pages, original_slots)]:
+                    llm.rebuild_cache(num_pages=pages, num_mamba_slots=slots)
+                    assert llm.engine.model._lora_identity == identity
+                    checks = []
+                    for index, row in enumerate(outputs):
+                        logits.clear()
+                        answer = llm.generate([row['prompt_tokens']], SamplingParams(temperature=0, max_tokens=8))[0]
+                        saved = torch.load(args.output / f'logits-{index}.pt', weights_only=True)
+                        checks.append(answer == row['modes']['enabled']['answer'] and
+                                      torch.equal(logits[0].view(torch.uint8), saved['enabled'].view(torch.uint8)))
+                    result['cache_rebuilds'].append({'pages': pages, 'usable_GDN_slots': slots,
+                        'all_answers_and_logits_E2': all(checks), 'adapter_identity_unchanged': True})
+                    save()
+                    assert all(checks), 'Cache rebuild changed native answers/logits'
         result['banks_unchanged'] = before_hashes == manager.hashes()
         result['streaming_after_requests'] = manager.inventory()
         result['memory'] = {'allocated': torch.cuda.memory_allocated(), 'reserved': torch.cuda.memory_reserved(),

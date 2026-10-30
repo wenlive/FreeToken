@@ -82,6 +82,12 @@ decrease relative to this native engine's disabled baseline. These are
 preregistered final checks, not results. Native exact answer counts are reported
 separately from the training NLL gate, since answer match rate is not NLL.
 
+`--check-cache-rebuild` additionally changes KV/GDN capacities and restores the
+original capacities while the scheduler is idle. The three saved enabled
+answers and vocabulary logits must remain byte-E2, the adapter identity must
+stay fixed, and the raw CPU bank hashes must stay unchanged. This integration
+check is prepared for the final campaign and has not run at this commit.
+
 The owner's current instructions explicitly authorize commits and final pushes
 to this independent fork branch. This overrides the inherited AGENTS restriction
 for this owner's fork only. No PR, upstream issue or upstream publication is
