@@ -1,0 +1,192 @@
+{
+  "protocol": "BF16-generated greedy causal history, checkpoint penalties, thinking disabled",
+  "bf16_source": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\results.json",
+    "sha256": "682e27937935b5ac6e5fc26702dcf14f8899f8929a7f359b54b3ab7c0c8efa5d"
+  },
+  "source_sha256": {
+    "modeling_clover_moe.py": "2584bd5502d6109c2cea9bee2f2ec98f147bbb8954c43858c0315eb4af9ffb0c",
+    "configuration_clover_moe.py": "f593baeba289a1f54987904f7782f4cfa7b22f9dfc75112768c189108f041d0d",
+    "sampling_clover_moe.py": "56768a0b23c4c7c26dc3b6f075741761ffada7d5fc2ff745c6aea5e3cc88011c"
+  },
+  "prompts_sha256": "4a9d9e83b0af6789e8c66b08b8330033ba796a76753f08bcc7c775c4e6e84aa6",
+  "aggregate": [
+    {
+      "precision": "nvfp4",
+      "tokens": 264,
+      "raw_matches": 254,
+      "penalized_matches": 253,
+      "raw_argmax_agreement": 0.9621212121212122,
+      "penalized_argmax_agreement": 0.9583333333333334,
+      "mean_raw_kl": 0.022989887613837738,
+      "prompt_raw_range": [
+        0.9024390243902439,
+        1.0
+      ],
+      "prompt_penalized_range": [
+        0.90625,
+        1.0
+      ]
+    },
+    {
+      "precision": "fp8",
+      "tokens": 264,
+      "raw_matches": 257,
+      "penalized_matches": 257,
+      "raw_argmax_agreement": 0.9734848484848485,
+      "penalized_argmax_agreement": 0.9734848484848485,
+      "mean_raw_kl": 0.004544701933826049,
+      "prompt_raw_range": [
+        0.926829268292683,
+        1.0
+      ],
+      "prompt_penalized_range": [
+        0.926829268292683,
+        1.0
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "prompt": "Count",
+      "raw_argmax_agreement": 1.0,
+      "penalized_argmax_agreement": 1.0,
+      "mean_raw_kl": 0.0036109897895174425,
+      "precision": "nvfp4",
+      "tokens": 31,
+      "raw_matches": 31,
+      "penalized_matches": 31,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+        "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+      }
+    },
+    {
+      "prompt": "Sky",
+      "raw_argmax_agreement": 0.9024390243902439,
+      "penalized_argmax_agreement": 0.926829268292683,
+      "mean_raw_kl": 0.02495922863072781,
+      "precision": "nvfp4",
+      "tokens": 41,
+      "raw_matches": 37,
+      "penalized_matches": 38,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+        "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+      }
+    },
+    {
+      "prompt": "Python",
+      "raw_argmax_agreement": 1.0,
+      "penalized_argmax_agreement": 1.0,
+      "mean_raw_kl": 0.006286702600633021,
+      "precision": "nvfp4",
+      "tokens": 64,
+      "raw_matches": 64,
+      "penalized_matches": 64,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+        "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+      }
+    },
+    {
+      "prompt": "JSON",
+      "raw_argmax_agreement": 0.953125,
+      "penalized_argmax_agreement": 0.96875,
+      "mean_raw_kl": 0.025225704942428706,
+      "precision": "nvfp4",
+      "tokens": 64,
+      "raw_matches": 61,
+      "penalized_matches": 62,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+        "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "raw_argmax_agreement": 0.953125,
+      "penalized_argmax_agreement": 0.90625,
+      "mean_raw_kl": 0.04558229984316142,
+      "precision": "nvfp4",
+      "tokens": 64,
+      "raw_matches": 61,
+      "penalized_matches": 58,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+        "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+      }
+    },
+    {
+      "prompt": "Count",
+      "raw_argmax_agreement": 1.0,
+      "penalized_argmax_agreement": 1.0,
+      "mean_raw_kl": 0.002396503711261469,
+      "precision": "fp8",
+      "tokens": 31,
+      "raw_matches": 31,
+      "penalized_matches": 31,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+        "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+      }
+    },
+    {
+      "prompt": "Sky",
+      "raw_argmax_agreement": 0.926829268292683,
+      "penalized_argmax_agreement": 0.926829268292683,
+      "mean_raw_kl": 0.0055358975614137485,
+      "precision": "fp8",
+      "tokens": 41,
+      "raw_matches": 38,
+      "penalized_matches": 38,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+        "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+      }
+    },
+    {
+      "prompt": "Python",
+      "raw_argmax_agreement": 1.0,
+      "penalized_argmax_agreement": 1.0,
+      "mean_raw_kl": 0.0017769803026617126,
+      "precision": "fp8",
+      "tokens": 64,
+      "raw_matches": 64,
+      "penalized_matches": 64,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+        "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+      }
+    },
+    {
+      "prompt": "JSON",
+      "raw_argmax_agreement": 0.984375,
+      "penalized_argmax_agreement": 0.984375,
+      "mean_raw_kl": 0.003713528870345373,
+      "precision": "fp8",
+      "tokens": 64,
+      "raw_matches": 63,
+      "penalized_matches": 63,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+        "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "raw_argmax_agreement": 0.953125,
+      "penalized_argmax_agreement": 0.953125,
+      "mean_raw_kl": 0.008549145443602413,
+      "precision": "fp8",
+      "tokens": 64,
+      "raw_matches": 61,
+      "penalized_matches": 61,
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+        "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+      }
+    }
+  ],
+  "qualification": "Aggregate raw agreement is in the design range; individual prompts can be below it. These prompts and lengths do not reproduce the original Spark experiment exactly."
+}

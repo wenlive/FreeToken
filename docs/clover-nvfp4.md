@@ -248,7 +248,7 @@ conditions. Four per-case judgments differ between native and HF NVFP4, with
 equal aggregate scores. NVFP4 differs from BF16 by -2 and +2 percentage points,
 respectively; these initial subset results do not trigger the design's roughly
 3-point quality-drop gate. The final quantization decision remains pending cap
-sensitivity and the causal/preview recipe checks.
+sensitivity and the preview recipe checks.
 The [HumanEval failure audit](evidence/clover-nvfp4/quality-failure-audit.json)
 classifies raw-token indentation, truncation and algorithm errors across all four
 conditions. The FP8 polynomial solver fails a probe with a negative leading
@@ -260,6 +260,18 @@ reused because the larger unused cap cannot change their forward arithmetic.
 Both caps will be reported separately before interpreting score differences.
 The fixed-subset protocol and available scores are in
 [quality evidence](evidence/clover-nvfp4/quality-first50.json).
+
+[The causal recipe comparison](evidence/clover-nvfp4/quantization-causal.json)
+forces the same BF16-generated history in all precisions, covering 264 positions
+across five prompts (up to 64 tokens or EOS). NVFP4 raw argmax agrees at
+**254/264 (96.21%)**, or **253/264 (95.83%)** after checkpoint penalties. FP8
+agrees at **257/264 (97.35%)** in both cases. Mean raw KL is 0.02299 for NVFP4
+and 0.004545 for FP8, about five times lower for FP8.
+The aggregate agrees with the design's expected range, while individual prompts
+do not uniformly reproduce its Spark range: NVFP4 Sky raw agreement is 90.24%,
+and Chinese penalized agreement is 90.63%. FP8 Sky is also only 92.68%.
+The prompt set and horizon differ from the Spark experiment; retain the full
+per-prompt results instead of treating the aggregate as exact replication.
 
 [First-block preview stress results](evidence/clover-nvfp4/quantization-preview.json)
 are reported separately: NVFP4 argmax agreement with BF16 is 100%/87.5%/87.5% for
