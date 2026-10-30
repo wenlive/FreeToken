@@ -4,22 +4,17 @@ from __future__ import annotations
 import copy
 import time
 from collections import deque
-from typing import NamedTuple
 
 import torch
 
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch
+from freetoken.engine.speculative import DeliveryLimit
 from freetoken.kernel.pinned import alloc_pinned_tensor
 from freetoken.kernel.triton.mtp_metadata import stage_verify_metadata
 from .mtp_draft_graph import DraftGraphs
 from .mtp_draft_policy import PairedPolicy
 from .mtp_state import MTP_LAST_RESIDUAL
-
-
-class DeliveryLimit(NamedTuple):
-    count: int
-    finished: bool
 
 
 def verified_prefix(candidates, picks, eos_ids, ignore_eos):

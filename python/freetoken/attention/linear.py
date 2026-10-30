@@ -46,7 +46,7 @@ class FLAMetadata:
     compact_mtp_pool: object | None = None
 
 
-def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:
+def build_fla_metadata(batch: "Batch", device: torch.device, *, max_verify_rows: int = 4) -> FLAMetadata:
     """Build the per-forward GDN metadata. Uses pinned host staging + non_blocking H2D
     (the input_ids/attn-metadata pattern), so the copies overlap the forward instead of
     stalling it.
@@ -82,8 +82,8 @@ def build_fla_metadata(batch: "Batch", device: torch.device) -> FLAMetadata:
 
     is_verify = getattr(batch, "is_verify", False)
     if is_verify:
-        if len(reqs) != 1 or not 1 <= lens[0] <= 4 or reqs[0].cached_len <= 0:
-            raise ValueError("MTP verification requires one continuing request and 1-4 rows")
+        if len(reqs) != 1 or not 1 <= lens[0] <= max_verify_rows or reqs[0].cached_len <= 0:
+            raise ValueError(f"Verification requires one continuing request and 1-{max_verify_rows} rows")
         track = {}
     else:
         track = _build_track_metadata(reqs, cu_host, device, pin)

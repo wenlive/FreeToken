@@ -1,0 +1,188 @@
+{
+  "state": "complete",
+  "precision": "NVFP4 W4A16, CPU VNNI disabled",
+  "rows": [
+    {
+      "layer": 0,
+      "width": 1,
+      "expert_union": 8,
+      "relative_l2": 0.0040658158250153065,
+      "gpu_cold_ms": 0.3721000102814287,
+      "gpu_hit_ms": 0.21199998445808887,
+      "cpu_ms": 1.7038000223692507
+    },
+    {
+      "layer": 0,
+      "width": 8,
+      "expert_union": 18,
+      "relative_l2": 0.0040950533002614975,
+      "gpu_cold_ms": 0.8022999973036349,
+      "gpu_hit_ms": 0.2266000083182007,
+      "cpu_ms": 12.689499999396503
+    },
+    {
+      "layer": 0,
+      "width": 16,
+      "expert_union": 26,
+      "relative_l2": 0.004164768382906914,
+      "gpu_cold_ms": 1.1655999987851828,
+      "gpu_hit_ms": 0.2888999879360199,
+      "cpu_ms": 25.202399992849678
+    },
+    {
+      "layer": 0,
+      "width": 32,
+      "expert_union": 40,
+      "relative_l2": 0.004163958132266998,
+      "gpu_cold_ms": 1.9351999799255282,
+      "gpu_hit_ms": 0.4763000179082155,
+      "cpu_ms": 47.52260001259856
+    },
+    {
+      "layer": 3,
+      "width": 1,
+      "expert_union": 8,
+      "relative_l2": 0.004414529073983431,
+      "gpu_cold_ms": 0.367300002835691,
+      "gpu_hit_ms": 0.19290001364424825,
+      "cpu_ms": 1.749599992763251
+    },
+    {
+      "layer": 3,
+      "width": 8,
+      "expert_union": 18,
+      "relative_l2": 0.0041775512509047985,
+      "gpu_cold_ms": 0.7962000090628862,
+      "gpu_hit_ms": 0.21410000044852495,
+      "cpu_ms": 12.862100003985688
+    },
+    {
+      "layer": 3,
+      "width": 16,
+      "expert_union": 26,
+      "relative_l2": 0.0042343405075371265,
+      "gpu_cold_ms": 1.1661000025924295,
+      "gpu_hit_ms": 0.30330001027323306,
+      "cpu_ms": 25.331799988634884
+    },
+    {
+      "layer": 3,
+      "width": 32,
+      "expert_union": 40,
+      "relative_l2": 0.004296992439776659,
+      "gpu_cold_ms": 1.935900014359504,
+      "gpu_hit_ms": 0.47050000284798443,
+      "cpu_ms": 46.733399998629466
+    },
+    {
+      "layer": 19,
+      "width": 1,
+      "expert_union": 8,
+      "relative_l2": 0.004709638189524412,
+      "gpu_cold_ms": 0.36780000664293766,
+      "gpu_hit_ms": 0.19439999596215785,
+      "cpu_ms": 1.7475999775342643
+    },
+    {
+      "layer": 19,
+      "width": 8,
+      "expert_union": 18,
+      "relative_l2": 0.00425188522785902,
+      "gpu_cold_ms": 0.797300017438829,
+      "gpu_hit_ms": 0.21719999494962394,
+      "cpu_ms": 12.890899990452453
+    },
+    {
+      "layer": 19,
+      "width": 16,
+      "expert_union": 26,
+      "relative_l2": 0.004162263125181198,
+      "gpu_cold_ms": 1.1703000054694712,
+      "gpu_hit_ms": 0.5659000016748905,
+      "cpu_ms": 24.822200008202344
+    },
+    {
+      "layer": 19,
+      "width": 32,
+      "expert_union": 40,
+      "relative_l2": 0.004205878358334303,
+      "gpu_cold_ms": 12.382600019918755,
+      "gpu_hit_ms": 2.2126999974716455,
+      "cpu_ms": 48.570900020422414
+    },
+    {
+      "layer": 36,
+      "width": 1,
+      "expert_union": 8,
+      "relative_l2": 0.004507472272962332,
+      "gpu_cold_ms": 0.36780000664293766,
+      "gpu_hit_ms": 0.19469999824650586,
+      "cpu_ms": 1.7619999998714775
+    },
+    {
+      "layer": 36,
+      "width": 8,
+      "expert_union": 18,
+      "relative_l2": 0.00424401368945837,
+      "gpu_cold_ms": 0.7978999929036945,
+      "gpu_hit_ms": 0.2080999838653952,
+      "cpu_ms": 12.721600010991096
+    },
+    {
+      "layer": 36,
+      "width": 16,
+      "expert_union": 26,
+      "relative_l2": 0.004216490779072046,
+      "gpu_cold_ms": 1.1669000086840242,
+      "gpu_hit_ms": 0.29379999614320695,
+      "cpu_ms": 24.053300003288314
+    },
+    {
+      "layer": 36,
+      "width": 32,
+      "expert_union": 40,
+      "relative_l2": 0.004312715493142605,
+      "gpu_cold_ms": 1.9189000013284385,
+      "gpu_hit_ms": 0.4771000239998102,
+      "cpu_ms": 48.33749998942949
+    },
+    {
+      "layer": 39,
+      "width": 1,
+      "expert_union": 8,
+      "relative_l2": 0.004355286248028278,
+      "gpu_cold_ms": 0.3674999752547592,
+      "gpu_hit_ms": 0.1976999919861555,
+      "cpu_ms": 1.805800013244152
+    },
+    {
+      "layer": 39,
+      "width": 8,
+      "expert_union": 18,
+      "relative_l2": 0.004283454734832048,
+      "gpu_cold_ms": 0.7939999923110008,
+      "gpu_hit_ms": 0.21120000747032464,
+      "cpu_ms": 12.810199987143278
+    },
+    {
+      "layer": 39,
+      "width": 16,
+      "expert_union": 26,
+      "relative_l2": 0.004248955752700567,
+      "gpu_cold_ms": 1.1685999925248325,
+      "gpu_hit_ms": 0.2928999892901629,
+      "cpu_ms": 24.72950000083074
+    },
+    {
+      "layer": 39,
+      "width": 32,
+      "expert_union": 40,
+      "relative_l2": 0.004280910827219486,
+      "gpu_cold_ms": 1.9343000021763146,
+      "gpu_hit_ms": 0.4715999821200967,
+      "cpu_ms": 47.64370000339113
+    }
+  ],
+  "raw_results_sha256": "c07de824c5885ac04c8c93184cecf09bb08452293e348ec2eb0ba37d1ae3fec1",
+  "scope": "Actual checkpoint banks, fixed synthetic routes, five layers; median 15 trials after 3 warmups; all misses vs all hits; not end-to-end"
+}
