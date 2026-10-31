@@ -6,8 +6,8 @@ architecture. Routed experts use NVFP4 W4A16, group 16; all other parameters sta
 BF16. The measured tensor payload is 23,017,708,416 bytes (21.44 GiB).
 
 The checkpoint and three decoding modes run on Windows, RTX 5070 Ti 16 GB and
-Ryzen 7 9700X / 64 GB RAM. Initial BF16/NVFP4/FP8 first-50 quality comparisons are
-complete; token-cap sensitivity and recipe checks remain in progress. Treat block
+Ryzen 7 9700X / 64 GB RAM. BF16/NVFP4/FP8 first-50 quality comparisons at both
+token caps are complete; preview recipe checks remain in progress. Treat block
 decoding as experimental: changing the BF16 batch shape
 can change near-tied argmax decisions even with exact acceptance.
 
@@ -235,38 +235,39 @@ also only approximate: JSON W16 reaches 4.19 and is still slower than causal.
 ## Downstream quality gate
 
 The fixed first-50 subsets use greedy causal decoding, thinking disabled, a
-512-token cap and checkpoint penalties. The HumanEval grader passes all 50
+512- and 1024-token caps and checkpoint penalties. The HumanEval grader passes all 50
 canonical solutions. Dataset commit and license hashes, prompts, token ids and
 per-case grading are recorded.
 
-| Runtime / routed weights | GSM8K | HumanEval |
-|---|---:|---:|
-| FreeToken / NVFP4 | 47/50 | 49/50 |
-| Official HF / same NVFP4 checkpoint | 47/50 | 49/50 |
-| Official HF / BF16 | 48/50 | 48/50 |
-| Official HF / per-channel FP8 | 48/50 | 48/50 |
+| Runtime / routed weights | GSM8K 512 | HumanEval 512 | GSM8K 1024 | HumanEval 1024 |
+|---|---:|---:|---:|---:|
+| FreeToken / NVFP4 | 47/50 | 49/50 | 49/50 | 49/50 |
+| Official HF / same NVFP4 checkpoint | 47/50 | 49/50 | 49/50 | 49/50 |
+| Official HF / BF16 | 48/50 | 48/50 | 49/50 | 49/50 |
+| Official HF / per-channel FP8 | 48/50 | 48/50 | 49/50 | 48/50 |
 
 All 100 tokenized prompts, dataset sources and protocols match across the four
-conditions. Four per-case judgments differ between native and HF NVFP4, with
-equal aggregate scores. NVFP4 differs from BF16 by -2 and +2 percentage points,
-respectively; these initial subset results do not trigger the design's roughly
-3-point quality-drop gate. The final quantization decision remains pending cap
-sensitivity and the preview recipe checks.
+conditions at each cap. The native runs both regenerate every case in the final
+production and grading source trees. Their 100 visible prefixes are identical
+across caps, and all previously EOS-terminated outputs remain unchanged. HF
+extensions preserve every capped prefix and reuse only unchanged EOS cases.
+Native and HF NVFP4 have equal aggregate scores, with some different failed
+cases retained in the evidence. NVFP4's largest deficit versus BF16 is 2 points
+at the smaller cap; at 1024 tokens both scores match BF16. Retain NVFP4: the
+roughly 3-point fallback gate is not triggered, and FP8 has no observed aggregate
+benefit on these subsets. Preview parallelism remains a separate qualification.
 The [HumanEval failure audit](evidence/clover-nvfp4/quality-failure-audit.json)
 classifies raw-token indentation, truncation and algorithm errors across all four
 conditions. The FP8 polynomial solver fails a probe with a negative leading
 coefficient: it returns 1,000,000 instead of -1 for coefficients [-1, -1].
 Grades and original outputs are preserved.
-All three native GSM8K misses reached the 512-token cap. A 1024-token sensitivity
-run is queued for capped cases in each precision; EOS-terminated cases can be
-reused because the larger unused cap cannot change their forward arithmetic.
-Both caps will be reported separately before interpreting score differences.
-The native table above is from an earlier source snapshot. Its three capped
-reruns also diverge within the original 512-token prefix; that composite cannot
-isolate a cap-only effect. Full native subsets at both caps in the final build
-are queued. The [prefix audit](evidence/clover-nvfp4/quality-cap-prefix-audit.json)
-retains the source snapshots and first differences; final comparisons will use
-the fresh full runs. Existing outputs and grades remain intact.
+All three native GSM8K misses reached the 512-token cap; two recover at 1024.
+The remaining native misses are the break-even/positive-profit distinction and
+the raw indentation error in HumanEval. A preliminary native composite extension
+used an earlier source snapshot and changed prefixes, so it was excluded and
+replaced with both full final-build runs. The
+[historical prefix audit](evidence/clover-nvfp4/quality-cap-prefix-audit.json)
+retains that source discrepancy. Existing outputs and grades remain intact.
 The fixed-subset protocol and available scores are in
 [quality evidence](evidence/clover-nvfp4/quality-first50.json).
 

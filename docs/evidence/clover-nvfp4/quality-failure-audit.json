@@ -3,13 +3,14 @@
   "cases": [
     {
       "backend": "native",
+      "token_cap": 512,
       "index": 12,
       "grade": {
         "returncode": 1,
-        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 40, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 19, in main\n    tree=ast.parse(code)\n         ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ast.py\", line 52, in parse\n    return compile(source, filename, mode, flags,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<unknown>\", line 17\n    longest_str = strings[0]\n                            ^\nIndentationError: unindent does not match any outer indentation level\n"
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 72, in main\n    tree = ast.parse(code)\n           ^^^^^^^^^^^^^^^\n  File \"C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\ast.py\", line 52, in parse\n    return compile(source, filename, mode, flags,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<unknown>\", line 17\n    longest_str = strings[0]\n                            ^\nIndentationError: unindent does not match any outer indentation level\n"
       },
-      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-v1\\results.json",
-      "source_sha256": "208656a76e929e2707e0be009491e744aeacdb3c9e5a82f79ea51001b9fb0d47",
+      "source": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-512-full-v2\\results.json",
+      "source_sha256": "35c6a51e541cd531c2aeb5710ef309551605d36bab3f4e4292ba834a84baff85",
       "reason": "Raw first token is unindented if; both standard concatenation and the grader separator fail parsing",
       "first_token_id": 331,
       "parsing": [
@@ -27,6 +28,7 @@
     },
     {
       "backend": "hf-nvfp4",
+      "token_cap": 512,
       "index": 40,
       "grade": {
         "returncode": 1,
@@ -38,6 +40,7 @@
     },
     {
       "backend": "hf-bf16",
+      "token_cap": 512,
       "index": 32,
       "grade": {
         "returncode": 1,
@@ -49,6 +52,7 @@
     },
     {
       "backend": "hf-bf16",
+      "token_cap": 512,
       "index": 40,
       "grade": {
         "returncode": 1,
@@ -60,6 +64,7 @@
     },
     {
       "backend": "hf-fp8",
+      "token_cap": 512,
       "index": 32,
       "grade": {
         "returncode": 1,
@@ -79,6 +84,7 @@
     },
     {
       "backend": "hf-fp8",
+      "token_cap": 512,
       "index": 40,
       "grade": {
         "returncode": 1,
