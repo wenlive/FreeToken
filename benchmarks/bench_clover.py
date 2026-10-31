@@ -328,6 +328,10 @@ def main():
                     summary[metric] = statistics.median(values) if values else None
                 result["summary"].append(summary)
                 save()
+        result.update(
+            cuda_peak_allocated=torch.cuda.max_memory_allocated(),
+            cuda_peak_reserved=torch.cuda.max_memory_reserved(),
+        )
         result["state"] = (
             "validation_failed" if args.require_exact and mismatch else "complete"
         )
