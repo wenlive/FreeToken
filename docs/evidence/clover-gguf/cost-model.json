@@ -1,0 +1,210 @@
+{
+  "state": "complete",
+  "source": {
+    "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\five-prompt-performance-v2\\results.json",
+    "sha256": "10077044f6b0e69f44b5ad077a7615437312f7dceb10cba0f4f12e1a714806cd"
+  },
+  "definition": "Selfspec rounds start after normal prefill; exclude its first causal output token from visible yield. Denoise excludes its first prefill-containing block and includes later pending flush+commit. Whole-round wall / preview count / causal output-only step; compare corresponding visible output / preview count. No steady denoise sample for single block.",
+  "cases": [
+    {
+      "prompt": "Count",
+      "mode": "selfspec",
+      "width": 8,
+      "causal_decode_step_seconds": 0.008811848276246596,
+      "break_even_visible_tokens": 7.628680487493586,
+      "actual_visible_tokens": 7.25
+    },
+    {
+      "prompt": "Count",
+      "mode": "selfspec",
+      "width": 16,
+      "causal_decode_step_seconds": 0.008811848276246596,
+      "break_even_visible_tokens": 9.417990119959649,
+      "actual_visible_tokens": 9.666666666666666
+    },
+    {
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 8,
+      "causal_decode_step_seconds": 0.008811848276246596,
+      "break_even_visible_tokens": 8.178953805018429,
+      "actual_visible_tokens": 7.333333333333333
+    },
+    {
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 16,
+      "causal_decode_step_seconds": 0.008811848276246596,
+      "break_even_visible_tokens": 9.287971996921632,
+      "actual_visible_tokens": 14.0
+    },
+    {
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 32,
+      "causal_decode_step_seconds": 0.008811848276246596,
+      "break_even_visible_tokens": null,
+      "actual_visible_tokens": null
+    },
+    {
+      "prompt": "Sky",
+      "mode": "selfspec",
+      "width": 8,
+      "causal_decode_step_seconds": 0.009816891176502822,
+      "break_even_visible_tokens": 7.105045202412983,
+      "actual_visible_tokens": 3.7777777777777777
+    },
+    {
+      "prompt": "Sky",
+      "mode": "selfspec",
+      "width": 16,
+      "causal_decode_step_seconds": 0.009816891176502822,
+      "break_even_visible_tokens": 8.385410940095925,
+      "actual_visible_tokens": 3.7777777777777777
+    },
+    {
+      "prompt": "Sky",
+      "mode": "denoise",
+      "width": 8,
+      "causal_decode_step_seconds": 0.009816891176502822,
+      "break_even_visible_tokens": 3.8312810328976012,
+      "actual_visible_tokens": 1.2758620689655173
+    },
+    {
+      "prompt": "Sky",
+      "mode": "denoise",
+      "width": 16,
+      "causal_decode_step_seconds": 0.009816891176502822,
+      "break_even_visible_tokens": 3.5721556862687387,
+      "actual_visible_tokens": 1.2727272727272727
+    },
+    {
+      "prompt": "Sky",
+      "mode": "denoise",
+      "width": 32,
+      "causal_decode_step_seconds": 0.009816891176502822,
+      "break_even_visible_tokens": 4.2921466969126465,
+      "actual_visible_tokens": 0.5185185185185185
+    },
+    {
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 8,
+      "causal_decode_step_seconds": 0.010177939919465702,
+      "break_even_visible_tokens": 6.962310028367576,
+      "actual_visible_tokens": 6.048780487804878
+    },
+    {
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 16,
+      "causal_decode_step_seconds": 0.010177939919465702,
+      "break_even_visible_tokens": 8.439267665403227,
+      "actual_visible_tokens": 9.185185185185185
+    },
+    {
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 8,
+      "causal_decode_step_seconds": 0.010177939919465702,
+      "break_even_visible_tokens": 4.638440917109758,
+      "actual_visible_tokens": 2.8783783783783785
+    },
+    {
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 16,
+      "causal_decode_step_seconds": 0.010177939919465702,
+      "break_even_visible_tokens": 4.383132802170288,
+      "actual_visible_tokens": 3.1449275362318843
+    },
+    {
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 32,
+      "causal_decode_step_seconds": 0.010177939919465702,
+      "break_even_visible_tokens": 5.35476497428052,
+      "actual_visible_tokens": 2.888888888888889
+    },
+    {
+      "prompt": "JSON",
+      "mode": "selfspec",
+      "width": 8,
+      "causal_decode_step_seconds": 0.010042506896344753,
+      "break_even_visible_tokens": 6.945775662918016,
+      "actual_visible_tokens": 4.833333333333333
+    },
+    {
+      "prompt": "JSON",
+      "mode": "selfspec",
+      "width": 16,
+      "causal_decode_step_seconds": 0.010042506896344753,
+      "break_even_visible_tokens": 8.339683261164444,
+      "actual_visible_tokens": 5.8
+    },
+    {
+      "prompt": "JSON",
+      "mode": "denoise",
+      "width": 8,
+      "causal_decode_step_seconds": 0.010042506896344753,
+      "break_even_visible_tokens": 5.164610101561037,
+      "actual_visible_tokens": 3.604651162790698
+    },
+    {
+      "prompt": "JSON",
+      "mode": "denoise",
+      "width": 16,
+      "causal_decode_step_seconds": 0.010042506896344753,
+      "break_even_visible_tokens": 4.671849749919049,
+      "actual_visible_tokens": 3.5714285714285716
+    },
+    {
+      "prompt": "JSON",
+      "mode": "denoise",
+      "width": 32,
+      "causal_decode_step_seconds": 0.010042506896344753,
+      "break_even_visible_tokens": 6.03902380780794,
+      "actual_visible_tokens": 3.911764705882353
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "selfspec",
+      "width": 8,
+      "causal_decode_step_seconds": 0.009556826595415143,
+      "break_even_visible_tokens": 6.976366431040933,
+      "actual_visible_tokens": 2.9393939393939394
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "selfspec",
+      "width": 16,
+      "causal_decode_step_seconds": 0.009556826595415143,
+      "break_even_visible_tokens": 7.904843401477569,
+      "actual_visible_tokens": 2.8529411764705883
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "denoise",
+      "width": 8,
+      "causal_decode_step_seconds": 0.009556826595415143,
+      "break_even_visible_tokens": 3.783454666895048,
+      "actual_visible_tokens": 0.9908256880733946
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "denoise",
+      "width": 16,
+      "causal_decode_step_seconds": 0.009556826595415143,
+      "break_even_visible_tokens": 3.5527183113519296,
+      "actual_visible_tokens": 0.9724770642201835
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "denoise",
+      "width": 32,
+      "causal_decode_step_seconds": 0.009556826595415143,
+      "break_even_visible_tokens": 4.392481185494594,
+      "actual_visible_tokens": 0.9367088607594937
+    }
+  ]
+}

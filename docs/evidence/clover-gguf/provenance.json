@@ -1,0 +1,389 @@
+{
+  "state": "complete",
+  "sources": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\reconstruction-v1\\results.json",
+      "sha256": "605515b62628033610a9dd52958e48d05f1d04f4ad53d9f5e5c798a3266d218c"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\model-source-integrity-v1\\results.json",
+      "sha256": "53fef6d298d5f6c8ef614c00b514b62dfdfefde4cd6cd29dc6668b46acfb8e4e"
+    }
+  ],
+  "integrity": {
+    "state": "complete",
+    "checked_at_utc": "2026-10-31T15:23:29.289185+00:00",
+    "model": {
+      "path": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+      "bytes": 20128892352,
+      "mtime_ns": 1793452860413884500,
+      "sha256": "04ca113c97ce6f225b5846ea9a8bc0c19c0e22f83b8eae40bd6dd967951c3cc4"
+    },
+    "protected_numerical_files": {
+      "python/freetoken/moe/fused_nvfp4.py": "773f733f1d6ce381725f4249884d5a39accdf88663a05fb1377df1e7fc5cf8b1",
+      "python/freetoken/kernel/triton/nvfp4_fused_moe.py": "f189cf420c02ee32f50f2317d78101c5c625269ad90c3c0da150ec341ddfbefd"
+    },
+    "refs": {
+      "main": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "feat/clover-nvfp4": "2fd00ceefe47b94edf2eff803a700b811283d78e",
+      "feat/clover-gguf": "1f83de40b1b246a286b2806723e49b8d8a4486ef"
+    },
+    "official_source_sha256": {
+      "modeling_clover_moe.py": "2584bd5502d6109c2cea9bee2f2ec98f147bbb8954c43858c0315eb4af9ffb0c",
+      "configuration_clover_moe.py": "f593baeba289a1f54987904f7782f4cfa7b22f9dfc75112768c189108f041d0d",
+      "sampling_clover_moe.py": "56768a0b23c4c7c26dc3b6f075741761ffada7d5fc2ff745c6aea5e3cc88011c"
+    },
+    "production_tree": "0e8787db0be5c049f7d6dd0c48aaa340a8c3c538",
+    "seconds": 17.59399999998277
+  },
+  "quantization": {
+    "state": "complete",
+    "checkpoint": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+    "source": "C:\\workspace\\models\\inputs\\clover-35b-a3b-bf16\\4b0402b65e523d0183a14c431955438714cb16ff",
+    "sample": "all40 layers, experts0/127/255, three projections",
+    "summary": {
+      "gate": {
+        "min": 0.07613596320152283,
+        "max": 0.08182341605424881,
+        "mean": 0.0770661157866319,
+        "count": 120
+      },
+      "up": {
+        "min": 0.07615254819393158,
+        "max": 0.07989931106567383,
+        "mean": 0.07683071059485276,
+        "count": 120
+      },
+      "down": {
+        "min": 0.07084550708532333,
+        "max": 0.09741123765707016,
+        "mean": 0.07265050088365872,
+        "count": 120
+      }
+    },
+    "seconds": 4.811999999976251
+  },
+  "runtime": {
+    "python": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Scripts\\python.exe",
+    "version": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": [
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1"
+      },
+      {
+        "name": "apache-tvm-ffi",
+        "version": "0.1.13.post3"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.7.22"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.2"
+      },
+      {
+        "name": "click",
+        "version": "8.5.0"
+      },
+      {
+        "name": "colorama",
+        "version": "0.4.6"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.1"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0"
+      },
+      {
+        "name": "einops",
+        "version": "0.8.2"
+      },
+      {
+        "name": "fastapi",
+        "version": "0.142.4"
+      },
+      {
+        "name": "filelock",
+        "version": "4.0.12"
+      },
+      {
+        "name": "flashlib",
+        "version": "0.3.0"
+      },
+      {
+        "name": "freetoken",
+        "version": "0.1.3+speed.mtpdecode2"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.7.0"
+      },
+      {
+        "name": "gguf",
+        "version": "0.19.0"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0"
+      },
+      {
+        "name": "hf-xet",
+        "version": "1.7.0"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1"
+      },
+      {
+        "name": "huggingface_hub",
+        "version": "1.33.0"
+      },
+      {
+        "name": "idna",
+        "version": "3.20"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.1"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6"
+      },
+      {
+        "name": "jiter",
+        "version": "0.17.0"
+      },
+      {
+        "name": "llvmlite",
+        "version": "0.50.0"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.2.0"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2"
+      },
+      {
+        "name": "modelscope",
+        "version": "1.40.1"
+      },
+      {
+        "name": "modelscope-hub",
+        "version": "0.4.5"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0"
+      },
+      {
+        "name": "msgpack",
+        "version": "1.2.3"
+      },
+      {
+        "name": "networkx",
+        "version": "3.7"
+      },
+      {
+        "name": "ninja",
+        "version": "1.13.2"
+      },
+      {
+        "name": "numba",
+        "version": "0.68.0"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6"
+      },
+      {
+        "name": "openai",
+        "version": "2.54.0"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.1"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3"
+      },
+      {
+        "name": "partial-json-parser",
+        "version": "0.2.1.1.post7"
+      },
+      {
+        "name": "pillow",
+        "version": "12.3.0"
+      },
+      {
+        "name": "pip",
+        "version": "26.2.2"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.7.0"
+      },
+      {
+        "name": "prompt_toolkit",
+        "version": "3.0.53"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.5"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.5"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0"
+      },
+      {
+        "name": "pytest",
+        "version": "9.1.1"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.3"
+      },
+      {
+        "name": "pyzmq",
+        "version": "27.2.0"
+      },
+      {
+        "name": "regex",
+        "version": "2026.9.29"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2"
+      },
+      {
+        "name": "rich",
+        "version": "15.0.0"
+      },
+      {
+        "name": "safetensors",
+        "version": "0.8.0"
+      },
+      {
+        "name": "setuptools",
+        "version": "78.1.0"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1"
+      },
+      {
+        "name": "starlette",
+        "version": "1.7.0"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0"
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.23.2"
+      },
+      {
+        "name": "torch",
+        "version": "2.11.0+cu130"
+      },
+      {
+        "name": "torchvision",
+        "version": "0.26.0+cu130"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1"
+      },
+      {
+        "name": "transformers",
+        "version": "5.16.1"
+      },
+      {
+        "name": "triton-windows",
+        "version": "3.6.0.post26"
+      },
+      {
+        "name": "typer",
+        "version": "0.27.3"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.8.0"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.9.2"
+      },
+      {
+        "name": "wheel",
+        "version": "0.48.0"
+      }
+    ]
+  },
+  "direct_hf": {
+    "transformers": "5.16.1",
+    "clover_registered": false,
+    "request": "metadata only, return_tensors=False",
+    "metadata_loader": "rejected",
+    "error": "ValueError: GGUF model with architecture clover_moe is not supported yet.",
+    "cuda_initialized": false
+  }
+}

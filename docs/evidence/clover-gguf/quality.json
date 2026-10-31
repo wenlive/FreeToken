@@ -1,0 +1,158 @@
+{
+  "state": "complete",
+  "native": {
+    "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\quality-native-1024-v1\\results.json",
+    "sha256": "cabf4a972c4f709b488c1f0623d5d9a2b5641d832012d7f71a3ba5400f610930",
+    "summary": {
+      "gsm8k": {
+        "completed": 50,
+        "correct": 49,
+        "score": 0.98,
+        "capped": 0
+      },
+      "humaneval": {
+        "completed": 50,
+        "correct": 49,
+        "score": 0.98,
+        "capped": 0
+      }
+    }
+  },
+  "protocol": {
+    "tokens": 1024,
+    "limit": 50,
+    "selection": "first N unshuffled",
+    "thinking": false,
+    "temperature": 0,
+    "penalties": "checkpoint defaults",
+    "grader": "GSM final number; HumanEval restricted subprocess 5s"
+  },
+  "same_inputs": true,
+  "baselines": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-bf16-first50-1024-v1\\results.json",
+      "sha256": "0e834951f25b3459e7e13b317b5620e12d80b9d86b7ca140ecedca2cf62ff483",
+      "summary": {
+        "gsm8k": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        },
+        "humaneval": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        }
+      },
+      "identical_grade_outcomes": 98,
+      "improvements": [
+        [
+          "humaneval",
+          "HumanEval/40",
+          40
+        ]
+      ],
+      "regressions": [
+        [
+          "humaneval",
+          "HumanEval/32",
+          32
+        ]
+      ]
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-1024-full-v2\\results.json",
+      "sha256": "41f1d66d9324f6e39b39a26754860bb0fb9a4728dd4797fc7ec6b3d8d47161cb",
+      "summary": {
+        "gsm8k": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        },
+        "humaneval": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        }
+      },
+      "identical_grade_outcomes": 98,
+      "improvements": [
+        [
+          "humaneval",
+          "HumanEval/12",
+          12
+        ]
+      ],
+      "regressions": [
+        [
+          "humaneval",
+          "HumanEval/32",
+          32
+        ]
+      ]
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-hf-nvfp4-first50-1024-v1\\results.json",
+      "sha256": "9a448ccb9a04ca34b784ff716e2255a778faf06989dfd20d465059e5cb9cec11",
+      "summary": {
+        "gsm8k": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        },
+        "humaneval": {
+          "completed": 50,
+          "correct": 49,
+          "score": 0.98,
+          "capped": 0
+        }
+      },
+      "identical_grade_outcomes": 98,
+      "improvements": [
+        [
+          "humaneval",
+          "HumanEval/40",
+          40
+        ]
+      ],
+      "regressions": [
+        [
+          "humaneval",
+          "HumanEval/32",
+          32
+        ]
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "dataset": "gsm8k",
+      "index": 12,
+      "task_id": null,
+      "correct": false,
+      "grade": {
+        "predicted": "12",
+        "expected": "13"
+      }
+    },
+    {
+      "dataset": "humaneval",
+      "index": 32,
+      "task_id": "HumanEval/32",
+      "correct": false,
+      "grade": {
+        "returncode": 1,
+        "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 105, in <module>\n  File \"<humaneval>\", line 101, in check\n  File \"<humaneval>\", line 39, in find_zero\nValueError: Polynomial must have an even degree.\n"
+      }
+    }
+  ],
+  "source": {
+    "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\quality-paired-audit-v1\\results.json",
+    "sha256": "c49192e18778663978d3eddb3bdab7b7b3c7365fa915a119606649d3727f24ae"
+  }
+}

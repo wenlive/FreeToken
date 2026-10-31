@@ -1,0 +1,26 @@
+{
+  "state": "complete",
+  "sources": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\all-modes-resource-v1\\results.json",
+      "sha256": "92740d99f2ceac88f1d3c444f3d9406c854a0e9e1aa5291171f5994e515880db"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T143358Z-final-five-prompt-matrix\\host-memory\\results.json",
+      "sha256": "a9f0833fd61e0cf28f25fd2e637e08a14a286a955e93ee8615b1b38697920e26"
+    }
+  ],
+  "cuda_peak_allocated": 14664297472,
+  "cuda_peak_reserved": 15793651712,
+  "host": {
+    "pid": 16836,
+    "started_at_utc": "2026-10-31T14:33:58.349646+00:00",
+    "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+    "state": "complete",
+    "peak_rss": 40690860032,
+    "peak_private": 20601946112,
+    "minimum_system_available": 17151963136
+  },
+  "host_sample_count": 458,
+  "note": "CUDA peaks from six-mode Count lifecycle; recursive host peaks from full five-prompt matrix; these are separate experiments"
+}

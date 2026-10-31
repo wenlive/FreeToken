@@ -1,0 +1,128 @@
+{
+  "state": "complete",
+  "sources": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\regression-v2\\results.json",
+      "sha256": "2c2798654d8785bfd51228d12364667f5fc2cc408517cd5e5be2e2424c68c738"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\paired-mtp-audit-v1\\results.json",
+      "sha256": "87d3e0c722e7246f6e6690bccaf49edd5616e9d101bbf1da1bd837f9be084885"
+    }
+  ],
+  "regression": {
+    "state": "complete",
+    "weight_environment": {
+      "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+      "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-atomic/556eebd05adcae7c29e6ce005eea7220f0e19eaa/Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf"
+    },
+    "exit_code": 0,
+    "seconds": 26.969000000040978,
+    "command": [
+      "tests/models/qwen4_exp",
+      "tests/models/test_qwen3_5_moe_weight.py",
+      "tests/models/test_gemma4_gguf_rope.py",
+      "tests/kernels/test_gemma4_fused_ops.py",
+      "tests/moe/test_nvfp4_backends.py",
+      "tests/moe/test_fused_copy.py",
+      "tests/kvcache/test_mtp_pool.py",
+      "tests/kvcache/test_linear_state_pool_alloc.py",
+      "tests/models/test_clover_model.py",
+      "tests/models/test_clover_generation.py",
+      "tests/models/test_clover_offload.py",
+      "tests/models/test_clover_gguf.py",
+      "tests/models/test_clover_eval.py",
+      "tests/scheduler/test_clover_prefill_bundle.py",
+      "tests/kernels/test_clover_preview.py",
+      "tests/kernels/test_clover_gguf.py",
+      "tests/models/test_clover_real_layers.py",
+      "tests/models/test_clover_bf16_blocks.py"
+    ],
+    "summary": "403 passed, 147 skipped, 47 subtests passed in 23.62s"
+  },
+  "real_mtp": {
+    "state": "complete",
+    "inputs": [
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\mtp-main-off-v1\\results.json",
+        "sha256": "4632797fd19ae6a6839e50fe20d6b483c5dae76618c1ea114c6816302f1eb8b0",
+        "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a"
+      },
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\mtp-feature-off-v1\\results.json",
+        "sha256": "3ffcf920f9b70da426002795370eaf4a10fedb6b322700372a125fa613a78455",
+        "commit": "1f83de40b1b246a286b2806723e49b8d8a4486ef"
+      },
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\mtp-main-on-v1\\results.json",
+        "sha256": "1f6e086b5a344bb751593201efcd47ffaf2a34c5388add33b748fab5e58e0cf9",
+        "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a"
+      },
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\mtp-feature-on-v1\\results.json",
+        "sha256": "6eac5ff058805453ae21248f4af39f37c4172d265b64920e5faaa8ae37b4f934",
+        "commit": "1f83de40b1b246a286b2806723e49b8d8a4486ef"
+      }
+    ],
+    "cases": [
+      {
+        "mode": "off",
+        "prompt": "Arithmetic",
+        "token_count": 2,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 0,
+        "drafts": 0
+      },
+      {
+        "mode": "off",
+        "prompt": "Count",
+        "token_count": 29,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 0,
+        "drafts": 0
+      },
+      {
+        "mode": "off",
+        "prompt": "Context",
+        "token_count": 1,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 0,
+        "drafts": 0
+      },
+      {
+        "mode": "on",
+        "prompt": "Arithmetic",
+        "token_count": 2,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 1,
+        "drafts": 3
+      },
+      {
+        "mode": "on",
+        "prompt": "Count",
+        "token_count": 29,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 8,
+        "drafts": 22
+      },
+      {
+        "mode": "on",
+        "prompt": "Context",
+        "token_count": 1,
+        "matches_tokens": true,
+        "matches_rounds": true,
+        "round_count": 1,
+        "drafts": 3
+      }
+    ],
+    "protected_hashes_unchanged": true,
+    "mtp_tensors": 31,
+    "reserved_slots": 4
+  },
+  "additional_cpu_accounting_tests": "5 passed separately after 403-test regression; see review-07-official-comparison.md"
+}
