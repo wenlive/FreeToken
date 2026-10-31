@@ -194,6 +194,15 @@ SUPPORTED_MODELS: tuple[AotModel, ...] = (
         expert_formats=_NVFP4_FORMATS,
     ),
     AotModel(
+        name="DiffuSpace/Clover-35B-A3B-Preview",
+        architecture="CloverMoeModelLM",
+        hidden_size=2048,
+        kv_groups=((2, 256),),
+        top_k=8,
+        moe_intermediate_size=512,
+        expert_formats=("bf16", "nvfp4"),
+    ),
+    AotModel(
         # QSA compressed-sparse attention (12 of 48 layers): the QSAKVCache stores K/V
         # through store_cache (2 kv heads x 256 head_dim), the compressed index-key slab
         # and the pending ring write via the vendored qsa triton kernels. Hyper-connections

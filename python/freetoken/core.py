@@ -24,6 +24,9 @@ class SamplingParams:
     # Stop strings (OpenAI `stop` / Anthropic `stop_sequences`). Generation finishes when one
     # appears in the decoded output; the matched substring (and anything after) is trimmed.
     stop_strs: list[str] = field(default_factory=list)
+    clover_mode: str | None = None
+    clover_width: int | None = None
+    clover_threshold: float | None = None
 
     @property
     def is_greedy(self) -> bool:
@@ -118,7 +121,7 @@ class Req:
 @dataclass
 class Batch:
     reqs: List[Req]
-    phase: Literal["prefill", "decode", "verify"]
+    phase: Literal["prefill", "decode", "verify", "preview"]
     # these fields should be set by scheduler
     input_ids: torch.Tensor = field(init=False)
     positions: torch.Tensor = field(init=False)

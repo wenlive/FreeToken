@@ -514,9 +514,10 @@ class Engine:
         if config.attention_backend.split(",")[0] == "triton":
             # Prefill runs on the first comma part; warm its autotune cache.
             self._warmup_prefill()
-        if config.mtp_runtime_path is not None:
-            from freetoken.models.qwen4_exp.mtp_runtime import MtpRuntime
-            self.mtp_runtime = MtpRuntime(self, self.model._mtp_drafter)
+        from freetoken.engine.speculative import create_runtime
+        # Retain the legacy attribute for scheduler/cache-rebuild compatibility;
+        # model-specific implementations share the neutral runtime protocol.
+        self.mtp_runtime = create_runtime(self)
         if config.moe_q2_adapt_every:
             self.q2_adaptive_owners = self.moe_offload_cache.start_adaptation()
 
@@ -851,7 +852,8 @@ class Engine:
             )
         # Decode batches never exceed max_running_req, but CUDA-graph padding can
         # round a batch up to the largest captured size; cover both.
-        max_tokens = max(config.max_running_req, config.cuda_graph_max_bs or 0, 1)
+        block_rows = 32 if config.model_config.model_type == "clover_moe" else 1
+        max_tokens = max(config.max_running_req, config.cuda_graph_max_bs or 0, block_rows)
         method = sample.quant_method
         executor = CpuMoeExecutor(
             cache,
@@ -1144,6 +1146,9 @@ class Engine:
             req.complete_one()
 
         batch_logits = logits[: batch.size]
+        process_logits = getattr(self.mtp_runtime, "process_logits", None)
+        if process_logits is not None:
+            batch_logits = process_logits(batch, batch_logits)
         next_tokens_gpu = self.sampler.sample(batch_logits, args).to(torch.int32)
         next_tokens_cpu = next_tokens_gpu.to("cpu", non_blocking=True)
         copy_done_event = torch.cuda.Event()

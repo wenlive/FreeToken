@@ -114,8 +114,24 @@ class EngineConfig:
     mtp_max_context: int = 8192
     mtp_compact_state: bool = False
     mtp_draft_policy: str = "full"
+    clover_mode: str = "causal"
+    clover_width: int = 8
+    clover_threshold: float = .95
+    clover_accept_rule: str = "exact"
+    clover_accept_ratio: float = .9
+    clover_accept_delta: float = .6
+    clover_coreset_top_p: float = .9
+    clover_disable_penalties: bool = False
 
     def __post_init__(self):
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if not 0 < self.clover_threshold < 1 or not 0 < self.clover_coreset_top_p <= 1:
+            raise ValueError("Clover confidence threshold and coreset top-p are out of range")
+        if not 0 <= self.clover_accept_ratio <= 1 or not 0 <= self.clover_accept_delta <= 1:
+            raise ValueError("Clover acceptance ratio/delta must be in [0,1]")
         if self.mtp_draft_policy not in ("full", "paired_cjk"):
             raise ValueError("MTP draft policy must be full or paired_cjk")
         if not 0 <= self.fixed_q2_rebuild_reserve_mib <= 512:
@@ -198,6 +214,10 @@ class EngineConfig:
         quant = checkpoint_quant_config(self.model_path, hf_config, spec)
         set_quant_config(quant)
         model_config = _load_attr(spec.module, spec.parse_config)(hf_config)
+        if self.clover_mode != "causal" and model_config.model_type != "clover_moe":
+            raise ValueError("Clover decoding requires a Clover checkpoint")
+        if model_config.model_type == "clover_moe" and (self.tp_info.size != 1 or self.mtp_runtime_path is not None):
+            raise ValueError("Clover currently requires TP=1 and cannot use a separate MTP runtime")
         if self.mtp_runtime_path is not None:
             from freetoken.models.config import SlotStateSpec
             from freetoken.models.qwen4_exp.mtp_state import MTP_LAST_RESIDUAL
