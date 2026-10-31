@@ -82,6 +82,32 @@ def packed_fixture(kind, experts=3, rows=64, width=256):
     return torch.from_numpy(flat.copy()), torch.from_numpy(dense.copy())
 
 
+def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
+    reference, monkeypatch
+):
+    from types import SimpleNamespace
+
+    packed, expected = packed_fixture(12, rows=2)
+    tensor = SimpleNamespace(
+        name="blk.0.ffn_down_exps.weight",
+        shape=(3, 2, 256),
+        _raw=packed.numpy(),
+        ggml_type=12,
+    )
+    monkeypatch.setattr(reference, "iter_gguf_tensors", lambda _: [tensor])
+    storage = reference.GGUFExpertStorage(
+        "synthetic", device="cpu", cache_bytes=0, cpu_cache_bytes=4096
+    )
+    for expert in (0, 1, 0):
+        torch.testing.assert_close(
+            storage.projection(0, expert, "down"), expected[expert], rtol=0, atol=0
+        )
+    assert storage.cpu_hits == 1 and storage.cpu_bytes == 4096
+    storage.projection(0, 2, "down")
+    assert list(storage.cpu_cache) == [(0, 0, "down"), (0, 2, "down")]
+    assert storage.cpu_bytes <= storage.cpu_limit and storage.bytes == 0
+
+
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
 @pytest.mark.parametrize("kind", [2, 8, 12, 23])
 @pytest.mark.parametrize("dtype", [torch.float16, torch.bfloat16])
