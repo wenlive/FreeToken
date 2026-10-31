@@ -1,0 +1,4234 @@
+{
+  "state": "complete",
+  "provenance": {
+    "repository": "https://github.com/ggml-org/llama.cpp",
+    "pr": {
+      "url": "https://github.com/ggml-org/llama.cpp/pull/31306",
+      "state": "open",
+      "head": "cb09d4355d8bf968bb907c5de03cf42d8aa073ce",
+      "head_repository": "Maphist0/llama.cpp-pub",
+      "base": "e486a4b559617dc88bf79978996f6c670b6bbc9d",
+      "updated_at": "2026-10-31T09:35:50Z"
+    },
+    "head": "cb09d4355d8bf968bb907c5de03cf42d8aa073ce",
+    "source_clean": true,
+    "binaries": [
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\ggml-base.dll",
+        "sha256": "394b8640f29a67698a43c18a5d20907f7fc00eda8ea5464a2a68dbb11ed396a3"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\ggml-cpu.dll",
+        "sha256": "ec4ecca022b638099928c88820587cc0e8bf3f47374d12fbef2c9a645d35f6ad"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\ggml-cuda.dll",
+        "sha256": "313bd9e6d08c89c7ef2ae00a6722be82a7abad51e4492d023e3b693f13a5c00c"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\ggml.dll",
+        "sha256": "d590c23746ea55c880dae2669a55243cc66c66b615a1daa6417aa49b052b8b92"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-common.dll",
+        "sha256": "e7f4bd71952605b654c60c482b576204e2b439e1019d7f82673a9b79d195b341"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server-impl.dll",
+        "sha256": "1ad90b48d893e080b559fa809e5819e74a966bd3cb78437d3bf4e969ef13435d"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama.dll",
+        "sha256": "da08c9d160f09818e0138f835ab5fbe9d9990ed297b9794140c53b82b85ef4ef"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\mtmd.dll",
+        "sha256": "0539d777b2bb76b265f5009c1cc8b7dcce64f49af5d599ecc093fd414b6c5bc4"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "sha256": "9aa8292305d761d5f99c17592e708d6f3460af638a8cb20ef5e7e4ce42868f59"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-speculative-simple.exe",
+        "sha256": "86e4c02e1c727ec48c763073d1b157ecc25a67c777cfcd8828ae01717a53bac1"
+      }
+    ],
+    "build_manifests": [
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T153658Z-configure-official-clover-llama-cpp-sm120\\manifest.json",
+        "sha256": "85effd3f509c311974f05baf67a7aae5e09e8a9aacc1736f35abcdb2248f1d75"
+      },
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T153713Z-build-official-clover-llama-speculative-simple\\manifest.json",
+        "sha256": "7917fcc45acff850b9ae12575ffcfa901fdf86c80cbe37ad332d0776b864eac7"
+      },
+      {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T155421Z-build-official-llama-server-comparison-frontend\\manifest.json",
+        "sha256": "9d32a485f482db30b70236340e69872021b2241183f06f42214b8a27b527589e"
+      }
+    ],
+    "build_flags": {
+      "GGML_CUDA": "ON",
+      "CMAKE_CUDA_ARCHITECTURES": "120 (compiler resolves120a)",
+      "CMAKE_CUDA_FLAGS": "-Xcompiler=/Zc:preprocessor",
+      "CMAKE_CXX_FLAGS": "/Zc:preprocessor",
+      "LLAMA_CURL": "OFF",
+      "LLAMA_BUILD_TESTS": "OFF",
+      "LLAMA_BUILD_SERVER": "ON",
+      "CMAKE_BUILD_TYPE": "Release"
+    }
+  },
+  "datasets": {
+    "five-prompt-no-penalties-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\five-prompt-no-penalties-v1\\results.json",
+        "sha256": "8cc3c26db0d8a3d5b7eeacceabdda04b1281c5349867f0546229677e9491f42d"
+      },
+      "settings": {
+        "cache_slots": 4096,
+        "memory_ratio": 0.85,
+        "context": 4096,
+        "token_budget": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "penalties": "disabled",
+        "bf16_dense_baseline": false,
+        "indexed_clover_penalty": false
+      },
+      "request_count": 105,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 0.36426340002799407,
+          "ttft_seconds": 0.09420729998964816,
+          "decode_tokens_per_second": 110.49706916756612,
+          "end_to_end_tokens_per_second": 82.35798600049982,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 1.0,
+          "decode_expert_copy_payload_bytes": 0,
+          "output_tokens": 30,
+          "min_e2e": 81.09999709938631,
+          "max_e2e": 83.89132716766231,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 0.3360924000153318,
+          "ttft_seconds": 0.08728149998933077,
+          "decode_tokens_per_second": 116.89094274573743,
+          "end_to_end_tokens_per_second": 89.2611674605896,
+          "tokens_per_round": 7.5,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8175155734701356,
+          "decode_expert_copy_payload_bytes": 3394240512,
+          "output_tokens": 30,
+          "min_e2e": 59.3274990641669,
+          "max_e2e": 89.62811502107614,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.31103479996090755,
+          "ttft_seconds": 0.08413370000198483,
+          "decode_tokens_per_second": 127.8796062045493,
+          "end_to_end_tokens_per_second": 96.45222979477073,
+          "tokens_per_round": 10,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.7716279984270547,
+          "decode_expert_copy_payload_bytes": 3958243328,
+          "output_tokens": 30,
+          "min_e2e": 95.64487441092317,
+          "max_e2e": 96.62660420472183,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 0.4411086000036448,
+          "ttft_seconds": 0.11056760000064969,
+          "decode_tokens_per_second": 106.02641678599154,
+          "end_to_end_tokens_per_second": 79.34553985052841,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8198479789727925,
+          "decode_expert_copy_payload_bytes": 4321181696,
+          "output_tokens": 35,
+          "min_e2e": 77.85211790025437,
+          "max_e2e": 79.83070417277924,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 0.7379578999825753,
+          "ttft_seconds": 0.09676749998470768,
+          "decode_tokens_per_second": 60.07371751826426,
+          "end_to_end_tokens_per_second": 47.42817984715174,
+          "tokens_per_round": 3.5,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8200473559589582,
+          "decode_expert_copy_payload_bytes": 6992953344,
+          "output_tokens": 35,
+          "min_e2e": 45.59270319062021,
+          "max_e2e": 47.518824923599254,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.7061596999992616,
+          "ttft_seconds": 0.09768380003515631,
+          "decode_tokens_per_second": 55.88739150842574,
+          "end_to_end_tokens_per_second": 49.56385928004189,
+          "tokens_per_round": 4.375,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8181181959564541,
+          "decode_expert_copy_payload_bytes": 7971012608,
+          "output_tokens": 35,
+          "min_e2e": 34.67929970855206,
+          "max_e2e": 50.22700453741734,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 2.494938100047875,
+          "ttft_seconds": 0.1503814000170678,
+          "decode_tokens_per_second": 101.25746323317605,
+          "end_to_end_tokens_per_second": 94.99233668180074,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8647257032521865,
+          "decode_expert_copy_payload_bytes": 18264489984,
+          "output_tokens": 237,
+          "min_e2e": 90.42632808704832,
+          "max_e2e": 96.42396862257046,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 2.474591000005603,
+          "ttft_seconds": 0.13656499999342486,
+          "decode_tokens_per_second": 100.9475898939867,
+          "end_to_end_tokens_per_second": 95.77340255398302,
+          "tokens_per_round": 6.771428571428571,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8078791417674025,
+          "decode_expert_copy_payload_bytes": 26349666304,
+          "output_tokens": 237,
+          "min_e2e": 94.71750862777034,
+          "max_e2e": 96.38808233412986,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 2.145216100034304,
+          "ttft_seconds": 0.14147969998884946,
+          "decode_tokens_per_second": 117.79210282890952,
+          "end_to_end_tokens_per_second": 110.4783802416037,
+          "tokens_per_round": 9.48,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.7856449794141558,
+          "decode_expert_copy_payload_bytes": 27855945728,
+          "output_tokens": 237,
+          "min_e2e": 110.35730295661833,
+          "max_e2e": 110.64124632052697,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 1.0273669000016525,
+          "ttft_seconds": 0.17262809997191653,
+          "decode_tokens_per_second": 102.1744869391904,
+          "end_to_end_tokens_per_second": 84.68250242426542,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8287041395976524,
+          "decode_expert_copy_payload_bytes": 9300082688,
+          "output_tokens": 87,
+          "min_e2e": 83.06631174154226,
+          "max_e2e": 86.18062905249366,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 1.2612393000163138,
+          "ttft_seconds": 0.16199829999823123,
+          "decode_tokens_per_second": 80.94391887116988,
+          "end_to_end_tokens_per_second": 71.35838535861978,
+          "tokens_per_round": 5.294117647058823,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8107632782272247,
+          "decode_expert_copy_payload_bytes": 12834045952,
+          "output_tokens": 90,
+          "min_e2e": 67.81174074249698,
+          "max_e2e": 71.90490145264744,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 1.8142751000123098,
+          "ttft_seconds": 0.17557790002319962,
+          "decode_tokens_per_second": 56.098317650782434,
+          "end_to_end_tokens_per_second": 47.95303644932883,
+          "tokens_per_round": 5.8,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8094416041431511,
+          "decode_expert_copy_payload_bytes": 14670888960,
+          "output_tokens": 87,
+          "min_e2e": 47.283024992866444,
+          "max_e2e": 65.8845089978949,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 1.2187052000081167,
+          "ttft_seconds": 0.13427350000711158,
+          "decode_tokens_per_second": 108.82540554528136,
+          "end_to_end_tokens_per_second": 96.82407197344699,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.9103777008879963,
+          "decode_expert_copy_payload_bytes": 6311378944,
+          "output_tokens": 118,
+          "min_e2e": 94.79968304953643,
+          "max_e2e": 97.06523268943538,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 3.589015399978962,
+          "ttft_seconds": 0.12419930001487955,
+          "decode_tokens_per_second": 37.27758825387978,
+          "end_to_end_tokens_per_second": 36.22163337631876,
+          "tokens_per_round": 2.549019607843137,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.9366911977508579,
+          "decode_expert_copy_payload_bytes": 10436608000,
+          "output_tokens": 130,
+          "min_e2e": 29.472298272665245,
+          "max_e2e": 40.37513093126768,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 3.8168358000111766,
+          "ttft_seconds": 0.12474880000809208,
+          "decode_tokens_per_second": 33.314267461067345,
+          "end_to_end_tokens_per_second": 32.48764329857651,
+          "tokens_per_round": 2.6382978723404253,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.9324223137401723,
+          "decode_expert_copy_payload_bytes": 12917538816,
+          "output_tokens": 124,
+          "min_e2e": 30.137840029212857,
+          "max_e2e": 38.1071853706234,
+          "outputs_repeatable": true
+        }
+      ],
+      "cache_receipts": [],
+      "cache_counters": [],
+      "scope": "offline scheduler; actual output length, EOS respected",
+      "cache_scope": null
+    },
+    "five-prompt-no-penalties-drift-control-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\five-prompt-no-penalties-drift-control-v1\\results.json",
+        "sha256": "df6832b859efb6b12db2d8e3984ca9eca192535bf9c528b68eb4dfe8c72c569c"
+      },
+      "settings": {
+        "cache_slots": 4096,
+        "memory_ratio": 0.85,
+        "context": 4096,
+        "token_budget": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "penalties": "disabled",
+        "bf16_dense_baseline": false,
+        "indexed_clover_penalty": false
+      },
+      "request_count": 35,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 0.30514459998812526,
+          "ttft_seconds": 0.05396839999593794,
+          "decode_tokens_per_second": 119.4912474873996,
+          "end_to_end_tokens_per_second": 98.3140452138673,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 1.0,
+          "decode_expert_copy_payload_bytes": 0,
+          "output_tokens": 30,
+          "min_e2e": 97.97745147061508,
+          "max_e2e": 98.42300106905495,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 0.44038739998359233,
+          "ttft_seconds": 0.1103368999902159,
+          "decode_tokens_per_second": 106.33051212646386,
+          "end_to_end_tokens_per_second": 79.47548000079931,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8196348653832493,
+          "decode_expert_copy_payload_bytes": 4326293504,
+          "output_tokens": 35,
+          "min_e2e": 79.36970475993186,
+          "max_e2e": 79.57469824824976,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 2.4631602999870665,
+          "ttft_seconds": 0.14308379997964948,
+          "decode_tokens_per_second": 102.3271181178321,
+          "end_to_end_tokens_per_second": 96.21785476212995,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8647130832039778,
+          "decode_expert_copy_payload_bytes": 18266193920,
+          "output_tokens": 237,
+          "min_e2e": 96.13967951540889,
+          "max_e2e": 96.25660890961466,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 1.0056723000016063,
+          "ttft_seconds": 0.164628200000152,
+          "decode_tokens_per_second": 103.64065519332065,
+          "end_to_end_tokens_per_second": 86.50929333527536,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.8287669083262719,
+          "decode_expert_copy_payload_bytes": 9296674816,
+          "output_tokens": 87,
+          "min_e2e": 86.43967211351612,
+          "max_e2e": 86.51819745952909,
+          "outputs_repeatable": true
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 8,
+          "wall_seconds": 1.1960586999775842,
+          "ttft_seconds": 0.12628139997832477,
+          "decode_tokens_per_second": 110.33304832413836,
+          "end_to_end_tokens_per_second": 98.6573652298265,
+          "tokens_per_round": 1.0,
+          "tokens_per_preview": null,
+          "visible_tokens_per_preview": null,
+          "expert_cache_hit_rate": 0.9103777008879963,
+          "decode_expert_copy_payload_bytes": 6311378944,
+          "output_tokens": 118,
+          "min_e2e": 94.80322466157978,
+          "max_e2e": 98.79481213401387,
+          "outputs_repeatable": true
+        }
+      ],
+      "cache_receipts": [],
+      "cache_counters": [],
+      "scope": "offline scheduler; actual output length, EOS respected",
+      "cache_scope": null
+    },
+    "llama-server-cache6656-mmap-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\results.json",
+        "sha256": "3678d68d3aa49cb7b773d95657460a51e5cace8d1cb49039453793f259d0f549"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1",
+        "frontend": "server",
+        "modes": "causal,selfspec:8,selfspec:16",
+        "prompts": "Count,Sky,Python,JSON,Chinese",
+        "tokens": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "cache_mib": 6656,
+        "load_mode": "mmap"
+      },
+      "request_count": 105,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.46260990004520863,
+          "ttft_seconds": 0.09715809999033809,
+          "end_to_end_tokens_per_second": 64.8494552258139,
+          "output_tokens": 30,
+          "min_e2e": 59.696514861076786,
+          "max_e2e": 67.79149324825482,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 96.251,
+            "prompt_per_token_ms": 4.583380952380953,
+            "prompt_per_second": 218.17955138128437,
+            "predicted_n": 31,
+            "predicted_ms": 350.666,
+            "predicted_per_token_ms": 11.688866666666666,
+            "predicted_per_second": 85.5514934439039
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 0.6696758999605663,
+          "ttft_seconds": 0.19970050000119954,
+          "end_to_end_tokens_per_second": 44.79778950051292,
+          "output_tokens": 30,
+          "min_e2e": 41.59725702247547,
+          "max_e2e": 45.20395800155533,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 198.694,
+            "prompt_per_token_ms": 9.461619047619047,
+            "prompt_per_second": 105.69015672340383,
+            "predicted_n": 31,
+            "predicted_ms": 470.192,
+            "predicted_per_token_ms": 15.673066666666667,
+            "predicted_per_second": 63.80372273454248,
+            "draft_n": 28,
+            "draft_n_accepted": 25
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.7272411999874748,
+          "ttft_seconds": 0.2052559000439942,
+          "end_to_end_tokens_per_second": 41.25178826573176,
+          "output_tokens": 30,
+          "min_e2e": 40.74854534582598,
+          "max_e2e": 41.462922471470065,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 204.218,
+            "prompt_per_token_ms": 9.724666666666666,
+            "prompt_per_second": 102.83128813326935,
+            "predicted_n": 31,
+            "predicted_ms": 521.649,
+            "predicted_per_token_ms": 17.3883,
+            "predicted_per_second": 57.509934841243826,
+            "draft_n": 30,
+            "draft_n_accepted": 27
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.7519617999787442,
+          "ttft_seconds": 0.22708039998542517,
+          "end_to_end_tokens_per_second": 46.544917575586084,
+          "output_tokens": 35,
+          "min_e2e": 43.850587767846925,
+          "max_e2e": 48.80949459142292,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 225.562,
+            "prompt_per_token_ms": 9.80704347826087,
+            "prompt_per_second": 101.96752999175392,
+            "predicted_n": 36,
+            "predicted_ms": 510.311,
+            "predicted_per_token_ms": 14.580314285714286,
+            "predicted_per_second": 68.58562719596482
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 1.464094599999953,
+          "ttft_seconds": 0.2631853999919258,
+          "end_to_end_tokens_per_second": 23.905559107998297,
+          "output_tokens": 35,
+          "min_e2e": 23.557173596408024,
+          "max_e2e": 25.0721091761578,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 245.232,
+            "prompt_per_token_ms": 10.662260869565218,
+            "prompt_per_second": 93.78873882690675,
+            "predicted_n": 36,
+            "predicted_ms": 1185.017,
+            "predicted_per_token_ms": 33.85762857142857,
+            "predicted_per_second": 29.535441263711828,
+            "draft_n": 56,
+            "draft_n_accepted": 20
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 2.1585725999902934,
+          "ttft_seconds": 0.24209509999491274,
+          "end_to_end_tokens_per_second": 16.2144187321554,
+          "output_tokens": 35,
+          "min_e2e": 15.11095890777908,
+          "max_e2e": 16.674011966131165,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 241.104,
+            "prompt_per_token_ms": 10.482782608695652,
+            "prompt_per_second": 95.39451854801248,
+            "predicted_n": 36,
+            "predicted_ms": 1916.106,
+            "predicted_per_token_ms": 54.74588571428571,
+            "predicted_per_second": 18.26621282956162,
+            "draft_n": 105,
+            "draft_n_accepted": 21
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 4.3575541000464,
+          "ttft_seconds": 0.35685199999716133,
+          "end_to_end_tokens_per_second": 54.38830925758934,
+          "output_tokens": 237,
+          "min_e2e": 51.95893744350176,
+          "max_e2e": 55.50526643050758,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 343.388,
+            "prompt_per_token_ms": 9.538555555555554,
+            "prompt_per_second": 104.83767633114728,
+            "predicted_n": 238,
+            "predicted_ms": 4023.966,
+            "predicted_per_token_ms": 16.978759493670886,
+            "predicted_per_second": 58.89711791799434
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 5.078758400049992,
+          "ttft_seconds": 0.34278120001545176,
+          "end_to_end_tokens_per_second": 46.664948661008786,
+          "output_tokens": 237,
+          "min_e2e": 45.592798138855706,
+          "max_e2e": 48.49270354616454,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 335.612,
+            "prompt_per_token_ms": 9.322555555555557,
+            "prompt_per_second": 107.26672467015482,
+            "predicted_n": 238,
+            "predicted_ms": 4735.629,
+            "predicted_per_token_ms": 19.981556962025316,
+            "predicted_per_second": 50.04615015238736,
+            "draft_n": 224,
+            "draft_n_accepted": 194
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 7.2665538000292145,
+          "ttft_seconds": 0.3623910999740474,
+          "end_to_end_tokens_per_second": 32.61518548160301,
+          "output_tokens": 237,
+          "min_e2e": 32.100021174046816,
+          "max_e2e": 32.73145029991405,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 361.298,
+            "prompt_per_token_ms": 10.036055555555556,
+            "prompt_per_second": 99.64073977713689,
+            "predicted_n": 238,
+            "predicted_ms": 6903.765,
+            "predicted_per_token_ms": 29.12981012658228,
+            "predicted_per_second": 34.32909434200034,
+            "draft_n": 345,
+            "draft_n_accepted": 195
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.7947585000074469,
+          "ttft_seconds": 0.44189919997006655,
+          "end_to_end_tokens_per_second": 48.47448835018138,
+          "output_tokens": 87,
+          "min_e2e": 47.682078263544945,
+          "max_e2e": 51.74732885479853,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 440.82,
+            "prompt_per_token_ms": 9.18375,
+            "prompt_per_second": 108.88798148904316,
+            "predicted_n": 88,
+            "predicted_ms": 1352.688,
+            "predicted_per_token_ms": 15.548137931034484,
+            "predicted_per_second": 64.31638337887227
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 2.365976499975659,
+          "ttft_seconds": 0.4621972999884747,
+          "end_to_end_tokens_per_second": 36.77128661290383,
+          "output_tokens": 87,
+          "min_e2e": 32.62919285139509,
+          "max_e2e": 37.87377168177108,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 446.499,
+            "prompt_per_token_ms": 9.3020625,
+            "prompt_per_second": 107.50304032035906,
+            "predicted_n": 88,
+            "predicted_ms": 1903.572,
+            "predicted_per_token_ms": 21.880137931034483,
+            "predicted_per_second": 45.703551008314896,
+            "draft_n": 91,
+            "draft_n_accepted": 67
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 3.663213399995584,
+          "ttft_seconds": 0.4559704000130296,
+          "end_to_end_tokens_per_second": 23.74964013838366,
+          "output_tokens": 87,
+          "min_e2e": 23.299639198335004,
+          "max_e2e": 23.77304643142327,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 454.904,
+            "prompt_per_token_ms": 9.477166666666667,
+            "prompt_per_second": 105.5167683731073,
+            "predicted_n": 88,
+            "predicted_ms": 3215.596,
+            "predicted_per_token_ms": 36.96087356321839,
+            "predicted_per_second": 27.055637586313704,
+            "draft_n": 165,
+            "draft_n_accepted": 65
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.6673083999776281,
+          "ttft_seconds": 0.2732238000025973,
+          "end_to_end_tokens_per_second": 58.77736836287453,
+          "output_tokens": 98,
+          "min_e2e": 57.01798608949557,
+          "max_e2e": 61.63468905907354,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 272.03,
+            "prompt_per_token_ms": 7.556388888888888,
+            "prompt_per_second": 132.33834503547405,
+            "predicted_n": 99,
+            "predicted_ms": 1386.16,
+            "predicted_per_token_ms": 14.144489795918368,
+            "predicted_per_second": 70.69890921682922
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 4.087355000025127,
+          "ttft_seconds": 0.2900899000233039,
+          "end_to_end_tokens_per_second": 23.73172870949641,
+          "output_tokens": 97,
+          "min_e2e": 22.35256867882851,
+          "max_e2e": 24.04407869558445,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 281.613,
+            "prompt_per_token_ms": 7.822583333333333,
+            "prompt_per_second": 127.83500761683587,
+            "predicted_n": 98,
+            "predicted_ms": 3797.032,
+            "predicted_per_token_ms": 39.144659793814434,
+            "predicted_per_second": 25.546268769923454,
+            "draft_n": 182,
+            "draft_n_accepted": 45
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 6.663321300002281,
+          "ttft_seconds": 0.2928855999489315,
+          "end_to_end_tokens_per_second": 14.707380236934764,
+          "output_tokens": 98,
+          "min_e2e": 14.3488387177517,
+          "max_e2e": 14.775939240548649,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 291.811,
+            "prompt_per_token_ms": 8.10586111111111,
+            "prompt_per_second": 123.36752212904929,
+            "predicted_n": 99,
+            "predicted_ms": 6370.441,
+            "predicted_per_token_ms": 65.0045,
+            "predicted_per_second": 15.383550369589798,
+            "draft_n": 405,
+            "draft_n_accepted": 44
+          }
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 70414, misses = 1970, hit rate = 97.28%, uploaded = 3201.25 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 13764, misses = 2091, hit rate = 86.81%, uploaded = 3397.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 69680, misses = 6904, hit rate = 90.99%, uploaded = 11219.00 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 9540, misses = 6315, hit rate = 60.17%, uploaded = 10261.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 6023, misses = 1401, hit rate = 81.13%, uploaded = 2276.62 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 57614, misses = 11224, hit rate = 83.70%, uploaded = 18239.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 77215, misses = 6523, hit rate = 92.21%, uploaded = 10599.88 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 9499, misses = 8554, hit rate = 52.62%, uploaded = 13900.25 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 145486, misses = 12872, hit rate = 91.87%, uploaded = 20917.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 9359, misses = 8694, hit rate = 51.84%, uploaded = 14127.75 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 40007, misses = 2452, hit rate = 94.23%, uploaded = 3984.50 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 142921, misses = 28600, hit rate = 83.33%, uploaded = 46475.00 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 475412, misses = 60505, hit rate = 88.71%, uploaded = 98320.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 6765, misses = 15096, hit rate = 30.95%, uploaded = 24531.00 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 509249, misses = 89199, hit rate = 85.09%, uploaded = 144948.38 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 7221, misses = 14640, hit rate = 33.03%, uploaded = 23790.00 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 81416, misses = 4093, hit rate = 95.21%, uploaded = 6651.12 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 509558, misses = 113834, hit rate = 81.74%, uploaded = 184980.25 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 183311, misses = 16676, hit rate = 91.66%, uploaded = 27098.50 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 218774, misses = 33167, hit rate = 86.84%, uploaded = 53896.38 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 40550, misses = 3582, hit rate = 91.88%, uploaded = 5820.75 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 253376, misses = 35444, hit rate = 87.73%, uploaded = 57596.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 213987, misses = 10815, hit rate = 95.19%, uploaded = 17574.38 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 11531, misses = 11639, hit rate = 49.77%, uploaded = 18913.38 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 457524, misses = 24738, hit rate = 94.87%, uploaded = 40199.25 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 11371, misses = 11799, hit rate = 49.08%, uploaded = 19173.38 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 137985, misses = 3608, hit rate = 97.45%, uploaded = 5863.00 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 423522, misses = 44708, hit rate = 90.45%, uploaded = 72650.50 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 70414,
+          "misses": 1970,
+          "hit_rate": 0.9728,
+          "uploaded_mib_rounded": 3201.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 13764,
+          "misses": 2091,
+          "hit_rate": 0.8681,
+          "uploaded_mib_rounded": 3397.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 69680,
+          "misses": 6904,
+          "hit_rate": 0.9098999999999999,
+          "uploaded_mib_rounded": 11219.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 9540,
+          "misses": 6315,
+          "hit_rate": 0.6017,
+          "uploaded_mib_rounded": 10261.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 6023,
+          "misses": 1401,
+          "hit_rate": 0.8112999999999999,
+          "uploaded_mib_rounded": 2276.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 57614,
+          "misses": 11224,
+          "hit_rate": 0.8370000000000001,
+          "uploaded_mib_rounded": 18239.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 77215,
+          "misses": 6523,
+          "hit_rate": 0.9220999999999999,
+          "uploaded_mib_rounded": 10599.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 9499,
+          "misses": 8554,
+          "hit_rate": 0.5262,
+          "uploaded_mib_rounded": 13900.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 145486,
+          "misses": 12872,
+          "hit_rate": 0.9187000000000001,
+          "uploaded_mib_rounded": 20917.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 9359,
+          "misses": 8694,
+          "hit_rate": 0.5184000000000001,
+          "uploaded_mib_rounded": 14127.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 40007,
+          "misses": 2452,
+          "hit_rate": 0.9423,
+          "uploaded_mib_rounded": 3984.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 142921,
+          "misses": 28600,
+          "hit_rate": 0.8332999999999999,
+          "uploaded_mib_rounded": 46475.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 475412,
+          "misses": 60505,
+          "hit_rate": 0.8870999999999999,
+          "uploaded_mib_rounded": 98320.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 6765,
+          "misses": 15096,
+          "hit_rate": 0.3095,
+          "uploaded_mib_rounded": 24531.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 509249,
+          "misses": 89199,
+          "hit_rate": 0.8509,
+          "uploaded_mib_rounded": 144948.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 7221,
+          "misses": 14640,
+          "hit_rate": 0.33030000000000004,
+          "uploaded_mib_rounded": 23790.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 81416,
+          "misses": 4093,
+          "hit_rate": 0.9521,
+          "uploaded_mib_rounded": 6651.12,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 509558,
+          "misses": 113834,
+          "hit_rate": 0.8173999999999999,
+          "uploaded_mib_rounded": 184980.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 183311,
+          "misses": 16676,
+          "hit_rate": 0.9166,
+          "uploaded_mib_rounded": 27098.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 218774,
+          "misses": 33167,
+          "hit_rate": 0.8684000000000001,
+          "uploaded_mib_rounded": 53896.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 40550,
+          "misses": 3582,
+          "hit_rate": 0.9188,
+          "uploaded_mib_rounded": 5820.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 253376,
+          "misses": 35444,
+          "hit_rate": 0.8773000000000001,
+          "uploaded_mib_rounded": 57596.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 213987,
+          "misses": 10815,
+          "hit_rate": 0.9519,
+          "uploaded_mib_rounded": 17574.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 11531,
+          "misses": 11639,
+          "hit_rate": 0.49770000000000003,
+          "uploaded_mib_rounded": 18913.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 457524,
+          "misses": 24738,
+          "hit_rate": 0.9487000000000001,
+          "uploaded_mib_rounded": 40199.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 11371,
+          "misses": 11799,
+          "hit_rate": 0.49079999999999996,
+          "uploaded_mib_rounded": 19173.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 137985,
+          "misses": 3608,
+          "hit_rate": 0.9745,
+          "uploaded_mib_rounded": 5863.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 423522,
+          "misses": 44708,
+          "hit_rate": 0.9045000000000001,
+          "uploaded_mib_rounded": 72650.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "one resident server per prompt/mode"
+    },
+    "llama-server-cache10240-capacity-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\results.json",
+        "sha256": "821059321d27b1d556e6e26b8a49f00c795a401fd233b5944efc2a28cfb82d63"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1",
+        "frontend": "server",
+        "modes": "causal,selfspec:16",
+        "prompts": "Count",
+        "tokens": 64,
+        "warmups": 1,
+        "repeats": 1,
+        "cache_mib": 10240,
+        "load_mode": "mmap"
+      },
+      "request_count": 4,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.5252412999980152,
+          "ttft_seconds": 0.17998409998835996,
+          "end_to_end_tokens_per_second": 57.1166052633587,
+          "output_tokens": 30,
+          "min_e2e": 57.1166052633587,
+          "max_e2e": 57.1166052633587,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 161.926,
+            "prompt_per_token_ms": 7.710761904761904,
+            "prompt_per_second": 129.68887022467055,
+            "predicted_n": 31,
+            "predicted_ms": 345.169,
+            "predicted_per_token_ms": 11.505633333333332,
+            "predicted_per_second": 86.9139465015688
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.7937103000003844,
+          "ttft_seconds": 0.17681799997808412,
+          "end_to_end_tokens_per_second": 37.79716604406604,
+          "output_tokens": 30,
+          "min_e2e": 37.79716604406604,
+          "max_e2e": 37.79716604406604,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 158.975,
+            "prompt_per_token_ms": 7.5702380952380945,
+            "prompt_per_second": 132.09624154741311,
+            "predicted_n": 31,
+            "predicted_ms": 616.31,
+            "predicted_per_token_ms": 20.543666666666663,
+            "predicted_per_second": 48.67680225860363,
+            "draft_n": 30,
+            "draft_n_accepted": 27
+          }
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 19124, misses = 1970, hit rate = 90.66%, uploaded = 3201.25 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 2439, misses = 2091, hit rate = 53.84%, uploaded = 3397.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 1715, misses = 819, hit rate = 67.68%, uploaded = 1330.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-capacity-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 16029, misses = 3639, hit rate = 81.50%, uploaded = 5913.38 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 19124,
+          "misses": 1970,
+          "hit_rate": 0.9066,
+          "uploaded_mib_rounded": 3201.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 2439,
+          "misses": 2091,
+          "hit_rate": 0.5384,
+          "uploaded_mib_rounded": 3397.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 1715,
+          "misses": 819,
+          "hit_rate": 0.6768000000000001,
+          "uploaded_mib_rounded": 1330.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 16029,
+          "misses": 3639,
+          "hit_rate": 0.815,
+          "uploaded_mib_rounded": 5913.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "one resident server per prompt/mode"
+    },
+    "llama-server-cache10240-mmap-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\results.json",
+        "sha256": "7a50c327598cee4702817b5599b33d38ec1139e7da484de271afb28953e9b12f"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1",
+        "frontend": "server",
+        "modes": "causal,selfspec:16",
+        "prompts": "Count,Sky,Python,JSON,Chinese",
+        "tokens": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "cache_mib": 10240,
+        "load_mode": "mmap"
+      },
+      "request_count": 70,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.4945657000062056,
+          "ttft_seconds": 0.1348467000061646,
+          "end_to_end_tokens_per_second": 60.659281465786194,
+          "output_tokens": 30,
+          "min_e2e": 57.74805678015169,
+          "max_e2e": 62.774350063823064,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 121.695,
+            "prompt_per_token_ms": 5.795,
+            "prompt_per_second": 172.5625539257981,
+            "predicted_n": 31,
+            "predicted_ms": 359.567,
+            "predicted_per_token_ms": 11.985566666666667,
+            "predicted_per_second": 83.43368551619031
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.7274656999506988,
+          "ttft_seconds": 0.13782920001540333,
+          "end_to_end_tokens_per_second": 41.23905773431398,
+          "output_tokens": 30,
+          "min_e2e": 39.62323585823288,
+          "max_e2e": 41.777719969279694,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 136.805,
+            "prompt_per_token_ms": 6.51452380952381,
+            "prompt_per_second": 153.5031614341581,
+            "predicted_n": 31,
+            "predicted_ms": 588.249,
+            "predicted_per_token_ms": 19.6083,
+            "predicted_per_second": 50.99881172768674,
+            "draft_n": 30,
+            "draft_n_accepted": 27
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.5447342999977991,
+          "ttft_seconds": 0.12399079999886453,
+          "end_to_end_tokens_per_second": 64.25150757009685,
+          "output_tokens": 35,
+          "min_e2e": 60.72926477349533,
+          "max_e2e": 66.47399338351856,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 122.47,
+            "prompt_per_token_ms": 5.324782608695652,
+            "prompt_per_second": 187.80109414550503,
+            "predicted_n": 36,
+            "predicted_ms": 419.858,
+            "predicted_per_token_ms": 11.995942857142857,
+            "predicted_per_second": 83.36151746542879
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 2.125219300040044,
+          "ttft_seconds": 0.13809959997888654,
+          "end_to_end_tokens_per_second": 16.46888864567554,
+          "output_tokens": 35,
+          "min_e2e": 15.955270538609915,
+          "max_e2e": 16.855653051565483,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 137.14,
+            "prompt_per_token_ms": 5.9626086956521736,
+            "prompt_per_second": 167.71182732973605,
+            "predicted_n": 36,
+            "predicted_ms": 1985.426,
+            "predicted_per_token_ms": 56.72645714285714,
+            "predicted_per_second": 17.628458577655376,
+            "draft_n": 105,
+            "draft_n_accepted": 21
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 3.6070249999756925,
+          "ttft_seconds": 0.250889900024049,
+          "end_to_end_tokens_per_second": 65.70511709832816,
+          "output_tokens": 237,
+          "min_e2e": 62.7537522106064,
+          "max_e2e": 67.71015926383174,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 248.816,
+            "prompt_per_token_ms": 6.911555555555555,
+            "prompt_per_second": 144.68522924570766,
+            "predicted_n": 238,
+            "predicted_ms": 3347.192,
+            "predicted_per_token_ms": 14.12317299578059,
+            "predicted_per_second": 70.80561856027381
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 7.608723100041971,
+          "ttft_seconds": 0.2697933000163175,
+          "end_to_end_tokens_per_second": 31.14845906255843,
+          "output_tokens": 237,
+          "min_e2e": 30.66866502128196,
+          "max_e2e": 31.21789216740954,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 268.76,
+            "prompt_per_token_ms": 7.4655555555555555,
+            "prompt_per_second": 133.94850424170264,
+            "predicted_n": 238,
+            "predicted_ms": 7338.617,
+            "predicted_per_token_ms": 30.964628691983123,
+            "predicted_per_second": 32.2949133331253,
+            "draft_n": 345,
+            "draft_n_accepted": 195
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.4868264999822713,
+          "ttft_seconds": 0.3811660000355914,
+          "end_to_end_tokens_per_second": 58.51388847389885,
+          "output_tokens": 87,
+          "min_e2e": 56.07843865307018,
+          "max_e2e": 63.1001312047583,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 372.177,
+            "prompt_per_token_ms": 7.753687500000001,
+            "prompt_per_second": 128.97089288161277,
+            "predicted_n": 88,
+            "predicted_ms": 1070.265,
+            "predicted_per_token_ms": 12.30189655172414,
+            "predicted_per_second": 81.28827907107117
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 3.7523833000450395,
+          "ttft_seconds": 0.33282180002424866,
+          "end_to_end_tokens_per_second": 23.18526468203708,
+          "output_tokens": 87,
+          "min_e2e": 23.053783682256377,
+          "max_e2e": 23.574998383305513,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 329.003,
+            "prompt_per_token_ms": 6.854229166666666,
+            "prompt_per_second": 145.89532618243604,
+            "predicted_n": 88,
+            "predicted_ms": 3416.466,
+            "predicted_per_token_ms": 39.269724137931036,
+            "predicted_per_second": 25.464910231800935,
+            "draft_n": 165,
+            "draft_n_accepted": 65
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.3205968999536708,
+          "ttft_seconds": 0.1309707000036724,
+          "end_to_end_tokens_per_second": 74.20886722014723,
+          "output_tokens": 98,
+          "min_e2e": 69.2094256728535,
+          "max_e2e": 75.80695928223874,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 129.971,
+            "prompt_per_token_ms": 3.6103055555555557,
+            "prompt_per_second": 276.98486585469067,
+            "predicted_n": 99,
+            "predicted_ms": 1191.253,
+            "predicted_per_token_ms": 12.155642857142857,
+            "predicted_per_second": 82.26631958114692
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 7.542949299968313,
+          "ttft_seconds": 0.21003310004016384,
+          "end_to_end_tokens_per_second": 12.992265505537958,
+          "output_tokens": 98,
+          "min_e2e": 12.860196553946066,
+          "max_e2e": 13.06611492814342,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 209.033,
+            "prompt_per_token_ms": 5.806472222222222,
+            "prompt_per_second": 172.22161094181303,
+            "predicted_n": 99,
+            "predicted_ms": 7333.55,
+            "predicted_per_token_ms": 74.83214285714286,
+            "predicted_per_second": 13.363241540590847,
+            "draft_n": 405,
+            "draft_n_accepted": 44
+          }
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 70414, misses = 1970, hit rate = 97.28%, uploaded = 3201.25 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 13764, misses = 2091, hit rate = 86.81%, uploaded = 3397.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 6605, misses = 819, hit rate = 88.97%, uploaded = 1330.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 65199, misses = 3639, hit rate = 94.71%, uploaded = 5913.38 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 81546, misses = 2192, hit rate = 97.38%, uploaded = 3562.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 15661, misses = 2392, hit rate = 86.75%, uploaded = 3887.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 41541, misses = 918, hit rate = 97.84%, uploaded = 1491.75 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 166534, misses = 4987, hit rate = 97.09%, uploaded = 8103.88 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 512566, misses = 23351, hit rate = 95.64%, uploaded = 37945.38 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 12500, misses = 9361, hit rate = 57.18%, uploaded = 15211.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 83508, misses = 2001, hit rate = 97.66%, uploaded = 3251.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 577212, misses = 46180, hit rate = 92.59%, uploaded = 75042.50 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 195003, misses = 4984, hit rate = 97.51%, uploaded = 8099.00 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 42689, misses = 1443, hit rate = 96.73%, uploaded = 2344.88 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 284064, misses = 4756, hit rate = 98.35%, uploaded = 7728.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 222470, misses = 2332, hit rate = 98.96%, uploaded = 3789.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 20090, misses = 3080, hit rate = 86.71%, uploaded = 5005.00 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 140101, misses = 1492, hit rate = 98.95%, uploaded = 2424.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 453763, misses = 14467, hit rate = 96.91%, uploaded = 23508.88 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 70414,
+          "misses": 1970,
+          "hit_rate": 0.9728,
+          "uploaded_mib_rounded": 3201.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 13764,
+          "misses": 2091,
+          "hit_rate": 0.8681,
+          "uploaded_mib_rounded": 3397.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 6605,
+          "misses": 819,
+          "hit_rate": 0.8896999999999999,
+          "uploaded_mib_rounded": 1330.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 65199,
+          "misses": 3639,
+          "hit_rate": 0.9470999999999999,
+          "uploaded_mib_rounded": 5913.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 81546,
+          "misses": 2192,
+          "hit_rate": 0.9738,
+          "uploaded_mib_rounded": 3562.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 15661,
+          "misses": 2392,
+          "hit_rate": 0.8675,
+          "uploaded_mib_rounded": 3887.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 41541,
+          "misses": 918,
+          "hit_rate": 0.9784,
+          "uploaded_mib_rounded": 1491.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 166534,
+          "misses": 4987,
+          "hit_rate": 0.9709,
+          "uploaded_mib_rounded": 8103.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 512566,
+          "misses": 23351,
+          "hit_rate": 0.9564,
+          "uploaded_mib_rounded": 37945.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 12500,
+          "misses": 9361,
+          "hit_rate": 0.5718,
+          "uploaded_mib_rounded": 15211.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 83508,
+          "misses": 2001,
+          "hit_rate": 0.9765999999999999,
+          "uploaded_mib_rounded": 3251.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 577212,
+          "misses": 46180,
+          "hit_rate": 0.9259000000000001,
+          "uploaded_mib_rounded": 75042.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 195003,
+          "misses": 4984,
+          "hit_rate": 0.9751000000000001,
+          "uploaded_mib_rounded": 8099.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 42689,
+          "misses": 1443,
+          "hit_rate": 0.9673,
+          "uploaded_mib_rounded": 2344.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 284064,
+          "misses": 4756,
+          "hit_rate": 0.9834999999999999,
+          "uploaded_mib_rounded": 7728.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 222470,
+          "misses": 2332,
+          "hit_rate": 0.9895999999999999,
+          "uploaded_mib_rounded": 3789.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 20090,
+          "misses": 3080,
+          "hit_rate": 0.8671,
+          "uploaded_mib_rounded": 5005.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 140101,
+          "misses": 1492,
+          "hit_rate": 0.9895,
+          "uploaded_mib_rounded": 2424.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 453763,
+          "misses": 14467,
+          "hit_rate": 0.9691,
+          "uploaded_mib_rounded": 23508.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "one resident server per prompt/mode"
+    },
+    "llama-server-python-no-mmap-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1\\results.json",
+        "sha256": "38bbf74ea0450b557488eea66a641fff4b4a3a767ee982c4ba9e681226599fc6"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1",
+        "frontend": "server",
+        "modes": "causal",
+        "prompts": "Python",
+        "tokens": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "cache_mib": 6656,
+        "load_mode": "none"
+      },
+      "request_count": 7,
+      "summary": [
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 3.5968127000378445,
+          "ttft_seconds": 0.17817400000058115,
+          "end_to_end_tokens_per_second": 65.89167125591676,
+          "output_tokens": 237,
+          "min_e2e": 59.5309862549554,
+          "max_e2e": 68.16205393232336,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 177.26,
+            "prompt_per_token_ms": 4.9238888888888885,
+            "prompt_per_second": 203.0915040054158,
+            "predicted_n": 238,
+            "predicted_ms": 3419.2,
+            "predicted_per_token_ms": 14.427004219409282,
+            "predicted_per_second": 69.31445952269537
+          }
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 475412, misses = 60505, hit rate = 88.71%, uploaded = 98320.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-python-no-mmap-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 6765, misses = 15096, hit rate = 30.95%, uploaded = 24531.00 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 475412,
+          "misses": 60505,
+          "hit_rate": 0.8870999999999999,
+          "uploaded_mib_rounded": 98320.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 6765,
+          "misses": 15096,
+          "hit_rate": 0.3095,
+          "uploaded_mib_rounded": 24531.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "one resident server per prompt/mode"
+    },
+    "llama-cli-official16-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\results.json",
+        "sha256": "0ce6780839d2ec014e3427b2581ede2bd8b245c9323369d843283f72c9fbca31"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-speculative-simple.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1",
+        "frontend": "cli",
+        "modes": "official:16",
+        "prompts": "Count,Sky,Python,JSON,Chinese",
+        "tokens": 256,
+        "warmups": 0,
+        "repeats": 1,
+        "cache_mib": 6656,
+        "load_mode": "mmap"
+      },
+      "request_count": 5,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "wall_seconds": 3.202749,
+          "ttft_seconds": 1.390799,
+          "end_to_end_tokens_per_second": 9.366953201765108,
+          "output_tokens": 30,
+          "min_e2e": 9.366953201765108,
+          "max_e2e": 9.366953201765108,
+          "outputs_repeatable": true,
+          "builtin_predicted_tokens": 32,
+          "builtin_decode_seconds": 1.878,
+          "unprinted_builtin_tokens": 2,
+          "replacement_character_observed": false
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "wall_seconds": 5.36992,
+          "ttft_seconds": 1.532547,
+          "end_to_end_tokens_per_second": 8.566235623621955,
+          "output_tokens": 46,
+          "min_e2e": 8.566235623621955,
+          "max_e2e": 8.566235623621955,
+          "outputs_repeatable": true,
+          "builtin_predicted_tokens": 48,
+          "builtin_decode_seconds": 3.9,
+          "unprinted_builtin_tokens": 2,
+          "replacement_character_observed": false
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "wall_seconds": 10.846748,
+          "ttft_seconds": 1.756593,
+          "end_to_end_tokens_per_second": 23.509350452319904,
+          "output_tokens": 255,
+          "min_e2e": 23.509350452319904,
+          "max_e2e": 23.509350452319904,
+          "outputs_repeatable": true,
+          "builtin_predicted_tokens": 256,
+          "builtin_decode_seconds": 9.177,
+          "unprinted_builtin_tokens": 1,
+          "replacement_character_observed": false
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "wall_seconds": 6.88982,
+          "ttft_seconds": 2.159885,
+          "end_to_end_tokens_per_second": 12.772467205239034,
+          "output_tokens": 88,
+          "min_e2e": 12.772467205239034,
+          "max_e2e": 12.772467205239034,
+          "outputs_repeatable": true,
+          "builtin_predicted_tokens": 90,
+          "builtin_decode_seconds": 4.824,
+          "unprinted_builtin_tokens": 2,
+          "replacement_character_observed": false
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "wall_seconds": 10.400104,
+          "ttft_seconds": 1.891137,
+          "end_to_end_tokens_per_second": 12.019110578124987,
+          "output_tokens": 125,
+          "min_e2e": 12.019110578124987,
+          "max_e2e": 12.019110578124987,
+          "outputs_repeatable": true,
+          "builtin_predicted_tokens": 127,
+          "builtin_decode_seconds": 8.609,
+          "unprinted_builtin_tokens": 2,
+          "replacement_character_observed": false
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Count-official-16\\request-0.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Count-official-16\\request-0.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Count-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 1299, misses = 1205, hit rate = 51.88%, uploaded = 1958.12 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Count-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 7391, misses = 4044, hit rate = 64.63%, uploaded = 6571.50 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Sky-official-16\\request-0.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Sky-official-16\\request-0.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Sky-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 7060, misses = 1356, hit rate = 83.89%, uploaded = 2203.50 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Sky-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 23773, misses = 6323, hit rate = 78.99%, uploaded = 10274.88 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Python-official-16\\request-0.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Python-official-16\\request-0.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Python-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 5373, misses = 1660, hit rate = 76.40%, uploaded = 2697.50 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Python-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 66309, misses = 13890, hit rate = 82.68%, uploaded = 22571.25 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\JSON-official-16\\request-0.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\JSON-official-16\\request-0.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\JSON-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 4475, misses = 1515, hit rate = 74.71%, uploaded = 2461.88 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\JSON-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 33120, misses = 5878, hit rate = 84.93%, uploaded = 9551.75 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Chinese-official-16\\request-0.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size =  6656.00 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Chinese-official-16\\request-0.stdout.log",
+          "message": "impl: 40 layers, q4_K:  4095 slots (40.0%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Chinese-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 22650, misses = 1769, hit rate = 92.76%, uploaded = 2874.62 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\Chinese-official-16\\request-0.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 61015, misses = 5994, hit rate = 91.05%, uploaded = 9740.25 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 1299,
+          "misses": 1205,
+          "hit_rate": 0.5188,
+          "uploaded_mib_rounded": 1958.12,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "official",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 7391,
+          "misses": 4044,
+          "hit_rate": 0.6463,
+          "uploaded_mib_rounded": 6571.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 7060,
+          "misses": 1356,
+          "hit_rate": 0.8389,
+          "uploaded_mib_rounded": 2203.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "official",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 23773,
+          "misses": 6323,
+          "hit_rate": 0.7898999999999999,
+          "uploaded_mib_rounded": 10274.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 5373,
+          "misses": 1660,
+          "hit_rate": 0.764,
+          "uploaded_mib_rounded": 2697.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "official",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 66309,
+          "misses": 13890,
+          "hit_rate": 0.8268000000000001,
+          "uploaded_mib_rounded": 22571.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 4475,
+          "misses": 1515,
+          "hit_rate": 0.7471,
+          "uploaded_mib_rounded": 2461.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "official",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 33120,
+          "misses": 5878,
+          "hit_rate": 0.8493,
+          "uploaded_mib_rounded": 9551.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 22650,
+          "misses": 1769,
+          "hit_rate": 0.9276000000000001,
+          "uploaded_mib_rounded": 2874.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "official",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 61015,
+          "misses": 5994,
+          "hit_rate": 0.9105,
+          "uploaded_mib_rounded": 9740.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "new model process per request"
+    },
+    "llama-server-cache10240-none-v1": {
+      "state": "complete",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\results.json",
+        "sha256": "438c51e89ab0255c11c7f30ea6eca4cd46b7814442a9325ee2dba3c0fb1a8d5b"
+      },
+      "settings": {
+        "executable": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "model": "C:\\workspace\\models\\inputs\\clover-gguf-atomic\\556eebd05adcae7c29e6ce005eea7220f0e19eaa\\Clover-35B-A3B-Preview-AD-Q4_K-IQ4_XS.gguf",
+        "prompts_json": "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "output": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1",
+        "frontend": "server",
+        "modes": "causal,selfspec:8,selfspec:16",
+        "prompts": "Count,Sky,Python,JSON,Chinese",
+        "tokens": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "cache_mib": 10240,
+        "load_mode": "none"
+      },
+      "request_count": 105,
+      "summary": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.48205950000556186,
+          "ttft_seconds": 0.12282459996640682,
+          "end_to_end_tokens_per_second": 62.232981612547555,
+          "output_tokens": 30,
+          "min_e2e": 60.78182445392111,
+          "max_e2e": 63.936656677473806,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 121.904,
+            "prompt_per_token_ms": 5.804952380952381,
+            "prompt_per_second": 172.2667016668854,
+            "predicted_n": 31,
+            "predicted_ms": 360.504,
+            "predicted_per_token_ms": 12.0168,
+            "predicted_per_second": 83.21682977165301
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 0.5459402000415139,
+          "ttft_seconds": 0.15531910001300275,
+          "end_to_end_tokens_per_second": 54.951073391772155,
+          "output_tokens": 30,
+          "min_e2e": 40.729508951041204,
+          "max_e2e": 57.64213686623131,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 141.0,
+            "prompt_per_token_ms": 6.714285714285714,
+            "prompt_per_second": 148.93617021276594,
+            "predicted_n": 31,
+            "predicted_ms": 398.864,
+            "predicted_per_token_ms": 13.295466666666666,
+            "predicted_per_second": 75.21360664286574,
+            "draft_n": 28,
+            "draft_n_accepted": 25
+          }
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 0.7267828999902122,
+          "ttft_seconds": 0.13756040000589564,
+          "end_to_end_tokens_per_second": 41.277801115579386,
+          "output_tokens": 30,
+          "min_e2e": 39.07967877390746,
+          "max_e2e": 41.42829859546028,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 21,
+            "prompt_ms": 136.596,
+            "prompt_per_token_ms": 6.5045714285714284,
+            "prompt_per_second": 153.73803039620486,
+            "predicted_n": 31,
+            "predicted_ms": 587.332,
+            "predicted_per_token_ms": 19.577733333333335,
+            "predicted_per_second": 51.078436046392845,
+            "draft_n": 30,
+            "draft_n_accepted": 27
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 0.5931523999897763,
+          "ttft_seconds": 0.13122670003212988,
+          "end_to_end_tokens_per_second": 59.00675779210076,
+          "output_tokens": 35,
+          "min_e2e": 55.86484283484389,
+          "max_e2e": 62.4352345935761,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 129.176,
+            "prompt_per_token_ms": 5.616347826086956,
+            "prompt_per_second": 178.05165046138603,
+            "predicted_n": 36,
+            "predicted_ms": 461.584,
+            "predicted_per_token_ms": 13.188114285714287,
+            "predicted_per_second": 75.8258518492842
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 1.2779425000189804,
+          "ttft_seconds": 0.14586029999190941,
+          "end_to_end_tokens_per_second": 27.387773706156707,
+          "output_tokens": 35,
+          "min_e2e": 25.543248332658354,
+          "max_e2e": 31.06642516405175,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 144.911,
+            "prompt_per_token_ms": 6.300478260869565,
+            "prompt_per_second": 158.7181097363209,
+            "predicted_n": 36,
+            "predicted_ms": 1136.582,
+            "predicted_per_token_ms": 32.47377142857143,
+            "predicted_per_second": 30.794082609085834,
+            "draft_n": 56,
+            "draft_n_accepted": 20
+          }
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 2.083779000036884,
+          "ttft_seconds": 0.13894740003161132,
+          "end_to_end_tokens_per_second": 16.796406912335943,
+          "output_tokens": 35,
+          "min_e2e": 16.4006128018433,
+          "max_e2e": 16.921174015860828,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 23,
+            "prompt_ms": 137.234,
+            "prompt_per_token_ms": 5.966695652173914,
+            "prompt_per_second": 167.59695119285306,
+            "predicted_n": 36,
+            "predicted_ms": 1932.911,
+            "predicted_per_token_ms": 55.22602857142857,
+            "predicted_per_second": 18.107403807004047,
+            "draft_n": 105,
+            "draft_n_accepted": 21
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 3.4529608000302687,
+          "ttft_seconds": 0.18187550001312047,
+          "end_to_end_tokens_per_second": 68.63674791730114,
+          "output_tokens": 237,
+          "min_e2e": 68.22708830772626,
+          "max_e2e": 72.14076910534337,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 169.199,
+            "prompt_per_token_ms": 4.699972222222223,
+            "prompt_per_second": 212.76721493625845,
+            "predicted_n": 238,
+            "predicted_ms": 3258.701,
+            "predicted_per_token_ms": 13.749793248945148,
+            "predicted_per_second": 72.72836630301461
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 3.647986199997831,
+          "ttft_seconds": 0.1865712000289932,
+          "end_to_end_tokens_per_second": 64.96735102784679,
+          "output_tokens": 237,
+          "min_e2e": 60.67835481939202,
+          "max_e2e": 65.51865994889148,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 185.57,
+            "prompt_per_token_ms": 5.154722222222222,
+            "prompt_per_second": 193.99687449479984,
+            "predicted_n": 238,
+            "predicted_ms": 3461.708,
+            "predicted_per_token_ms": 14.606362869198312,
+            "predicted_per_second": 68.46331348571283,
+            "draft_n": 224,
+            "draft_n_accepted": 194
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 7.088671599980444,
+          "ttft_seconds": 0.18404779996490106,
+          "end_to_end_tokens_per_second": 33.43362668975296,
+          "output_tokens": 237,
+          "min_e2e": 33.092372456620325,
+          "max_e2e": 33.44066281015289,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 183.101,
+            "prompt_per_token_ms": 5.086138888888889,
+            "prompt_per_second": 196.61279840088258,
+            "predicted_n": 238,
+            "predicted_ms": 6904.25,
+            "predicted_per_token_ms": 29.13185654008439,
+            "predicted_per_second": 34.32668284027954,
+            "draft_n": 345,
+            "draft_n_accepted": 195
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.6583387999562547,
+          "ttft_seconds": 0.5273358999984339,
+          "end_to_end_tokens_per_second": 52.462138618655594,
+          "output_tokens": 87,
+          "min_e2e": 49.90082640894901,
+          "max_e2e": 54.099249362693136,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 526.371,
+            "prompt_per_token_ms": 10.9660625,
+            "prompt_per_second": 91.19043412346045,
+            "predicted_n": 88,
+            "predicted_ms": 1130.019,
+            "predicted_per_token_ms": 12.988724137931035,
+            "predicted_per_second": 76.98985592277651
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 2.043563599989284,
+          "ttft_seconds": 0.5619049000088125,
+          "end_to_end_tokens_per_second": 42.57269017732368,
+          "output_tokens": 87,
+          "min_e2e": 39.75411667521433,
+          "max_e2e": 45.44859487103779,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 560.954,
+            "prompt_per_token_ms": 11.686541666666665,
+            "prompt_per_second": 85.56851363926455,
+            "predicted_n": 88,
+            "predicted_ms": 1490.931,
+            "predicted_per_token_ms": 17.137137931034484,
+            "predicted_per_second": 58.35280103505796,
+            "draft_n": 91,
+            "draft_n_accepted": 67
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 3.965502800012473,
+          "ttft_seconds": 0.5682266000076197,
+          "end_to_end_tokens_per_second": 21.939210331594357,
+          "output_tokens": 87,
+          "min_e2e": 21.38686756370971,
+          "max_e2e": 22.189463432847802,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 48,
+            "prompt_ms": 567.127,
+            "prompt_per_token_ms": 11.815145833333332,
+            "prompt_per_second": 84.63712713378132,
+            "predicted_n": 88,
+            "predicted_ms": 3394.499,
+            "predicted_per_token_ms": 39.01722988505747,
+            "predicted_per_second": 25.629702645368287,
+            "draft_n": 165,
+            "draft_n_accepted": 65
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "wall_seconds": 1.427038799971342,
+          "ttft_seconds": 0.13268610002705827,
+          "end_to_end_tokens_per_second": 68.67367586779564,
+          "output_tokens": 98,
+          "min_e2e": 66.1536652444885,
+          "max_e2e": 74.72006660662534,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 129.606,
+            "prompt_per_token_ms": 3.6001666666666665,
+            "prompt_per_second": 277.7649182908199,
+            "predicted_n": 99,
+            "predicted_ms": 1294.14,
+            "predicted_per_token_ms": 13.205510204081634,
+            "predicted_per_second": 75.72596473333641
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "wall_seconds": 3.7720148999942467,
+          "ttft_seconds": 0.14757700002519414,
+          "end_to_end_tokens_per_second": 25.715699055204674,
+          "output_tokens": 97,
+          "min_e2e": 24.421434809229005,
+          "max_e2e": 26.882354419647857,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 143.204,
+            "prompt_per_token_ms": 3.9778888888888893,
+            "prompt_per_second": 251.38962598810087,
+            "predicted_n": 98,
+            "predicted_ms": 3624.149,
+            "predicted_per_token_ms": 37.36236082474227,
+            "predicted_per_second": 26.764903981596785,
+            "draft_n": 182,
+            "draft_n_accepted": 45
+          }
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "wall_seconds": 7.475149700010661,
+          "ttft_seconds": 0.16790619998937473,
+          "end_to_end_tokens_per_second": 13.11010534007904,
+          "output_tokens": 98,
+          "min_e2e": 13.04885880207306,
+          "max_e2e": 13.194962341055376,
+          "outputs_repeatable": true,
+          "builtin_timing_medians": {
+            "cache_n": 0,
+            "prompt_n": 36,
+            "prompt_ms": 166.908,
+            "prompt_per_token_ms": 4.636333333333333,
+            "prompt_per_second": 215.6876842332303,
+            "predicted_n": 99,
+            "predicted_ms": 7287.004,
+            "predicted_per_token_ms": 74.3571836734694,
+            "predicted_per_second": 13.448599726307272,
+            "draft_n": 405,
+            "draft_n_accepted": 44
+          }
+        }
+      ],
+      "cache_receipts": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 70414, misses = 1970, hit rate = 97.28%, uploaded = 3201.25 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 13764, misses = 2091, hit rate = 86.81%, uploaded = 3397.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 74101, misses = 2483, hit rate = 96.76%, uploaded = 4034.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 13764, misses = 2091, hit rate = 86.81%, uploaded = 3397.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 6605, misses = 819, hit rate = 88.97%, uploaded = 1330.88 MiB\n"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Count-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 65199, misses = 3639, hit rate = 94.71%, uploaded = 5913.38 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 81546, misses = 2192, hit rate = 97.38%, uploaded = 3562.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 15661, misses = 2392, hit rate = 86.75%, uploaded = 3887.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 155396, misses = 2962, hit rate = 98.13%, uploaded = 4813.25 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 15661, misses = 2392, hit rate = 86.75%, uploaded = 3887.00 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 41541, misses = 918, hit rate = 97.84%, uploaded = 1491.75 MiB\n"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Sky-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 166534, misses = 4987, hit rate = 97.09%, uploaded = 8103.88 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 512566, misses = 23351, hit rate = 95.64%, uploaded = 37945.38 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 12500, misses = 9361, hit rate = 57.18%, uploaded = 15211.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 564312, misses = 34136, hit rate = 94.30%, uploaded = 55471.00 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 12183, misses = 9678, hit rate = 55.73%, uploaded = 15726.75 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 83508, misses = 2001, hit rate = 97.66%, uploaded = 3251.62 MiB\n"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Python-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 577212, misses = 46180, hit rate = 92.59%, uploaded = 75042.50 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 195003, misses = 4984, hit rate = 97.51%, uploaded = 8099.00 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 245983, misses = 5958, hit rate = 97.64%, uploaded = 9681.75 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 42689, misses = 1443, hit rate = 96.73%, uploaded = 2344.88 MiB\n"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\JSON-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 284064, misses = 4756, hit rate = 98.35%, uploaded = 7728.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 222470, misses = 2332, hit rate = 98.96%, uploaded = 3789.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-causal-1\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 20090, misses = 3080, hit rate = 86.71%, uploaded = 5005.00 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 479070, misses = 3192, hit rate = 99.34%, uploaded = 5187.00 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-8\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 20090, misses = 3080, hit rate = 86.71%, uploaded = 5005.00 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl:      CUDA0 MoE cache size = 10239.12 MiB for 16640.00 MiB of host experts\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "impl: 40 layers, q4_K:  6300 slots (61.5%)\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch <= 8: hits = 140101, misses = 1492, hit rate = 98.95%, uploaded = 2424.50 MiB\n"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-none-v1\\Chinese-selfspec-16\\server.stdout.log",
+          "message": "llama_moe_cache: ubatch  > 8: hits = 453763, misses = 14467, hit rate = 96.91%, uploaded = 23508.88 MiB\n"
+        }
+      ],
+      "cache_counters": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 70414,
+          "misses": 1970,
+          "hit_rate": 0.9728,
+          "uploaded_mib_rounded": 3201.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 13764,
+          "misses": 2091,
+          "hit_rate": 0.8681,
+          "uploaded_mib_rounded": 3397.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 74101,
+          "misses": 2483,
+          "hit_rate": 0.9676,
+          "uploaded_mib_rounded": 4034.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 13764,
+          "misses": 2091,
+          "hit_rate": 0.8681,
+          "uploaded_mib_rounded": 3397.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 6605,
+          "misses": 819,
+          "hit_rate": 0.8896999999999999,
+          "uploaded_mib_rounded": 1330.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 65199,
+          "misses": 3639,
+          "hit_rate": 0.9470999999999999,
+          "uploaded_mib_rounded": 5913.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 81546,
+          "misses": 2192,
+          "hit_rate": 0.9738,
+          "uploaded_mib_rounded": 3562.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 15661,
+          "misses": 2392,
+          "hit_rate": 0.8675,
+          "uploaded_mib_rounded": 3887.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 155396,
+          "misses": 2962,
+          "hit_rate": 0.9813,
+          "uploaded_mib_rounded": 4813.25,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 15661,
+          "misses": 2392,
+          "hit_rate": 0.8675,
+          "uploaded_mib_rounded": 3887.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 41541,
+          "misses": 918,
+          "hit_rate": 0.9784,
+          "uploaded_mib_rounded": 1491.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 166534,
+          "misses": 4987,
+          "hit_rate": 0.9709,
+          "uploaded_mib_rounded": 8103.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 512566,
+          "misses": 23351,
+          "hit_rate": 0.9564,
+          "uploaded_mib_rounded": 37945.38,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 12500,
+          "misses": 9361,
+          "hit_rate": 0.5718,
+          "uploaded_mib_rounded": 15211.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 564312,
+          "misses": 34136,
+          "hit_rate": 0.943,
+          "uploaded_mib_rounded": 55471.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 12183,
+          "misses": 9678,
+          "hit_rate": 0.5573,
+          "uploaded_mib_rounded": 15726.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 83508,
+          "misses": 2001,
+          "hit_rate": 0.9765999999999999,
+          "uploaded_mib_rounded": 3251.62,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 577212,
+          "misses": 46180,
+          "hit_rate": 0.9259000000000001,
+          "uploaded_mib_rounded": 75042.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 195003,
+          "misses": 4984,
+          "hit_rate": 0.9751000000000001,
+          "uploaded_mib_rounded": 8099.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 245983,
+          "misses": 5958,
+          "hit_rate": 0.9764,
+          "uploaded_mib_rounded": 9681.75,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 42689,
+          "misses": 1443,
+          "hit_rate": 0.9673,
+          "uploaded_mib_rounded": 2344.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 284064,
+          "misses": 4756,
+          "hit_rate": 0.9834999999999999,
+          "uploaded_mib_rounded": 7728.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": "<=8",
+          "hits": 222470,
+          "misses": 2332,
+          "hit_rate": 0.9895999999999999,
+          "uploaded_mib_rounded": 3789.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "ubatch": ">8",
+          "hits": 20090,
+          "misses": 3080,
+          "hit_rate": 0.8671,
+          "uploaded_mib_rounded": 5005.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": "<=8",
+          "hits": 479070,
+          "misses": 3192,
+          "hit_rate": 0.9934000000000001,
+          "uploaded_mib_rounded": 5187.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "ubatch": ">8",
+          "hits": 20090,
+          "misses": 3080,
+          "hit_rate": 0.8671,
+          "uploaded_mib_rounded": 5005.0,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": "<=8",
+          "hits": 140101,
+          "misses": 1492,
+          "hit_rate": 0.9895,
+          "uploaded_mib_rounded": 2424.5,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "ubatch": ">8",
+          "hits": 453763,
+          "misses": 14467,
+          "hit_rate": 0.9691,
+          "uploaded_mib_rounded": 23508.88,
+          "scope": "Cumulative complete process lifetime including warmups; not per measured request"
+        }
+      ],
+      "scope": "greedy, no penalties; official mode uses entropy acceptance0.9/0.6",
+      "cache_scope": "one resident server per prompt/mode"
+    }
+  },
+  "same_P0_output_checks": [
+    {
+      "prompt": "Count",
+      "mode": "causal",
+      "width": 1,
+      "exact_ids": true,
+      "native_tokens": 30,
+      "llama_tokens": 30
+    },
+    {
+      "prompt": "Count",
+      "mode": "selfspec",
+      "width": 8,
+      "exact_ids": true,
+      "native_tokens": 30,
+      "llama_tokens": 30
+    },
+    {
+      "prompt": "Count",
+      "mode": "selfspec",
+      "width": 16,
+      "exact_ids": true,
+      "native_tokens": 30,
+      "llama_tokens": 30
+    },
+    {
+      "prompt": "Sky",
+      "mode": "causal",
+      "width": 1,
+      "exact_ids": true,
+      "native_tokens": 35,
+      "llama_tokens": 35
+    },
+    {
+      "prompt": "Sky",
+      "mode": "selfspec",
+      "width": 8,
+      "exact_ids": true,
+      "native_tokens": 35,
+      "llama_tokens": 35
+    },
+    {
+      "prompt": "Sky",
+      "mode": "selfspec",
+      "width": 16,
+      "exact_ids": true,
+      "native_tokens": 35,
+      "llama_tokens": 35
+    },
+    {
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 1,
+      "exact_ids": true,
+      "native_tokens": 237,
+      "llama_tokens": 237
+    },
+    {
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 8,
+      "exact_ids": true,
+      "native_tokens": 237,
+      "llama_tokens": 237
+    },
+    {
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 16,
+      "exact_ids": true,
+      "native_tokens": 237,
+      "llama_tokens": 237
+    },
+    {
+      "prompt": "JSON",
+      "mode": "causal",
+      "width": 1,
+      "exact_ids": true,
+      "native_tokens": 87,
+      "llama_tokens": 87
+    },
+    {
+      "prompt": "JSON",
+      "mode": "selfspec",
+      "width": 8,
+      "exact_ids": false,
+      "native_tokens": 90,
+      "llama_tokens": 87
+    },
+    {
+      "prompt": "JSON",
+      "mode": "selfspec",
+      "width": 16,
+      "exact_ids": true,
+      "native_tokens": 87,
+      "llama_tokens": 87
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "causal",
+      "width": 1,
+      "exact_ids": false,
+      "native_tokens": 118,
+      "llama_tokens": 98
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "selfspec",
+      "width": 8,
+      "exact_ids": false,
+      "native_tokens": 130,
+      "llama_tokens": 97
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "selfspec",
+      "width": 16,
+      "exact_ids": false,
+      "native_tokens": 124,
+      "llama_tokens": 98
+    }
+  ],
+  "limitations": [
+    "Native offline versus localhost HTTP/SSE stock server, not identical serving layers",
+    "GGUF file/prompt IDs/P0 greedy settings match; dense arithmetic and other EOG semantics differ",
+    "Official CLI entropy mode is a distinct acceptance policy and fresh model process",
+    "Stock PR has no pure LowConfidence controller; no official block-denoise timing exists",
+    "Cache counters are process-lifetime totals including warmups and rounded upload MiB; no physical PCIe byte measurement"
+  ]
+}

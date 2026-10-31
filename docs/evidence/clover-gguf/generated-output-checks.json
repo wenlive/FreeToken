@@ -1,0 +1,675 @@
+{
+  "state": "complete",
+  "cases": [
+    {
+      "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\five-prompt-performance-v2\\results.json",
+      "sha256": "10077044f6b0e69f44b5ad077a7615437312f7dceb10cba0f4f12e1a714806cd",
+      "checks": {
+        "source_sha256": "10077044f6b0e69f44b5ad077a7615437312f7dceb10cba0f4f12e1a714806cd",
+        "cases": [
+          {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "denoise",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "denoise",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "denoise",
+            "width": 32,
+            "valid": true
+          },
+          {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16
+          },
+          {
+            "prompt": "Sky",
+            "mode": "denoise",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "denoise",
+            "width": 16
+          },
+          {
+            "prompt": "Sky",
+            "mode": "denoise",
+            "width": 32
+          },
+          {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 8,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "denoise",
+            "width": 8,
+            "valid": false,
+            "grade": {
+              "returncode": 1,
+              "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 24, in <module>\n  File \"<humaneval>\", line 10, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "denoise",
+            "width": 16,
+            "valid": false,
+            "grade": {
+              "returncode": 1,
+              "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261031-clover-gguf\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 23, in <module>\n  File \"<humaneval>\", line 9, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "denoise",
+            "width": 32,
+            "valid": false,
+            "error": "SyntaxError"
+          },
+          {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "denoise",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "denoise",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "denoise",
+            "width": 32,
+            "valid": true
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 8,
+            "chinese_characters": 138,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 8,
+            "chinese_characters": 142,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "chinese_characters": 142,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "denoise",
+            "width": 8,
+            "chinese_characters": 178,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "denoise",
+            "width": 16,
+            "chinese_characters": 190,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "denoise",
+            "width": 32,
+            "chinese_characters": 148,
+            "paragraphs": 2
+          }
+        ]
+      }
+    },
+    {
+      "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\five-prompt-no-penalties-v1\\results.json",
+      "sha256": "8cc3c26db0d8a3d5b7eeacceabdda04b1281c5349867f0546229677e9491f42d",
+      "checks": {
+        "source_sha256": "8cc3c26db0d8a3d5b7eeacceabdda04b1281c5349867f0546229677e9491f42d",
+        "cases": [
+          {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16
+          },
+          {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 8,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 8,
+            "chinese_characters": 169,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 8,
+            "chinese_characters": 195,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "chinese_characters": 185,
+            "paragraphs": 2
+          }
+        ]
+      }
+    },
+    {
+      "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache6656-mmap-v1\\results.json",
+      "sha256": "3678d68d3aa49cb7b773d95657460a51e5cace8d1cb49039453793f259d0f549",
+      "checks": {
+        "source_sha256": "3678d68d3aa49cb7b773d95657460a51e5cace8d1cb49039453793f259d0f549",
+        "cases": [
+          {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 1,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 1
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 8
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16
+          },
+          {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 1,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 1,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 8,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 1,
+            "chinese_characters": 147,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 8,
+            "chinese_characters": 145,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "chinese_characters": 147,
+            "paragraphs": 2
+          }
+        ]
+      }
+    },
+    {
+      "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-server-cache10240-mmap-v1\\results.json",
+      "sha256": "7a50c327598cee4702817b5599b33d38ec1139e7da484de271afb28953e9b12f",
+      "checks": {
+        "source_sha256": "7a50c327598cee4702817b5599b33d38ec1139e7da484de271afb28953e9b12f",
+        "cases": [
+          {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 1,
+            "valid": true
+          },
+          {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 1
+          },
+          {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16
+          },
+          {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 1,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 1,
+            "valid": true
+          },
+          {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 1,
+            "chinese_characters": 147,
+            "paragraphs": 2
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "chinese_characters": 147,
+            "paragraphs": 2
+          }
+        ]
+      }
+    },
+    {
+      "source": "C:\\workspace\\runs\\T-20261031-clover-gguf\\llama-cli-official16-v1\\results.json",
+      "sha256": "0ce6780839d2ec014e3427b2581ede2bd8b245c9323369d843283f72c9fbca31",
+      "checks": {
+        "source_sha256": "0ce6780839d2ec014e3427b2581ede2bd8b245c9323369d843283f72c9fbca31",
+        "cases": [
+          {
+            "prompt": "Count",
+            "mode": "official",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Sky",
+            "mode": "official",
+            "width": 16
+          },
+          {
+            "prompt": "Python",
+            "mode": "official",
+            "width": 16,
+            "valid": true,
+            "grade": {
+              "returncode": 0,
+              "stderr": ""
+            }
+          },
+          {
+            "prompt": "JSON",
+            "mode": "official",
+            "width": 16,
+            "valid": true
+          },
+          {
+            "prompt": "Chinese",
+            "mode": "official",
+            "width": 16,
+            "chinese_characters": 192,
+            "paragraphs": 2
+          }
+        ]
+      }
+    }
+  ],
+  "source": {
+    "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\concrete-generated-output-audit-v1\\results.json",
+    "sha256": "78f7ed2c32026baa5407998e34774cbe32939b4c2498f00f74379dda29589cff"
+  },
+  "best_stock_loading_checks": {
+    "source": {
+      "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\best-stock-output-audit-v1\\results.json",
+      "sha256": "63133e09a7fbcce951438125c5808219f8640b152b7e2ed8d92f1e999aa0e7d3"
+    },
+    "checks": {
+      "source_sha256": "438c51e89ab0255c11c7f30ea6eca4cd46b7814442a9325ee2dba3c0fb1a8d5b",
+      "cases": [
+        {
+          "prompt": "Count",
+          "mode": "causal",
+          "width": 1,
+          "valid": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "valid": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "valid": true
+        },
+        {
+          "prompt": "Sky",
+          "mode": "causal",
+          "width": 1
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 8
+        },
+        {
+          "prompt": "Sky",
+          "mode": "selfspec",
+          "width": 16
+        },
+        {
+          "prompt": "Python",
+          "mode": "causal",
+          "width": 1,
+          "valid": true,
+          "grade": {
+            "returncode": 0,
+            "stderr": ""
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 8,
+          "valid": true,
+          "grade": {
+            "returncode": 0,
+            "stderr": ""
+          }
+        },
+        {
+          "prompt": "Python",
+          "mode": "selfspec",
+          "width": 16,
+          "valid": true,
+          "grade": {
+            "returncode": 0,
+            "stderr": ""
+          }
+        },
+        {
+          "prompt": "JSON",
+          "mode": "causal",
+          "width": 1,
+          "valid": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "valid": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "valid": true
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "causal",
+          "width": 1,
+          "chinese_characters": 147,
+          "paragraphs": 2
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 8,
+          "chinese_characters": 145,
+          "paragraphs": 2
+        },
+        {
+          "prompt": "Chinese",
+          "mode": "selfspec",
+          "width": 16,
+          "chinese_characters": 147,
+          "paragraphs": 2
+        }
+      ],
+      "state": "complete"
+    }
+  }
+}

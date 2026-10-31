@@ -15,6 +15,8 @@ independent external review. Full notes and immutable command logs remain under
 | AOT | Full regression exposed missing Clover GGUF architecture alias and mixed row sizes | Actual bank-byte contracts, targeted19 passes, full403 passes/147 skips/47 subtests |
 | Official comparison | Input LF stripping, EOS overcount, SSE duplicates, metadata penalty conflict and unsupported server entropy flags | Five accounting tests plus real stock CLI/server smokes; separate protocols and cache scopes |
 | Evidence | First selfspec round occurs after prefill; only denoise should omit its prefill-containing first block | Corrected derived cost model without altering raw records; SHA bindings, all25progress gates and readonly hashes asserted |
+| Final comparison | Ordinary loading helps Python but is not a universal gain; Count has19.4% temporal drift while other native prompts vary0.2%-2.2% | Eight completed comparison datasets/436requests, all host observers complete, exact input checks,11/15 P0 output pairs identical |
+| Output validity | Algorithm progress does not establish generated program correctness | Native causal/SS Python pass; all3denoise Python fail; all6GGUF JSON outputs pass; stock measured profiles' Python/JSON pass |
 
 Known limits remain explicit: three causal Chinese rank reversals; selfspec
 and HF text differences;64-token block-reference horizon; first50 quality

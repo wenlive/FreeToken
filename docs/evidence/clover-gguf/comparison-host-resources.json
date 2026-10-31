@@ -1,0 +1,126 @@
+{
+  "state": "complete",
+  "cases": [
+    {
+      "experiment": "five-prompt-no-penalties-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T163513Z-five-prompt-no-penalties-v1\\host-memory\\results.json",
+        "sha256": "e9fc49846793a4c001ae82a3ed21460f4ade740b281e516d570c7822979b1c52"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T163513Z-five-prompt-no-penalties-v1\\manifest.json",
+        "sha256": "a3898acd9b3572b8cd4d66a5ad01a82308a92048a35803b08f32523d83c0fa2b"
+      },
+      "peak_rss": 40478842880,
+      "peak_private": 18296586240,
+      "minimum_system_available": 17390493696,
+      "sample_count": 195
+    },
+    {
+      "experiment": "five-prompt-no-penalties-drift-control-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165227Z-five-prompt-no-penalties-drift-control-v1\\host-memory\\results.json",
+        "sha256": "08a4dc8e212878afadaf55a7a2a430d8e87e5dfe68e11cf07e681a24b6c91179"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165227Z-five-prompt-no-penalties-drift-control-v1\\manifest.json",
+        "sha256": "393e836629f5d2bb73ae9878a1d2f358c4b1d7b11e1ddde03fd48e982ef62a86"
+      },
+      "peak_rss": 40453611520,
+      "peak_private": 17365258240,
+      "minimum_system_available": 17606254592,
+      "sample_count": 71
+    },
+    {
+      "experiment": "llama-server-cache6656-mmap-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T163829Z-llama-server-cache6656-mmap-v1\\host-memory\\results.json",
+        "sha256": "8fad4bdf4dede8711d45aadeed8859dace76a21d93a3f40616dfdfd82ddeb4da"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T163829Z-llama-server-cache6656-mmap-v1\\manifest.json",
+        "sha256": "52e45be1aa78dba07cf7e44e0ffa87863757cf544ec575e8dae60dc0025bc7ce"
+      },
+      "peak_rss": 18109186048,
+      "peak_private": 12278001664,
+      "minimum_system_available": 40140206080,
+      "sample_count": 427
+    },
+    {
+      "experiment": "llama-server-cache10240-capacity-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T164539Z-llama-server-cache10240-capacity-v1\\host-memory\\results.json",
+        "sha256": "634deee680bda216bcbe7948ab4962bc70d30445e8001a20b2bea9237014b9fe"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T164539Z-llama-server-cache10240-capacity-v1\\manifest.json",
+        "sha256": "36a7bbdb65ed7ab7519a28e33afbedef2bd41541e5f540e76767a265503f8beb"
+      },
+      "peak_rss": 11106426880,
+      "peak_private": 15901683712,
+      "minimum_system_available": 47177379840,
+      "sample_count": 18
+    },
+    {
+      "experiment": "llama-server-cache10240-mmap-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T164557Z-llama-server-cache10240-mmap-v1\\host-memory\\results.json",
+        "sha256": "32be2f954fcbe27456bf0e4e168bfd5cf940db9c4de6c251520b010d65e65eb9"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T164557Z-llama-server-cache10240-mmap-v1\\manifest.json",
+        "sha256": "276ef68a88a1d44520c084d1635b5fa2ba8148ed254f8788254c88a5038dddfe"
+      },
+      "peak_rss": 18108710912,
+      "peak_private": 16043618304,
+      "minimum_system_available": 40144203776,
+      "sample_count": 290
+    },
+    {
+      "experiment": "llama-server-python-no-mmap-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165049Z-llama-server-python-no-mmap-v1\\host-memory\\results.json",
+        "sha256": "2587372ea6c16c6c2a31fdf63f4188a73b64a44e2ea761722ace6f808b61ceb1"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165049Z-llama-server-python-no-mmap-v1\\manifest.json",
+        "sha256": "be1c6761e29b4f3ed570aaeb66f2a18541fcb3c1163e4587959840604f838649"
+      },
+      "peak_rss": 19105968128,
+      "peak_private": 29892698112,
+      "minimum_system_available": 39097806848,
+      "sample_count": 35
+    },
+    {
+      "experiment": "llama-cli-official16-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165125Z-llama-cli-official16-v1\\host-memory\\results.json",
+        "sha256": "58c22958cb0ca8a9cd0cb47eac3770185fdfb6aa998bdf2a58e89626a3515f36"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165125Z-llama-cli-official16-v1\\manifest.json",
+        "sha256": "9413700dc684630995110df942e4bea5cd1474f46e8dc1e8dded47a1dfee6415"
+      },
+      "peak_rss": 17726279680,
+      "peak_private": 11952279552,
+      "minimum_system_available": 40552194048,
+      "sample_count": 62
+    },
+    {
+      "experiment": "llama-server-cache10240-none-v1",
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165347Z-llama-server-cache10240-none-v1\\host-memory\\results.json",
+        "sha256": "44f4c4be05e47590caff2ccaa125cd08a8019b9f8c6475a7d95674c8de6158b7"
+      },
+      "manifest": {
+        "path": "C:\\workspace\\runs\\T-20261031-clover-gguf\\20261031T165347Z-llama-server-cache10240-none-v1\\manifest.json",
+        "sha256": "e28f1f29fd712b9dec4d4e8972db9f58fc8960cbc402da59a2cb3fb309bae727"
+      },
+      "peak_rss": 19436474368,
+      "peak_private": 34026815488,
+      "minimum_system_available": 38824570880,
+      "sample_count": 399
+    }
+  ],
+  "note": "Recursive sampled process-tree sums; separate processes for each stock prompt/mode. CUDA allocator/board peaks not measured by this observer."
+}
