@@ -143,6 +143,9 @@ repository's numerical kernel bodies. The latest focused Qwen4/MTP, Qwen3.5,
 NVFP4, copy and Clover run passes: **260 passed, 146 skipped, 47 subtests passed**.
 Skips include unavailable optional backends and weight-gated tests. This does not
 turn the unrelated historical broad-suite failures into passing results.
+The [final combined run](evidence/clover-nvfp4/regression-final.json) includes all
+15 operator cases, 14 actual BF16 mixers and six complete BF16 blocks:
+**306 passed, 146 skipped, 47 subtests passed** on the final production source.
 A separate [pool/prefix regression](evidence/clover-nvfp4/legacy-pool-regression.json)
 passes all 41 cases, including both CUDA parameterizations. It exercises the
 original four reserved MTP slots, shared prefixes and rejected-tail recycling.
@@ -258,6 +261,12 @@ All three native GSM8K misses reached the 512-token cap. A 1024-token sensitivit
 run is queued for capped cases in each precision; EOS-terminated cases can be
 reused because the larger unused cap cannot change their forward arithmetic.
 Both caps will be reported separately before interpreting score differences.
+The native table above is from an earlier source snapshot. Its three capped
+reruns also diverge within the original 512-token prefix; that composite cannot
+isolate a cap-only effect. Full native subsets at both caps in the final build
+are queued. The [prefix audit](evidence/clover-nvfp4/quality-cap-prefix-audit.json)
+retains the source snapshots and first differences; final comparisons will use
+the fresh full runs. Existing outputs and grades remain intact.
 The fixed-subset protocol and available scores are in
 [quality evidence](evidence/clover-nvfp4/quality-first50.json).
 
@@ -272,6 +281,12 @@ do not uniformly reproduce its Spark range: NVFP4 Sky raw agreement is 90.24%,
 and Chinese penalized agreement is 90.63%. FP8 Sky is also only 92.68%.
 The prompt set and horizon differ from the Spark experiment; retain the full
 per-prompt results instead of treating the aggregate as exact replication.
+[Saved-logit analysis](evidence/clover-nvfp4/quantization-margins.json) finds that
+2 of 10 NVFP4 raw disagreements and 5 of 7 FP8 disagreements select another
+token tied for the maximum in the BF16 logits. All three FP8 Sky disagreements
+are such ties. NVFP4 also has eight genuine ranking changes; its selected
+alternatives rank second through sixth under BF16. Keep the exact argmax rates
+above as measured.
 
 [First-block preview stress results](evidence/clover-nvfp4/quantization-preview.json)
 are reported separately: NVFP4 argmax agreement with BF16 is 100%/87.5%/87.5% for

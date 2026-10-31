@@ -1,0 +1,46 @@
+{
+  "state": "passed",
+  "passed": 306,
+  "skipped": 146,
+  "subtests_passed": 47,
+  "source_commit": "d8c48156495295f8a84d473838ea423c128cffcb",
+  "command": [
+    "C:/workspace/envs/T-20261030-clover-nvfp4/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/models/qwen4_exp",
+    "tests/models/test_qwen3_5_moe_weight.py",
+    "tests/moe/test_nvfp4_backends.py",
+    "tests/moe/test_fused_copy.py",
+    "tests/models/test_clover_model.py",
+    "tests/models/test_clover_nvfp4.py",
+    "tests/models/test_clover_generation.py",
+    "tests/models/test_clover_offload.py",
+    "tests/scheduler/test_clover_prefill_bundle.py",
+    "tests/kernels/test_clover_preview.py",
+    "tests/models/test_clover_real_layers.py",
+    "tests/models/test_clover_bf16_blocks.py"
+  ],
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken/python",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261030-clover-nvfp4/kernel-cache",
+    "PYTHONUTF8": "1",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/clover-nvfp4",
+    "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "elapsed_seconds": 24.562999999994645,
+  "manifest": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261031T000127Z-final-clover-qwen-mtp-regression\\manifest.json",
+    "sha256": "b3705319382eb465b8b83dcde997a641673c3281da10443db2a8c3a3fa32f82c"
+  },
+  "stdout": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261031T000127Z-final-clover-qwen-mtp-regression\\stdout.log",
+    "sha256": "e88612ae03296f6bf3ebc8f23829358fe9b23437a79d50c5364b00cf4f9b193a"
+  },
+  "scope": "All qwen4_exp tests, qwen3_5 MoE loader, NVFP4 backends/copy, Clover packing/controller/offload, 15 operator cases, 14 actual BF16 mixers and six complete BF16 blocks",
+  "limitation": "Skipped cases are not passes. Optional backend and weight gates remain; real existing GGUF/MTP bundle compatibility is a separate queued comparison. Historical unrelated broad-suite failures are retained."
+}

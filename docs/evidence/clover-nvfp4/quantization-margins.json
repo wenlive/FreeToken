@@ -1,0 +1,307 @@
+{
+  "scope": "Raw causal decisions only, identical BF16 histories, saved logits; no penalty-margin claim",
+  "cuda_initialized": false,
+  "summary": [
+    {
+      "precision": "nvfp4",
+      "disagreements": 10,
+      "bf16_top_two_gap_min": 0.0,
+      "bf16_top_two_gap_median": 0.4375,
+      "bf16_top_two_gap_max": 0.75,
+      "bf16_rank_counts": {
+        "1": 2,
+        "2": 5,
+        "3": 2,
+        "6": 1
+      }
+    },
+    {
+      "precision": "fp8",
+      "disagreements": 7,
+      "bf16_top_two_gap_min": 0.0,
+      "bf16_top_two_gap_median": 0.0,
+      "bf16_top_two_gap_max": 0.5,
+      "bf16_rank_counts": {
+        "1": 5,
+        "2": 2
+      }
+    }
+  ],
+  "shared_disagreement_positions": [
+    [
+      "Chinese",
+      31
+    ],
+    [
+      "JSON",
+      31
+    ],
+    [
+      "Sky",
+      0
+    ],
+    [
+      "Sky",
+      2
+    ]
+  ],
+  "cases": [
+    {
+      "precision": "nvfp4",
+      "prompt": "Sky",
+      "step": 0,
+      "bf16_token_id": 760,
+      "quantized_token_id": 29108,
+      "bf16_token": "The",
+      "quantized_token": "Sun",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.45193225145339966
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Sky",
+      "step": 2,
+      "bf16_token_id": 369,
+      "quantized_token_id": 7701,
+      "bf16_token": " is",
+      "quantized_token": " appears",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.49823445081710815
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Sky",
+      "step": 6,
+      "bf16_token_id": 1100,
+      "quantized_token_id": 369,
+      "bf16_token": " sc",
+      "quantized_token": " is",
+      "bf16_top_two_logit_gap": 0.5,
+      "bf16_gap_to_quantized_choice": 0.5,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.45890891551971436
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Sky",
+      "step": 8,
+      "bf16_token_id": 303,
+      "quantized_token_id": 777,
+      "bf16_token": " in",
+      "quantized_token": " more",
+      "bf16_top_two_logit_gap": 0.375,
+      "bf16_gap_to_quantized_choice": 0.375,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.3657819628715515
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Sky",
+      "step": 0,
+      "bf16_token_id": 760,
+      "quantized_token_id": 29108,
+      "bf16_token": "The",
+      "quantized_token": "Sun",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.45193225145339966
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Sky",
+      "step": 2,
+      "bf16_token_id": 369,
+      "quantized_token_id": 7701,
+      "bf16_token": " is",
+      "quantized_token": " appears",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.49823445081710815
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Sky",
+      "step": 9,
+      "bf16_token_id": 279,
+      "quantized_token_id": 660,
+      "bf16_token": " the",
+      "quantized_token": " all",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.46910375356674194
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "JSON",
+      "step": 25,
+      "bf16_token_id": 5618,
+      "quantized_token_id": 9603,
+      "bf16_token": "des",
+      "quantized_token": "pol",
+      "bf16_top_two_logit_gap": 0.625,
+      "bf16_gap_to_quantized_choice": 0.625,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.4591589570045471
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "JSON",
+      "step": 31,
+      "bf16_token_id": 760,
+      "quantized_token_id": 16,
+      "bf16_token": "The",
+      "quantized_token": "1",
+      "bf16_top_two_logit_gap": 0.5,
+      "bf16_gap_to_quantized_choice": 0.5,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.3557977080345154
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "JSON",
+      "step": 52,
+      "bf16_token_id": 73,
+      "quantized_token_id": 371,
+      "bf16_token": "j",
+      "quantized_token": "tr",
+      "bf16_top_two_logit_gap": 0.5,
+      "bf16_gap_to_quantized_choice": 0.75,
+      "bf16_rank_of_quantized_choice": 3,
+      "bf16_max_probability": 0.329023152589798
+    },
+    {
+      "precision": "fp8",
+      "prompt": "JSON",
+      "step": 31,
+      "bf16_token_id": 760,
+      "quantized_token_id": 47,
+      "bf16_token": "The",
+      "quantized_token": "P",
+      "bf16_top_two_logit_gap": 0.5,
+      "bf16_gap_to_quantized_choice": 0.5,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.3557977080345154
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Chinese",
+      "step": 30,
+      "bf16_token_id": 97447,
+      "quantized_token_id": 118964,
+      "bf16_token": "且",
+      "quantized_token": "植被",
+      "bf16_top_two_logit_gap": 0.75,
+      "bf16_gap_to_quantized_choice": 1.0,
+      "bf16_rank_of_quantized_choice": 3,
+      "bf16_max_probability": 0.16861706972122192
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Chinese",
+      "step": 31,
+      "bf16_token_id": 122005,
+      "quantized_token_id": 110614,
+      "bf16_token": "导热",
+      "quantized_token": "散热",
+      "bf16_top_two_logit_gap": 0.125,
+      "bf16_gap_to_quantized_choice": 0.125,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.32318252325057983
+    },
+    {
+      "precision": "nvfp4",
+      "prompt": "Chinese",
+      "step": 62,
+      "bf16_token_id": 97423,
+      "quantized_token_id": 97035,
+      "bf16_token": "同时",
+      "quantized_token": "城市",
+      "bf16_top_two_logit_gap": 0.375,
+      "bf16_gap_to_quantized_choice": 1.0,
+      "bf16_rank_of_quantized_choice": 6,
+      "bf16_max_probability": 0.17716288566589355
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Chinese",
+      "step": 4,
+      "bf16_token_id": 96217,
+      "quantized_token_id": 96709,
+      "bf16_token": "指",
+      "quantized_token": "主要",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.33490249514579773
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Chinese",
+      "step": 17,
+      "bf16_token_id": 97040,
+      "quantized_token_id": 101624,
+      "bf16_token": "建筑",
+      "quantized_token": "大量",
+      "bf16_top_two_logit_gap": 0.0,
+      "bf16_gap_to_quantized_choice": 0.0,
+      "bf16_rank_of_quantized_choice": 1,
+      "bf16_max_probability": 0.4171595573425293
+    },
+    {
+      "precision": "fp8",
+      "prompt": "Chinese",
+      "step": 31,
+      "bf16_token_id": 122005,
+      "quantized_token_id": 110614,
+      "bf16_token": "导热",
+      "quantized_token": "散热",
+      "bf16_top_two_logit_gap": 0.125,
+      "bf16_gap_to_quantized_choice": 0.125,
+      "bf16_rank_of_quantized_choice": 2,
+      "bf16_max_probability": 0.32318252325057983
+    }
+  ],
+  "source_results": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\results.json",
+      "sha256": "682e27937935b5ac6e5fc26702dcf14f8899f8929a7f359b54b3ab7c0c8efa5d"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-nvfp4-v1\\results.json",
+      "sha256": "1e57cd27a13b8ecb6dbc0ae79aff868a0ca9ff944c76dcfc221725c0af210c47"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-fp8-v1\\results.json",
+      "sha256": "b0d603e5abae8bf9ed2b8b9401d84c24464859b5bfa694a9d702bd07ef7c985d"
+    }
+  ],
+  "bf16_logits": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\Count-logits.pt",
+      "sha256": "39951a16e5fe2b79a463cc9e4cac6ddb3a578c39f3fae698c0cda871c0acae6c"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\Sky-logits.pt",
+      "sha256": "a1425debbf5af79fb3ce7523993f577e5b084df9265533506d5e1196f2fbbf95"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\Python-logits.pt",
+      "sha256": "ca0ee8262eda222ce94c61935a74890c197adf615d445470192c979acb8edbd4"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\JSON-logits.pt",
+      "sha256": "2ff511049c778636e5fee25c5d01611eed15b15bf3c8940404ea4cb643fb2a9e"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quantization-causal-bf16-v1\\Chinese-logits.pt",
+      "sha256": "8c0204d052d653953858ea1dd4551f63f6f26c6a4622472ce7c4c8e11d205c9b"
+    }
+  ]
+}

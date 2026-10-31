@@ -1,0 +1,64 @@
+{
+  "scope": "Original native composite extension; excluded from final cap-only comparison",
+  "old_source": "2f2db1d27ae6440bdf31d04188d0ad13623a3ca2",
+  "new_source": "d8c48156495295f8a84d473838ea423c128cffcb",
+  "old_source_patch": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261030T174807Z-native-quality-first50\\source.patch",
+    "sha256": "09000c125142eaa65955f71b4c685994f1e072374e79de8c4dedde1796116d67"
+  },
+  "old_manifest": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261030T174807Z-native-quality-first50\\manifest.json",
+    "sha256": "569d78dceba264aa8533582f0107e1e3cb35c47c1c7f3eb7fdaa73f38b5b5f7e"
+  },
+  "new_manifest": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261031T000152Z-native-quality-1024-cap-extension\\manifest.json",
+    "sha256": "97021db717644391f2dc84d5fc2ec5992d338a9255c0c6c543c06a48a262d500"
+  },
+  "old_results": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-v1\\results.json",
+    "sha256": "208656a76e929e2707e0be009491e744aeacdb3c9e5a82f79ea51001b9fb0d47"
+  },
+  "new_results": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\quality-native-first50-1024-v1\\results.json",
+    "sha256": "549e8c051c4b8dd62d8a98fab34e77b5fb3f9040887fcdfc5d728e14220ff1c2"
+  },
+  "exact_reused_eos_cases": 97,
+  "rerun_cases": [
+    {
+      "dataset": "gsm8k",
+      "index": 8,
+      "first_prefix_difference": 69,
+      "prefix_matches": false,
+      "old_correct": false,
+      "new_correct": true,
+      "old_tokens": 512,
+      "new_tokens": 636
+    },
+    {
+      "dataset": "gsm8k",
+      "index": 12,
+      "first_prefix_difference": 234,
+      "prefix_matches": false,
+      "old_correct": false,
+      "new_correct": false,
+      "old_tokens": 512,
+      "new_tokens": 586
+    },
+    {
+      "dataset": "gsm8k",
+      "index": 13,
+      "first_prefix_difference": 64,
+      "prefix_matches": false,
+      "old_correct": false,
+      "new_correct": true,
+      "old_tokens": 512,
+      "new_tokens": 566
+    }
+  ],
+  "current_penalty_source": {
+    "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\python\\freetoken\\models\\clover_moe\\generation.py",
+    "sha256": "7e700c3cc423dd1924aa4096ff2bde157c790715dfe30f4c55e4c4417a7f7aa1"
+  },
+  "penalty_cap_dependency": "Penalty ramps use committed length and fixed start/window configuration; max_tokens/max_new_tokens are not read here",
+  "conclusion": "Earlier source snapshot and prefix mismatches do not isolate a token-cap effect. Full native 512/1024 runs in the final build are required and queued; existing outputs and grades are preserved."
+}
