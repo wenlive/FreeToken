@@ -86,6 +86,12 @@ _MINIMAX_M3_PROCESSOR = "freetoken.mm.processors.minimax_m3:MiniMaxM3MMProcessor
 _MINIMAX_M3_ENCODERS = (EncoderSpec("vision", "vision_config", ("image",)),)
 
 _MODEL_REGISTRY: dict[str, ModelSpec] = {
+    "CloverMoeGGUFModelLM": ModelSpec(
+        "freetoken.models.clover_moe.gguf",
+        "CloverMoeModelLM",
+        parse_config="parse_gguf_config",
+        iter_weights="iter_gguf_weights",
+    ),
     "CloverMoeModelLM": ModelSpec(
         "freetoken.models.clover_moe",
         "CloverMoeModelLM",

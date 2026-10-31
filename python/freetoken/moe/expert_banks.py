@@ -185,9 +185,34 @@ def _q4_0_banks(model_path, model_config, device, dtype, dummy, parallel=False, 
     )
 
 
+def _clover_gguf_banks(
+    model_path,
+    model_config,
+    device,
+    dtype,
+    dummy,
+    parallel=False,
+    workers=8,
+    chunk=_PARALLEL_CHUNK,
+    decode_target="gpu",
+    layer_sink=None,
+):
+    if parallel or decode_target != "gpu":
+        raise NotImplementedError(
+            "Mixed Clover GGUF requires serial loading and GPU expert execution"
+        )
+    from freetoken.models.clover_moe.gguf import load_packed_expert_sources
+
+    sources = load_packed_expert_sources(
+        model_path, model_config, dummy=dummy, layer_sink=layer_sink
+    )
+    return ExpertBanks("clover_gguf", sources, streamed=layer_sink is not None)
+
+
 # expert formats that still load through their own provider (GGUF)
 _PROVIDERS = {
     "q4_0": _q4_0_banks,
+    "clover_gguf": _clover_gguf_banks,
 }
 
 

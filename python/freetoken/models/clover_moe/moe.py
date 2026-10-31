@@ -35,7 +35,7 @@ class CloverMoE(Qwen3_5MoE):
         if not (
             get_global_ctx().batch.is_prefill
             and cache is not None
-            and cache.quant_format == "nvfp4"
+            and cache.quant_format in ("nvfp4", "clover_gguf")
             and cache.decode_target == "gpu"
             and cache.cache_policy == "lru"
             and not cache.is_cpu_layer(self.experts.layer_id)

@@ -208,12 +208,16 @@ class EngineConfig:
         hf_config = copy.copy(self.hf_config)
         built = {e.config_key for e in self.active_encoders}
         for key in set(ENCODER_SECTIONS) | {e.config_key for e in self.model_spec.encoders}:
-            if key not in built:
+            if key not in built and getattr(hf_config, key, None) is not None:
                 setattr(hf_config, key, None)
         spec = self.model_spec
         quant = checkpoint_quant_config(self.model_path, hf_config, spec)
         set_quant_config(quant)
         model_config = _load_attr(spec.module, spec.parse_config)(hf_config)
+        if model_config.expert_quant == "clover_gguf" and (
+            self.moe_strategy not in ("auto", "offload") or self.moe_cpu_layers
+        ):
+            raise ValueError("Mixed Clover GGUF requires GPU expert offload; CPU/hybrid is unsupported")
         if self.clover_mode != "causal" and model_config.model_type != "clover_moe":
             raise ValueError("Clover decoding requires a Clover checkpoint")
         if model_config.model_type == "clover_moe" and (self.tp_info.size != 1 or self.mtp_runtime_path is not None):

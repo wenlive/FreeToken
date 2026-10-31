@@ -327,6 +327,10 @@ def main():
             raise AssertionError(
                 "Exact selfspec differs from causal; inspect the recorded token IDs"
             )
+    except BaseException as error:
+        result.update(state="failed", error=f"{type(error).__name__}: {error}")
+        save()
+        raise
     finally:
         llm.engine.shutdown()
 

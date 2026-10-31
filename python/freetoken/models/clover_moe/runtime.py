@@ -2,8 +2,6 @@
 
 import copy
 from collections import deque
-import json
-from pathlib import Path
 import time
 from types import SimpleNamespace
 import weakref
@@ -18,6 +16,7 @@ from .generation import (
     PENALTY_DEFAULTS,
     validate_penalties,
     resolve_low_confidence,
+    load_generation_settings,
 )
 from .preview import CloverTransactions, make_preview_batch
 
@@ -25,9 +24,11 @@ from .preview import CloverTransactions, make_preview_batch
 class CloverRuntime:
     def __init__(self, engine):
         self.engine = engine
-        self.mask_id = int(engine.config.hf_config.mask_token_id)
-        path = Path(engine.config.model_path) / "generation_config.json"
-        raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        self.mask_id, raw = load_generation_settings(
+            engine.config.model_path, engine.config.hf_config
+        )
+        if not 0 <= self.mask_id < engine.config.model_config.vocab_size:
+            raise ValueError("Clover mask token is outside the model vocabulary")
         self.generation = SimpleNamespace(**{**PENALTY_DEFAULTS, **raw})
         if engine.config.clover_disable_penalties:
             for name in (

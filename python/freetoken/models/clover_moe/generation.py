@@ -21,6 +21,8 @@ All state belongs to one generate request; prompt tokens are never accumulated.
 """
 
 import math
+import json
+from pathlib import Path
 
 import torch
 
@@ -41,6 +43,38 @@ PENALTY_DEFAULTS = {
     "dllm_think_end_token_id": None,
     "stop_token_ids": [],
 }
+
+
+def load_generation_settings(model_path, hf_config):
+    metadata = getattr(hf_config, "metadata", None)
+    if metadata is None:
+        path = Path(model_path) / "generation_config.json"
+        raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        return int(hf_config.mask_token_id), raw
+    # The release GGUF omits length/thinking and presence controls. Preserve
+    # Clover's published preset; explicitly encoded sampling metadata takes priority.
+    tokens = metadata.get("tokenizer.ggml.tokens", [])
+    if "</think>" not in tokens:
+        raise ValueError("Clover GGUF tokenizer is missing </think>")
+    raw = dict(
+        do_sample=False,
+        temperature=metadata.get("general.sampling.temp", 1.0),
+        top_p=metadata.get("general.sampling.top_p", 1.0),
+        top_k=None,
+        presence_penalty=metadata.get("general.sampling.penalty_present", 0.9),
+        frequency_penalty=metadata.get("general.sampling.penalty_freq", 0.0),
+        repetition_penalty=metadata.get("general.sampling.penalty_repeat", 1.05),
+        dllm_length_penalty=10.0,
+        dllm_length_penalty_start=8192,
+        dllm_length_penalty_window=8192,
+        dllm_think_end_bias=10.0,
+        dllm_think_end_start=4096,
+        dllm_think_end_window=4096,
+        dllm_think_end_token_id=tokens.index("</think>"),
+        eos_token_id=metadata["tokenizer.ggml.eos_token_id"],
+        pad_token_id=metadata["tokenizer.ggml.padding_token_id"],
+    )
+    return int(metadata["tokenizer.ggml.mask_token_id"]), raw
 
 
 def validate_penalties(gen, vocab_size):
