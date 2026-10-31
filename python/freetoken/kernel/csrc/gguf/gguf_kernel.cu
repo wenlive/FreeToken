@@ -1,9 +1,15 @@
 // Adatped from
 // https://github.com/vllm-project/vllm/blob/755ed7b05be4743237d3339c4ff8c22bcaae04f4/csrc/quantization/gguf/gguf_kernel.cu
+#ifdef _WIN32
+// Import RPC before libtorch so its small macro can be removed once.
+#include <rpc.h>
+#include <rpcndr.h>
+#undef small
+#endif
 #include <c10/cuda/CUDAGuard.h>
 #include <cuda_fp16.h>
 #include <cuda_runtime.h>
-#include <torch/all.h>
+#include <torch/types.h>
 
 // dont use clang-format here, it breaks the include order
 // clang-format off
@@ -837,6 +843,7 @@ int64_t ggml_moe_get_block_size(int64_t type) {
 
 // ---- FreeToken pybind bindings (donor registers these via TORCH_LIBRARY; we
 // expose them through torch.utils.cpp_extension.load's pybind module instead) ----
+#ifndef _WIN32
 #include <torch/extension.h>
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("ggml_dequantize", &ggml_dequantize, "");
@@ -846,3 +853,4 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("ggml_moe_a8_vec", &ggml_moe_a8_vec, "");
   m.def("ggml_moe_get_block_size", &ggml_moe_get_block_size, "");
 }
+#endif

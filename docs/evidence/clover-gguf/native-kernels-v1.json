@@ -1,0 +1,63 @@
+{
+  "state": "complete",
+  "device": "NVIDIA GeForce RTX 5070 Ti",
+  "torch": "2.11.0+cu130",
+  "cases": [
+    {
+      "operation": "dequant",
+      "role": "gate",
+      "bitwise": true,
+      "relative_l2": 0.0,
+      "seconds": 0.9429877999937162,
+      "note": "Q4_K standalone dequant has FP16 intermediate arithmetic; NumPy reference uses FP32"
+    },
+    {
+      "operation": "dequant",
+      "role": "up",
+      "bitwise": true,
+      "relative_l2": 0.0,
+      "seconds": 0.0008139999699778855,
+      "note": "Q4_K standalone dequant has FP16 intermediate arithmetic; NumPy reference uses FP32"
+    },
+    {
+      "operation": "dequant",
+      "role": "down",
+      "bitwise": false,
+      "relative_l2": 0.001841178280301392,
+      "seconds": 0.0003196000470779836,
+      "note": "Q4_K standalone dequant has FP16 intermediate arithmetic; NumPy reference uses FP32"
+    },
+    {
+      "operation": "actual_expert_swiglu",
+      "width": 1,
+      "relative_l2": 0.009125487878918648,
+      "note": "Existing MMVQ quantizes activations toQ8_1; reference uses BF16 activations"
+    },
+    {
+      "operation": "actual_expert_swiglu",
+      "width": 8,
+      "relative_l2": 0.01079592201858759,
+      "note": "Existing MMVQ quantizes activations toQ8_1; reference uses BF16 activations"
+    },
+    {
+      "operation": "actual_expert_swiglu",
+      "width": 16,
+      "relative_l2": 0.011037283577024937,
+      "note": "Existing MMVQ quantizes activations toQ8_1; reference uses BF16 activations"
+    },
+    {
+      "operation": "actual_expert_swiglu",
+      "width": 32,
+      "relative_l2": 0.010996324010193348,
+      "note": "Existing MMVQ quantizes activations toQ8_1; reference uses BF16 activations"
+    }
+  ],
+  "build_contract": {
+    "cuda_numerical_body_unchanged": true,
+    "body_sha256": "fec77081f5c0da877921bf2c24c508ec5caefa5f2ea9b1022e67a4781b60c328",
+    "compiler": "VS2022 MSVC14.44 / CUDA13.2 / Torch2.11+cu130 / sm120",
+    "changes": "MSVC conforming preprocessor; preload/undef RPC small; use torch/types.h and a Windows-only C++ binding translation unit",
+    "reference": "https://docs.pytorch.org/docs/2.11/cpp_extension.html",
+    "scope": "Existing dequant and MoE kernels on real layer0/expert0; broader operator and model regressions follow"
+  }
+}
