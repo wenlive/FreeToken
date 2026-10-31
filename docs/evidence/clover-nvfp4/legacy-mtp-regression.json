@@ -1,0 +1,307 @@
+{
+  "scope": "Real existing GGUF/MTP bundle; frozen main versus feature, matched per-mode settings",
+  "text_only_configuration": "Public mm.disabled_encoders={vision} on both sources; bundle files unchanged",
+  "initial_attempt": {
+    "source": {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\mtp-real-main-off-v1\\results.json",
+      "sha256": "f5162e0339837f6ceb17c6f18da68c2ee4ad6f62c5534e1e0cd37cb99ae729f0"
+    },
+    "state": "failed before model load",
+    "reason": "Text-only GGUF bundle retains vision_config; missing visual.blocks.0.attn.qkv",
+    "recording_limit": "v1 did not catch initialization errors; results state remains running, recorded execution exited1"
+  },
+  "modes": [
+    {
+      "mode": "off",
+      "baseline_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\mtp-real-main-off-v2\\results.json",
+        "sha256": "54c0bc014a0ea9b39f54ca769a9a5fa2b17b9347b04f8d4951abf08571bd0566"
+      },
+      "feature_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\mtp-real-feature-off-v2\\results.json",
+        "sha256": "74f4e94f71e5f3f6cb492b2d5095e87d1f0dd23db6702b14a61b2b5470c31ada"
+      },
+      "settings": {
+        "moe_strategy": "offload",
+        "moe_cache_size": 7296,
+        "moe_q2_resident_experts": 5248,
+        "moe_q2_dynamic_slots": 1024,
+        "attention_backend": "qsa_sparse",
+        "ple_backend": "disk",
+        "cache_type": "radix",
+        "expert_load": "serial",
+        "max_running_req": 1,
+        "memory_ratio": 0.9,
+        "num_token_override": 8192,
+        "max_seq_len_override": 8192,
+        "max_extend_tokens": 1024,
+        "cuda_graph_bs": [
+          1
+        ],
+        "linear_state_cache_slots": 1,
+        "moe_q2_adapt_every": 32,
+        "moe_q2_adapt_decay": 0.7,
+        "gguf_embedding_host": true,
+        "ple_row_cache_rows": 1048576,
+        "moe_q2_prefill_workspace": true,
+        "fixed_q2_rebuild_reserve_mib": 0,
+        "mtp_runtime_path": null,
+        "mtp_compact_state": false,
+        "mtp_max_context": 8192,
+        "mtp_draft_policy": "full",
+        "mm": {
+          "disabled_encoders": [
+            "vision"
+          ]
+        }
+      },
+      "source_commits": [
+        "f417397f339050e6f400e75db0f1e6acbc40f13a",
+        "ad81f7acaffc1d05b6c90326ed1c8874fa3e270a"
+      ],
+      "protected_metadata_unchanged": true,
+      "cases": [
+        {
+          "prompt": "Arithmetic",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            19,
+            17
+          ],
+          "feature_token_ids": [
+            19,
+            17
+          ],
+          "baseline_mtp_rounds": 0,
+          "feature_mtp_rounds": 0
+        },
+        {
+          "prompt": "Count",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            16,
+            11,
+            220,
+            17,
+            11,
+            220,
+            18,
+            11,
+            220,
+            19,
+            11,
+            220,
+            20,
+            11,
+            220,
+            21,
+            11,
+            220,
+            22,
+            11,
+            220,
+            23,
+            11,
+            220,
+            24,
+            11,
+            220,
+            16,
+            15
+          ],
+          "feature_token_ids": [
+            16,
+            11,
+            220,
+            17,
+            11,
+            220,
+            18,
+            11,
+            220,
+            19,
+            11,
+            220,
+            20,
+            11,
+            220,
+            21,
+            11,
+            220,
+            22,
+            11,
+            220,
+            23,
+            11,
+            220,
+            24,
+            11,
+            220,
+            16,
+            15
+          ],
+          "baseline_mtp_rounds": 0,
+          "feature_mtp_rounds": 0
+        },
+        {
+          "prompt": "Context",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            3793
+          ],
+          "feature_token_ids": [
+            3793
+          ],
+          "baseline_mtp_rounds": 0,
+          "feature_mtp_rounds": 0
+        }
+      ]
+    },
+    {
+      "mode": "on",
+      "baseline_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\mtp-real-main-on-v2\\results.json",
+        "sha256": "1edda1b4079b3a520eaaf966800d6e76642491cddadd7b35ec33fc1965247098"
+      },
+      "feature_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\mtp-real-feature-on-v2\\results.json",
+        "sha256": "f3af7e7bb6138c8fc6b86e310cb2e58da4300664767e9ff5e44f678c8d0b8640"
+      },
+      "settings": {
+        "moe_strategy": "offload",
+        "moe_cache_size": 6528,
+        "moe_q2_resident_experts": 4480,
+        "moe_q2_dynamic_slots": 1024,
+        "attention_backend": "qsa_sparse",
+        "ple_backend": "disk",
+        "cache_type": "radix",
+        "expert_load": "serial",
+        "max_running_req": 1,
+        "memory_ratio": 0.9,
+        "num_token_override": 8192,
+        "max_seq_len_override": 8192,
+        "max_extend_tokens": 1024,
+        "cuda_graph_bs": [
+          1
+        ],
+        "linear_state_cache_slots": 1,
+        "moe_q2_adapt_every": 32,
+        "moe_q2_adapt_decay": 0.7,
+        "gguf_embedding_host": true,
+        "ple_row_cache_rows": 1048576,
+        "moe_q2_prefill_workspace": true,
+        "fixed_q2_rebuild_reserve_mib": 0,
+        "mtp_runtime_path": "C:\\workspace\\models\\bundles\\flash-next\\mtpdecode2-20261026\\checkpoints\\flash-next-mtp",
+        "mtp_compact_state": true,
+        "mtp_max_context": 8192,
+        "mtp_draft_policy": "paired_cjk",
+        "mm": {
+          "disabled_encoders": [
+            "vision"
+          ]
+        }
+      },
+      "source_commits": [
+        "f417397f339050e6f400e75db0f1e6acbc40f13a",
+        "ebdedec5ad404e0a80f70dc6d1701109847585b9"
+      ],
+      "protected_metadata_unchanged": true,
+      "cases": [
+        {
+          "prompt": "Arithmetic",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            19,
+            17
+          ],
+          "feature_token_ids": [
+            19,
+            17
+          ],
+          "baseline_mtp_rounds": 1,
+          "feature_mtp_rounds": 1
+        },
+        {
+          "prompt": "Count",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            16,
+            11,
+            220,
+            17,
+            11,
+            220,
+            18,
+            11,
+            220,
+            19,
+            11,
+            220,
+            20,
+            11,
+            220,
+            21,
+            11,
+            220,
+            22,
+            11,
+            220,
+            23,
+            11,
+            220,
+            24,
+            11,
+            220,
+            16,
+            15
+          ],
+          "feature_token_ids": [
+            16,
+            11,
+            220,
+            17,
+            11,
+            220,
+            18,
+            11,
+            220,
+            19,
+            11,
+            220,
+            20,
+            11,
+            220,
+            21,
+            11,
+            220,
+            22,
+            11,
+            220,
+            23,
+            11,
+            220,
+            24,
+            11,
+            220,
+            16,
+            15
+          ],
+          "baseline_mtp_rounds": 8,
+          "feature_mtp_rounds": 8
+        },
+        {
+          "prompt": "Context",
+          "tokens_identical": true,
+          "baseline_token_ids": [
+            3793
+          ],
+          "feature_token_ids": [
+            3793
+          ],
+          "baseline_mtp_rounds": 1,
+          "feature_mtp_rounds": 1
+        }
+      ]
+    }
+  ]
+}

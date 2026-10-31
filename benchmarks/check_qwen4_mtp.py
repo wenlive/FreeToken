@@ -36,6 +36,7 @@ def main():
     import torch
     from freetoken.core import SamplingParams
     from freetoken.llm import LLM
+    from freetoken.mm.config import MultimodalConfig
 
     source_file = Path(inspect.getfile(LLM)).resolve()
     if not source_file.is_relative_to(code):
@@ -70,6 +71,9 @@ def main():
         mtp_compact_state=enabled,
         mtp_max_context=8192,
         mtp_draft_policy="paired_cjk" if enabled else "full",
+        # The immutable GGUF bundle contains text weights only. Use the public
+        # configuration knob on both source trees instead of editing its config.
+        mm={"disabled_encoders": ["vision"]},
     )
     protected = [
         args.model / name
@@ -109,24 +113,31 @@ def main():
 
     save()
     started = time.perf_counter()
-    llm = LLM(str(args.model), **settings)
-    runtime = llm.engine.mtp_runtime
-    if enabled:
-        assert type(runtime).__name__ == "MtpRuntime"
-        assert Path(inspect.getfile(type(runtime))).resolve().is_relative_to(code)
-        assert len(runtime.pool.reserved_slot_ids) == 4
-        result["reserved_slots"] = [int(i) for i in runtime.pool.reserved_slot_ids]
-        result["mtp_tensor_count"] = len(runtime.draft.metadata)
-        assert result["mtp_tensor_count"] == 31
-    else:
-        assert runtime is None
-    result["startup_seconds"] = time.perf_counter() - started
+    llm = None
     prompts = dict(
         Arithmetic="计算17+25，只写结果。",
         Count="Count from 1 to 10.",
         Context="背景：这是兼容性测试，不需要总结。\n" * 16 + "请只回答 OK。",
     )
     try:
+        options = {
+            **settings,
+            "mm": MultimodalConfig(disabled_encoders=frozenset({"vision"})),
+        }
+        llm = LLM(str(args.model), **options)
+        assert not llm.engine.config.active_encoders
+        result["text_only"] = True
+        runtime = llm.engine.mtp_runtime
+        if enabled:
+            assert type(runtime).__name__ == "MtpRuntime"
+            assert Path(inspect.getfile(type(runtime))).resolve().is_relative_to(code)
+            assert len(runtime.pool.reserved_slot_ids) == 4
+            result["reserved_slots"] = [int(i) for i in runtime.pool.reserved_slot_ids]
+            result["mtp_tensor_count"] = len(runtime.draft.metadata)
+            assert result["mtp_tensor_count"] == 31
+        else:
+            assert runtime is None
+        result["startup_seconds"] = time.perf_counter() - started
         for name, prompt in prompts.items():
             ids = llm.tokenizer.apply_chat_template(
                 [dict(role="user", content=prompt)],
@@ -180,8 +191,18 @@ def main():
             elapsed_seconds=time.perf_counter() - started,
         )
         save()
+    except BaseException as error:
+        result.update(
+            state="failed",
+            error=f"{type(error).__name__}: {error}",
+            protected_after={str(path): sha256(path) for path in protected},
+            elapsed_seconds=time.perf_counter() - started,
+        )
+        save()
+        raise
     finally:
-        llm.engine.shutdown()
+        if llm is not None:
+            llm.engine.shutdown()
 
 
 if __name__ == "__main__":
