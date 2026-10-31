@@ -93,7 +93,7 @@ _BANK_BYTES_PER_EXPERT = {
         + (H // 128) * fp8_block_scale_pad(H // 128, I // 128)
     ) * 2,
     "q4_0": lambda H, I: 2 * I * (H // 32) * 18 + H * (I // 32) * 18,
-    "clover_gguf": lambda H, I: 2 * I * (H // 256) * 136 + H * (I // 256) * 144,
+    "clover_gguf": lambda h, i: 2 * i * (h // 256) * 136 + h * (i // 256) * 144,
     "q2_0": lambda H, I: 3 * I * H // 64 * 18,
     "nvfp4": lambda H, I: 2 * I * (H // 2 + H // 16 + 2) + H * (I // 2 + I // 16 + 2),
     "mxfp4": lambda H, I: 2 * I * (H // 2 + H // 32 + 2) + H * (I // 2 + I // 32 + 2),

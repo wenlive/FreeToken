@@ -9,7 +9,8 @@ import torch
 
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch
-from freetoken.engine.speculative import DeliveryLimit
+# Preserve the former module-level type as an explicit compatibility re-export.
+from freetoken.engine.speculative import DeliveryLimit as DeliveryLimit
 from freetoken.kernel.pinned import alloc_pinned_tensor
 from freetoken.kernel.triton.mtp_metadata import stage_verify_metadata
 from .mtp_draft_graph import DraftGraphs
@@ -159,7 +160,6 @@ class MtpRuntime:
 
     def after_native(self, batch, native_state):
         base, previous = native_state
-        req = batch.reqs[0]
         if previous is not None:
             self.draft.prime(previous, batch.input_ids[:1], start=base - 1)
             self.aux.publish(batch.out_loc[:1], self.draft.keys[base-1:base], self.draft.values[base-1:base])
