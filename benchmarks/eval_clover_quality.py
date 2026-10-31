@@ -71,7 +71,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--backend", choices=["native", "hf"], required=True)
     parser.add_argument(
-        "--precision", choices=["nvfp4", "bf16", "fp8"], default="nvfp4"
+        "--precision", choices=["nvfp4", "bf16", "fp8", "gguf"], default="nvfp4"
     )
     parser.add_argument("--tokens", type=int, default=512)
     parser.add_argument("--limit", type=int, default=50)
@@ -105,8 +105,10 @@ def main():
     started = time.perf_counter()
     llm = None
     if args.backend == "native":
-        if args.precision != "nvfp4":
-            raise ValueError("Native quality gate uses the actual NVFP4 checkpoint")
+        if args.precision not in ("nvfp4", "gguf"):
+            raise ValueError(
+                "Native quality gate uses the actual NVFP4 or GGUF checkpoint"
+            )
         from freetoken.llm import LLM
         from freetoken.core import SamplingParams
 
@@ -133,7 +135,11 @@ def main():
             )[0]
     else:
         from transformers import AutoTokenizer
-        from clover_hf_reference import load_official, official_modules
+        from clover_hf_reference import (
+            load_official,
+            official_modules,
+            reference_generation_config,
+        )
 
         model, _ = load_official(args.source, args.checkpoint, precision=args.precision)
         tokenizer = AutoTokenizer.from_pretrained(
@@ -143,8 +149,8 @@ def main():
         gen = SimpleNamespace(
             **{
                 **sampling.PENALTY_DEFAULTS,
-                **json.loads(
-                    (args.source / "generation_config.json").read_text(encoding="utf-8")
+                **reference_generation_config(
+                    args.checkpoint if args.precision == "gguf" else args.source
                 ),
             }
         )

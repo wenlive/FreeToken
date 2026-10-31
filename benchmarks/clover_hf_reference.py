@@ -2,8 +2,9 @@
 
 Reference: DiffuSpace/Clover-35B-A3B-Preview at
 4b0402b65e523d0183a14c431955438714cb16ff/{modeling,configuration,sampling}_clover_moe.py.
-This harness replaces only expert tensor indexing: each selected expert is read
-or dequantized on demand. Official forward/generate functions remain unchanged.
+For safetensors this replaces only expert indexing. GGUF additionally emulates
+GGML Q8_1 expert activations in an independent float32 dot reference; other HF
+operators and generation control flow remain unchanged.
 It is a correctness oracle, not a serving-performance implementation.
 """
 
@@ -33,6 +34,20 @@ def official_modules(source: Path):
     config = importlib.import_module(package + ".configuration_clover_moe")
     sampling = importlib.import_module(package + ".sampling_clover_moe")
     return model, config, sampling
+
+
+def reference_generation_config(checkpoint):
+    checkpoint = Path(checkpoint)
+    if checkpoint.is_file() and checkpoint.suffix == ".gguf":
+        from freetoken.models.clover_moe.generation import load_generation_settings
+        from freetoken.utils import cached_load_hf_config
+
+        return load_generation_settings(
+            str(checkpoint), cached_load_hf_config(str(checkpoint))
+        )[1]
+    return json.loads(
+        (checkpoint / "generation_config.json").read_text(encoding="utf-8")
+    )
 
 
 class ExpertStorage:
@@ -160,6 +175,12 @@ class ExpertIndex:
 def load_official(
     source, checkpoint, *, device="cuda", cache_bytes=6 << 30, precision="nvfp4"
 ):
+    if precision == "gguf":
+        from clover_gguf_reference import load_gguf_official
+
+        return load_gguf_official(
+            source, checkpoint, device=device, cache_bytes=cache_bytes
+        )
     source, checkpoint = Path(source), Path(checkpoint)
     model_code, config_code, _ = official_modules(source)
     raw_config = json.loads((source / "config.json").read_text(encoding="utf-8"))
@@ -202,7 +223,7 @@ def main():
     parser.add_argument("--native-results", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
-        "--precision", choices=["nvfp4", "bf16", "fp8"], default="nvfp4"
+        "--precision", choices=["nvfp4", "bf16", "fp8", "gguf"], default="nvfp4"
     )
     parser.add_argument("--steps", type=int, default=8)
     parser.add_argument("--checkpoint-penalties", action="store_true")
@@ -249,9 +270,7 @@ def main():
     gen = SimpleNamespace(
         **{
             **sampling.PENALTY_DEFAULTS,
-            **json.loads(
-                (args.checkpoint / "generation_config.json").read_text(encoding="utf-8")
-            ),
+            **reference_generation_config(args.checkpoint),
         }
     )
 

@@ -14,7 +14,11 @@ from types import SimpleNamespace
 import time
 
 import torch
-from clover_hf_reference import load_official, official_modules
+from clover_hf_reference import (
+    load_official,
+    official_modules,
+    reference_generation_config,
+)
 
 
 @torch.inference_mode()
@@ -26,21 +30,25 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--tokens", type=int, default=64)
     parser.add_argument("--prompts", default="Count,Sky")
+    parser.add_argument(
+        "--precision", choices=["nvfp4", "bf16", "fp8", "gguf"], default="nvfp4"
+    )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     torch.set_num_threads(4)
-    model, _ = load_official(args.source, args.checkpoint)
+    model, _ = load_official(args.source, args.checkpoint, precision=args.precision)
     _, _, sampling = official_modules(args.source)
     gen = SimpleNamespace(
         **{
             **sampling.PENALTY_DEFAULTS,
-            **json.loads((args.checkpoint / "generation_config.json").read_text()),
+            **reference_generation_config(args.checkpoint),
         }
     )
     eos = set(gen.eos_token_id)
     native = json.loads(args.native_results.read_text(encoding="utf-8"))
     result = dict(
         state="running",
+        precision=args.precision,
         checkpoint=str(args.checkpoint),
         source=str(args.source),
         settings=dict(

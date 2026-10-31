@@ -71,7 +71,14 @@ def load_generation_settings(model_path, hf_config):
         dllm_think_end_start=4096,
         dllm_think_end_window=4096,
         dllm_think_end_token_id=tokens.index("</think>"),
-        eos_token_id=metadata["tokenizer.ggml.eos_token_id"],
+        eos_token_id=list(
+            dict.fromkeys(
+                (
+                    metadata["tokenizer.ggml.eos_token_id"],
+                    metadata["tokenizer.ggml.padding_token_id"],
+                )
+            )
+        ),
         pad_token_id=metadata["tokenizer.ggml.padding_token_id"],
     )
     return int(metadata["tokenizer.ggml.mask_token_id"]), raw

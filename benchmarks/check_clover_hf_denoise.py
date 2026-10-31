@@ -9,7 +9,11 @@ import time
 import torch
 from transformers import GenerationConfig
 
-from clover_hf_reference import load_official, official_modules
+from clover_hf_reference import (
+    load_official,
+    official_modules,
+    reference_generation_config,
+)
 
 
 @torch.inference_mode()
@@ -23,7 +27,7 @@ def main():
     parser.add_argument("--prompts", default="Count,Sky")
     parser.add_argument("--widths", default="8,16,32")
     parser.add_argument(
-        "--precision", choices=["nvfp4", "bf16", "fp8"], default="nvfp4"
+        "--precision", choices=["nvfp4", "bf16", "fp8", "gguf"], default="nvfp4"
     )
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -48,7 +52,7 @@ def main():
         ),
         cases=[],
     )
-    raw = json.loads((args.checkpoint / "generation_config.json").read_text())
+    raw = reference_generation_config(args.checkpoint)
 
     def save():
         (args.output / "results.json").write_text(
