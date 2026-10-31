@@ -10,6 +10,9 @@ Ryzen 7 9700X / 64 GB RAM. BF16/NVFP4/FP8 first-50 quality comparisons at both
 token caps and the full five-prompt preview comparisons are complete. Treat block
 decoding as experimental: changing the BF16 batch shape
 can change near-tied argmax decisions even with exact acceptance.
+The [final local audit](evidence/clover-nvfp4/acceptance.json) binds the reviewed
+evidence, checks every recorded checkpoint output hash and lists the remaining
+numerical and coverage limits. All task-owned model processes have exited.
 
 ## Convert local weights
 
@@ -123,13 +126,19 @@ on-demand experts; no full BF16 model or Spark connection is required.
 All three local reference-code files have matching SHA256 against the pinned
 remote revision; see [source verification](evidence/clover-nvfp4/reference-sources.json).
 
-Count outputs match official HF for both selfspec widths and all denoise widths
-after removing the terminal EOS. Sky outputs can diverge at low-margin choices;
-its mean tokens per round differs from HF by -9.1%/0% for selfspec W8/W16,
-and -2.4%/-1.7%/-5.3% for denoise W8/W16/W32. Count W16 denoise differs by -25%
-in tokens per preview while retaining identical visible output. These are within
-the design's gates. Same-weight causal teacher forcing agrees on 156/158 tokens
-across all five prompts. See [correctness evidence](evidence/clover-nvfp4/correctness-v2.json).
+All 25 full-cap official HF block-mode references are complete: the five prompts,
+selfspec W8/16 and denoise W8/16/32. Average progress differs by -9.1% to +17.6%
+for selfspec and -25.5% to +12.7% for denoise, within the design's respective
+20%/30% gates. Visible token sequences match in 6/10 selfspec and 5/15 denoise
+cases; Count matches at every width. These progress gates do not establish
+bitwise text equivalence. Exact acceptance refers to verify's logits: comparing
+56 batched verify rows with sequential native decoding gives 94.64% argmax
+agreement, mean KL 0.00261 and maximum recurrent-state relative L2 of 1.34%.
+Identical-input transaction snapshots pass bitwise operator tests, but different
+BF16 batch shapes can change decisions. Same-weight causal teacher forcing
+agrees on 156/158 tokens across all five prompts. The saved reference tokens,
+logits and first differences remain available in
+[correctness evidence](evidence/clover-nvfp4/correctness-v3.json).
 
 The broad regression run had 947 passes, 149 skips, 47 passing subtests and 23
 failures. Twenty-one failures reproduce on unchanged main; the two new issues
@@ -149,7 +158,13 @@ The [final combined run](evidence/clover-nvfp4/regression-final.json) includes a
 A separate [pool/prefix regression](evidence/clover-nvfp4/legacy-pool-regression.json)
 passes all 41 cases, including both CUDA parameterizations. It exercises the
 original four reserved MTP slots, shared prefixes and rejected-tail recycling.
-The real Flash-Next main-versus-feature comparison remains queued.
+[Real Flash-Next compatibility](evidence/clover-nvfp4/legacy-mtp-regression.json)
+also passes: immutable local GGUF weights, MTP OFF/ON on frozen main and the
+feature branch, three prompts each. All corresponding token ids and round
+counts match. MTP actually emits drafts, with four reserved slots and all 31
+runtime tensors checked. The text-only GGUF bundle retains a vision config;
+both checks use the existing `mm.disabled_encoders` option, leaving all protected
+bundle metadata hashes unchanged. The initial failed harness attempt is retained.
 
 ## Short-prompt offload
 
@@ -179,6 +194,8 @@ in one block has no meaningful steady decode interval. Output-only arrival rates
 exclude the terminal EOS event. Raw event timestamps remain immutable; an earlier
 calculation included EOS in the steady interval and is corrected by the tested
 `benchmarks/clover_metrics.py` helper. End-to-end rates are unaffected.
+[The regression receipt](evidence/clover-nvfp4/arrival-accounting.json) retains
+the failing original-formula reproduction and the ten passing evaluation tests.
 
 | Prompt | Causal | Selfspec W8 | Selfspec W16 | Denoise W8 | Denoise W16 | Denoise W32 |
 |---|---:|---:|---:|---:|---:|---:|
@@ -216,6 +233,29 @@ behavior tests. Count denoise W16 has a small throughput advantage but delays th
 first token (180 ms versus 51 ms), so it is an optional throughput tradeoff.
 W32 delivers this short Count response in one burst after 291 ms; its higher
 total rate does not provide a steady-decode sample or low interactive latency.
+
+[Mode-specific cache profiles](evidence/clover-nvfp4/cache-capacity.json) use
+memory otherwise reserved for W32 snapshots: causal with 5120 slots and
+`memory_ratio=0.95`, selfspec W16 with 4608 slots and `memory_ratio=0.90`.
+Each adds two warmups and five trials on all five prompts. All outputs match
+their 4096-slot counterparts. With the same 4096-token context allocation:
+
+| Prompt | Causal 5120 tok/s | TTFT ms | Selfspec W16 4608 tok/s | TTFT ms |
+|---|---:|---:|---:|---:|
+| Count | 98.4 | 50 | 110.8 | 54 |
+| Sky | 100.6 | 51 | 45.5 | 84 |
+| Python | 101.4 | 118 | 115.3 | 126 |
+| JSON | 92.9 | 130 | 62.8 | 142 |
+| Chinese | 102.3 | 107 | 37.4 | 104 |
+
+Causal 5120 removes warm Sky expert misses and improves its total rate by 27.4%.
+Selfspec W16 4608 beats tuned causal by 12.6% on Count and 13.7% on this Python
+task. Prefer it for similarly predictable output after checking acceptance yield;
+use causal for general text, Chinese and JSON. Denoise provides no additional
+advantage over the tuned selfspec Count result here. These are two bounded
+profiles, not an exhaustive cache optimum. Keep the common 4096-slot settings
+when exercising all widths in one process: the larger profiles are not qualified
+for W32, longer contexts, concurrent requests or other VRAM consumers.
 
 The denoised Python outputs fail behavior/syntax checks at all three widths;
 denoise W8 also produces invalid JSON in this matrix. Do not recommend denoising
@@ -314,6 +354,17 @@ token tied for the maximum in the BF16 logits. All three FP8 Sky disagreements
 are such ties. NVFP4 also has eight genuine ranking changes; its selected
 alternatives rank second through sixth under BF16. Keep the exact argmax rates
 above as measured.
+
+[Equal-horizon denoise recipes](evidence/clover-nvfp4/quantization-denoise.json)
+compare official BF16/NVFP4/FP8 arithmetic for up to 64 output tokens, complete
+blocks and EOS stopping, at W16/W32 on all five prompts. NVFP4/BF16 resolved-slot
+yield ratios are 0.867-1.063 outside Sky; Count is exactly 1.0. Sky ratios are 0.791
+at W16 and 1.611 at W32; FP8 also reaches 1.871 at W32. The design's 0.8-1.1 Spark
+band therefore is not reproduced uniformly. These independently generated
+trajectories measure practical parallelism, not identical masked inputs. The
+small W16 Sky decline and large W32 variance are retained; neither the causal
+downstream gate nor useful desktop prose throughput favors switching to FP8.
+The default remains causal.
 
 [First-block preview stress results](evidence/clover-nvfp4/quantization-preview.json)
 are reported separately: NVFP4 argmax agreement with BF16 is 100%/87.5%/87.5% for

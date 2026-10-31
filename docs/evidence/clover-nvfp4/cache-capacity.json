@@ -1,0 +1,373 @@
+{
+  "scope": "Two bounded mode-specific capacity profiles; GPU-alone warm LRU, not a universal cache optimum",
+  "profiles": [
+    {
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\causal-cache5120-v1\\results.json",
+        "sha256": "ca5e1a8186229cddaba4c094fcc6f1ce28fe5155dcf5b2ccd402f02f43ed715b"
+      },
+      "settings": {
+        "cache_slots": 5120,
+        "memory_ratio": 0.95,
+        "context": 4096,
+        "token_budget": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "penalties": "checkpoint defaults",
+        "bf16_dense_baseline": false,
+        "indexed_clover_penalty": false
+      },
+      "rows": [
+        {
+          "prompt": "Count",
+          "baseline_4096": {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 0.3072041000123136,
+            "ttft_seconds": 0.05103530001360923,
+            "decode_tokens_per_second": 117.18109166263717,
+            "end_to_end_tokens_per_second": 97.65494665858144,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 1.0,
+            "decode_expert_copy_payload_bytes": 0,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Count",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 0.30484600001364015,
+            "ttft_seconds": 0.050093900004867464,
+            "decode_tokens_per_second": 117.83042495442763,
+            "end_to_end_tokens_per_second": 98.4103448910521,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 1.0,
+            "decode_expert_copy_payload_bytes": 0
+          },
+          "tokens_identical": true,
+          "speedup": 1.007735381138568
+        },
+        {
+          "prompt": "Sky",
+          "baseline_4096": {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 0.44352020000224,
+            "ttft_seconds": 0.10673559998394921,
+            "decode_tokens_per_second": 104.15913555400552,
+            "end_to_end_tokens_per_second": 78.91410582837767,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8149751596877218,
+            "decode_expert_copy_payload_bytes": 4629030912,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Sky",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 0.3479938999807928,
+            "ttft_seconds": 0.05080959998304024,
+            "decode_tokens_per_second": 117.82734689603474,
+            "end_to_end_tokens_per_second": 100.57647562768139,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 1.0,
+            "decode_expert_copy_payload_bytes": 0
+          },
+          "tokens_identical": true,
+          "speedup": 1.2745056738831335
+        },
+        {
+          "prompt": "Python",
+          "baseline_4096": {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 2.5994920000084676,
+            "ttft_seconds": 0.1354054000112228,
+            "decode_tokens_per_second": 101.21854475561868,
+            "end_to_end_tokens_per_second": 95.7879462599573,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8653700338199718,
+            "decode_expert_copy_payload_bytes": 19862040576,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Python",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 2.4548503999831155,
+            "ttft_seconds": 0.11807100000442006,
+            "decode_tokens_per_second": 106.62987591942573,
+            "end_to_end_tokens_per_second": 101.43184285352486,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.9099859183747157,
+            "decode_expert_copy_payload_bytes": 13279832064
+          },
+          "tokens_identical": true,
+          "speedup": 1.0589207391319435
+        },
+        {
+          "prompt": "JSON",
+          "baseline_4096": {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 1.0279332000063732,
+            "ttft_seconds": 0.15350430001853965,
+            "decode_tokens_per_second": 103.17114481477309,
+            "end_to_end_tokens_per_second": 87.5543274596462,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8360346088228126,
+            "decode_expert_copy_payload_bytes": 9556365312,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "JSON",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 0.9687488999916241,
+            "ttft_seconds": 0.1299492999969516,
+            "decode_tokens_per_second": 107.4958940183183,
+            "end_to_end_tokens_per_second": 92.90333129748912,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8825554472337314,
+            "decode_expert_copy_payload_bytes": 6844999680
+          },
+          "tokens_identical": true,
+          "speedup": 1.061093540354225
+        },
+        {
+          "prompt": "Chinese",
+          "baseline_4096": {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 1.138524400012102,
+            "ttft_seconds": 0.11375580000458285,
+            "decode_tokens_per_second": 108.37416001396173,
+            "end_to_end_tokens_per_second": 97.49461671512717,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.9059813753581661,
+            "decode_expert_copy_payload_bytes": 6525388800,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Chinese",
+            "mode": "causal",
+            "width": 8,
+            "wall_seconds": 1.0850456000189297,
+            "ttft_seconds": 0.10662199999205768,
+            "decode_tokens_per_second": 113.48720065336832,
+            "end_to_end_tokens_per_second": 102.29984804146802,
+            "tokens_per_round": 1.0,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.940262996316005,
+            "decode_expert_copy_payload_bytes": 4146063360
+          },
+          "tokens_identical": true,
+          "speedup": 1.049287145159834
+        }
+      ]
+    },
+    {
+      "source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\selfspec16-cache4608-v1\\results.json",
+        "sha256": "77fc19946856fe38d3dbc2890259422c51ace08c7927db0f9a36f4d07dad04a5"
+      },
+      "settings": {
+        "cache_slots": 4608,
+        "memory_ratio": 0.9,
+        "context": 4096,
+        "token_budget": 256,
+        "warmups": 2,
+        "repeats": 5,
+        "penalties": "checkpoint defaults",
+        "bf16_dense_baseline": false,
+        "indexed_clover_penalty": false
+      },
+      "rows": [
+        {
+          "prompt": "Count",
+          "baseline_4096": {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 0.3200751999975182,
+            "ttft_seconds": 0.07921940000960603,
+            "decode_tokens_per_second": 120.49854819826535,
+            "end_to_end_tokens_per_second": 93.7279739268541,
+            "tokens_per_round": 10,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.7542950086408458,
+            "decode_expert_copy_payload_bytes": 4291663872,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Count",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 0.2708221000211779,
+            "ttft_seconds": 0.0535766999819316,
+            "decode_tokens_per_second": 134.1328266544024,
+            "end_to_end_tokens_per_second": 110.77382531800042,
+            "tokens_per_round": 10,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 1.0,
+            "decode_expert_copy_payload_bytes": 0
+          },
+          "tokens_identical": true,
+          "speedup": 1.181865143104971
+        },
+        {
+          "prompt": "Sky",
+          "baseline_4096": {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 0.8005105000047479,
+            "ttft_seconds": 0.09117579998564906,
+            "decode_tokens_per_second": 53.5217719480428,
+            "end_to_end_tokens_per_second": 43.72209983478344,
+            "tokens_per_round": 3.888888888888889,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.815466992489309,
+            "decode_expert_copy_payload_bytes": 9117788160,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Sky",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 0.7698910000035539,
+            "ttft_seconds": 0.08421780000207946,
+            "decode_tokens_per_second": 55.44112217976257,
+            "end_to_end_tokens_per_second": 45.46098083993505,
+            "tokens_per_round": 3.888888888888889,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.849319006720092,
+            "decode_expert_copy_payload_bytes": 7445157888
+          },
+          "tokens_identical": true,
+          "speedup": 1.0397712143680762
+        },
+        {
+          "prompt": "Python",
+          "baseline_4096": {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 2.2416146000032313,
+            "ttft_seconds": 0.1320164000208024,
+            "decode_tokens_per_second": 118.33246651665117,
+            "end_to_end_tokens_per_second": 111.08064695850976,
+            "tokens_per_round": 9.72,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.7989988349614001,
+            "decode_expert_copy_payload_bytes": 27877171200,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Python",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 2.1595234000124037,
+            "ttft_seconds": 0.12616600000183098,
+            "decode_tokens_per_second": 122.72129928571428,
+            "end_to_end_tokens_per_second": 115.30321921891182,
+            "tokens_per_round": 9.72,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8343596768618213,
+            "decode_expert_copy_payload_bytes": 22972919808
+          },
+          "tokens_identical": true,
+          "speedup": 1.0380135728051643
+        },
+        {
+          "prompt": "JSON",
+          "baseline_4096": {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 1.449325299996417,
+            "ttft_seconds": 0.1529158999910578,
+            "decode_tokens_per_second": 70.8825199637625,
+            "end_to_end_tokens_per_second": 60.717907843199555,
+            "tokens_per_round": 5.176470588235294,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.829008966119178,
+            "decode_expert_copy_payload_bytes": 15305809920,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "JSON",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 1.40048460001708,
+            "ttft_seconds": 0.1416297000250779,
+            "decode_tokens_per_second": 73.11539399258099,
+            "end_to_end_tokens_per_second": 62.835392833971014,
+            "tokens_per_round": 5.176470588235294,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.8607474410854559,
+            "decode_expert_copy_payload_bytes": 12464824320
+          },
+          "tokens_identical": true,
+          "speedup": 1.034874142835088
+        },
+        {
+          "prompt": "Chinese",
+          "baseline_4096": {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 3.1204104000062216,
+            "ttft_seconds": 0.11677380002220161,
+            "decode_tokens_per_second": 37.621188919531015,
+            "end_to_end_tokens_per_second": 36.533655957489664,
+            "tokens_per_round": 2.7142857142857144,
+            "tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.9242518242784129,
+            "decode_expert_copy_payload_bytes": 13658038272,
+            "visible_tokens_per_preview": null
+          },
+          "larger_cache": {
+            "prompt": "Chinese",
+            "mode": "selfspec",
+            "width": 16,
+            "wall_seconds": 3.0494244000001345,
+            "ttft_seconds": 0.10355770000023767,
+            "decode_tokens_per_second": 38.36086404276842,
+            "end_to_end_tokens_per_second": 37.384104357528905,
+            "tokens_per_round": 2.7142857142857144,
+            "tokens_per_preview": null,
+            "visible_tokens_per_preview": null,
+            "expert_cache_hit_rate": 0.941672329069298,
+            "decode_expert_copy_payload_bytes": 10516973568
+          },
+          "tokens_identical": true,
+          "speedup": 1.0232784915100974
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "state": "qualified_with_documented_limits",
+  "observed_at_utc": "2026-10-31T01:49:47.932729+00:00",
+  "branch": "feat/clover-nvfp4",
+  "audited_commit": "eed8ccedda928942131ca677ea58cb89be6b8296",
+  "production_tree": "b435d021df9145fc16649be4e01a49b2abeeeb7d",
+  "base": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+  "protected_remote_refs": {
+    "observed_at_utc": "2026-10-31 01:48:04 UTC",
+    "reports": [
+      {
+        "repository_full_name": "wenlive/FreeToken",
+        "base": "4392986",
+        "head": "feat/dense27b-nvfp4-lora",
+        "status": "identical",
+        "ahead_by": 0,
+        "behind_by": 0,
+        "total_commits": 0,
+        "too_large": null,
+        "base_commit": {
+          "sha": "4392986f6de84462ff3df9d95e3eae7ffcdc9405",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/4392986f6de84462ff3df9d95e3eae7ffcdc9405",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/4392986f6de84462ff3df9d95e3eae7ffcdc9405"
+        },
+        "merge_base_commit": {
+          "sha": "4392986f6de84462ff3df9d95e3eae7ffcdc9405",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/4392986f6de84462ff3df9d95e3eae7ffcdc9405",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/4392986f6de84462ff3df9d95e3eae7ffcdc9405"
+        },
+        "files": []
+      },
+      {
+        "repository_full_name": "wenlive/FreeToken",
+        "base": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+        "head": "main",
+        "status": "identical",
+        "ahead_by": 0,
+        "behind_by": 0,
+        "total_commits": 0,
+        "too_large": null,
+        "base_commit": {
+          "sha": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/f417397f339050e6f400e75db0f1e6acbc40f13a",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/f417397f339050e6f400e75db0f1e6acbc40f13a"
+        },
+        "merge_base_commit": {
+          "sha": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/f417397f339050e6f400e75db0f1e6acbc40f13a",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/f417397f339050e6f400e75db0f1e6acbc40f13a"
+        },
+        "files": []
+      },
+      {
+        "repository_full_name": "wenlive/FreeToken",
+        "base": "b354e6df87108143d1277f62520ce070806e03a2",
+        "head": "feat/qwen36-nvfp4-lora",
+        "status": "identical",
+        "ahead_by": 0,
+        "behind_by": 0,
+        "total_commits": 0,
+        "too_large": null,
+        "base_commit": {
+          "sha": "b354e6df87108143d1277f62520ce070806e03a2",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/b354e6df87108143d1277f62520ce070806e03a2",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/b354e6df87108143d1277f62520ce070806e03a2"
+        },
+        "merge_base_commit": {
+          "sha": "b354e6df87108143d1277f62520ce070806e03a2",
+          "url": "https://api.github.com/repos/wenlive/FreeToken/commits/b354e6df87108143d1277f62520ce070806e03a2",
+          "html_url": "https://github.com/wenlive/FreeToken/commit/b354e6df87108143d1277f62520ce070806e03a2"
+        },
+        "files": []
+      }
+    ]
+  },
+  "unchanged_fused_kernels": [
+    "python/freetoken/moe/fused_nvfp4.py",
+    "python/freetoken/kernel/triton/nvfp4_fused_moe.py"
+  ],
+  "checkpoint": {
+    "path": "C:\\workspace\\models\\bundles\\clover-nvfp4\\4b0402b6-routed-v1",
+    "payload_bytes": 23017708416,
+    "all_recorded_output_sha256_verified": true,
+    "source_metadata_sizes_and_auxiliary_hashes_verified": true,
+    "conversion": {
+      "path": "C:\\workspace\\models\\bundles\\clover-nvfp4\\4b0402b6-routed-v1\\conversion.json",
+      "sha256": "44e0e2ca184ac61deae80b9556a6914ed5035fce43d1ed130d7f5d05543fbc00"
+    }
+  },
+  "evidence": {
+    "quality-first50.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\quality-first50.json",
+      "sha256": "04a6655f7c90561602e13d12e434412910d061b838f6ba8c57ce5e49c5bef8c5"
+    },
+    "quantization.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\quantization.json",
+      "sha256": "b15afd7e33e832db8a9a78ace52af88860386b30fa97e5221629c1fa1f536423"
+    },
+    "quantization-causal.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\quantization-causal.json",
+      "sha256": "dde9fb96b72a0bcee84c82f377e1cb64f091a026cab4425a116828d3cd58f812"
+    },
+    "quantization-denoise.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\quantization-denoise.json",
+      "sha256": "ccb4736604e926afd3fe33b46f85a84899d090fcc35b6c81a94eabc6637defd6"
+    },
+    "quantization-margins.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\quantization-margins.json",
+      "sha256": "77cd77098548047c1c9b9b9afa5ad96fa04c253131d661a0cc310fdc63cdd872"
+    },
+    "correctness-v3.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\correctness-v3.json",
+      "sha256": "e9ecab1c7acd104e0e44388ee7ce177dfc7d91b253af5e98e0646221daeae214"
+    },
+    "performance-v3.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\performance-v3.json",
+      "sha256": "0c8a2dc33d65bea3eabf5c5145e9ba056cbd5a8bbde5ed274d93ff0a7b7021ed"
+    },
+    "penalty-ab.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\penalty-ab.json",
+      "sha256": "d5a69dcb17da9f857c3016855f50231448e3142c07767106426d6702af2aa8da"
+    },
+    "cost-model-v3.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\cost-model-v3.json",
+      "sha256": "0af9bd96ad25ae6870eab7cb2a65aa578f0c259620438ef62544019aeeead19f"
+    },
+    "cache-capacity.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\cache-capacity.json",
+      "sha256": "e15429d44bcd064b5701ba73e70bb6c14d842c1ff737b059770b4a5d8b092b27"
+    },
+    "regression-final.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\regression-final.json",
+      "sha256": "67dc2b4178079400fc7d96fee8b707e81f2e3fa2ea5d7f7564e8c7309b513891"
+    },
+    "legacy-pool-regression.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\legacy-pool-regression.json",
+      "sha256": "99a03ba21b75d5a44adfc664736782cdcff7c1c167190948582ec491609394dc"
+    },
+    "legacy-mtp-regression.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\legacy-mtp-regression.json",
+      "sha256": "1f90a0bc63dc1a8f8e3cfd3450210074b28e6a702f00336080752a039b56c189"
+    },
+    "arrival-accounting.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\arrival-accounting.json",
+      "sha256": "92d266f32ebc8d63a84675e64c2a29c700170f21982f695822e86d1dc4e5f65c"
+    },
+    "cpu-vs-fetch-v1.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\cpu-vs-fetch-v1.json",
+      "sha256": "201b2aae76394b368a0eb3fc033dbb588957b0b6fe542ac8dec73b2be7bbbb79"
+    },
+    "reference-sources.json": {
+      "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\docs\\evidence\\clover-nvfp4\\reference-sources.json",
+      "sha256": "9c7e548f9b05fa2d2197b1a3c0d8cae6cbf8279642bd957e329de07f5d6881ae"
+    }
+  },
+  "decisions": {
+    "format": "NVFP4 routed W4A16, all other tensors BF16",
+    "default": "causal; 5120 cache slots/memory_ratio0.95 for the qualified short-prompt standalone profile",
+    "selective": "selfspec W16; 4608 slots/memory_ratio0.90 for tested Count/Python workloads",
+    "denoise": "available experimentally at W8/16/32; no unchecked code/JSON recommendation",
+    "all_width_profile": "4096 slots/memory_ratio0.85",
+    "cpu_misses": "GPU transfer wins over this scalar W4A16 CPU executor in all20 actual-bank cases"
+  },
+  "limitations": [
+    "HF text is identical in11/25 block cases; progress gates pass in25/25. Exact acceptance is relative to verify logits; BF16 batch shapes are not bitwise invariant.",
+    "First50 quality subsets and five short prompts are exploratory; no full benchmark or long-context/concurrent-request claim.",
+    "NVFP4 causal BF16-history aggregate is in the expected range, but some individual prompts and Sky denoise yields do not uniformly reproduce Spark.",
+    "Stock Qwen NVFP4 uses FP8 dense linears and is faster; the BF16-dense controlled comparison is in the same causal range.",
+    "146 optional backend/weight tests are skipped. Historical unrelated broad-suite failures reproduce on main; do not claim every repository test passes.",
+    "Copied bytes are algorithmic H2D expert payload, not measured physical PCIe bus traffic.",
+    "Explicit cache profiles reserve different transaction memory. Do not use larger profiles for W32 without a new memory qualification.",
+    "No remote push or PR: repository AGENTS.md prohibits agent git push and gh pr create."
+  ],
+  "remaining_required_local_work": [],
+  "processes": "All task-owned full-model queues exited; no background inference left by this task"
+}

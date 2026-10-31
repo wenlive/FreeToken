@@ -1,0 +1,22 @@
+{
+  "scope": "Model-free arrival/cap evaluation; failed original-formula reproduction retained",
+  "runs": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261031T011357Z-reproduce-eos-token-arrival-metric-bug",
+      "state": "failed",
+      "exit_code": 1,
+      "manifest_sha256": "563fc7f25802f6b7691d4e7c3e8a7990b9c1d45d22fcc5056c89480fb97b142c",
+      "stdout_sha256": "b365d42333692260b2c2ef643b7afc13f590073421000be00136c7bfe687ec47",
+      "summary": "4 failed, 5 passed in 5.35s"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\20261031T011552Z-corrected-eos-arrival-and-eval-tests",
+      "state": "passed",
+      "exit_code": 0,
+      "manifest_sha256": "a5e9be0c9564acd8fa93774171c4ea8af28df5c09025806c27780875cf210340",
+      "stdout_sha256": "a57c0fb6853ca90691ba18110ea6e455e06559e3c24a79a969140546dd7a6326",
+      "summary": "10 passed in 4.88s"
+    }
+  ],
+  "raw_model_traces_modified": false
+}

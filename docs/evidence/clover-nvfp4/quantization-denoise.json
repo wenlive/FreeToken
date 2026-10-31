@@ -1,0 +1,225 @@
+{
+  "scope": "Equal first-64-token/full-block horizon; official arithmetic in all precisions",
+  "cases": [
+    {
+      "prompt": "Count",
+      "width": 16,
+      "cap": 64,
+      "bf16_tokens_per_preview": 10.666666666666666,
+      "nvfp4_tokens_per_preview": 10.666666666666666,
+      "fp8_tokens_per_preview": 10.666666666666666,
+      "nvfp4_to_bf16": 1.0,
+      "fp8_to_bf16": 1.0,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-reference-v2\\results.json",
+        "sha256": "e3a89728f21a15a10ae3101a6260a32a8838fc1e38b370dba5972ecea713a99f"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-count-denoise-v1\\results.json",
+        "sha256": "e9bdd3c8497bcf8e4a32d54403e52ae2bdaee0665aebe16a3d725508038a779d"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-count-denoise-v1\\results.json",
+        "sha256": "23bee94bb69b7e6f0724f2ab55ded97c4f35ab49288a49eae73c07f46466bc27"
+      }
+    },
+    {
+      "prompt": "Count",
+      "width": 32,
+      "cap": 64,
+      "bf16_tokens_per_preview": 8.0,
+      "nvfp4_tokens_per_preview": 8.0,
+      "fp8_tokens_per_preview": 8.0,
+      "nvfp4_to_bf16": 1.0,
+      "fp8_to_bf16": 1.0,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-reference-v2\\results.json",
+        "sha256": "e3a89728f21a15a10ae3101a6260a32a8838fc1e38b370dba5972ecea713a99f"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-count-denoise-v1\\results.json",
+        "sha256": "e9bdd3c8497bcf8e4a32d54403e52ae2bdaee0665aebe16a3d725508038a779d"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-count-denoise-v1\\results.json",
+        "sha256": "23bee94bb69b7e6f0724f2ab55ded97c4f35ab49288a49eae73c07f46466bc27"
+      }
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "cap": 64,
+      "bf16_tokens_per_preview": 1.3714285714285714,
+      "nvfp4_tokens_per_preview": 1.0847457627118644,
+      "fp8_tokens_per_preview": 1.3333333333333333,
+      "nvfp4_to_bf16": 0.7909604519774012,
+      "fp8_to_bf16": 0.9722222222222222,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-reference-v2\\results.json",
+        "sha256": "e3a89728f21a15a10ae3101a6260a32a8838fc1e38b370dba5972ecea713a99f"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "Sky",
+      "width": 32,
+      "cap": 64,
+      "bf16_tokens_per_preview": 1.103448275862069,
+      "nvfp4_tokens_per_preview": 1.7777777777777777,
+      "fp8_tokens_per_preview": 2.064516129032258,
+      "nvfp4_to_bf16": 1.611111111111111,
+      "fp8_to_bf16": 1.8709677419354838,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-reference-v2\\results.json",
+        "sha256": "e3a89728f21a15a10ae3101a6260a32a8838fc1e38b370dba5972ecea713a99f"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "cap": 64,
+      "bf16_tokens_per_preview": 2.4615384615384617,
+      "nvfp4_tokens_per_preview": 2.1333333333333333,
+      "fp8_tokens_per_preview": 2.4615384615384617,
+      "nvfp4_to_bf16": 0.8666666666666666,
+      "fp8_to_bf16": 1.0,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-python-v1\\results.json",
+        "sha256": "6770c0db92247b894dea319c4aca6388def59e611fe4b81f734df699f85e6b7b"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "Python",
+      "width": 32,
+      "cap": 64,
+      "bf16_tokens_per_preview": 2.206896551724138,
+      "nvfp4_tokens_per_preview": 2.1333333333333333,
+      "fp8_tokens_per_preview": 2.2857142857142856,
+      "nvfp4_to_bf16": 0.9666666666666667,
+      "fp8_to_bf16": 1.0357142857142856,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-python-v1\\results.json",
+        "sha256": "6770c0db92247b894dea319c4aca6388def59e611fe4b81f734df699f85e6b7b"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "cap": 64,
+      "bf16_tokens_per_preview": 3.764705882352941,
+      "nvfp4_tokens_per_preview": 3.764705882352941,
+      "fp8_tokens_per_preview": 4.0,
+      "nvfp4_to_bf16": 1.0,
+      "fp8_to_bf16": 1.0625,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-long-two-v1\\results.json",
+        "sha256": "538224b9404285cb1c801713476645e6454ff97f7570bcbf032886b47e25c688"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "JSON",
+      "width": 32,
+      "cap": 64,
+      "bf16_tokens_per_preview": 3.764705882352941,
+      "nvfp4_tokens_per_preview": 4.0,
+      "fp8_tokens_per_preview": 4.0,
+      "nvfp4_to_bf16": 1.0625,
+      "fp8_to_bf16": 1.0625,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-long-two-v1\\results.json",
+        "sha256": "538224b9404285cb1c801713476645e6454ff97f7570bcbf032886b47e25c688"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "cap": 64,
+      "bf16_tokens_per_preview": 1.032258064516129,
+      "nvfp4_tokens_per_preview": 1.0158730158730158,
+      "fp8_tokens_per_preview": 1.0158730158730158,
+      "nvfp4_to_bf16": 0.9841269841269841,
+      "fp8_to_bf16": 0.9841269841269841,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-long-two-v1\\results.json",
+        "sha256": "538224b9404285cb1c801713476645e6454ff97f7570bcbf032886b47e25c688"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "width": 32,
+      "cap": 64,
+      "bf16_tokens_per_preview": 1.032258064516129,
+      "nvfp4_tokens_per_preview": 1.0158730158730158,
+      "fp8_tokens_per_preview": 1.0158730158730158,
+      "nvfp4_to_bf16": 0.9841269841269841,
+      "fp8_to_bf16": 0.9841269841269841,
+      "nvfp4_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-denoise-long-two-v1\\results.json",
+        "sha256": "538224b9404285cb1c801713476645e6454ff97f7570bcbf032886b47e25c688"
+      },
+      "bf16_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-bf16-four-denoise-v1\\results.json",
+        "sha256": "fba2287e2963cdecc9434a0b65de458aa8d7078b58bef259f3e924d633d0361a"
+      },
+      "fp8_source": {
+        "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\hf-fp8-four-denoise-v1\\results.json",
+        "sha256": "3c7deb21886e12fe3dbc393420d15c45552ae778982e3114b17cf9094d6fe00c"
+      }
+    }
+  ]
+}

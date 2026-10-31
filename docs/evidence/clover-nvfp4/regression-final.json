@@ -42,5 +42,5 @@
     "sha256": "e88612ae03296f6bf3ebc8f23829358fe9b23437a79d50c5364b00cf4f9b193a"
   },
   "scope": "All qwen4_exp tests, qwen3_5 MoE loader, NVFP4 backends/copy, Clover packing/controller/offload, 15 operator cases, 14 actual BF16 mixers and six complete BF16 blocks",
-  "limitation": "Skipped cases are not passes. Optional backend and weight gates remain; real existing GGUF/MTP bundle compatibility is a separate queued comparison. Historical unrelated broad-suite failures are retained."
+  "limitation": "Skipped cases are not passes. Optional backend and weight gates remain; the real existing GGUF/MTP comparison completed separately (legacy-mtp-regression.json). Historical unrelated broad-suite failures are retained."
 }
