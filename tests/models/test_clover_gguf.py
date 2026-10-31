@@ -11,6 +11,22 @@ from freetoken.models.clover_moe import gguf as adapter
 from freetoken.models.gguf.config import GgufConfigShim
 
 
+def test_aot_claims_gguf_architecture_and_both_actual_expert_rows():
+    from freetoken.kernel.aot_models import SUPPORTED_MODELS, expert_bank_row_bytes
+
+    entry = next(
+        model
+        for model in SUPPORTED_MODELS
+        if "CloverMoeGGUFModelLM" in model.arch_aliases
+    )
+    assert adapter.EXPERT_FORMAT in entry.expert_formats
+    rows = expert_bank_row_bytes(
+        adapter.EXPERT_FORMAT, entry.hidden_size, entry.moe_intermediate_size
+    )
+    assert rows == {"gate_up": 1_114_112, "down": 589_824}
+    assert sum(rows.values()) == 1_703_936
+
+
 @pytest.fixture
 def shim(monkeypatch):
     metadata = {
@@ -234,6 +250,8 @@ def test_gguf_sampling_metadata_overrides_published_clover_defaults():
     from freetoken.models.clover_moe.generation import predict_with_confidence
 
     logits = torch.tensor([[0.0, 2.0, 0.0, -1.0, 0.0]])
-    prediction, confidence = predict_with_confidence(logits, SimpleNamespace(**generation))
+    prediction, confidence = predict_with_confidence(
+        logits, SimpleNamespace(**generation)
+    )
     assert prediction.tolist() == [1]
     torch.testing.assert_close(confidence, logits.softmax(-1).max(-1).values)
