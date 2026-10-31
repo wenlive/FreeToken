@@ -1,6 +1,7 @@
 """Independent Q8_1 dot arithmetic and Clover's routed rounding boundaries."""
 
 from pathlib import Path
+import os
 
 import gguf
 import numpy as np
@@ -106,6 +107,52 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
     storage.projection(0, 2, "down")
     assert list(storage.cpu_cache) == [(0, 0, "down"), (0, 2, "down")]
     assert storage.cpu_bytes <= storage.cpu_limit and storage.bytes == 0
+
+
+@pytest.mark.parametrize("kind", [12, 23])
+@pytest.mark.parametrize("device", ["cpu", "cuda"])
+def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
+    if device == "cuda" and not torch.cuda.is_available():
+        pytest.skip("requires CUDA")
+    from clover_gguf_decode import decode_expert
+
+    raw, expected = packed_fixture(kind, rows=19, width=1024)
+    for expert in (0, 1, 2):
+        actual = decode_expert(raw[expert].numpy(), kind, device=device)
+        torch.testing.assert_close(actual.cpu(), expected[expert], rtol=0, atol=0)
+
+
+@pytest.fixture(scope="module")
+def real_gguf_experts():
+    location = os.environ.get("CLOVER_GGUF_CHECKPOINT")
+    if not location:
+        pytest.skip("set CLOVER_GGUF_CHECKPOINT to the mixed Clover GGUF")
+    from freetoken.models.gguf.reader import iter_gguf_tensors
+
+    return {
+        tensor.name: tensor
+        for tensor in iter_gguf_tensors(location)
+        if "_exps.weight" in tensor.name
+    }
+
+
+@pytest.mark.needs_weights
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("layer", [0, 36])
+@pytest.mark.parametrize("expert", [0, 127, 255])
+@pytest.mark.parametrize("role", ["gate", "up", "down"])
+def test_real_expert_torch_decoder_is_bitwise_numpy(
+    reference, real_gguf_experts, layer, expert, role
+):
+    from clover_gguf_decode import decode_expert
+
+    tensor = real_gguf_experts[f"blk.{layer}.ffn_{role}_exps.weight"]
+    raw = tensor._raw.reshape(*tensor.shape[:2], -1)[expert]
+    expected = torch.from_numpy(
+        gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
+    )
+    actual = decode_expert(raw, tensor.ggml_type, device="cuda")
+    torch.testing.assert_close(actual.cpu(), expected, rtol=0, atol=0)
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")

@@ -226,6 +226,7 @@ def main():
         "--precision", choices=["nvfp4", "bf16", "fp8", "gguf"], default="nvfp4"
     )
     parser.add_argument("--steps", type=int, default=8)
+    parser.add_argument("--prompts", help="Optional comma-separated prompt names")
     parser.add_argument("--checkpoint-penalties", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -264,6 +265,11 @@ def main():
             )
             for name, value in native["prompts"].items()
         ]
+    if args.prompts:
+        selected = set(args.prompts.split(","))
+        if selected - {case["name"] for case in cases}:
+            raise ValueError("Unknown reference prompt")
+        cases = [case for case in cases if case["name"] in selected]
     _, _, sampling = official_modules(args.source)
     from types import SimpleNamespace
 
@@ -307,10 +313,36 @@ def main():
         p = scores.log_softmax(-1)
         q = native_scores.float().log_softmax(-1)
         kl = float(torch.where(p.exp() > 0, p.exp() * (p - q), 0).sum())
-        reference_ids, forced_ids = [], []
-        for token in case["token_ids"][: args.steps]:
+        reference_ids, forced_ids, comparisons = [], [], []
+        trace_path = args.native_results.parent / f"{case['name']}-all-logits.pt"
+        native_trace = (
+            torch.load(trace_path, weights_only=True) if trace_path.exists() else None
+        )
+        if native_trace is not None and len(native_trace) < min(
+            args.steps, len(case["token_ids"])
+        ):
+            raise ValueError(
+                "Native causal trace is shorter than the requested comparison"
+            )
+        for step, token in enumerate(case["token_ids"][: args.steps]):
             reference_ids.append(int(scores.argmax()))
             forced_ids.append(token)
+            if native_trace is not None:
+                actual = native_trace[step].to(scores.device)
+                p, q = scores.log_softmax(-1), actual.log_softmax(-1)
+                hf_id = int(scores.argmax())
+                comparisons.append(
+                    dict(
+                        step=step,
+                        native_id=token,
+                        hf_id=hf_id,
+                        native_id_rank_hf=int((scores > scores[token]).sum()) + 1,
+                        hf_id_rank_native=int((actual > actual[hf_id]).sum()) + 1,
+                        hf_gap=float(scores.amax() - scores[token]),
+                        native_gap=float(actual.amax() - actual[hf_id]),
+                        kl=float(torch.where(p.exp() > 0, p.exp() * (p - q), 0).sum()),
+                    )
+                )
             state.commit(torch.tensor([token], device="cuda"))
             output = model(
                 torch.tensor([[token]], device="cuda"),
@@ -325,6 +357,7 @@ def main():
             hf_argmax_ids=reference_ids,
             argmax_agreement=sum(a == b for a, b in zip(forced_ids, reference_ids))
             / len(forced_ids),
+            comparisons=comparisons,
         )
         result["cases"].append(row)
         save()

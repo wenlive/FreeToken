@@ -51,6 +51,7 @@ def main():
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
+    parser.add_argument("--capture-logits-steps", type=int, default=0)
     parser.add_argument(
         "--indexed-clover-penalty",
         action="store_true",
@@ -166,7 +167,9 @@ def main():
     sample = llm.engine.sampler.sample
 
     def capture(logits, arguments):
-        if args.capture_first_logits and not captured:
+        if (args.capture_first_logits and not captured) or (
+            len(captured) < args.capture_logits_steps
+        ):
             captured.append(logits[0].detach().float().cpu())
         return sample(logits, arguments)
 
@@ -232,8 +235,15 @@ def main():
                         if runtime is not None and hasattr(runtime, "rounds")
                         else []
                     )
-                    if captured:
+                    # Keep the causal oracle artifact bound to its measured run;
+                    # later block modes must not overwrite it under the same name.
+                    if captured and mode == "causal" and repeat == args.warmups:
                         torch.save(captured[0], args.output / f"{name}-first-logits.pt")
+                        if args.capture_logits_steps:
+                            torch.save(
+                                torch.stack(captured),
+                                args.output / f"{name}-all-logits.pt",
+                            )
                     count = len(answer["token_ids"])
                     timing = arrival_metrics(count, times)
                     row = dict(

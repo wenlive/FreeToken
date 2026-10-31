@@ -15,6 +15,7 @@ import numpy as np
 import torch
 import torch.nn.functional as functional
 
+from clover_gguf_decode import decode_expert
 from clover_hf_reference import official_modules
 from freetoken.models.clover_moe.gguf import iter_hf_gguf_weights, parse_gguf_config
 from freetoken.models.gguf.reader import iter_gguf_tensors
@@ -58,7 +59,11 @@ class GGUFExpertStorage:
         device="cuda",
         cache_bytes=6 << 30,
         cpu_cache_bytes=16 << 30,
+        decoder="torch",
     ):
+        if decoder not in ("torch", "numpy"):
+            raise ValueError("Independent expert decoder must be torch or numpy")
+        self.decoder = decoder if str(device).startswith("cuda") else "numpy"
         self.path = str(checkpoint)
         self.device, self.limit = device, cache_bytes
         self.tensors = {
@@ -68,7 +73,8 @@ class GGUFExpertStorage:
         }
         self.cache = OrderedDict()
         self.cpu_cache = OrderedDict()
-        self.cpu_limit, self.cpu_bytes = cpu_cache_bytes, 0
+        self.cpu_limit = cpu_cache_bytes if self.decoder == "numpy" else 0
+        self.cpu_bytes = 0
         self.cpu_hits = 0
         self.bytes = self.reads = self.hits = 0
 
@@ -80,10 +86,14 @@ class GGUFExpertStorage:
             return self.cache[key]
         self.reads += 1
         tensor = self.tensors[f"blk.{layer}.ffn_{projection}_exps.weight"]
-        if key in self.cpu_cache:
+        if self.decoder == "torch":
+            raw = tensor._raw.reshape(tensor.shape[0], tensor.shape[1], -1)[int(expert)]
+            value = decode_expert(raw, tensor.ggml_type, device=self.device)
+        elif key in self.cpu_cache:
             self.cpu_hits += 1
             self.cpu_cache.move_to_end(key)
             host = self.cpu_cache[key]
+            value = host.to(self.device)
         else:
             raw = tensor._raw.reshape(tensor.shape[0], tensor.shape[1], -1)[int(expert)]
             decoded = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
@@ -95,7 +105,7 @@ class GGUFExpertStorage:
             if size <= self.cpu_limit:
                 self.cpu_cache[key] = host
                 self.cpu_bytes += size
-        value = host.to(self.device)
+            value = host.to(self.device)
         value._clover_ggml_type = tensor.ggml_type
         count = value.numel() * value.element_size()
         while self.cache and self.bytes + count > self.limit:
