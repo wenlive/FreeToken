@@ -7,7 +7,7 @@ BF16. The measured tensor payload is 23,017,708,416 bytes (21.44 GiB).
 
 The checkpoint and three decoding modes run on Windows, RTX 5070 Ti 16 GB and
 Ryzen 7 9700X / 64 GB RAM. BF16/NVFP4/FP8 first-50 quality comparisons at both
-token caps are complete; preview recipe checks remain in progress. Treat block
+token caps and the full five-prompt preview comparisons are complete. Treat block
 decoding as experimental: changing the BF16 batch shape
 can change near-tied argmax decisions even with exact acceptance.
 
@@ -169,21 +169,24 @@ passes on the 16 GB GPU.
 
 ## Performance and mode choice
 
-[The optimized matrix](evidence/clover-nvfp4/performance-v2.json) uses two
+[The final matrix](evidence/clover-nvfp4/performance-v3.json) uses two
 warmups and five measured repetitions per prompt/mode, a 256-token cap, actual
 EOS stopping, checkpoint penalties and 4096 expert-cache slots. These are offline
-scheduler measurements, excluding startup. Causal steady decode is 99-115 tok/s.
+scheduler measurements, excluding startup. Causal steady decode is 101-117 tok/s.
 The expert LRU persists across warmups and trials; these are warm-cache requests.
 End-to-end tok/s and TTFT include prompt processing. A response delivered entirely
-in one block has no meaningful steady decode interval.
+in one block has no meaningful steady decode interval. Output-only arrival rates
+exclude the terminal EOS event. Raw event timestamps remain immutable; an earlier
+calculation included EOS in the steady interval and is corrected by the tested
+`benchmarks/clover_metrics.py` helper. End-to-end rates are unaffected.
 
 | Prompt | Causal | Selfspec W8 | Selfspec W16 | Denoise W8 | Denoise W16 | Denoise W32 |
 |---|---:|---:|---:|---:|---:|---:|
-| Count | 96.3 | 86.7 | 92.5 | 73.6 | 103.0 | 102.1 |
-| Sky | 77.8 | 41.6 | 42.9 | 27.7 | 29.8 | 28.4 |
-| Python | 93.8 | 83.9 | 107.7 | 58.6 | 65.5 | 48.6 |
-| JSON | 86.0 | 68.5 | 58.6 | 66.9 | 82.3 | 75.5 |
-| Chinese | 95.4 | 36.4 | 35.4 | 27.7 | 29.1 | 29.0 |
+| Count | 97.7 | 86.3 | 93.7 | 72.1 | 102.0 | 102.9 |
+| Sky | 78.9 | 41.8 | 43.7 | 26.9 | 29.3 | 28.4 |
+| Python | 95.8 | 85.2 | 111.1 | 57.9 | 65.2 | 48.0 |
+| JSON | 87.5 | 69.3 | 60.7 | 66.0 | 81.1 | 75.1 |
+| Chinese | 97.5 | 36.7 | 36.5 | 27.5 | 28.9 | 28.4 |
 
 Table values are visible output tokens per total request second. Modes can
 produce different output lengths and contents; these rates do not establish
@@ -191,12 +194,28 @@ equal quality. Cache hit rates and copied expert payloads are in the linked JSON
 The byte metric counts algorithmic H2D expert payload in union/decode calls,
 including the short-prompt sparse prefill. It excludes physical PCIe overhead and
 full-layer transfers (the latter are absent for these short Clover prompts).
+Cache counters accumulate unique expert admissions per layer call; repeated ids
+in the sparse carrier count once. Only Count causal has 100% hits and zero copied
+expert payload. Count selfspec W8/W16 copies 3.36/4.29 GB per request; previews
+expand the expert union and cause evictions even for this simple prompt.
+`tokens_per_round` counts emitted ids including EOS, while denoise
+`tokens_per_preview` counts all resolved block slots, including unused positions
+after EOS. The separate `visible_tokens_per_preview` reports returned output ids.
 The [original matrix](evidence/clover-nvfp4/performance-v1.json) is retained for A/B.
 
+[The isolated penalty A/B](evidence/clover-nvfp4/penalty-ab.json) contains another
+210 requests with the original indexed repetition penalty. All 30 configurations
+produce identical token ids. Dense small-row arithmetic improves causal rates
+by 1.3%-2.0% and selfspec W16 by 2.1%-3.8%. Denoise has no consistent gain; W32
+keeps its original implementation. The earlier approximately threefold penalty
+microbenchmark improvement is not a threefold serving-speed claim.
+
 Causal is the default for general prose, Chinese, JSON and short interactive
-responses. Selfspec W16 improves this Python task by about 15%, with passing code
+responses. Selfspec W16 improves this Python task by about 16%, with passing code
 behavior tests. Count denoise W16 has a small throughput advantage but delays the
-first token (179 ms versus 50 ms), so it is an optional throughput tradeoff.
+first token (180 ms versus 51 ms), so it is an optional throughput tradeoff.
+W32 delivers this short Count response in one burst after 291 ms; its higher
+total rate does not provide a steady-decode sample or low interactive latency.
 
 The denoised Python outputs fail behavior/syntax checks at all three widths;
 denoise W8 also produces invalid JSON in this matrix. Do not recommend denoising
@@ -209,7 +228,7 @@ are in the correctness JSON.
 [Qwen comparisons](evidence/clover-nvfp4/causal-baselines.json) distinguish dtype
 recipes: the stock NVIDIA Qwen checkpoint uses FP8 dense linears and decodes at
 139-165 tok/s. A benchmark-only adapter dequantizes those dense linears to BF16
-while retaining its NVFP4 experts, yielding 105-120 tok/s. Clover's 99-115 tok/s
+while retaining its NVFP4 experts, yielding 105-120 tok/s. Clover's 101-117 tok/s
 is in that range; its weights, routing and response penalties also differ. The
 adapter changes no checkpoint or production Qwen path.
 
@@ -222,15 +241,22 @@ slower than cold fetch plus GPU compute for all measured widths/unions. GPU
 offload remains the supported block backend; deeper hybrid optimization is not
 justified by these measurements.
 
-[Measured break-even](evidence/clover-nvfp4/cost-model.json), dividing eager
-selfspec round wall time by causal decode step time, is **6.8-7.5 tokens/round
-for W8** and **7.8-9.3 for W16**. This supports the design's higher desktop
+[Measured break-even](evidence/clover-nvfp4/cost-model-v3.json), dividing eager
+selfspec round wall time by output-only causal decode step time, is **6.95-7.67
+tokens/round for W8** and **7.71-9.36 for W16**. This supports the design's higher desktop
 threshold than Spark, and is higher than its approximate W8 estimate of six.
-Python W16 accepts 9.72 tokens against a measured threshold of 8.30; W8 accepts
-6.23 against 6.94. These are whole-round measurements: PCIe, compute and eager
+Python W16 accepts 9.72 tokens against a measured threshold of 8.22; W8 accepts
+6.23 against 7.00. These are whole-round measurements: PCIe, compute and eager
 dispatch are all included. Without a profiler breakdown, the extra cost cannot
-be attributed entirely to PCIe. The denoise estimate of four tokens/preview is
-also only approximate: JSON W16 reaches 4.19 and is still slower than causal.
+be attributed entirely to PCIe. Spark's cited 5.4 estimate also includes replay,
+whereas this implementation commits transaction snapshots directly.
+For denoise, exclude the first block containing prompt prefill and include the
+pending-token flush and causal commit in every later block. The resulting
+break-even is 3.50-5.57 visible tokens/preview for the four non-Count prompts;
+Count W8/W16 requires 7.09/6.61. JSON W16 returns 3.92 visible tokens/preview
+against a threshold of 4.75. The design's rough four-token estimate is therefore
+insufficient in that case. Full resolved-slot yield (4.19) overstates useful
+output. Count W32 has no later block, so no steady estimate is reported.
 
 ## Downstream quality gate
 

@@ -1,80 +1,88 @@
 [
   {
-    "label": "five-prompt-performance-v2",
-    "source_sha256": "4a9d9e83b0af6789e8c66b08b8330033ba796a76753f08bcc7c775c4e6e84aa6",
+    "label": "five-prompt-performance-v3",
+    "source_sha256": "4643509533ef31c3631cab86fe700e6dd55ed94f337985b38f8dd21b5be7b382",
     "settings": {
       "cache_slots": 4096,
       "context": 4096,
       "token_budget": 256,
       "warmups": 2,
       "repeats": 5,
-      "penalties": "checkpoint defaults"
+      "penalties": "checkpoint defaults",
+      "bf16_dense_baseline": false,
+      "indexed_clover_penalty": false
     },
+    "timing_definition": "Output token ids, terminal EOS excluded; a single visible burst has no steady decode rate",
     "summary": [
       {
         "prompt": "Count",
         "mode": "causal",
         "width": 8,
-        "wall_seconds": 0.31154990001232363,
-        "ttft_seconds": 0.04954760000691749,
-        "decode_tokens_per_second": 114.70704966414247,
-        "end_to_end_tokens_per_second": 96.29276080272638,
+        "wall_seconds": 0.3072041000123136,
+        "ttft_seconds": 0.05103530001360923,
+        "decode_tokens_per_second": 117.18109166263717,
+        "end_to_end_tokens_per_second": 97.65494665858144,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 1.0,
-        "decode_expert_copy_payload_bytes": 0
+        "decode_expert_copy_payload_bytes": 0,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Sky",
         "mode": "causal",
         "width": 8,
-        "wall_seconds": 0.4499826999963261,
-        "ttft_seconds": 0.10618539998540655,
-        "decode_tokens_per_second": 101.8302385153909,
-        "end_to_end_tokens_per_second": 77.78076801682766,
+        "wall_seconds": 0.44352020000224,
+        "ttft_seconds": 0.10673559998394921,
+        "decode_tokens_per_second": 104.15913555400552,
+        "end_to_end_tokens_per_second": 78.91410582837767,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8149751596877218,
-        "decode_expert_copy_payload_bytes": 4629030912
+        "decode_expert_copy_payload_bytes": 4629030912,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Python",
         "mode": "causal",
         "width": 8,
-        "wall_seconds": 2.6536765999917407,
-        "ttft_seconds": 0.1364742000005208,
-        "decode_tokens_per_second": 98.92380042675136,
-        "end_to_end_tokens_per_second": 93.8320818749259,
+        "wall_seconds": 2.5994920000084676,
+        "ttft_seconds": 0.1354054000112228,
+        "decode_tokens_per_second": 101.21854475561868,
+        "end_to_end_tokens_per_second": 95.7879462599573,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8653700338199718,
-        "decode_expert_copy_payload_bytes": 19862040576
+        "decode_expert_copy_payload_bytes": 19862040576,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "JSON",
         "mode": "causal",
         "width": 8,
-        "wall_seconds": 1.0469886000209954,
-        "ttft_seconds": 0.15376859999378212,
-        "decode_tokens_per_second": 100.7462047514118,
-        "end_to_end_tokens_per_second": 85.96082134819349,
+        "wall_seconds": 1.0279332000063732,
+        "ttft_seconds": 0.15350430001853965,
+        "decode_tokens_per_second": 103.17114481477309,
+        "end_to_end_tokens_per_second": 87.5543274596462,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8360346088228126,
-        "decode_expert_copy_payload_bytes": 9556365312
+        "decode_expert_copy_payload_bytes": 9556365312,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Chinese",
         "mode": "causal",
         "width": 8,
-        "wall_seconds": 1.1637640000262763,
-        "ttft_seconds": 0.11489770002663136,
-        "decode_tokens_per_second": 105.84302107032595,
-        "end_to_end_tokens_per_second": 95.38016298621865,
+        "wall_seconds": 1.138524400012102,
+        "ttft_seconds": 0.11375580000458285,
+        "decode_tokens_per_second": 108.37416001396173,
+        "end_to_end_tokens_per_second": 97.49461671512717,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.9059813753581661,
-        "decode_expert_copy_payload_bytes": 6525388800
+        "decode_expert_copy_payload_bytes": 6525388800,
+        "visible_tokens_per_preview": null
       }
     ]
   },
@@ -89,6 +97,7 @@
       "repeats": 5,
       "penalties": "checkpoint defaults"
     },
+    "timing_definition": "Output token ids, terminal EOS excluded; a single visible burst has no steady decode rate",
     "summary": [
       {
         "prompt": "Count",
@@ -96,12 +105,13 @@
         "width": 8,
         "wall_seconds": 0.5867537000158336,
         "ttft_seconds": 0.3984076000051573,
-        "decode_tokens_per_second": 157.9870919101391,
+        "decode_tokens_per_second": 157.54659438982793,
         "end_to_end_tokens_per_second": 49.42448594566584,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.9466666666666667,
-        "decode_expert_copy_payload_bytes": 909115392
+        "decode_expert_copy_payload_bytes": 909115392,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Sky",
@@ -109,12 +119,13 @@
         "width": 8,
         "wall_seconds": 0.7179815999988932,
         "ttft_seconds": 0.3985083000152372,
-        "decode_tokens_per_second": 165.25826370978288,
+        "decode_tokens_per_second": 165.0726368232317,
         "end_to_end_tokens_per_second": 72.42525435203376,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.969811320754717,
-        "decode_expert_copy_payload_bytes": 909115392
+        "decode_expert_copy_payload_bytes": 909115392,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Python",
@@ -127,7 +138,8 @@
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8813848039215686,
-        "decode_expert_copy_payload_bytes": 17186187264
+        "decode_expert_copy_payload_bytes": 17186187264,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "JSON",
@@ -135,12 +147,13 @@
         "width": 8,
         "wall_seconds": 1.7504396000003908,
         "ttft_seconds": 0.3991712999995798,
-        "decode_tokens_per_second": 139.32510768699595,
+        "decode_tokens_per_second": 139.43387000095825,
         "end_to_end_tokens_per_second": 106.8303070839795,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8801695478723404,
-        "decode_expert_copy_payload_bytes": 12800415744
+        "decode_expert_copy_payload_bytes": 12800415744,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Chinese",
@@ -148,12 +161,13 @@
         "width": 8,
         "wall_seconds": 1.2494318999815732,
         "ttft_seconds": 0.39910099998814985,
-        "decode_tokens_per_second": 162.069725731702,
+        "decode_tokens_per_second": 162.49893021397392,
         "end_to_end_tokens_per_second": 108.84946990868869,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.9587591240875912,
-        "decode_expert_copy_payload_bytes": 3210313728
+        "decode_expert_copy_payload_bytes": 3210313728,
+        "visible_tokens_per_preview": null
       }
     ]
   },
@@ -169,6 +183,7 @@
       "penalties": "checkpoint defaults",
       "bf16_dense_baseline": true
     },
+    "timing_definition": "Output token ids, terminal EOS excluded; a single visible burst has no steady decode rate",
     "summary": [
       {
         "prompt": "Count",
@@ -176,12 +191,13 @@
         "width": 8,
         "wall_seconds": 0.6499773999967147,
         "ttft_seconds": 0.3940385000023525,
-        "decode_tokens_per_second": 116.53124263137681,
+        "decode_tokens_per_second": 116.24325062066077,
         "end_to_end_tokens_per_second": 44.61693591215107,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.9466666666666667,
-        "decode_expert_copy_payload_bytes": 909115392
+        "decode_expert_copy_payload_bytes": 909115392,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Sky",
@@ -189,12 +205,13 @@
         "width": 8,
         "wall_seconds": 0.8343661999970209,
         "ttft_seconds": 0.39416630001505837,
-        "decode_tokens_per_second": 120.12719621305715,
+        "decode_tokens_per_second": 120.05327540434371,
         "end_to_end_tokens_per_second": 62.32275468515583,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.969811320754717,
-        "decode_expert_copy_payload_bytes": 909115392
+        "decode_expert_copy_payload_bytes": 909115392,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Python",
@@ -207,7 +224,8 @@
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8825490196078432,
-        "decode_expert_copy_payload_bytes": 17017503744
+        "decode_expert_copy_payload_bytes": 17017503744,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "JSON",
@@ -215,12 +233,13 @@
         "width": 8,
         "wall_seconds": 2.254864999995334,
         "ttft_seconds": 0.39503300000797026,
-        "decode_tokens_per_second": 105.43721324764941,
+        "decode_tokens_per_second": 105.5064754059415,
         "end_to_end_tokens_per_second": 86.47967838447246,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.8771364795918367,
-        "decode_expert_copy_payload_bytes": 13682896896
+        "decode_expert_copy_payload_bytes": 13682896896,
+        "visible_tokens_per_preview": null
       },
       {
         "prompt": "Chinese",
@@ -228,12 +247,13 @@
         "width": 8,
         "wall_seconds": 1.5197563999972772,
         "ttft_seconds": 0.3947984999977052,
-        "decode_tokens_per_second": 118.1027008456002,
+        "decode_tokens_per_second": 118.32341904192221,
         "end_to_end_tokens_per_second": 86.19802489414403,
         "tokens_per_round": 1.0,
         "tokens_per_preview": null,
         "expert_cache_hit_rate": 0.9582623106060606,
-        "decode_expert_copy_payload_bytes": 3130411008
+        "decode_expert_copy_payload_bytes": 3130411008,
+        "visible_tokens_per_preview": null
       }
     ]
   }

@@ -12,6 +12,7 @@ import torch
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
 from freetoken.message import DetokenizeMsg
+from clover_metrics import arrival_metrics
 
 PROMPTS = {
     "Count": "Count from 1 to 10.",
@@ -46,6 +47,7 @@ def main():
     parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--cache-slots", type=int, default=4096)
+    parser.add_argument("--memory-ratio", type=float, default=0.85)
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
@@ -119,7 +121,7 @@ def main():
         moe_cache_size=args.cache_slots,
         expert_load="serial",
         max_running_req=1,
-        memory_ratio=0.85,
+        memory_ratio=args.memory_ratio,
         num_token_override=4096,
         max_seq_len_override=4096,
         max_extend_tokens=4096,
@@ -130,10 +132,12 @@ def main():
     result = dict(
         state="running",
         scope="offline scheduler; actual output length, EOS respected",
+        timing_definition="Output token ids exclude terminal EOS; raw stream events are retained separately",
         startup_seconds=time.perf_counter() - started,
         checkpoint=args.model,
         settings=dict(
             cache_slots=args.cache_slots,
+            memory_ratio=args.memory_ratio,
             context=4096,
             token_budget=args.tokens,
             warmups=args.warmups,
@@ -231,7 +235,7 @@ def main():
                     if captured:
                         torch.save(captured[0], args.output / f"{name}-first-logits.pt")
                     count = len(answer["token_ids"])
-                    first_burst = sum(stamp == times[0] for stamp in times)
+                    timing = arrival_metrics(count, times)
                     row = dict(
                         prompt=name,
                         mode=mode,
@@ -239,17 +243,12 @@ def main():
                         repeat=repeat,
                         warmup=repeat < args.warmups,
                         **answer,
+                        **timing,
                         emitted_tokens=len(times),
                         output_tokens=count,
                         wall_seconds=wall,
-                        ttft_seconds=times[0],
-                        token_arrival_seconds=times,
-                        first_burst_tokens=first_burst,
+                        stream_event_arrival_seconds=times,
                         expert_stats=stats,
-                        decode_tokens_per_second=(len(times) - first_burst)
-                        / (times[-1] - times[0])
-                        if times[-1] > times[0]
-                        else None,
                         end_to_end_tokens_per_second=count / wall,
                         expert_miss_rate=stats["miss_rate"],
                         expert_cache_hit_rate=1 - stats["miss_rate"],
@@ -264,6 +263,11 @@ def main():
                         tokens_per_preview=(
                             sum(sum(r["steps"]) for r in rounds)
                             / sum(len(r["steps"]) for r in rounds)
+                        )
+                        if mode == "denoise" and rounds
+                        else None,
+                        visible_tokens_per_preview=(
+                            count / sum(len(r["steps"]) for r in rounds)
                         )
                         if mode == "denoise" and rounds
                         else None,
@@ -306,6 +310,7 @@ def main():
                     "end_to_end_tokens_per_second",
                     "tokens_per_round",
                     "tokens_per_preview",
+                    "visible_tokens_per_preview",
                     "expert_cache_hit_rate",
                     "decode_expert_copy_payload_bytes",
                 ):

@@ -1,0 +1,242 @@
+{
+  "source": {
+    "path": "C:\\workspace\\runs\\T-20261030-clover-nvfp4\\five-prompt-performance-v3\\results.json",
+    "sha256": "4643509533ef31c3631cab86fe700e6dd55ed94f337985b38f8dd21b5be7b382"
+  },
+  "scope": "Whole eager round versus output-only causal decode step; PCIe, compute and dispatch included",
+  "denoise_scope": "Exclude the first block containing prompt prefill; subsequent blocks include pending-token flush, previews and causal commit. Single-burst requests have no steady sample.",
+  "rows": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "mean_round_ms": 65.49031000031391,
+      "causal_decode_tokens_per_second": 117.18109166263717,
+      "break_even_tokens_per_round": 7.674226019161308,
+      "actual_tokens_per_round": 7.5
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "mean_round_ms": 79.84338000145121,
+      "causal_decode_tokens_per_second": 117.18109166263717,
+      "break_even_tokens_per_round": 9.356134430604826,
+      "actual_tokens_per_round": 10
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "mean_round_ms": 67.30030727286993,
+      "causal_decode_tokens_per_second": 104.15913555400552,
+      "break_even_tokens_per_round": 7.0099418280610815,
+      "actual_tokens_per_round": 3.1818181818181817
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "mean_round_ms": 78.66336222440522,
+      "causal_decode_tokens_per_second": 104.15913555400552,
+      "break_even_tokens_per_round": 8.19350780906566,
+      "actual_tokens_per_round": 3.888888888888889
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "mean_round_ms": 69.11625550143071,
+      "causal_decode_tokens_per_second": 101.21854475561868,
+      "break_even_tokens_per_round": 6.995846800812341,
+      "actual_tokens_per_round": 6.225
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "mean_round_ms": 81.1774624006357,
+      "causal_decode_tokens_per_second": 101.21854475561868,
+      "break_even_tokens_per_round": 8.216664611146298,
+      "actual_tokens_per_round": 9.72
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "mean_round_ms": 67.4010399985812,
+      "causal_decode_tokens_per_second": 103.17114481477309,
+      "break_even_tokens_per_round": 6.953842458359934,
+      "actual_tokens_per_round": 5.294117647058823
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "mean_round_ms": 76.16215647157172,
+      "causal_decode_tokens_per_second": 103.17114481477309,
+      "break_even_tokens_per_round": 7.857736874733933,
+      "actual_tokens_per_round": 5.176470588235294
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "mean_round_ms": 65.70457589740937,
+      "causal_decode_tokens_per_second": 108.37416001396173,
+      "break_even_tokens_per_round": 7.120678221955336,
+      "actual_tokens_per_round": 2.5384615384615383
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "mean_round_ms": 71.14448047664371,
+      "causal_decode_tokens_per_second": 108.37416001396173,
+      "break_even_tokens_per_round": 7.7102233112859615,
+      "actual_tokens_per_round": 2.7142857142857144
+    }
+  ],
+  "denoise_rows": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "steady_blocks": 15,
+      "previews": 20,
+      "mean_ms_per_preview": 60.51406000042334,
+      "break_even_visible_tokens_per_preview": 7.091103611787934,
+      "actual_visible_tokens_per_preview": 5.5,
+      "resolved_slots_per_preview": 6.0
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "steady_blocks": 5,
+      "previews": 10,
+      "mean_ms_per_preview": 56.42186000186484,
+      "break_even_visible_tokens_per_preview": 6.611575148655007,
+      "actual_visible_tokens_per_preview": 7.0,
+      "resolved_slots_per_preview": 8.0
+    },
+    {
+      "prompt": "Count",
+      "width": 32,
+      "steady_blocks": 0,
+      "previews": 0,
+      "mean_ms_per_preview": null,
+      "break_even_visible_tokens_per_preview": null,
+      "actual_visible_tokens_per_preview": null,
+      "resolved_slots_per_preview": null
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "steady_blocks": 25,
+      "previews": 170,
+      "mean_ms_per_preview": 36.812733529094494,
+      "break_even_visible_tokens_per_preview": 3.834382501770438,
+      "actual_visible_tokens_per_preview": 1.0588235294117647,
+      "resolved_slots_per_preview": 1.1764705882352942
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "steady_blocks": 10,
+      "previews": 150,
+      "mean_ms_per_preview": 33.611659333109856,
+      "break_even_visible_tokens_per_preview": 3.500961380672444,
+      "actual_visible_tokens_per_preview": 1.0333333333333334,
+      "resolved_slots_per_preview": 1.0666666666666667
+    },
+    {
+      "prompt": "Sky",
+      "width": 32,
+      "steady_blocks": 5,
+      "previews": 35,
+      "mean_ms_per_preview": 41.38164285769952,
+      "break_even_visible_tokens_per_preview": 4.310276147862568,
+      "actual_visible_tokens_per_preview": 1.1428571428571428,
+      "resolved_slots_per_preview": 4.571428571428571
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "steady_blocks": 140,
+      "previews": 405,
+      "mean_ms_per_preview": 45.668904444656945,
+      "break_even_visible_tokens_per_preview": 4.622540048471582,
+      "actual_visible_tokens_per_preview": 2.740740740740741,
+      "resolved_slots_per_preview": 2.765432098765432
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "steady_blocks": 75,
+      "previews": 410,
+      "mean_ms_per_preview": 41.17503634152832,
+      "break_even_visible_tokens_per_preview": 4.16767725874921,
+      "actual_visible_tokens_per_preview": 2.8536585365853657,
+      "resolved_slots_per_preview": 2.926829268292683
+    },
+    {
+      "prompt": "Python",
+      "width": 32,
+      "steady_blocks": 30,
+      "previews": 430,
+      "mean_ms_per_preview": 39.887186279249654,
+      "break_even_visible_tokens_per_preview": 4.037322949581931,
+      "actual_visible_tokens_per_preview": 1.9186046511627908,
+      "resolved_slots_per_preview": 2.2325581395348837
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "steady_blocks": 100,
+      "previews": 225,
+      "mean_ms_per_preview": 50.618903555571,
+      "break_even_visible_tokens_per_preview": 5.222410229096848,
+      "actual_visible_tokens_per_preview": 3.511111111111111,
+      "resolved_slots_per_preview": 3.5555555555555554
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "steady_blocks": 50,
+      "previews": 195,
+      "mean_ms_per_preview": 46.050808718278766,
+      "break_even_visible_tokens_per_preview": 4.751114655110954,
+      "actual_visible_tokens_per_preview": 3.923076923076923,
+      "resolved_slots_per_preview": 4.102564102564102
+    },
+    {
+      "prompt": "JSON",
+      "width": 32,
+      "steady_blocks": 25,
+      "previews": 160,
+      "mean_ms_per_preview": 54.021825625204656,
+      "break_even_visible_tokens_per_preview": 5.573493594736409,
+      "actual_visible_tokens_per_preview": 4.125,
+      "resolved_slots_per_preview": 5.0
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "steady_blocks": 55,
+      "previews": 425,
+      "mean_ms_per_preview": 36.23569341116201,
+      "break_even_visible_tokens_per_preview": 3.9270128359581307,
+      "actual_visible_tokens_per_preview": 1.0235294117647058,
+      "resolved_slots_per_preview": 1.035294117647059
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "steady_blocks": 25,
+      "previews": 320,
+      "mean_ms_per_preview": 34.2283246873194,
+      "break_even_visible_tokens_per_preview": 3.7094659366733893,
+      "actual_visible_tokens_per_preview": 1.0,
+      "resolved_slots_per_preview": 1.25
+    },
+    {
+      "prompt": "Chinese",
+      "width": 32,
+      "steady_blocks": 15,
+      "previews": 385,
+      "mean_ms_per_preview": 34.465300519466886,
+      "break_even_visible_tokens_per_preview": 3.7351479934259824,
+      "actual_visible_tokens_per_preview": 0.961038961038961,
+      "resolved_slots_per_preview": 1.2467532467532467
+    }
+  ]
+}
