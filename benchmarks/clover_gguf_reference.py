@@ -1,9 +1,10 @@
 """Official HF Clover operators with an independent GGUF expert-dot reference.
 
-GGML weights decode with gguf-py's NumPy implementation. The expert linear
-operation emulates Q8_1 activation blocks in float32; no production CUDA GGUF
-kernel is used by the reference. Dense loader mapping is shared with production
-and qualified separately against original BF16 tensors and explicit head labels.
+GGML weights use an independent eager-Torch decoder qualified bitwise against
+gguf-py's NumPy implementation; NumPy remains the CPU/fallback decoder. The
+expert linear emulates Q8_1 activation blocks in float32 without production
+CUDA GGUF kernels. Dense loader mapping is shared with production and qualified
+separately against original BF16 tensors and explicit head labels.
 """
 
 from collections import OrderedDict
