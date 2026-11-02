@@ -266,3 +266,86 @@ def test_fused_pick_matches_torch_penalties_and_confidence(width):
     picks, confidence = pick_with_confidence(logits, state, block, mask)
     assert torch.equal(picks.long(), expected.argmax(-1))
     torch.testing.assert_close(confidence, expected.softmax(-1).max(-1).values, rtol=2e-5, atol=1e-7)
+
+
+def test_transaction_rejects_padding_and_incorrect_layer_set():
+    from freetoken.models.clover_moe.preview import CloverTransactions
+
+    pool = SimpleNamespace(device='cpu', recurrent_states=torch.zeros(2, 1, 2, 2),
+                           conv_states=torch.zeros(2, 1, 2, 3))
+    transaction = CloverTransactions(pool, 8)
+    transaction.begin(8, 3)
+    transaction.written.update((0, 2))
+    with pytest.raises(ValueError, match='incomplete'):
+        transaction.commit(pool, 2, 0)
+    transaction.written = {0, 1}
+    with pytest.raises(ValueError, match='out-of-range'):
+        transaction.commit(pool, 4, 0)
+    transaction.recurrent[:, 1].fill_(7)
+    transaction.conv[:, 1].fill_(9)
+    transaction.commit(pool, 2, 0)
+    assert torch.all(pool.recurrent_states == 7) and torch.all(pool.conv_states == 9)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+def test_padded_verify_kv_never_writes_unowned_locations():
+    from freetoken.kernel.triton.clover_store import store_verify_kv
+
+    keys = torch.full((16, 2, 64), 17., device='cuda', dtype=torch.bfloat16)
+    values = keys.clone()
+    k = torch.randn(8, 2, 64, device='cuda', dtype=torch.bfloat16)
+    v = torch.randn_like(k)
+    locations = torch.tensor([3, 7, 11, -100, 1000000, -1, -1, -1], device='cuda', dtype=torch.int32)
+    valid = torch.arange(8, device='cuda') < 3
+    expected_k, expected_v = keys.clone(), values.clone()
+    expected_k[locations[:3]] = k[:3]
+    expected_v[locations[:3]] = v[:3]
+    store_verify_kv(keys, values, locations, k, v, valid)
+    assert torch.equal(keys, expected_k) and torch.equal(values, expected_v)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+@pytest.mark.parametrize('width', [8, 16])
+@pytest.mark.parametrize('rule', ['exact', 'threshold'])
+@pytest.mark.parametrize('break_row', [None, 3])
+def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+    import copy
+    from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+
+    vocab, mask = 257, 256
+    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+        'frequency_penalty': .15, 'repetition_penalty': 1.05,
+        'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+        'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+        'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+        'dllm_think_end_token_id': 123})
+    state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+    state.commit(torch.tensor([7, 7, 18], device='cuda'))
+    state.length = 8190
+    inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+    inputs[0] = 123
+    logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+    logits[:, 7] = 12
+    if break_row is not None:
+        logits[break_row, 7] = -10
+        logits[break_row, 11] = 20
+    reference = logits.float().clone()
+    reference[:, mask] = -float('inf')
+    hypothetical = copy.copy(state)
+    hypothetical.counts = state.counts.clone()
+    for row in range(width):
+        hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+        if row + 1 < width:
+            hypothetical.commit(inputs[row+1:row+2].long())
+    frozen = state.counts.clone()
+    actual = penalize_logits(logits, state, mask, inputs)
+    torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+    accepted = int(clover_correct_drafts(reference[None], inputs[None], accept_rule=rule).item())
+    packet = verify_and_deliver(logits, inputs, state, mask, rule=rule).cpu().tolist()
+    assert packet[0] == accepted
+    assert packet[1:accepted+2] == inputs[1:accepted+1].tolist() + [int(reference[accepted].argmax())]
+    assert torch.equal(state.counts, frozen) and state.length == 8190
+    causal = logits[:1].float().clone()
+    causal[:, mask] = -float('inf')
+    state.apply(causal, torch.tensor([mask], device='cuda'), mask)
+    torch.testing.assert_close(penalize_logits(logits[:1], state, mask), causal, rtol=0, atol=0)

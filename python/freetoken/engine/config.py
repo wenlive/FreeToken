@@ -116,6 +116,7 @@ class EngineConfig:
     mtp_draft_policy: str = "full"
     clover_mode: str = "causal"
     clover_width: int = 8
+    clover_max_width: int = 32
     clover_threshold: float = .95
     clover_accept_rule: str = "exact"
     clover_accept_ratio: float = .9
@@ -128,6 +129,10 @@ class EngineConfig:
             raise ValueError("Clover mode must be causal, selfspec or denoise")
         if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
             raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+            raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+        if self.clover_mode != "causal" and self.clover_width > self.clover_max_width:
+            raise ValueError("Clover block width exceeds the reserved maximum")
         if not 0 < self.clover_threshold < 1 or not 0 < self.clover_coreset_top_p <= 1:
             raise ValueError("Clover confidence threshold and coreset top-p are out of range")
         if not 0 <= self.clover_accept_ratio <= 1 or not 0 <= self.clover_accept_delta <= 1:

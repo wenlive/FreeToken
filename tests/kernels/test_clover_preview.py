@@ -120,3 +120,38 @@ def test_existing_fla_verify_snapshots_equal_sequential_decode(width):
         torch.testing.assert_close(snapshots[:,row], sequential, rtol=0, atol=0)
     torch.testing.assert_close(actual, torch.cat(expected,dim=1), rtol=0, atol=0)
     assert torch.equal(state, frozen)
+
+
+@pytest.mark.parametrize('valid_rows', [1, 3, 8])
+def test_padded_verify_attention_is_causal_and_stores_only_valid_rows(valid_rows):
+    from types import SimpleNamespace
+    from freetoken.models.clover_moe.preview import attention_preview
+
+    torch.manual_seed(91)
+    width, prefix, heads, kv_heads, dim = 8, 11, 4, 2, 64
+    q = torch.randn(width, heads, dim, device='cuda', dtype=torch.bfloat16)
+    k, v = [torch.randn(width, kv_heads, dim, device='cuda', dtype=torch.bfloat16) for _ in range(2)]
+    keys, values = [torch.randn(32, kv_heads, dim, device='cuda', dtype=torch.bfloat16) for _ in range(2)]
+    frozen_k, frozen_v = keys.clone(), values.clone()
+    valid = torch.arange(width, device='cuda') < valid_rows
+    locations = torch.arange(prefix, prefix+width, device='cuda', dtype=torch.int32)
+    locations[~valid] = -999
+    batch = SimpleNamespace(reqs=[SimpleNamespace(cached_len=prefix,table_idx=0)],
+        out_loc=locations, clover_valid=valid, clover_attention=dict(
+        q_indptr=torch.tensor([0,width],device='cuda',dtype=torch.int32),
+        kv_indptr=torch.tensor([0,prefix+width],device='cuda',dtype=torch.int32),
+        indices=torch.arange(prefix,device='cuda',dtype=torch.int32),
+        prefix_lens=torch.tensor([prefix],device='cuda',dtype=torch.int32),
+        block_ends=torch.full((width,),prefix+width,device='cuda',dtype=torch.int32)))
+    mixer = SimpleNamespace(num_kv=kv_heads,head_dim=dim,layer_id=0,
+        _project=lambda _: (q,k,v,None), _combine=lambda output,gate: output)
+    ctx = SimpleNamespace(batch=batch, kv_cache=SimpleNamespace(k_cache=lambda _:keys,v_cache=lambda _:values))
+    actual = attention_preview(mixer,torch.empty(width,1),ctx,preview=False)
+    all_k = torch.cat((frozen_k[:prefix],k)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
+    all_v = torch.cat((frozen_v[:prefix],v)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
+    allowed = torch.arange(prefix+width,device='cuda')[None,:] <= prefix+torch.arange(width,device='cuda')[:,None]
+    expected = F.scaled_dot_product_attention(q.transpose(0,1).float(),all_k,all_v,attn_mask=allowed).transpose(0,1)
+    torch.testing.assert_close(actual[:valid_rows].float(),expected[:valid_rows],rtol=.02,atol=.006)
+    frozen_k[prefix:prefix+valid_rows] = k[:valid_rows]
+    frozen_v[prefix:prefix+valid_rows] = v[:valid_rows]
+    assert torch.equal(keys,frozen_k) and torch.equal(values,frozen_v)

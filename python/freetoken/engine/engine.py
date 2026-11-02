@@ -28,6 +28,7 @@ from freetoken.utils import align_ceil, init_logger, is_sm90_family, is_sm100_fa
 
 from .config import EngineConfig
 from .graph import GraphRunner, get_free_memory
+from .speculative import runtime_reserve_bytes
 from .sample import BatchSamplingArgs, Sampler
 from freetoken.kvcache import create_kv_pool, resolve_pool_class
 from freetoken.kvcache.base import CacheRebuildRejected
@@ -431,7 +432,15 @@ class Engine:
         # off it; the KV pool family owns every geometry-specific formula behind the rest.
         available_memory = _startup_kv_budget(config.memory_ratio, init_free_memory, new_free)
         available_memory -= state_pool_bytes(config)
+        runtime_reserve = runtime_reserve_bytes(config)
+        available_memory -= runtime_reserve
         self.num_pages = self._pool_cls.solve_num_pages(config, available_memory)
+        if runtime_reserve:
+            page_bytes, fixed_bytes, _, _ = self._pool_cls.kv_cost(config)
+            if self.num_pages * page_bytes + fixed_bytes > available_memory:
+                raise ValueError("KV/expert budget leaves no room for the reserved Clover transaction; "
+                                 "reduce moe_cache_size, context or clover_max_width")
+            logger.info_rank0(f"Reserved Clover private runtime: {mem_GB(runtime_reserve)}")
         num_tokens = self.num_pages * config.page_size
         self.ctx.kv_cache = self.kv_cache = create_kv_pool(
             config, self.num_pages, device=self.device, dtype=self.dtype
@@ -639,6 +648,7 @@ class Engine:
 
         cache_per_page, fixed_cache_size, page_tokens, min_reserve = self._pool_cls.kv_cost(config)
         fixed_cache_size += state_pool_bytes(config)  # sibling GDN state pool, engine-summed
+        fixed_cache_size += runtime_reserve_bytes(config)
         num_experts = config.model_config.num_experts
         total_experts = config.model_config.num_moe_layers * num_experts
         return resolve_moe_cache_auto(
@@ -1019,7 +1029,7 @@ class Engine:
                 weights_bytes=self._weights_bytes, current_num_pages=self.num_pages,
                 extra_fixed_bytes=(
                     state_pool_bytes(config, target_mamba) if target_mamba is not None else 0
-                ),
+                ) + runtime_reserve_bytes(config),
                 extra_note=(
                     f", mamba={target_mamba - 1} slots" if target_mamba is not None else ""
                 ),
