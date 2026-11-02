@@ -155,7 +155,8 @@ def main():
                 start.record(llm.engine.stream)
                 output = original(*positional, **keywords)
                 end.record(llm.engine.stream)
-                runtime_trace.append((phase, start, end, block_index[0]))
+                actual_phase = ('native_prefill' if phase == 'causal' and not positional[0].is_decode else phase)
+                runtime_trace.append((actual_phase, start, end, block_index[0]))
                 return output
             setattr(owner, name, observed)
 
@@ -166,6 +167,7 @@ def main():
         instrument(CloverTransactions, "commit", "state_commit")
         instrument(CloverBlockGraphs, "save_ahead", "save_ahead")
         instrument(runtime, "_denoise", "round", count_round=True)
+        instrument(llm.engine, "forward_batch", "causal")
     if not args.reuse_prefix:
         match = llm.cache_manager.match_req
         llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
