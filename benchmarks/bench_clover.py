@@ -54,6 +54,10 @@ def main():
     parser.add_argument("--runtime-breakdown", action="store_true",
         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
+    parser.add_argument("--cache-auto", action="store_true")
+    parser.add_argument("--embedding-host", action="store_true")
+    parser.add_argument("--phase-cache-stats", action="store_true",
+        help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
@@ -69,6 +73,8 @@ def main():
         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
     )
     args = parser.parse_args()
+    if args.phase_cache_stats and not args.runtime_breakdown:
+        parser.error('--phase-cache-stats requires --runtime-breakdown')
     args.output.mkdir(parents=True, exist_ok=False)
     if args.indexed_clover_penalty:
         from freetoken.models.clover_moe import generation
@@ -126,7 +132,10 @@ def main():
     llm = LLM(
         args.model,
         moe_strategy="offload",
-        moe_cache_size=args.cache_slots,
+        moe_cache_size=0 if args.cache_auto else args.cache_slots,
+        moe_cache_auto=args.cache_auto,
+        kv_reserve_tokens=args.context_size,
+        gguf_embedding_host=args.embedding_host,
         expert_load="serial",
         max_running_req=1,
         memory_ratio=args.memory_ratio,
@@ -156,7 +165,9 @@ def main():
                 output = original(*positional, **keywords)
                 end.record(llm.engine.stream)
                 actual_phase = ('native_prefill' if phase == 'causal' and not positional[0].is_decode else phase)
-                runtime_trace.append((actual_phase, start, end, block_index[0]))
+                snapshot = (llm.engine.moe_offload_cache.lru_stats.clone()
+                    if args.phase_cache_stats and phase in ('preview','verify','advance') else None)
+                runtime_trace.append((actual_phase, start, end, block_index[0], snapshot))
                 return output
             setattr(owner, name, observed)
 
@@ -178,7 +189,10 @@ def main():
         startup_seconds=time.perf_counter() - started,
         checkpoint=args.model,
         settings=dict(
-            cache_slots=args.cache_slots,
+            cache_slots=llm.engine.moe_offload_cache.cache_size,
+            cache_auto=args.cache_auto,
+            embedding_host=args.embedding_host,
+            mapped_host_table_bytes=llm.engine._host_tables_bytes,
             memory_ratio=args.memory_ratio,
             context=args.context_size,
             accept_rule=args.accept_rule,
@@ -330,8 +344,21 @@ def main():
                         reserved=torch.cuda.memory_reserved(),
                     )
                     if args.runtime_breakdown:
-                        row["runtime_breakdown"] = [dict(phase=phase, block_index=index, cuda_ms=start.elapsed_time(end))
-                            for phase, start, end, index in runtime_trace]
+                        previous = [0,0,0]
+                        row['runtime_breakdown'] = []
+                        payload = 0
+                        for phase,start,end,index,snapshot in runtime_trace:
+                            item = dict(phase=phase,block_index=index,cuda_ms=start.elapsed_time(end))
+                            if snapshot is not None:
+                                values = snapshot.cpu().sum(0).tolist()
+                                active,missing,calls = [int(a-b) for a,b in zip(values,previous)]
+                                previous = values
+                                item.update(active_experts=active,missing_experts=missing,layer_calls=calls,
+                                    logical_expert_h2d_bytes=missing*per_expert)
+                                payload += missing*per_expert
+                            row['runtime_breakdown'].append(item)
+                        if args.phase_cache_stats and mode == 'denoise':
+                            assert payload == row['decode_expert_copy_payload_bytes']
                     if mode == "causal":
                         causal_ids = answer["token_ids"]
                     elif mode == "selfspec" and causal_ids is not None:
@@ -380,6 +407,14 @@ def main():
             cuda_peak_allocated=torch.cuda.max_memory_allocated(),
             cuda_peak_reserved=torch.cuda.max_memory_reserved(),
         )
+        import psutil
+
+        memory = psutil.Process().memory_info()
+        result['host_memory'] = dict(current_rss_bytes=memory.rss,
+            peak_working_set_bytes=getattr(memory,'peak_wset',None),
+            current_private_bytes=getattr(memory,'private',None))
+        result['host_bank_payload_bytes'] = sum(t.numel()*t.element_size()
+            for layers in cache.bank_sources.values() for t in layers)
         result["state"] = (
             "validation_failed" if args.require_exact and mismatch else "complete"
         )
