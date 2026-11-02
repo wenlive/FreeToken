@@ -1,11 +1,11 @@
 # Clover NVFP4 on a 16 GB desktop GPU
 
-Runtime update (2026-11-02): preview/verify graphs, static block metadata, fused
-picking and merged pending-state handling are now qualified. See the
-[new five-prompt matrix and official Q8 llama comparison](clover-runtime-performance.md)
-for current speeds, changed denoise outputs, quality checks and limits.
-The measurements below and their evidence describe the earlier `2fd00ce`
-runtime and are retained as the before control.
+Runtime review update (2026-11-02): fixed-width verification, fused response
+verification and explicit private-window budgeting are covered by the
+[current performance index](clover-performance.md) and [R1 report](clover-runtime-review.md).
+The run recipe below uses the current planner. Historical measurements later in
+this guide describe `2fd00ce`; the [R0 report](clover-runtime-performance.md) is
+also retained with its original evidence and control-noise caveats.
 
 This feature branch loads `DiffuSpace/Clover-35B-A3B-Preview` revision
 `4b0402b65e523d0183a14c431955438714cb16ff` under its native `clover_moe`
@@ -44,20 +44,20 @@ matching the existing inference bank representation.
 ## Run
 
 Use the source checkout with a compatible Windows FreeToken native wheel and AOT
-cache. The tested configuration leaves room for a private GDN transaction window
-(about 1 GiB for W16, 2 GiB for W32). Automatic cache sizing does not yet reserve
-that window; use the explicit settings below.
+cache. Automatic planning now reserves the declared maximum transaction window
+and clean GDN state. The qualified auto .9 / 4K KV / W32 lifecycle test selected
+3566 expert slots on this machine; the count depends on free VRAM at startup.
+Set `clover_max_width=0` for causal-only use, or reserve the largest block width
+that the engine will serve.
 
 On the qualified local machine, select this task's source and private kernel
 cache before running Python. The runtime is Torch 2.11.0+cu130, Triton Windows
 3.6.0.post26, Transformers 5.16.1, with the existing Windows native wheel.
 
 ```powershell
-$env:PYTHONPATH = 'C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken/python'
-$env:FREETOKEN_KERNEL_CACHE_DIR = 'C:/workspace/builds/T-20261030-clover-nvfp4/kernel-cache'
-$env:TRITON_CACHE_DIR = 'C:/workspace/cache/triton/clover-nvfp4'
-$env:HF_HUB_OFFLINE = '1'
-$python = 'C:/workspace/envs/T-20261030-clover-nvfp4/runtime/Scripts/python.exe'
+. C:/workspace/tasks/T-20261102-clover-q8/env.ps1
+$env:PYTHONPATH = 'C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken/python;C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken'
+$python = 'C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe'
 # Run the Python example below with this interpreter.
 ```
 
@@ -67,8 +67,9 @@ from freetoken.core import SamplingParams
 
 llm = LLM(
     "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
-    moe_strategy="offload", moe_cache_size=4096, expert_load="serial",
-    max_running_req=1, memory_ratio=0.85,
+    moe_strategy="offload", moe_cache_auto=True, kv_reserve_tokens=4096,
+    expert_load="serial", clover_max_width=32,
+    max_running_req=1, memory_ratio=0.9,
     num_token_override=4096, max_seq_len_override=4096,
     max_extend_tokens=4096, cuda_graph_bs=[1],
 )

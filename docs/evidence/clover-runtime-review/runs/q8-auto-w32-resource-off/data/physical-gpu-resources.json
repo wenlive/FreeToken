@@ -1,0 +1,5972 @@
+{
+  "state": "complete",
+  "scope": "Separate instrumented diagnostic; whole-device physical counter estimate, includes desktop and nonexpert bytes; primary medians are uninstrumented",
+  "source": "https://docs.nvidia.com/deploy/nvml-api/latest/api/group__nvmlDeviceQueries.html",
+  "raw_unit": "NVML KB/s; byte estimates explicitly use 1024 bytes/KB",
+  "integration": "trapezoidal, actual sample gaps; counters smooth a 20ms window, no exact per-request byte count claim",
+  "sampling_note": "20ms is the driver counter window, not the achieved polling interval; inspect actual gaps (Windows NVML calls can block)",
+  "result_sha256": "e0a5313f60208ecaaa2f3bb300cf44d7d02fe2f2063523d217ca05a93bd446cb",
+  "device_peak_used_bytes": 15375101952,
+  "intervals": [
+    {
+      "start": 12787.5429335,
+      "end": 12788.919831,
+      "rx_integrated_KB": 63744313.73361538,
+      "tx_integrated_KB": 11412638.616880782,
+      "rx_estimated_bytes_KB1024": 65274177263.22215,
+      "tx_estimated_bytes_KB1024": 11686541943.68592,
+      "device_peak_used_bytes": 15370907648,
+      "counter_window_seconds": 0.02,
+      "samples": 14,
+      "actual_sample_gap_max_seconds": 0.09512349999931757,
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 32,
+      "repeat": 0,
+      "warmup": true
+    },
+    {
+      "start": 12788.9436371,
+      "end": 12789.5412921,
+      "rx_integrated_KB": 36630711.26763399,
+      "tx_integrated_KB": 5927489.47311331,
+      "rx_estimated_bytes_KB1024": 37509848338.057205,
+      "tx_estimated_bytes_KB1024": 6069749220.468029,
+      "device_peak_used_bytes": 15375101952,
+      "counter_window_seconds": 0.02,
+      "samples": 6,
+      "actual_sample_gap_max_seconds": 0.09511610000117798,
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 32,
+      "repeat": 1,
+      "warmup": false
+    },
+    {
+      "start": 12789.5422834,
+      "end": 12790.1315845,
+      "rx_integrated_KB": 38847032.50882553,
+      "tx_integrated_KB": 5691916.611232762,
+      "rx_estimated_bytes_KB1024": 39779361289.037346,
+      "tx_estimated_bytes_KB1024": 5828522609.9023485,
+      "device_peak_used_bytes": 15375101952,
+      "counter_window_seconds": 0.02,
+      "samples": 6,
+      "actual_sample_gap_max_seconds": 0.09498350000103528,
+      "prompt": "Count",
+      "mode": "denoise",
+      "width": 32,
+      "repeat": 2,
+      "warmup": false
+    }
+  ],
+  "samples": [
+    {
+      "t": 12729.8258121,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12729.9195702,
+      "rx_KBps": 1305,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.013385,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.1074155,
+      "rx_KBps": 1157,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.1855583,
+      "rx_KBps": 130,
+      "tx_KBps": 937,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.278325,
+      "rx_KBps": 250,
+      "tx_KBps": 2217,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.3730384,
+      "rx_KBps": 250,
+      "tx_KBps": 1002,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.4657402,
+      "rx_KBps": 250,
+      "tx_KBps": 459,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.5599684,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.6548607,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.749174,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.8437261,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12730.9370773,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.0312924,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.1283299,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.2199864,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.2987892,
+      "rx_KBps": 1122,
+      "tx_KBps": 937,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.39345,
+      "rx_KBps": 1370,
+      "tx_KBps": 941,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.4878678,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.5825293,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.678688,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.7894886,
+      "rx_KBps": 1285,
+      "tx_KBps": 1264,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.8965411,
+      "rx_KBps": 282,
+      "tx_KBps": 941,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12731.9752072,
+      "rx_KBps": 250,
+      "tx_KBps": 838,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.0691598,
+      "rx_KBps": 250,
+      "tx_KBps": 852,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.1737581,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.2478087,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.3198926,
+      "rx_KBps": 250,
+      "tx_KBps": 1088,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.4139849,
+      "rx_KBps": 379,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.508092,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.6010662,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.6948599,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.7896696,
+      "rx_KBps": 983,
+      "tx_KBps": 276,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.8738345,
+      "rx_KBps": 272,
+      "tx_KBps": 173,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12732.9894056,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.0735365,
+      "rx_KBps": 130,
+      "tx_KBps": 276,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.1687397,
+      "rx_KBps": 250,
+      "tx_KBps": 1329,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.2485348,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.4178615,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.5137137,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.6096546,
+      "rx_KBps": 210,
+      "tx_KBps": 104,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.710944,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 729538560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.8237413,
+      "rx_KBps": 2195,
+      "tx_KBps": 28569,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12733.9141636,
+      "rx_KBps": 815,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.065943,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.1585058,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.2526158,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.4510188,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.5487097,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.6474404,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.8631291,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12734.9534587,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.0474684,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.3060086,
+      "rx_KBps": 334,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.3953339,
+      "rx_KBps": 343,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.4874577,
+      "rx_KBps": 1167,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.586913,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.6949941,
+      "rx_KBps": 250,
+      "tx_KBps": 2074,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12735.9838776,
+      "rx_KBps": 250,
+      "tx_KBps": 899,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.0766091,
+      "rx_KBps": 250,
+      "tx_KBps": 899,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.1750693,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.2659581,
+      "rx_KBps": 250,
+      "tx_KBps": 1279,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.3600979,
+      "rx_KBps": 130,
+      "tx_KBps": 117,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.4523455,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.796483,
+      "rx_KBps": 1055,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.8955426,
+      "rx_KBps": 356,
+      "tx_KBps": 838,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12736.9842348,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.0792452,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.1747802,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.2535583,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.345941,
+      "rx_KBps": 250,
+      "tx_KBps": 1190,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.7697872,
+      "rx_KBps": 970,
+      "tx_KBps": 1200,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.8708373,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12737.9594263,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.0544454,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.1403702,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.22388,
+      "rx_KBps": 832,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.324497,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.4138831,
+      "rx_KBps": 1048,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.5056996,
+      "rx_KBps": 130,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12738.9593081,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.0541631,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.1626092,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.2610129,
+      "rx_KBps": 130,
+      "tx_KBps": 1278,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.3526337,
+      "rx_KBps": 250,
+      "tx_KBps": 1191,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.4454089,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.5278456,
+      "rx_KBps": 836,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.6205845,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.7201357,
+      "rx_KBps": 130,
+      "tx_KBps": 1041,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.8063401,
+      "rx_KBps": 933,
+      "tx_KBps": 838,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12739.9097853,
+      "rx_KBps": 356,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.3818881,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.4689906,
+      "rx_KBps": 250,
+      "tx_KBps": 449,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.572636,
+      "rx_KBps": 250,
+      "tx_KBps": 191,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.6702286,
+      "rx_KBps": 250,
+      "tx_KBps": 373,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.7636808,
+      "rx_KBps": 250,
+      "tx_KBps": 1287,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.8584348,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12740.9506813,
+      "rx_KBps": 250,
+      "tx_KBps": 294,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.0490442,
+      "rx_KBps": 250,
+      "tx_KBps": 191,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.1406223,
+      "rx_KBps": 955,
+      "tx_KBps": 294,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.2330755,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.343354,
+      "rx_KBps": 990,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.437872,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.5898277,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 932016128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.6998139,
+      "rx_KBps": 472,
+      "tx_KBps": 4896,
+      "device_used_bytes": 944599040,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.8004632,
+      "rx_KBps": 9967,
+      "tx_KBps": 5096,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.8874709,
+      "rx_KBps": 293,
+      "tx_KBps": 1193,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12741.9818415,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.0755665,
+      "rx_KBps": 250,
+      "tx_KBps": 325,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.1703975,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.2636798,
+      "rx_KBps": 250,
+      "tx_KBps": 2614,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.3588637,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.4520454,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.546871,
+      "rx_KBps": 9458,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.6415173,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.7369224,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.8314591,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12742.9262776,
+      "rx_KBps": 330,
+      "tx_KBps": 1389,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.0195407,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.1134615,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.3802124,
+      "rx_KBps": 250,
+      "tx_KBps": 1250,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.4744911,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.5692675,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 1097691136,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.7253793,
+      "rx_KBps": 9937,
+      "tx_KBps": 2631,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.8190218,
+      "rx_KBps": 5958224,
+      "tx_KBps": 509623,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12743.9594249,
+      "rx_KBps": 18166534,
+      "tx_KBps": 1166425,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.0558224,
+      "rx_KBps": 3351,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.1494249,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.2434113,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.3385509,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.4315162,
+      "rx_KBps": 1693,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.5252541,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.618685,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.7135847,
+      "rx_KBps": 877,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.8082446,
+      "rx_KBps": 1082,
+      "tx_KBps": 838,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.9016708,
+      "rx_KBps": 356,
+      "tx_KBps": 941,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12744.9962567,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.0909206,
+      "rx_KBps": 250,
+      "tx_KBps": 838,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.1858992,
+      "rx_KBps": 250,
+      "tx_KBps": 2074,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.2802043,
+      "rx_KBps": 250,
+      "tx_KBps": 1255,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.516888,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.6108132,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.7053999,
+      "rx_KBps": 709,
+      "tx_KBps": 937,
+      "device_used_bytes": 2114809856,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.8928517,
+      "rx_KBps": 1082,
+      "tx_KBps": 822149,
+      "device_used_bytes": 3131928576,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12745.9872406,
+      "rx_KBps": 21771409,
+      "tx_KBps": 838,
+      "device_used_bytes": 3131928576,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.1437265,
+      "rx_KBps": 250,
+      "tx_KBps": 145082,
+      "device_used_bytes": 3159191552,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.2367128,
+      "rx_KBps": 2134436,
+      "tx_KBps": 322487,
+      "device_used_bytes": 3238883328,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.3314173,
+      "rx_KBps": 2603668,
+      "tx_KBps": 188685,
+      "device_used_bytes": 3366809600,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.4260337,
+      "rx_KBps": 2135099,
+      "tx_KBps": 188489,
+      "device_used_bytes": 3494735872,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.5202101,
+      "rx_KBps": 1876450,
+      "tx_KBps": 188271,
+      "device_used_bytes": 3616370688,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.6138607,
+      "rx_KBps": 2231045,
+      "tx_KBps": 189131,
+      "device_used_bytes": 3758977024,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.7082318,
+      "rx_KBps": 2603461,
+      "tx_KBps": 248571,
+      "device_used_bytes": 3909971968,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.8021866,
+      "rx_KBps": 2148287,
+      "tx_KBps": 198083,
+      "device_used_bytes": 4031606784,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.8961635,
+      "rx_KBps": 2133631,
+      "tx_KBps": 230458,
+      "device_used_bytes": 4159533056,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12746.989792,
+      "rx_KBps": 2136756,
+      "tx_KBps": 230413,
+      "device_used_bytes": 4310528000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.0834216,
+      "rx_KBps": 3601340,
+      "tx_KBps": 204741,
+      "device_used_bytes": 4459425792,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.1770438,
+      "rx_KBps": 2133294,
+      "tx_KBps": 275686,
+      "device_used_bytes": 4608323584,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.5216559,
+      "rx_KBps": 174252,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.6150882,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.7090229,
+      "rx_KBps": 1012,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.8040329,
+      "rx_KBps": 1083,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.8977449,
+      "rx_KBps": 578,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12747.9922799,
+      "rx_KBps": 250,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.0855536,
+      "rx_KBps": 250,
+      "tx_KBps": 1151,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.1814916,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.273951,
+      "rx_KBps": 250,
+      "tx_KBps": 1332,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.5099475,
+      "rx_KBps": 472,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.6042448,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.6983667,
+      "rx_KBps": 472,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12748.7917906,
+      "rx_KBps": 1073,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.0410647,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.1352635,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.2284891,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.324406,
+      "rx_KBps": 210,
+      "tx_KBps": 137,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.6279063,
+      "rx_KBps": 423,
+      "tx_KBps": 1051,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.7157774,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.8101146,
+      "rx_KBps": 1131,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12749.9039971,
+      "rx_KBps": 356,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.000572,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.0948824,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.4264377,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.5162854,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.611072,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.7067682,
+      "rx_KBps": 130,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.8007399,
+      "rx_KBps": 1071,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.893995,
+      "rx_KBps": 356,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12750.9890148,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.0845574,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.4614429,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.5559472,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.651112,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.7428853,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.8376951,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12751.9361183,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.0302786,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.1191148,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.4940591,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.5920417,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.6839702,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.7828783,
+      "rx_KBps": 250,
+      "tx_KBps": 1216,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.8742179,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12752.9700987,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.0620759,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.1567261,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.5941861,
+      "rx_KBps": 326,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.6845593,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.7777188,
+      "rx_KBps": 250,
+      "tx_KBps": 1265,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.8696539,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12753.9700234,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.059947,
+      "rx_KBps": 1104,
+      "tx_KBps": 377,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.1527827,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.2450587,
+      "rx_KBps": 907,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.3441503,
+      "rx_KBps": 786,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.4366355,
+      "rx_KBps": 910,
+      "tx_KBps": 1043,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12754.921944,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.0143962,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.1074523,
+      "rx_KBps": 250,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.2036883,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.2962819,
+      "rx_KBps": 1074,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.3862884,
+      "rx_KBps": 250,
+      "tx_KBps": 268,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.4813574,
+      "rx_KBps": 275,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.5761471,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.6673928,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.7651484,
+      "rx_KBps": 250,
+      "tx_KBps": 1217,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.8563552,
+      "rx_KBps": 210,
+      "tx_KBps": 105,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12755.9546658,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.4821234,
+      "rx_KBps": 273,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.5779059,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.6704301,
+      "rx_KBps": 1223,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.7645726,
+      "rx_KBps": 250,
+      "tx_KBps": 1263,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.8599319,
+      "rx_KBps": 955,
+      "tx_KBps": 105,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12756.976425,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.0645574,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.155461,
+      "rx_KBps": 210,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.2488106,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.3447128,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.4395543,
+      "rx_KBps": 210,
+      "tx_KBps": 1190,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.5343219,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.6273373,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12757.7197103,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.3471137,
+      "rx_KBps": 1074,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.440748,
+      "rx_KBps": 955,
+      "tx_KBps": 1045,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.5355369,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.6271416,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.7215117,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.8165876,
+      "rx_KBps": 1103,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12758.9120112,
+      "rx_KBps": 324,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.0056871,
+      "rx_KBps": 130,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.1026538,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.1990239,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.2911386,
+      "rx_KBps": 130,
+      "tx_KBps": 1165,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.3796963,
+      "rx_KBps": 130,
+      "tx_KBps": 268,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.4797323,
+      "rx_KBps": 991,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.5712282,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.6667599,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.7660279,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.8667359,
+      "rx_KBps": 250,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12759.9619588,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12760.6464056,
+      "rx_KBps": 210,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12760.7514788,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12760.8401139,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12760.9341136,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.0256788,
+      "rx_KBps": 250,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.122309,
+      "rx_KBps": 130,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.2125313,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.3077729,
+      "rx_KBps": 955,
+      "tx_KBps": 170,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.4020265,
+      "rx_KBps": 343,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.4954992,
+      "rx_KBps": 276,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.586812,
+      "rx_KBps": 158,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.6840689,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.7812941,
+      "rx_KBps": 250,
+      "tx_KBps": 1221,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.8795462,
+      "rx_KBps": 130,
+      "tx_KBps": 105,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12761.9666003,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.065759,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.1547104,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.2474982,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.3404778,
+      "rx_KBps": 326,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.4349213,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.5322261,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.6247743,
+      "rx_KBps": 130,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12762.7176728,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12763.5520831,
+      "rx_KBps": 1018,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12763.6437348,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12763.7381091,
+      "rx_KBps": 326,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12763.8304261,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12763.9262261,
+      "rx_KBps": 250,
+      "tx_KBps": 174,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.0209868,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.1132881,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.2070748,
+      "rx_KBps": 250,
+      "tx_KBps": 170,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.3007613,
+      "rx_KBps": 1017,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.3950311,
+      "rx_KBps": 343,
+      "tx_KBps": 25170,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.4893502,
+      "rx_KBps": 988,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.5835721,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.6770224,
+      "rx_KBps": 81932,
+      "tx_KBps": 16156,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.7718345,
+      "rx_KBps": 130,
+      "tx_KBps": 1237,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.864898,
+      "rx_KBps": 330,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12764.9563816,
+      "rx_KBps": 188287,
+      "tx_KBps": 3210,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.0476843,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.138595,
+      "rx_KBps": 330,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.2300914,
+      "rx_KBps": 218166,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.3214683,
+      "rx_KBps": 250,
+      "tx_KBps": 170,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.4124135,
+      "rx_KBps": 343,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.5039542,
+      "rx_KBps": 200659,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.596071,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.6909484,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.7847844,
+      "rx_KBps": 103815,
+      "tx_KBps": 1222,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.8799368,
+      "rx_KBps": 261,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12765.9786568,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.0687198,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.1626889,
+      "rx_KBps": 285,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.2565385,
+      "rx_KBps": 906,
+      "tx_KBps": 7968,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.3510266,
+      "rx_KBps": 906,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.4452352,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.5387874,
+      "rx_KBps": 134,
+      "tx_KBps": 11905,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.6322777,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.7260661,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.820744,
+      "rx_KBps": 1031,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12766.9139897,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.0082075,
+      "rx_KBps": 250,
+      "tx_KBps": 27813,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.101464,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.1956104,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.2889423,
+      "rx_KBps": 1029,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.3829268,
+      "rx_KBps": 217898,
+      "tx_KBps": 268,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.4752801,
+      "rx_KBps": 250,
+      "tx_KBps": 1190,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.5700013,
+      "rx_KBps": 10188,
+      "tx_KBps": 4489,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.6642845,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.7567786,
+      "rx_KBps": 82567,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.8500843,
+      "rx_KBps": 330,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12767.944645,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.0380031,
+      "rx_KBps": 134,
+      "tx_KBps": 17457,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.1315859,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.2247656,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.3198629,
+      "rx_KBps": 1031,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.4135605,
+      "rx_KBps": 161432,
+      "tx_KBps": 7283,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.5073836,
+      "rx_KBps": 250,
+      "tx_KBps": 1192,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.6007518,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.6935082,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.7881505,
+      "rx_KBps": 73077,
+      "tx_KBps": 1264,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.8830166,
+      "rx_KBps": 303,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12768.9762685,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.0701024,
+      "rx_KBps": 210,
+      "tx_KBps": 8064,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.1647316,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.2595621,
+      "rx_KBps": 326,
+      "tx_KBps": 1216,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.3528951,
+      "rx_KBps": 206,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.4475833,
+      "rx_KBps": 330,
+      "tx_KBps": 20431,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.540605,
+      "rx_KBps": 989,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.6344846,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.7281162,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.8222141,
+      "rx_KBps": 94822,
+      "tx_KBps": 16103,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12769.9158906,
+      "rx_KBps": 292,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.0090072,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.1030718,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.1962745,
+      "rx_KBps": 136184,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.2915538,
+      "rx_KBps": 1072,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.3858313,
+      "rx_KBps": 250,
+      "tx_KBps": 268,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.4801746,
+      "rx_KBps": 250,
+      "tx_KBps": 21917,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.5733645,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.6666041,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.7608547,
+      "rx_KBps": 951,
+      "tx_KBps": 1264,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.8543952,
+      "rx_KBps": 147304,
+      "tx_KBps": 9365,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12770.9492187,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.0436336,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.1412893,
+      "rx_KBps": 130,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.2309264,
+      "rx_KBps": 49885,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.3243463,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.4187468,
+      "rx_KBps": 343,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.5127785,
+      "rx_KBps": 250,
+      "tx_KBps": 28403,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.6071225,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.7022112,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.7960927,
+      "rx_KBps": 1131,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.8904817,
+      "rx_KBps": 167401,
+      "tx_KBps": 6617,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12771.9835392,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.0779608,
+      "rx_KBps": 334,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.1729665,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.2674469,
+      "rx_KBps": 64990,
+      "tx_KBps": 1216,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.3628747,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.4569608,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.5513875,
+      "rx_KBps": 1638,
+      "tx_KBps": 23544,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.6454947,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.740927,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.8351964,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12772.930171,
+      "rx_KBps": 14621,
+      "tx_KBps": 16796,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.0240484,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.1171282,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.212413,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.3070007,
+      "rx_KBps": 146691,
+      "tx_KBps": 9538,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.400804,
+      "rx_KBps": 343,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.4931302,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.5878314,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.6821912,
+      "rx_KBps": 73095,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.7750289,
+      "rx_KBps": 951,
+      "tx_KBps": 1264,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.8686011,
+      "rx_KBps": 955,
+      "tx_KBps": 208,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12773.96331,
+      "rx_KBps": 955,
+      "tx_KBps": 18691,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.0571169,
+      "rx_KBps": 1042,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.1508467,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.2440485,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.3386976,
+      "rx_KBps": 106691,
+      "tx_KBps": 14331,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.4318766,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.5266491,
+      "rx_KBps": 250,
+      "tx_KBps": 1259,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.6230822,
+      "rx_KBps": 250,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.7166744,
+      "rx_KBps": 20922,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.810374,
+      "rx_KBps": 1131,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.9032949,
+      "rx_KBps": 237,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12774.9969842,
+      "rx_KBps": 250,
+      "tx_KBps": 21843,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.091472,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.1844361,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.2780271,
+      "rx_KBps": 326,
+      "tx_KBps": 1216,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.3709591,
+      "rx_KBps": 101319,
+      "tx_KBps": 165,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.4652384,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.5591441,
+      "rx_KBps": 1069,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.6518958,
+      "rx_KBps": 3352,
+      "tx_KBps": 27774,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.7465839,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.8408242,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12775.9348277,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.0293934,
+      "rx_KBps": 190020,
+      "tx_KBps": 3389,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.1226744,
+      "rx_KBps": 250,
+      "tx_KBps": 173,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.2164848,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.3106731,
+      "rx_KBps": 1074,
+      "tx_KBps": 17972,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.4050384,
+      "rx_KBps": 224,
+      "tx_KBps": 104,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.4991449,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.592945,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.688475,
+      "rx_KBps": 250,
+      "tx_KBps": 26105,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.7833266,
+      "rx_KBps": 326,
+      "tx_KBps": 1263,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.8763376,
+      "rx_KBps": 352,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12776.9704412,
+      "rx_KBps": 210,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.0638639,
+      "rx_KBps": 30789,
+      "tx_KBps": 14518,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.1584781,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.2526685,
+      "rx_KBps": 130,
+      "tx_KBps": 895,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.3476881,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 4673335296,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.8000586,
+      "rx_KBps": 122477,
+      "tx_KBps": 1730,
+      "device_used_bytes": 5814185984,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.8921948,
+      "rx_KBps": 9694,
+      "tx_KBps": 3551,
+      "device_used_bytes": 7156363264,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12777.9846597,
+      "rx_KBps": 9893,
+      "tx_KBps": 3628,
+      "device_used_bytes": 8028778496,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.0785768,
+      "rx_KBps": 8875,
+      "tx_KBps": 7919,
+      "device_used_bytes": 10050433024,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.1744445,
+      "rx_KBps": 19390,
+      "tx_KBps": 104,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.2663298,
+      "rx_KBps": 951,
+      "tx_KBps": 1217,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.360277,
+      "rx_KBps": 951,
+      "tx_KBps": 207,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.4529891,
+      "rx_KBps": 130,
+      "tx_KBps": 941,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.5472192,
+      "rx_KBps": 250,
+      "tx_KBps": 2236,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.6410491,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.7343196,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 12990640128,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.843646,
+      "rx_KBps": 2161,
+      "tx_KBps": 942,
+      "device_used_bytes": 13022097408,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12778.9388398,
+      "rx_KBps": 2287,
+      "tx_KBps": 1973,
+      "device_used_bytes": 13022097408,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.0315206,
+      "rx_KBps": 8057,
+      "tx_KBps": 247573,
+      "device_used_bytes": 13022097408,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.1244238,
+      "rx_KBps": 40857461,
+      "tx_KBps": 2451598,
+      "device_used_bytes": 13028388864,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.2171025,
+      "rx_KBps": 8543,
+      "tx_KBps": 2746,
+      "device_used_bytes": 13030486016,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.3104385,
+      "rx_KBps": 10724,
+      "tx_KBps": 4088,
+      "device_used_bytes": 13036777472,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.4032349,
+      "rx_KBps": 24762759,
+      "tx_KBps": 8374293,
+      "device_used_bytes": 13198258176,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.4976511,
+      "rx_KBps": 53859554,
+      "tx_KBps": 9475437,
+      "device_used_bytes": 13198258176,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.5926797,
+      "rx_KBps": 11367507,
+      "tx_KBps": 3355604,
+      "device_used_bytes": 13221326848,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.6880221,
+      "rx_KBps": 31573840,
+      "tx_KBps": 3941495,
+      "device_used_bytes": 13221326848,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.795559,
+      "rx_KBps": 1868,
+      "tx_KBps": 3534,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.8888641,
+      "rx_KBps": 282,
+      "tx_KBps": 1240,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12779.9895942,
+      "rx_KBps": 141,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.0871058,
+      "rx_KBps": 955,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.1775114,
+      "rx_KBps": 955,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.2725454,
+      "rx_KBps": 951,
+      "tx_KBps": 1112,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.3754285,
+      "rx_KBps": 1869,
+      "tx_KBps": 268,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.4799876,
+      "rx_KBps": 955,
+      "tx_KBps": 1240,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.5643495,
+      "rx_KBps": 836,
+      "tx_KBps": 1042,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.6593215,
+      "rx_KBps": 955,
+      "tx_KBps": 1240,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.7532956,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.8597928,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12780.952881,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.0448317,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.149652,
+      "rx_KBps": 130,
+      "tx_KBps": 838,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.2498174,
+      "rx_KBps": 250,
+      "tx_KBps": 937,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.3782102,
+      "rx_KBps": 951,
+      "tx_KBps": 165,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.4657674,
+      "rx_KBps": 955,
+      "tx_KBps": 706,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.5617311,
+      "rx_KBps": 1118,
+      "tx_KBps": 2315,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.6717286,
+      "rx_KBps": 130,
+      "tx_KBps": 233,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12781.7803633,
+      "rx_KBps": 1870,
+      "tx_KBps": 1263,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.1620309,
+      "rx_KBps": 955,
+      "tx_KBps": 271,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.2619177,
+      "rx_KBps": 250,
+      "tx_KBps": 1035,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.4229129,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.5321838,
+      "rx_KBps": 571,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.6404463,
+      "rx_KBps": 275,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.7386124,
+      "rx_KBps": 250,
+      "tx_KBps": 834,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.8316953,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12782.9264579,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.3658487,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.4523948,
+      "rx_KBps": 130,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.5443325,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.6401996,
+      "rx_KBps": 250,
+      "tx_KBps": 838,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.7369262,
+      "rx_KBps": 250,
+      "tx_KBps": 834,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.8281107,
+      "rx_KBps": 250,
+      "tx_KBps": 941,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12783.9229972,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.0173621,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.1089294,
+      "rx_KBps": 517,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.2019937,
+      "rx_KBps": 130,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.6991427,
+      "rx_KBps": 1830,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.7856626,
+      "rx_KBps": 951,
+      "tx_KBps": 1215,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.875669,
+      "rx_KBps": 341,
+      "tx_KBps": 1398,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12784.9699412,
+      "rx_KBps": 836,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.0733559,
+      "rx_KBps": 330,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.159822,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.2523182,
+      "rx_KBps": 130,
+      "tx_KBps": 273,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.3485789,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.4416125,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.5353093,
+      "rx_KBps": 158,
+      "tx_KBps": 276,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.631199,
+      "rx_KBps": 989,
+      "tx_KBps": 276,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12785.7222604,
+      "rx_KBps": 250,
+      "tx_KBps": 104,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.2592167,
+      "rx_KBps": 1132,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.3476578,
+      "rx_KBps": 250,
+      "tx_KBps": 273,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.4508276,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.5394469,
+      "rx_KBps": 130,
+      "tx_KBps": 173,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.6302544,
+      "rx_KBps": 250,
+      "tx_KBps": 276,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.7313509,
+      "rx_KBps": 250,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12786.9939583,
+      "rx_KBps": 250,
+      "tx_KBps": 278,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.5239424,
+      "rx_KBps": 130,
+      "tx_KBps": 207,
+      "device_used_bytes": 13223424000,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.6157737,
+      "rx_KBps": 2290185,
+      "tx_KBps": 949704,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.7099487,
+      "rx_KBps": 31596717,
+      "tx_KBps": 11120424,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.8048149,
+      "rx_KBps": 67975964,
+      "tx_KBps": 11132540,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.8980372,
+      "rx_KBps": 69566528,
+      "tx_KBps": 4481819,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12787.9914468,
+      "rx_KBps": 35983372,
+      "tx_KBps": 2889464,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.0865703,
+      "rx_KBps": 163624,
+      "tx_KBps": 6877474,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.1809811,
+      "rx_KBps": 55483468,
+      "tx_KBps": 10895726,
+      "device_used_bytes": 13286338560,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.2745395,
+      "rx_KBps": 10644793,
+      "tx_KBps": 2399,
+      "device_used_bytes": 15347838976,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.3679438,
+      "rx_KBps": 69272938,
+      "tx_KBps": 10937683,
+      "device_used_bytes": 15352033280,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.462563,
+      "rx_KBps": 72988361,
+      "tx_KBps": 12282896,
+      "device_used_bytes": 15368810496,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.5565145,
+      "rx_KBps": 70679285,
+      "tx_KBps": 12291488,
+      "device_used_bytes": 15368810496,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.6507758,
+      "rx_KBps": 76912808,
+      "tx_KBps": 11755942,
+      "device_used_bytes": 15368810496,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.7456506,
+      "rx_KBps": 10924121,
+      "tx_KBps": 11807542,
+      "device_used_bytes": 15370907648,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.8397976,
+      "rx_KBps": 77699487,
+      "tx_KBps": 12266331,
+      "device_used_bytes": 15370907648,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12788.933438,
+      "rx_KBps": 73631924,
+      "tx_KBps": 5737955,
+      "device_used_bytes": 15370907648,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.0269913,
+      "rx_KBps": 69390386,
+      "tx_KBps": 10850347,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.1221074,
+      "rx_KBps": 68509443,
+      "tx_KBps": 11352050,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.2153226,
+      "rx_KBps": 54128245,
+      "tx_KBps": 6397292,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.3089607,
+      "rx_KBps": 45112660,
+      "tx_KBps": 9683628,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.4039191,
+      "rx_KBps": 60096340,
+      "tx_KBps": 11498894,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.4971348,
+      "rx_KBps": 71718134,
+      "tx_KBps": 11798085,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.5909847,
+      "rx_KBps": 46525853,
+      "tx_KBps": 11234823,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.6841039,
+      "rx_KBps": 69728921,
+      "tx_KBps": 10477465,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.7784844,
+      "rx_KBps": 70161121,
+      "tx_KBps": 9432196,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.8729097,
+      "rx_KBps": 60199346,
+      "tx_KBps": 7834282,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12789.9678932,
+      "rx_KBps": 70009573,
+      "tx_KBps": 10082718,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12790.0619839,
+      "rx_KBps": 69168376,
+      "tx_KBps": 11850735,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "t": 12790.6218074,
+      "rx_KBps": 76442578,
+      "tx_KBps": 2017541,
+      "device_used_bytes": 15375101952,
+      "status": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

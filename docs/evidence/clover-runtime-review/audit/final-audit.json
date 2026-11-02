@@ -1,0 +1,274 @@
+{
+  "state": "complete",
+  "heads": {
+    "q8": "86076d32103f947abb6040cba73396c252fec2b5",
+    "nvfp4": "bc912a1cc87694d23354e655e1b3cf782826b0ea"
+  },
+  "official_q8": {
+    "path": "C:\\workspace\\models\\inputs\\clover-gguf-diffuspace\\32e22a02b885e173177b7ce7661ad13448b4f89e\\Clover-35B-A3B-Preview-Q8_0.gguf",
+    "bytes": 37863343264,
+    "sha256": "834529e7aae000305ae94656782726bcf0ed77976f95a56383447d8903afddab"
+  },
+  "frozen_source_status": {
+    "FreeToken-nvfp4-before": "",
+    "FreeToken-nvfp4-reviewed": "",
+    "FreeToken-q8-before": "",
+    "FreeToken-q8-reviewed": ""
+  },
+  "shared_arithmetic_equal": {
+    "engine/speculative.py": true,
+    "kernel/triton/clover_verify.py": true,
+    "kernel/triton/clover_store.py": true,
+    "kernel/triton/clover_attention.py": true,
+    "models/clover_moe/graph.py": true,
+    "models/clover_moe/model.py": true,
+    "models/clover_moe/preview.py": true
+  },
+  "shared_runtime_methods_equal": true,
+  "runtime_constructor_exception": "Q8 initializes generation from GGUF metadata; NVFP4 reads its HF config/generation JSON.",
+  "r0_inventory": {
+    ".gitattributes": true,
+    "acceptance.json": true,
+    "behavior.json": true,
+    "comparison.json": true,
+    "correctness.json": true,
+    "excluded-runs.json": true,
+    "hf-initial-preview.json": true,
+    "loading-ab.json": true,
+    "logs/20261102T043707Z-official-q8-kernels-and-contract-tests-manifest.json": true,
+    "logs/20261102T043707Z-official-q8-kernels-and-contract-tests-stderr.log": true,
+    "logs/20261102T043707Z-official-q8-kernels-and-contract-tests-stdout.log": true,
+    "logs/20261102T044322Z-mmq-large-slot-regression-manifest.json": true,
+    "logs/20261102T044322Z-mmq-large-slot-regression-stderr.log": true,
+    "logs/20261102T044322Z-mmq-large-slot-regression-stdout.log": true,
+    "logs/20261102T044452Z-mmq-pre-fix-high-slot-reproducer-expected-failure-manifest.json": true,
+    "logs/20261102T044452Z-mmq-pre-fix-high-slot-reproducer-expected-failure-stderr.log": true,
+    "logs/20261102T044452Z-mmq-pre-fix-high-slot-reproducer-expected-failure-stdout.log": true,
+    "long-prefill-ab.json": true,
+    "long-prompts.json": true,
+    "matrices.json": true,
+    "numerical-diagnostics.json": true,
+    "nvfp4-capacity.json": true,
+    "output-stability.json": true,
+    "outputs.json": true,
+    "patches/20261102T035455Z-q8-sized-pinned-bank-probe.patch": true,
+    "patches/20261102T042212Z-official-q8-p0-server-baseline.patch": true,
+    "patches/20261102T043634Z-official-q8-adapter-contracts.patch": true,
+    "patches/20261102T045059Z-official-q8-graph-audit-mmq-fixed.patch": true,
+    "patches/20261102T045230Z-official-q8-p0-full-matrix.patch": true,
+    "patches/20261102T050041Z-official-q8-p1-full-matrix.patch": true,
+    "patches/20261102T050900Z-official-q8-p0-threshold-matrix.patch": true,
+    "patches/20261102T051935Z-q8-hf-forced-history-priority.patch": true,
+    "patches/20261102T061519Z-q8-runtime-before-p1-full-matrix.patch": true,
+    "provenance.json": true,
+    "quality.json": true,
+    "README.md": true,
+    "regression.json": true,
+    "resources.json": true,
+    "sources.json": true,
+    "tools/audit_delivery.py": true,
+    "tools/bench_cold_experts.py": true,
+    "tools/bench_eager_isolation.py": true,
+    "tools/bench_gpu_resources.py": true,
+    "tools/bench_no_ahead.py": true,
+    "tools/bench_old_commit_shape.py": true,
+    "tools/capture_initial_preview.py": true,
+    "tools/check_official_adapter.py": true,
+    "tools/check_qwen35_real.py": true,
+    "tools/collect_evidence.py": true,
+    "tools/compare_initial_preview.py": true,
+    "tools/env.ps1": true,
+    "tools/machine_snapshot.py": true,
+    "tools/observe_memory.py": true,
+    "tools/prepare_long_prompts.py": true,
+    "tools/prepare_short_prompts.py": true,
+    "tools/probe_pinned.py": true,
+    "tools/render_report.py": true,
+    "tools/report-draft.md": true,
+    "tools/reproduce_mmq_before_fix.py": true,
+    "tools/run.py": true,
+    "tools/run_regression.py": true,
+    "tools/run_stock_preview.py": true,
+    "tools/runtime_inventory.py": true
+  },
+  "real_regressions": {
+    "mtp-q8-review-off": {
+      "state": "passed",
+      "cases": {
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Context": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/mtp-q8-review-off/data/results.json",
+        "current_sha256": "6da3bd0a3e5bc6e76d69a6cd2a694089271257cd202a93750918d9d59b1be4a5",
+        "previous_main": "audit/main-controls/mtp-main-off.json",
+        "previous_sha256": "e0e04e26f8d99b0c91280d231adab6b2733e8fb4ecccf45fb614002efba2d09b"
+      }
+    },
+    "mtp-q8-review-on": {
+      "state": "passed",
+      "cases": {
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Context": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/mtp-q8-review-on/data/results.json",
+        "current_sha256": "0cf7e9b5d4c35bd3cd965c5ddbfdd8190b79db110f9a62936db10f1eb55b9765",
+        "previous_main": "audit/main-controls/mtp-main-on.json",
+        "previous_sha256": "0bfb4ef7613a71c7eed24552d6bfba8bd16521ab567a177b53a4cff5a9646b26"
+      }
+    },
+    "qwen35-q8-review": {
+      "state": "passed",
+      "cases": {
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true
+        },
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true
+        },
+        "JSON": {
+          "prompt_ids": true,
+          "token_ids": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/qwen35-q8-review/data/results.json",
+        "current_sha256": "615a18fb5adfa4bf4b36bcdc40ed1caedf2472a38dd018d78cc03b77b78f22e4",
+        "previous_main": "audit/main-controls/qwen35-real-nvfp4-main.json",
+        "previous_sha256": "bafd4ca4aaa979b9fa2b834639b3163ec72782d5a61c6751dbcf355d67517698"
+      }
+    },
+    "mtp-nvfp4-review-off": {
+      "state": "passed",
+      "cases": {
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Context": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/mtp-nvfp4-review-off/data/results.json",
+        "current_sha256": "4598b16d9817fd3d659ccecd5ca9bbfb650df42a9fa500aba3dca4581c3fdcad",
+        "previous_main": "audit/main-controls/mtp-main-off.json",
+        "previous_sha256": "e0e04e26f8d99b0c91280d231adab6b2733e8fb4ecccf45fb614002efba2d09b"
+      }
+    },
+    "mtp-nvfp4-review-on": {
+      "state": "passed",
+      "cases": {
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        },
+        "Context": {
+          "prompt_ids": true,
+          "token_ids": true,
+          "rounds": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/mtp-nvfp4-review-on/data/results.json",
+        "current_sha256": "8a7eac17759c4a01f1ee97af87a38c6ffdf6a5bc90101f1950763d3fbaab060b",
+        "previous_main": "audit/main-controls/mtp-main-on.json",
+        "previous_sha256": "0bfb4ef7613a71c7eed24552d6bfba8bd16521ab567a177b53a4cff5a9646b26"
+      }
+    },
+    "qwen35-nvfp4-review": {
+      "state": "passed",
+      "cases": {
+        "Count": {
+          "prompt_ids": true,
+          "token_ids": true
+        },
+        "Arithmetic": {
+          "prompt_ids": true,
+          "token_ids": true
+        },
+        "JSON": {
+          "prompt_ids": true,
+          "token_ids": true
+        }
+      },
+      "protected_metadata_unchanged": true,
+      "input_receipts": {
+        "current": "runs/qwen35-nvfp4-review/data/results.json",
+        "current_sha256": "6b765ddf07f04f92e05bc63d3fe6e884950d2b515137d81bd2b37a78452fcb96",
+        "previous_main": "audit/main-controls/qwen35-real-nvfp4-main.json",
+        "previous_sha256": "bafd4ca4aaa979b9fa2b834639b3163ec72782d5a61c6751dbcf355d67517698"
+      }
+    }
+  },
+  "delivered_source_matches_final_real_smoke": {
+    "q8": {
+      "equal": true,
+      "manifest": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124919Z-qwen35-q8-review\\manifest.json",
+      "production_files": 516,
+      "native_extensions": {
+        "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+        "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+        "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+      }
+    },
+    "nvfp4": {
+      "equal": true,
+      "manifest": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125130Z-qwen35-nvfp4-review\\manifest.json",
+      "production_files": 512,
+      "native_extensions": {
+        "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+        "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+        "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "state": "passed",
+  "jobs": [
+    {
+      "name": "optional-kernel-and-mapping-tests-v2",
+      "state": "passed"
+    },
+    {
+      "name": "q8-paired-split-kv-v2",
+      "state": "passed"
+    },
+    {
+      "name": "q8-split-graph-audit",
+      "state": "passed"
+    },
+    {
+      "name": "q8-host-embedding-off",
+      "state": "passed"
+    },
+    {
+      "name": "q8-host-embedding-on",
+      "state": "passed"
+    },
+    {
+      "name": "q8-host-w32-capacity",
+      "state": "passed"
+    },
+    {
+      "name": "q8-phase-expert-traffic",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-block-costs64",
+      "state": "passed"
+    },
+    {
+      "name": "q8-review-regressions",
+      "state": "passed"
+    },
+    {
+      "name": "mtp-q8-review-off",
+      "state": "passed"
+    },
+    {
+      "name": "mtp-q8-review-on",
+      "state": "passed"
+    },
+    {
+      "name": "qwen35-q8-review",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-review-regressions",
+      "state": "passed"
+    },
+    {
+      "name": "mtp-nvfp4-review-off",
+      "state": "passed"
+    },
+    {
+      "name": "mtp-nvfp4-review-on",
+      "state": "passed"
+    },
+    {
+      "name": "qwen35-nvfp4-review",
+      "state": "passed"
+    }
+  ]
+}

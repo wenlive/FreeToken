@@ -1,0 +1,52 @@
+{
+  "name": "q8-frozen-abab-1-after",
+  "started_at_utc": "20261102T114723Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-reviewed/benchmarks/bench_clover.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/q8-frozen-abab-1-after",
+    "--cache-slots",
+    "2560",
+    "--memory-ratio",
+    ".98",
+    "--tokens",
+    "256",
+    "--warmups",
+    "2",
+    "--repeats",
+    "5",
+    "--modes",
+    "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-review\\FreeToken-q8-reviewed",
+  "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+  "dirty": "",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-reviewed/python;C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-reviewed",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261102-clover-review/extensions-q8-after"
+  },
+  "script_receipts": {
+    "C:\\workspace\\wt\\T-20261102-clover-review\\FreeToken-q8-reviewed\\benchmarks\\bench_clover.py": "0d117d3049d55860d4a88ae2594a0aa8dc832d1d58885092b2c40d5ee18c8397"
+  },
+  "device_before": {
+    "exit_code": 0,
+    "output": "name, driver_version, memory.used [MiB], pstate, temperature.gpu, power.draw [W], clocks.current.sm [MHz]\nNVIDIA GeForce RTX 5070 Ti, 610.88, 440 MiB, P5, 47, 42.31 W, 210 MHz"
+  },
+  "pid": 2152,
+  "exit_code": 0,
+  "elapsed_seconds": 517.3279999999995,
+  "device_after": {
+    "exit_code": 0,
+    "output": "name, driver_version, memory.used [MiB], pstate, temperature.gpu, power.draw [W], clocks.current.sm [MHz]\nNVIDIA GeForce RTX 5070 Ti, 610.88, 424 MiB, P3, 47, 42.47 W, 210 MHz"
+  }
+}

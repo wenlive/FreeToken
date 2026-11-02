@@ -1,0 +1,35 @@
+{
+  "name": "original-abab-1-delivered",
+  "started_at_utc": "20261102T102454Z",
+  "state": "failed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-before/benchmarks/bench_clover.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/original-abab-1-delivered",
+    "--cache-slots",
+    "2560",
+    "--memory-ratio",
+    ".95",
+    "--modes",
+    "causal",
+    "--tokens",
+    "256",
+    "--warmups",
+    "2",
+    "--repeats",
+    "5"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-review\\FreeToken-q8-before",
+  "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+  "dirty": "",
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-before/python;C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-before"
+  },
+  "pid": 16448,
+  "exit_code": 1,
+  "elapsed_seconds": 48.59400000000005
+}

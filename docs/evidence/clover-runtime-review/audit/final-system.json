@@ -1,0 +1,21 @@
+{
+  "observed_at_utc": "2026-11-02T12:16:57.9494321Z",
+  "os": {
+    "Caption": "Microsoft Windows 11 专业版",
+    "Version": "10.0.26200",
+    "LastBootUpTime": "2026-11-02T17:21:32.5+08:00",
+    "TotalVisibleMemorySize": 64607580
+  },
+  "cpu": {
+    "Name": "AMD Ryzen 7 9700X 8-Core Processor             ",
+    "NumberOfCores": 8,
+    "NumberOfLogicalProcessors": 16
+  },
+  "memory": {
+    "TotalPhysicalMemory": 66158161920
+  },
+  "gpu": [
+    "name, driver_version, memory.total [MiB]",
+    "NVIDIA GeForce RTX 5070 Ti, 610.88, 16303 MiB"
+  ]
+}
