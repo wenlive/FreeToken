@@ -117,6 +117,7 @@ class EngineConfig:
     clover_mode: str = "causal"
     clover_width: int = 8
     clover_max_width: int = 32
+    clover_split_kv: bool = False
     clover_threshold: float = .95
     clover_accept_rule: str = "exact"
     clover_accept_ratio: float = .9
