@@ -23,8 +23,14 @@ def test_aot_claims_gguf_architecture_and_both_actual_expert_rows():
     rows = expert_bank_row_bytes(
         adapter.EXPERT_FORMAT, entry.hidden_size, entry.moe_intermediate_size
     )
-    assert rows == {"gate_up": 1_114_112, "down": 589_824}
-    assert sum(rows.values()) == 1_703_936
+    assert rows == {"gate_up": 2_228_224, "down": 1_114_112}
+    assert sum(rows.values()) == 3_342_336
+    mixed = expert_bank_row_bytes(adapter.EXPERT_FORMAT, entry.hidden_size,
+        entry.moe_intermediate_size, gguf_types=(23, 12))
+    assert mixed == {"gate_up": 1_114_112, "down": 589_824}
+    from freetoken.kernel.aot_models import fast_index_copy_feature_sizes
+
+    assert set(rows.values()) | set(mixed.values()) <= fast_index_copy_feature_sizes(entry)
 
 
 @pytest.fixture

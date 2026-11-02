@@ -70,7 +70,8 @@ def fp8_block_scale_pad(rows: int, cols: int) -> int:
     return cols
 
 
-def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int) -> dict[str, int]:
+def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int,
+                         *, gguf_types: tuple[int, int] = (8, 8)) -> dict[str, int]:
     """Per-expert row bytes for each offload bank a format registers.
 
     Bank names and layouts follow moe/offload_cache.py ``_BANK_SCHEMAS`` and the
@@ -95,8 +96,12 @@ def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int
         # gemma4/gguf.py _q4_0_expert_specs: GGML Q4_0 rows, 32 elems -> 18 bytes
         return {"gate_up": 2 * I * (H // 32 * 18), "down": H * (I // 32 * 18)}
     if fmt == "clover_gguf":
-        # IQ4_XS gate/up and Q4_K down retain their distinct 256-value blocks.
-        return {"gate_up": 2 * I * (H // 256 * 136), "down": H * (I // 256 * 144)}
+        blocks = {2: (32, 18), 8: (32, 34), 12: (256, 144),
+                  14: (256, 210), 23: (256, 136)}
+        gate_block, gate_bytes = blocks[gguf_types[0]]
+        down_block, down_bytes = blocks[gguf_types[1]]
+        return {"gate_up": 2 * I * (H // gate_block * gate_bytes),
+                "down": H * (I // down_block * down_bytes)}
     if fmt in ("nvfp4", "nvfp4_marlin", "nvfp4_b12x"):
         # models/nvfp4_banks.py: packed e2m1 pairs + per-16 fp8-e4m3 scales + fp16
         # per-row globals; marlin/b12x repacks are byte-identical with the globals
@@ -437,6 +442,10 @@ def fast_index_copy_feature_sizes(model: AotModel) -> set[int]:
         sizes.update(
             expert_bank_row_bytes(fmt, model.hidden_size, model.moe_intermediate_size).values()
         )
+        if fmt == "clover_gguf":
+            for kind in (2, 8, 12, 14, 23):
+                sizes.update(expert_bank_row_bytes(fmt, model.hidden_size,
+                    model.moe_intermediate_size, gguf_types=(kind, kind)).values())
     return sizes
 
 
