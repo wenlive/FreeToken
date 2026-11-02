@@ -48,9 +48,13 @@ def main():
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--cache-slots", type=int, default=4096)
     parser.add_argument("--memory-ratio", type=float, default=0.85)
+    parser.add_argument("--context-size", type=int, default=4096)
+    parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
+    parser.add_argument("--reuse-prefix", action="store_true", help="Diagnostic only; default benchmark recomputes the complete prompt")
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
+    parser.add_argument("--capture-logits-steps", type=int, default=0)
     parser.add_argument(
         "--indexed-clover-penalty",
         action="store_true",
@@ -122,13 +126,17 @@ def main():
         expert_load="serial",
         max_running_req=1,
         memory_ratio=args.memory_ratio,
-        num_token_override=4096,
-        max_seq_len_override=4096,
-        max_extend_tokens=4096,
+        num_token_override=args.context_size,
+        max_seq_len_override=args.context_size,
+        max_extend_tokens=args.context_size,
         cuda_graph_bs=[1],
         moe_collect_stats=True,
         clover_disable_penalties=args.no_penalties,
+        clover_accept_rule=args.accept_rule,
     )
+    if not args.reuse_prefix:
+        match = llm.cache_manager.match_req
+        llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
     result = dict(
         state="running",
         scope="offline scheduler; actual output length, EOS respected",
@@ -138,7 +146,9 @@ def main():
         settings=dict(
             cache_slots=args.cache_slots,
             memory_ratio=args.memory_ratio,
-            context=4096,
+            context=args.context_size,
+            accept_rule=args.accept_rule,
+            prefix_cache_reuse=args.reuse_prefix,
             token_budget=args.tokens,
             warmups=args.warmups,
             repeats=args.repeats,
@@ -166,7 +176,9 @@ def main():
     sample = llm.engine.sampler.sample
 
     def capture(logits, arguments):
-        if args.capture_first_logits and not captured:
+        if (args.capture_first_logits and not captured) or (
+            len(captured) < args.capture_logits_steps
+        ):
             captured.append(logits[0].detach().float().cpu())
         return sample(logits, arguments)
 
@@ -232,8 +244,15 @@ def main():
                         if runtime is not None and hasattr(runtime, "rounds")
                         else []
                     )
-                    if captured:
+                    # Keep the causal oracle artifact bound to its measured run;
+                    # later block modes must not overwrite it under the same name.
+                    if captured and mode == "causal" and repeat == args.warmups:
                         torch.save(captured[0], args.output / f"{name}-first-logits.pt")
+                        if args.capture_logits_steps:
+                            torch.save(
+                                torch.stack(captured),
+                                args.output / f"{name}-all-logits.pt",
+                            )
                     count = len(answer["token_ids"])
                     timing = arrival_metrics(count, times)
                     row = dict(
@@ -318,6 +337,10 @@ def main():
                     summary[metric] = statistics.median(values) if values else None
                 result["summary"].append(summary)
                 save()
+        result.update(
+            cuda_peak_allocated=torch.cuda.max_memory_allocated(),
+            cuda_peak_reserved=torch.cuda.max_memory_reserved(),
+        )
         result["state"] = (
             "validation_failed" if args.require_exact and mismatch else "complete"
         )
@@ -327,6 +350,10 @@ def main():
             raise AssertionError(
                 "Exact selfspec differs from causal; inspect the recorded token IDs"
             )
+    except BaseException as error:
+        result.update(state="failed", error=f"{type(error).__name__}: {error}")
+        save()
+        raise
     finally:
         llm.engine.shutdown()
 
