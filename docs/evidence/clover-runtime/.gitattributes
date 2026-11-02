@@ -1,0 +1,2 @@
+# Verbatim evidence: preserve CRLF and whitespace in recorded patches/logs.
+* -text -whitespace

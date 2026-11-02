@@ -1,0 +1,2817 @@
+{
+  "official-q8-p0-full-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p0-full-matrix\\results.json",
+    "sha256": "6c41e91c558dca916d3626e4bedbd9c3b2eeed445e9324325166b71b81993c69",
+    "bytes": 2486642,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p0-full-matrix",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--no-penalties"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T045230Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T045230Z-official-q8-p0-full-matrix",
+      "pid": 2524,
+      "exit_code": 0,
+      "elapsed_seconds": 491.31200000003446
+    },
+    "host_memory": {
+      "pid": 2524,
+      "started_at_utc": "2026-11-02T04:52:30.446834+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38122602496,
+      "peak_private": 21512962048,
+      "minimum_system_available": 20421201920
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T045230Z-official-q8-p0-full-matrix.patch",
+      "sha256": "56858e4cf08efbc5c9f4aa30cead4b9f5de86ba73de2f3f94532d87730f55731"
+    }
+  },
+  "official-q8-p1-full-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p1-full-matrix\\results.json",
+    "sha256": "08e47ab67194c02a533617991f1ddecbdd861a68a184fde2227afb7b41d5fc7c",
+    "bytes": 2519718,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p1-full-matrix",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "d8d4c484c6e8bc4738c6bc23b7fb3db74b408369",
+      "dirty": " M benchmarks/clover_gguf_reference.py\n M python/freetoken/models/clover_moe/gguf.py\n",
+      "started_at": "20261102T050041Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T050041Z-official-q8-p1-full-matrix",
+      "pid": 9688,
+      "exit_code": 0,
+      "elapsed_seconds": 498.2820000000065
+    },
+    "host_memory": {
+      "pid": 9688,
+      "started_at_utc": "2026-11-02T05:00:41.915482+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38121971712,
+      "peak_private": 21530349568,
+      "minimum_system_available": 20404326400
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T050041Z-official-q8-p1-full-matrix.patch",
+      "sha256": "cb4e47012ff0e247a1e004b3779d6ea6d3c25834fc13fcc70c30119a95ae60bf"
+    }
+  },
+  "official-q8-p0-threshold-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p0-threshold-matrix\\results.json",
+    "sha256": "72b9cd99348f78d6319cc8a9ca8ecddb861539c6620ed584f13406ce12890579",
+    "bytes": 881593,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p0-threshold-matrix",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--no-penalties",
+        "--accept-rule",
+        "threshold"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "d8d4c484c6e8bc4738c6bc23b7fb3db74b408369",
+      "dirty": " M benchmarks/clover_gguf_reference.py\n M python/freetoken/models/clover_moe/gguf.py\n",
+      "started_at": "20261102T050900Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T050900Z-official-q8-p0-threshold-matrix",
+      "pid": 12912,
+      "exit_code": 0,
+      "elapsed_seconds": 178.90599999995902
+    },
+    "host_memory": {
+      "pid": 12912,
+      "started_at_utc": "2026-11-02T05:09:00.510110+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 37237112832,
+      "peak_private": 19286519808,
+      "minimum_system_available": 20329725952
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T050900Z-official-q8-p0-threshold-matrix.patch",
+      "sha256": "cb4e47012ff0e247a1e004b3779d6ea6d3c25834fc13fcc70c30119a95ae60bf"
+    }
+  },
+  "q8-cold-cache-p0-threshold-denoise/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-cold-cache-p0-threshold-denoise\\results.json",
+    "sha256": "bbdade6a837fda6283099ea6500650430cd7f9b41c366c8f0c3e2dff02b98425",
+    "bytes": 1295196,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_cold_experts.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--no-penalties",
+        "--accept-rule",
+        "threshold",
+        "--modes",
+        "selfspec:8,selfspec:16,denoise:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-cold-cache-p0-threshold-denoise"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081909Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081909Z-q8-cold-cache-p0-threshold-denoise",
+      "pid": 9984,
+      "exit_code": 0,
+      "elapsed_seconds": 262.23500000004424
+    },
+    "host_memory": {
+      "pid": 9984,
+      "started_at_utc": "2026-11-02T08:19:09.799118+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 37279776768,
+      "peak_private": 19345760256,
+      "minimum_system_available": 21147926528
+    }
+  },
+  "official-q8-p0-server-baseline/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p0-server-baseline\\results.json",
+    "sha256": "24eb5bc749aa6a02e936a1ad747c344cbbc743433bc27097c8b05bac66b1db0a",
+    "bytes": 964684,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:\\workspace\\models\\inputs\\clover-gguf-diffuspace\\32e22a02b885e173177b7ce7661ad13448b4f89e\\Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:/workspace/tasks/T-20261031-clover-gguf/llama-prompts/manifest.json",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/official-q8-p0-server-baseline",
+        "--modes",
+        "causal,selfspec:8,selfspec:16",
+        "--prompts",
+        "Count,Sky,Python,JSON,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "eb0f7beb3cf1292e79238553259a8a319571e5ea",
+      "dirty": " M benchmarks/clover_gguf_reference.py\n M python/freetoken/models/clover_moe/gguf.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T042212Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T042212Z-official-q8-p0-server-baseline",
+      "pid": 12752,
+      "exit_code": 0,
+      "elapsed_seconds": 823.3589999999967
+    },
+    "host_memory": {
+      "pid": 12752,
+      "started_at_utc": "2026-11-02T04:22:12.475658+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 32368279552,
+      "peak_private": 14577315840,
+      "minimum_system_available": 26417909760
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T042212Z-official-q8-p0-server-baseline.patch",
+      "sha256": "cb4e47012ff0e247a1e004b3779d6ea6d3c25834fc13fcc70c30119a95ae60bf"
+    }
+  },
+  "stock-q8-p0-entropy-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-p0-entropy-matrix\\results.json",
+    "sha256": "838d5b4614f2e6ba26de6c8cd63c345cfa31b1cf4558b2507dc67865c137afd3",
+    "bytes": 146564,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-speculative-simple.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261031-clover-gguf\\llama-prompts\\manifest.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-p0-entropy-matrix",
+        "--frontend",
+        "cli",
+        "--modes",
+        "official:8,official:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T053205Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T053205Z-stock-q8-p0-entropy-matrix",
+      "pid": 6036,
+      "exit_code": 0,
+      "elapsed_seconds": 1377.4219999999623
+    },
+    "host_memory": {
+      "pid": 6036,
+      "started_at_utc": "2026-11-02T05:32:05.516637+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 32266100736,
+      "peak_private": 14297567232,
+      "minimum_system_available": 26139381760
+    }
+  },
+  "stock-q8-none-causal-audit/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-causal-audit\\results.json",
+    "sha256": "4ec2416dc8822f9f61307043c4cd1cc66da16de88ca342660ca847272b82f406",
+    "bytes": 325267,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--modes",
+        "causal",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-causal-audit"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T062834Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T062834Z-stock-q8-none-causal-audit",
+      "pid": 6960,
+      "exit_code": 0,
+      "elapsed_seconds": 177.09399999998277
+    },
+    "host_memory": {
+      "pid": 6960,
+      "started_at_utc": "2026-11-02T06:28:34.736516+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36444729344,
+      "peak_private": 49614532608,
+      "minimum_system_available": 21704749056
+    }
+  },
+  "stock-q8-none-p0-selfspec/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-p0-selfspec\\results.json",
+    "sha256": "ec9c08e71cb2aeef42424eda4a6f8153dd2a207a6bac8b68ea6fe2071df80dca",
+    "bytes": 642434,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--modes",
+        "selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-p0-selfspec"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T065238Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T065238Z-stock-q8-none-p0-selfspec",
+      "pid": 4668,
+      "exit_code": 0,
+      "elapsed_seconds": 458.0779999999795
+    },
+    "host_memory": {
+      "pid": 4668,
+      "started_at_utc": "2026-11-02T06:52:38.343384+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36677447680,
+      "peak_private": 49871396864,
+      "minimum_system_available": 21913055232
+    }
+  },
+  "stock-q8-none-p0-entropy/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-p0-entropy\\results.json",
+    "sha256": "7d28bf8520fe1f23a60b87c436ab1d2da043841605f51de2e4f59a3048208de4",
+    "bytes": 145997,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-speculative-simple.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--frontend",
+        "cli",
+        "--modes",
+        "official:8,official:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-p0-entropy"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T070016Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T070016Z-stock-q8-none-p0-entropy",
+      "pid": 10692,
+      "exit_code": 0,
+      "elapsed_seconds": 1556.1410000000033
+    },
+    "host_memory": {
+      "pid": 10692,
+      "started_at_utc": "2026-11-02T07:00:16.728768+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36378480640,
+      "peak_private": 49558360064,
+      "minimum_system_available": 22042136576
+    }
+  },
+  "nvfp4-before-p1-full-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-before-p1-full-matrix\\results.json",
+    "sha256": "0d6e6da8ab78345e2b8efd7ae644d1a473337f0779e5d9e13187bdb22f32471e",
+    "bytes": 2623578,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/nvfp4-before-p1-full-matrix",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--prompts",
+        "Count,Sky,Python,JSON,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken-nvfp4-before",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "2fd00ceefe47b94edf2eff803a700b811283d78e",
+      "dirty": "",
+      "started_at": "20261102T040618Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T040618Z-nvfp4-before-p1-full-matrix",
+      "pid": 2532,
+      "exit_code": 0,
+      "elapsed_seconds": 595.670999999973
+    },
+    "host_memory": {
+      "pid": 2532,
+      "started_at_utc": "2026-11-02T04:06:18.741572+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20946784256,
+      "peak_private": 20078198784,
+      "minimum_system_available": 36231147520
+    }
+  },
+  "nvfp4-final-p1-full-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-p1-full-matrix\\results.json",
+    "sha256": "244ea0cbecab14d04387562ec63f33ca81f8fe26670144eeda9342177818d231",
+    "bytes": 2662940,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-p1-full-matrix",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T051418Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T051418Z-nvfp4-final-p1-full-matrix",
+      "pid": 7756,
+      "exit_code": 0,
+      "elapsed_seconds": 311.46899999998277
+    },
+    "host_memory": {
+      "pid": 7756,
+      "started_at_utc": "2026-11-02T05:14:18.535926+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 21250723840,
+      "peak_private": 20501598208,
+      "minimum_system_available": 37366906880
+    }
+  },
+  "q8-runtime-before-p1-full-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-runtime-before-p1-full-matrix\\results.json",
+    "sha256": "ef37ea847c99a826000d85153ac2f23ac75f2dd8e084b8fb659c0e811f5604e8",
+    "bytes": 2516874,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-runtime-before-p1-full-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken-q8-runtime-before",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "dirty": " M benchmarks/bench_clover.py\n M python/freetoken/kernel/causal_conv1d.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n",
+      "started_at": "20261102T061519Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061519Z-q8-runtime-before-p1-full-matrix",
+      "pid": 11576,
+      "exit_code": 0,
+      "elapsed_seconds": 795.0619999999763
+    },
+    "host_memory": {
+      "pid": 11576,
+      "started_at_utc": "2026-11-02T06:15:19.852080+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38177644544,
+      "peak_private": 21043351552,
+      "minimum_system_available": 20001632256
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T061519Z-q8-runtime-before-p1-full-matrix.patch",
+      "sha256": "08078a9985c926100a2ebcc39e7130f670fac2442e670c13dad2f07c41af7dd3"
+    }
+  },
+  "q8-five-prompt-preview/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-five-prompt-preview\\results.json",
+    "sha256": "4a9f2fea765cc5f98611e381f50974efad8a8a85df7d45dce9d90ead4ff0f94a",
+    "bytes": 50801,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_preview.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-five-prompt-preview"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060116Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060116Z-q8-five-prompt-preview",
+      "pid": 13640,
+      "exit_code": 0,
+      "elapsed_seconds": 75.45299999997951
+    },
+    "host_memory": {
+      "pid": 13640,
+      "started_at_utc": "2026-11-02T06:01:16.954100+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38000758784,
+      "peak_private": 18454212608,
+      "minimum_system_available": 20479188992
+    }
+  },
+  "stock-q8-none-preview-perf/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-preview-perf\\results.json",
+    "sha256": "d6b6f6ea350b3f14cac020ea473c86bd982ebeb5d5f9ff3b88ddbd417fa3dc2e",
+    "bytes": 20097,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\run_stock_preview.py",
+        "--load-mode",
+        "none",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-preview-perf"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T064526Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T064526Z-stock-q8-none-preview-perf",
+      "pid": 14700,
+      "exit_code": 0,
+      "elapsed_seconds": 195.03099999995902
+    },
+    "host_memory": {
+      "pid": 14700,
+      "started_at_utc": "2026-11-02T06:45:26.906038+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36249182208,
+      "peak_private": 49429073920,
+      "minimum_system_available": 22175236096
+    }
+  },
+  "official-q8-graph-audit-mmq-fixed/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-graph-audit-mmq-fixed\\results.json",
+    "sha256": "a74b90fd4c3d6217ee32857b2ed5a7dc7b9f67cf40007a659a991e054014338b",
+    "bytes": 49918,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_graphs.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/official-q8-graph-audit-mmq-fixed"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T045059Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T045059Z-official-q8-graph-audit-mmq-fixed",
+      "pid": 8636,
+      "exit_code": 0,
+      "elapsed_seconds": 88.53100000001723
+    },
+    "host_memory": {
+      "pid": 8636,
+      "started_at_utc": "2026-11-02T04:50:59.627406+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 39554363392,
+      "peak_private": 22604730368,
+      "minimum_system_available": 19060559872
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T045059Z-official-q8-graph-audit-mmq-fixed.patch",
+      "sha256": "56858e4cf08efbc5c9f4aa30cead4b9f5de86ba73de2f3f94532d87730f55731"
+    }
+  },
+  "nvfp4-final-graph-state-audit/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-graph-state-audit\\results.json",
+    "sha256": "b30ef964eddeb72f8060a0a674d8bf6f24baab6da664524a32c93676316368f7",
+    "bytes": 49856,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_graphs.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-graph-state-audit"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060818Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060818Z-nvfp4-final-graph-state-audit",
+      "pid": 17032,
+      "exit_code": 0,
+      "elapsed_seconds": 42.28100000001723
+    },
+    "host_memory": {
+      "pid": 17032,
+      "started_at_utc": "2026-11-02T06:08:18.365934+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 22893654016,
+      "peak_private": 21740785664,
+      "minimum_system_available": 35566206976
+    }
+  },
+  "nvfp4-five-prompt-preview/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-five-prompt-preview\\results.json",
+    "sha256": "3ab96c44e3ccf331f6bbfa716dd68a1ce40add04db00aa180fd84a680eaa81f3",
+    "bytes": 50545,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_preview.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-five-prompt-preview"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060732Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060732Z-nvfp4-five-prompt-preview",
+      "pid": 15808,
+      "exit_code": 0,
+      "elapsed_seconds": 45.29700000002049
+    },
+    "host_memory": {
+      "pid": 15808,
+      "started_at_utc": "2026-11-02T06:07:32.916513+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 21135564800,
+      "peak_private": 17595826176,
+      "minimum_system_available": 37434478592
+    }
+  },
+  "q8-hf-forced-history-priority/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-forced-history-priority\\results.json",
+    "sha256": "fc113acadb2536ecea8cc428b209961faba227cfc0e2660ba4a33ba7ea7b55db",
+    "bytes": 48586,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/clover_hf_reference.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--precision",
+        "gguf",
+        "--native-results",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p1-correctness-64\\results.json",
+        "--steps",
+        "32",
+        "--checkpoint-penalties",
+        "--prompts",
+        "Count,Sky,Python,JSON,Chinese",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-forced-history-priority"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "d8d4c484c6e8bc4738c6bc23b7fb3db74b408369",
+      "dirty": " M benchmarks/clover_gguf_reference.py\n M benchmarks/clover_hf_reference.py\n M python/freetoken/models/clover_moe/gguf.py\n?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T051935Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T051935Z-q8-hf-forced-history-priority",
+      "pid": 10560,
+      "exit_code": 0,
+      "elapsed_seconds": 178.85899999999674
+    },
+    "host_memory": {
+      "pid": 10560,
+      "started_at_utc": "2026-11-02T05:19:35.177423+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 35294572544,
+      "peak_private": 19023859712,
+      "minimum_system_available": 22752411648
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T051935Z-q8-hf-forced-history-priority.patch",
+      "sha256": "00ab50d452e7cf400222c668e797d6de4d1a39c5750aa1ee7f8e870cfdfef810"
+    }
+  },
+  "q8-hf-selfspec-progress/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-selfspec-progress\\results.json",
+    "sha256": "1a5ea034843826a65fe35876273b1656ba9ee9c7f5ca113742ad062cbe798666",
+    "bytes": 36380,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_hf_selfspec.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--precision",
+        "gguf",
+        "--native-results",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p1-correctness-64\\results.json",
+        "--prompts",
+        "Count,Sky,Python,JSON,Chinese",
+        "--tokens",
+        "64",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-selfspec-progress"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T063132Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T063132Z-q8-hf-selfspec-progress",
+      "pid": 10052,
+      "exit_code": 0,
+      "elapsed_seconds": 833.9060000000172
+    },
+    "host_memory": {
+      "pid": 10052,
+      "started_at_utc": "2026-11-02T06:31:32.334428+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38715052032,
+      "peak_private": 19260014592,
+      "minimum_system_available": 19614031872
+    }
+  },
+  "q8-hf-denoise-progress/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-denoise-progress\\results.json",
+    "sha256": "2df196d31ba417f316d17e9cf8f58122bc2d131d669ef2e751d24fc0a59609c0",
+    "bytes": 536012,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_hf_denoise.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--precision",
+        "gguf",
+        "--native-results",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-p1-correctness-64\\results.json",
+        "--prompts",
+        "Count,Sky,Python,JSON,Chinese",
+        "--tokens",
+        "64",
+        "--widths",
+        "8,16,32",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-hf-denoise-progress"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T072813Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T072813Z-q8-hf-denoise-progress",
+      "pid": 14372,
+      "exit_code": 0,
+      "elapsed_seconds": 1288.765000000014
+    },
+    "host_memory": {
+      "pid": 14372,
+      "started_at_utc": "2026-11-02T07:28:13.257831+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 39330742272,
+      "peak_private": 19134775296,
+      "minimum_system_available": 18461827072
+    }
+  },
+  "q8-final-regressions/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-final-regressions\\results.json",
+    "sha256": "e5b5932d4d61847590bf886a4ea99ad615a0d250c8dd37cc61142fac4dcf21d7",
+    "bytes": 1616,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\run_regression.py",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-final-regressions"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T055750Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T055750Z-q8-final-regressions",
+      "pid": 10668,
+      "exit_code": 0,
+      "elapsed_seconds": 205.98399999999674
+    },
+    "host_memory": {
+      "pid": 10668,
+      "started_at_utc": "2026-11-02T05:57:50.819582+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 3871010816,
+      "peak_private": 11615698944,
+      "minimum_system_available": 54613700608
+    }
+  },
+  "nvfp4-final-regressions/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-regressions\\results.json",
+    "sha256": "189976a0b4875ce9a2735e848e326db4cc048d9f8fd38248251f9e82cca5be84",
+    "bytes": 1621,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\run_regression.py",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-regressions"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060713Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060713Z-nvfp4-final-regressions",
+      "pid": 13396,
+      "exit_code": 0,
+      "elapsed_seconds": 19.17200000002049
+    },
+    "host_memory": {
+      "pid": 13396,
+      "started_at_utc": "2026-11-02T06:07:13.604802+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 3508191232,
+      "peak_private": 10124161024,
+      "minimum_system_available": 55271628800
+    }
+  },
+  "mtp-main-off/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-main-off\\results.json",
+    "sha256": "e0e04e26f8d99b0c91280d231adab6b2733e8fb4ecccf45fb614002efba2d09b",
+    "bytes": 8314,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+        "--mode",
+        "off",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-main-off"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "dirty": "",
+      "started_at": "20261102T061113Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061113Z-mtp-main-off",
+      "pid": 13348,
+      "exit_code": 0,
+      "elapsed_seconds": 55.32799999997951
+    },
+    "host_memory": {
+      "pid": 13348,
+      "started_at_utc": "2026-11-02T06:11:13.877127+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 29104758784,
+      "peak_private": 45134639104,
+      "minimum_system_available": 29306097664
+    }
+  },
+  "mtp-q8-off/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-q8-off\\results.json",
+    "sha256": "56ee665fc693087c50a0ee319ba6aef1464e5cbee1b37e829fa4d80e063e1091",
+    "bytes": 8294,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+        "--mode",
+        "off",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-q8-off"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T061209Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061209Z-mtp-q8-off",
+      "pid": 14696,
+      "exit_code": 0,
+      "elapsed_seconds": 35.26500000001397
+    },
+    "host_memory": {
+      "pid": 14696,
+      "started_at_utc": "2026-11-02T06:12:09.377221+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 29015183360,
+      "peak_private": 45084880896,
+      "minimum_system_available": 29385035776
+    }
+  },
+  "mtp-nvfp4-off/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-nvfp4-off\\results.json",
+    "sha256": "2f2a5bc6af500c3c8aeba89d0d311d9211fc3256d49534dcc07362a2c0221d47",
+    "bytes": 8300,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+        "--mode",
+        "off",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-nvfp4-off"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T061244Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061244Z-mtp-nvfp4-off",
+      "pid": 15244,
+      "exit_code": 0,
+      "elapsed_seconds": 35.25
+    },
+    "host_memory": {
+      "pid": 15244,
+      "started_at_utc": "2026-11-02T06:12:44.849935+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 29012926464,
+      "peak_private": 45080502272,
+      "minimum_system_available": 29427359744
+    }
+  },
+  "mtp-main-on/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-main-on\\results.json",
+    "sha256": "0bfb4ef7613a71c7eed24552d6bfba8bd16521ab567a177b53a4cff5a9646b26",
+    "bytes": 10161,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+        "--mode",
+        "on",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-main-on"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "dirty": "",
+      "started_at": "20261102T061320Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061320Z-mtp-main-on",
+      "pid": 8136,
+      "exit_code": 0,
+      "elapsed_seconds": 44.29699999996228
+    },
+    "host_memory": {
+      "pid": 8136,
+      "started_at_utc": "2026-11-02T06:13:20.283392+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 30345637888,
+      "peak_private": 46589194240,
+      "minimum_system_available": 28080455680
+    }
+  },
+  "mtp-q8-on/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-q8-on\\results.json",
+    "sha256": "b741aa7964c4a37f15856b8ae3ba258be693c231a3d646992265bcb2557e9df3",
+    "bytes": 10137,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+        "--mode",
+        "on",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-q8-on"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T061404Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061404Z-mtp-q8-on",
+      "pid": 14664,
+      "exit_code": 0,
+      "elapsed_seconds": 37.25
+    },
+    "host_memory": {
+      "pid": 14664,
+      "started_at_utc": "2026-11-02T06:14:04.758059+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 30280773632,
+      "peak_private": 46564716544,
+      "minimum_system_available": 28133998592
+    }
+  },
+  "mtp-nvfp4-on/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-nvfp4-on\\results.json",
+    "sha256": "ae3b2ab5fd9e84344527921d6e7bbfb5f4fa36981851db5c7284562d1f467ed1",
+    "bytes": 10143,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_qwen4_mtp.py",
+        "--model",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-strata-q2",
+        "--mtp-runtime",
+        "C:/workspace/models/bundles/flash-next/mtpdecode2-20261026/checkpoints/flash-next-mtp",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+        "--mode",
+        "on",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\mtp-nvfp4-on"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T061442Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T061442Z-mtp-nvfp4-on",
+      "pid": 7952,
+      "exit_code": 0,
+      "elapsed_seconds": 37.25
+    },
+    "host_memory": {
+      "pid": 7952,
+      "started_at_utc": "2026-11-02T06:14:42.199745+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 30296444928,
+      "peak_private": 46585393152,
+      "minimum_system_available": 28126621696
+    }
+  },
+  "qwen35-real-nvfp4-main/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-main\\results.json",
+    "sha256": "bafd4ca4aaa979b9fa2b834639b3163ec72782d5a61c6751dbcf355d67517698",
+    "bytes": 5598,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\check_qwen35_real.py",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+        "--model",
+        "C:/workspace/models/inputs/qwen3.6-35b-a3b-nvfp4/1355db6a052410cfd62085d94b58866fd0f2c3c5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-main"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken-baseline",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "dirty": "",
+      "started_at": "20261102T081508Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081508Z-qwen35-real-nvfp4-main",
+      "pid": 13028,
+      "exit_code": 0,
+      "elapsed_seconds": 57.34399999998277
+    },
+    "host_memory": {
+      "pid": 13028,
+      "started_at_utc": "2026-11-02T08:15:08.837796+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 27737542656,
+      "peak_private": 26719514624,
+      "minimum_system_available": 30765031424
+    }
+  },
+  "qwen35-real-nvfp4-q8/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-q8\\results.json",
+    "sha256": "1a1c5056127f8128f186a62a377151135bcc4d8df4b2680cee48b51170811a3e",
+    "bytes": 5600,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\check_qwen35_real.py",
+        "--code-root",
+        "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+        "--model",
+        "C:/workspace/models/inputs/qwen3.6-35b-a3b-nvfp4/1355db6a052410cfd62085d94b58866fd0f2c3c5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-q8"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081606Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081606Z-qwen35-real-nvfp4-q8",
+      "pid": 14928,
+      "exit_code": 0,
+      "elapsed_seconds": 21.20299999997951
+    },
+    "host_memory": {
+      "pid": 14928,
+      "started_at_utc": "2026-11-02T08:16:06.377159+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 27086704640,
+      "peak_private": 26706522112,
+      "minimum_system_available": 31323361280
+    }
+  },
+  "qwen35-real-nvfp4-nvfp4/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-nvfp4\\results.json",
+    "sha256": "3c1b7dd7d64959f42bd07fe879f6c900c653e20e38ef88f6134486256c281d26",
+    "bytes": 5600,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\check_qwen35_real.py",
+        "--code-root",
+        "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+        "--model",
+        "C:/workspace/models/inputs/qwen3.6-35b-a3b-nvfp4/1355db6a052410cfd62085d94b58866fd0f2c3c5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\qwen35-real-nvfp4-nvfp4"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T081627Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081627Z-qwen35-real-nvfp4-nvfp4",
+      "pid": 9652,
+      "exit_code": 0,
+      "elapsed_seconds": 21.17200000002049
+    },
+    "host_memory": {
+      "pid": 9652,
+      "started_at_utc": "2026-11-02T08:16:27.711477+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 25809465344,
+      "peak_private": 26703663104,
+      "minimum_system_available": 32441479168
+    }
+  },
+  "q8-causal-quality-first50/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-causal-quality-first50\\results.json",
+    "sha256": "6bf23e91c3787fe32ad2cd39e26347cd5d87317a1fc1eac559b29eb0b9df13e5",
+    "bytes": 607394,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/eval_clover_quality.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--backend",
+        "native",
+        "--precision",
+        "gguf",
+        "--data",
+        "C:/workspace/data/datasets/T-20261030-clover-nvfp4",
+        "--tokens",
+        "1024",
+        "--limit",
+        "50",
+        "--cache-slots",
+        "2560",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-causal-quality-first50"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T074942Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T074942Z-q8-causal-quality-first50",
+      "pid": 10592,
+      "exit_code": 0,
+      "elapsed_seconds": 535.7030000000377
+    },
+    "host_memory": {
+      "pid": 10592,
+      "started_at_utc": "2026-11-02T07:49:42.181708+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 37573558272,
+      "peak_private": 17774280704,
+      "minimum_system_available": 19769434112
+    }
+  },
+  "nvfp4-causal-quality-first50/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-causal-quality-first50\\results.json",
+    "sha256": "0b263c1407502ef05220780970533d82889b4c5924418b1b15c479b8ff38b017",
+    "bytes": 561504,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/eval_clover_quality.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--backend",
+        "native",
+        "--precision",
+        "nvfp4",
+        "--data",
+        "C:/workspace/data/datasets/T-20261030-clover-nvfp4",
+        "--tokens",
+        "1024",
+        "--limit",
+        "50",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-causal-quality-first50"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T075837Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T075837Z-nvfp4-causal-quality-first50",
+      "pid": 15540,
+      "exit_code": 0,
+      "elapsed_seconds": 288.3280000000377
+    },
+    "host_memory": {
+      "pid": 15540,
+      "started_at_utc": "2026-11-02T07:58:38.062572+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20538748928,
+      "peak_private": 16694022144,
+      "minimum_system_available": 37346840576
+    }
+  },
+  "q8-physical-resource-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-physical-resource-matrix\\results.json",
+    "sha256": "7389820fd72d1152fec55115fd2ddeee186801123adffe3e18f27166d2041298",
+    "bytes": 724782,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "native",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--no-penalties",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060402Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060402Z-q8-physical-resource-matrix",
+      "pid": 4868,
+      "exit_code": 0,
+      "elapsed_seconds": 190.96799999999348
+    },
+    "host_memory": {
+      "pid": 4868,
+      "started_at_utc": "2026-11-02T06:04:02.453345+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38365802496,
+      "peak_private": 21481099264,
+      "minimum_system_available": 20059119616
+    }
+  },
+  "q8-physical-resource-matrix/physical-gpu-resources.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-physical-resource-matrix\\physical-gpu-resources.json",
+    "sha256": "29f4ce905c3421198e558473b95e5d03895458b65b0f813a2caf2306e0b8e885",
+    "bytes": 402212,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "native",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--no-penalties",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060402Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060402Z-q8-physical-resource-matrix",
+      "pid": 4868,
+      "exit_code": 0,
+      "elapsed_seconds": 190.96799999999348
+    },
+    "host_memory": {
+      "pid": 4868,
+      "started_at_utc": "2026-11-02T06:04:02.453345+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38365802496,
+      "peak_private": 21481099264,
+      "minimum_system_available": 20059119616
+    }
+  },
+  "nvfp4-physical-resource-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-physical-resource-matrix\\results.json",
+    "sha256": "99abc8426a01c2c0ea6108e6f2cf8fdd87f3e6d9d322251e4b92e9481d8eb778",
+    "bytes": 767277,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "native",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--no-penalties",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060936Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060936Z-nvfp4-physical-resource-matrix",
+      "pid": 15908,
+      "exit_code": 0,
+      "elapsed_seconds": 97.48499999998603
+    },
+    "host_memory": {
+      "pid": 15908,
+      "started_at_utc": "2026-11-02T06:09:36.208892+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 21396836352,
+      "peak_private": 19498524672,
+      "minimum_system_available": 37029240832
+    }
+  },
+  "nvfp4-physical-resource-matrix/physical-gpu-resources.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-physical-resource-matrix\\physical-gpu-resources.json",
+    "sha256": "b694dae8e1c7f9e039d855b8eef1cd05e636a6c2a588dfe448c414d9cdb3e2bb",
+    "bytes": 229668,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "native",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--no-penalties",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060936Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060936Z-nvfp4-physical-resource-matrix",
+      "pid": 15908,
+      "exit_code": 0,
+      "elapsed_seconds": 97.48499999998603
+    },
+    "host_memory": {
+      "pid": 15908,
+      "started_at_utc": "2026-11-02T06:09:36.208892+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 21396836352,
+      "peak_private": 19498524672,
+      "minimum_system_available": 37029240832
+    }
+  },
+  "stock-q8-none-physical-resource-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-physical-resource-matrix\\results.json",
+    "sha256": "412ea144f68563398681c3f1e64a295d10ed1a7b83dcb5ba2fb546d420068695",
+    "bytes": 293146,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "stock",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--modes",
+        "causal,selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T080330Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T080330Z-stock-q8-none-physical-resource-matrix",
+      "pid": 10088,
+      "exit_code": 0,
+      "elapsed_seconds": 399.219000000041
+    },
+    "host_memory": {
+      "pid": 10088,
+      "started_at_utc": "2026-11-02T08:03:30.672078+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36701945856,
+      "peak_private": 49891987456,
+      "minimum_system_available": 21500461056
+    }
+  },
+  "stock-q8-none-physical-resource-matrix/physical-gpu-resources.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-physical-resource-matrix\\physical-gpu-resources.json",
+    "sha256": "6e895fc2b452585a007912a04cacb6b16e1616d3769eda6c1b3fe6ad2403020d",
+    "bytes": 845008,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "stock",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--modes",
+        "causal,selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T080330Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T080330Z-stock-q8-none-physical-resource-matrix",
+      "pid": 10088,
+      "exit_code": 0,
+      "elapsed_seconds": 399.219000000041
+    },
+    "host_memory": {
+      "pid": 10088,
+      "started_at_utc": "2026-11-02T08:03:30.672078+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36701945856,
+      "peak_private": 49891987456,
+      "minimum_system_available": 21500461056
+    }
+  },
+  "stock-q8-physical-resource-matrix/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-physical-resource-matrix\\results.json",
+    "sha256": "32d6c69ad81696bdf0b0bd76d7f11ee811db4e3aacc56683b78d2ff154dbdc63",
+    "bytes": 292221,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "stock",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:/workspace/tasks/T-20261031-clover-gguf/llama-prompts/manifest.json",
+        "--cache-mib",
+        "8160",
+        "--modes",
+        "causal,selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T052357Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T052357Z-stock-q8-physical-resource-matrix",
+      "pid": 15396,
+      "exit_code": 0,
+      "elapsed_seconds": 380.25
+    },
+    "host_memory": {
+      "pid": 15396,
+      "started_at_utc": "2026-11-02T05:23:57.819742+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 32397561856,
+      "peak_private": 14590988288,
+      "minimum_system_available": 25155162112
+    }
+  },
+  "stock-q8-physical-resource-matrix/physical-gpu-resources.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-physical-resource-matrix\\physical-gpu-resources.json",
+    "sha256": "1a4483cac9df5031703c6741debee1e479c38eb916e4f963af0d5ad01c5abc74",
+    "bytes": 814477,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_gpu_resources.py",
+        "--resource-frontend",
+        "stock",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:/workspace/tasks/T-20261031-clover-gguf/llama-prompts/manifest.json",
+        "--cache-mib",
+        "8160",
+        "--modes",
+        "causal,selfspec:8,selfspec:16",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-physical-resource-matrix"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T052357Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T052357Z-stock-q8-physical-resource-matrix",
+      "pid": 15396,
+      "exit_code": 0,
+      "elapsed_seconds": 380.25
+    },
+    "host_memory": {
+      "pid": 15396,
+      "started_at_utc": "2026-11-02T05:23:57.819742+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 32397561856,
+      "peak_private": 14590988288,
+      "minimum_system_available": 25155162112
+    }
+  },
+  "q8-long-ttft/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-long-ttft\\results.json",
+    "sha256": "2c47ceb321f988ade3a0d05b8ee2bc62949e7f6ebdc0d04a00cad8d1c37e4bf0",
+    "bytes": 155154,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_long.py",
+        "--long-prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--context-size",
+        "8192",
+        "--cache-slots",
+        "2560",
+        "--no-penalties",
+        "--modes",
+        "causal",
+        "--prompts",
+        "Long1K,Long4K",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-long-ttft"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060232Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060232Z-q8-long-ttft",
+      "pid": 14176,
+      "exit_code": 0,
+      "elapsed_seconds": 89.51500000001397
+    },
+    "host_memory": {
+      "pid": 14176,
+      "started_at_utc": "2026-11-02T06:02:32.741074+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 37004328960,
+      "peak_private": 18604011520,
+      "minimum_system_available": 21477810176
+    }
+  },
+  "nvfp4-long-ttft/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-long-ttft\\results.json",
+    "sha256": "5a4783197e8c973ce413ed97e44e6b955686f537847652d283d5a16a41236abe",
+    "bytes": 157624,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_long.py",
+        "--long-prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--context-size",
+        "8192",
+        "--cache-slots",
+        "4096",
+        "--no-penalties",
+        "--modes",
+        "causal",
+        "--prompts",
+        "Long1K,Long4K",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-long-ttft"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T060900Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T060900Z-nvfp4-long-ttft",
+      "pid": 9612,
+      "exit_code": 0,
+      "elapsed_seconds": 35.23399999999674
+    },
+    "host_memory": {
+      "pid": 9612,
+      "started_at_utc": "2026-11-02T06:09:00.805368+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20096065536,
+      "peak_private": 17079857152,
+      "minimum_system_available": 38323073024
+    }
+  },
+  "stock-q8-none-long-ttft/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ttft\\results.json",
+    "sha256": "ab7318ad94f274d42be7114ac5f2dbfd1c53c6159c2c5379d437c6afedbd77bf",
+    "bytes": 65053,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--prompts",
+        "Long1K,Long4K",
+        "--modes",
+        "causal",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--context-size",
+        "8192",
+        "--batch-size",
+        "4096",
+        "--ubatch-size",
+        "256",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ttft"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T072612Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T072612Z-stock-q8-none-long-ttft",
+      "pid": 6728,
+      "exit_code": 0,
+      "elapsed_seconds": 119.67200000002049
+    },
+    "host_memory": {
+      "pid": 6728,
+      "started_at_utc": "2026-11-02T07:26:13.100421+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36354166784,
+      "peak_private": 49591660544,
+      "minimum_system_available": 22455726080
+    }
+  },
+  "stock-q8-long-ttft/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-long-ttft\\results.json",
+    "sha256": "2d0fab8d1b211675b4cd96bfacb4f3ee9edf03758673ed5bcbdbb920f113faf2",
+    "bytes": 65095,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-long-ttft",
+        "--prompts",
+        "Long1K,Long4K",
+        "--modes",
+        "causal",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--context-size",
+        "8192",
+        "--batch-size",
+        "4096",
+        "--ubatch-size",
+        "256"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T055502Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T055502Z-stock-q8-long-ttft",
+      "pid": 6888,
+      "exit_code": 0,
+      "elapsed_seconds": 164.01600000000326
+    },
+    "host_memory": {
+      "pid": 6888,
+      "started_at_utc": "2026-11-02T05:55:03.099506+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 30360903680,
+      "peak_private": 14355615744,
+      "minimum_system_available": 27997847552
+    }
+  },
+  "stock-q8-none-long-ub1024/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ub1024\\results.json",
+    "sha256": "642194e9bfa3396e99d45da8d7e2e15e1b9df0ef70ab6d7137ea0c35ff576cdf",
+    "bytes": 65203,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--prompts",
+        "Long1K,Long4K",
+        "--modes",
+        "causal",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--context-size",
+        "8192",
+        "--batch-size",
+        "4096",
+        "--ubatch-size",
+        "1024",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ub1024"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081232Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081232Z-stock-q8-none-long-ub1024",
+      "pid": 2200,
+      "exit_code": 0,
+      "elapsed_seconds": 78.51600000000326
+    },
+    "host_memory": {
+      "pid": 2200,
+      "started_at_utc": "2026-11-02T08:12:32.433710+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 36406697984,
+      "peak_private": 50175959040,
+      "minimum_system_available": 22175117312
+    }
+  },
+  "stock-q8-none-long-ub4096/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ub4096\\results.json",
+    "sha256": "c111504a1f65ecc5e0353659cfa81f36597bc5b4989c6c53a0897ee592e9c889",
+    "bytes": 65205,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover_llama.py",
+        "--executable",
+        "C:/workspace/builds/T-20261031-clover-gguf/llama-official-cb09-sm120/bin/llama-server.exe",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\long-prompts\\manifest.json",
+        "--prompts",
+        "Long1K,Long4K",
+        "--modes",
+        "causal",
+        "--tokens",
+        "128",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--cache-mib",
+        "8160",
+        "--load-mode",
+        "none",
+        "--context-size",
+        "8192",
+        "--batch-size",
+        "4096",
+        "--ubatch-size",
+        "4096",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-none-long-ub4096"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081350Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081350Z-stock-q8-none-long-ub4096",
+      "pid": 13812,
+      "exit_code": 0,
+      "elapsed_seconds": 77.48499999998603
+    },
+    "host_memory": {
+      "pid": 13812,
+      "started_at_utc": "2026-11-02T08:13:51.130236+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 38600282112,
+      "peak_private": 58304258048,
+      "minimum_system_available": 19724218368
+    }
+  },
+  "nvfp4-no-ahead-diagnostic/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-no-ahead-diagnostic\\results.json",
+    "sha256": "1304e64bae33bd540266e03860b3d5296093ece82be5de1672b974c92f87f04c",
+    "bytes": 408476,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_no_ahead.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "denoise:8,denoise:16,denoise:32",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-no-ahead-diagnostic"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T052234Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T052234Z-nvfp4-no-ahead-diagnostic",
+      "pid": 11964,
+      "exit_code": 0,
+      "elapsed_seconds": 83.45299999997951
+    },
+    "host_memory": {
+      "pid": 11964,
+      "started_at_utc": "2026-11-02T05:22:34.211551+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 21390123008,
+      "peak_private": 20382515200,
+      "minimum_system_available": 36191670272
+    }
+  },
+  "nvfp4-old-commit-shape/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-commit-shape\\results.json",
+    "sha256": "f7ddc259236a4cd7f4afa90ae9ba54fbebaa0a3919dc31a72d65e66cec554956",
+    "bytes": 69933,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_old_commit_shape.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "denoise:32",
+        "--prompts",
+        "Python,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-commit-shape"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T081127Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081127Z-nvfp4-old-commit-shape",
+      "pid": 2592,
+      "exit_code": 0,
+      "elapsed_seconds": 32.23399999999674
+    },
+    "host_memory": {
+      "pid": 2592,
+      "started_at_utc": "2026-11-02T08:11:27.656623+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20309819392,
+      "peak_private": 18710401024,
+      "minimum_system_available": 38045388800
+    }
+  },
+  "nvfp4-old-shape-reference-pick/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-shape-reference-pick\\results.json",
+    "sha256": "63d38b9be117a2c8e5421ba0840b01278f44262ee1714bd7726b6458c705630f",
+    "bytes": 69991,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_old_commit_shape.py",
+        "--reference-pick",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "denoise:32",
+        "--prompts",
+        "Python,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-shape-reference-pick"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T081159Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081159Z-nvfp4-old-shape-reference-pick",
+      "pid": 10956,
+      "exit_code": 0,
+      "elapsed_seconds": 32.21900000004098
+    },
+    "host_memory": {
+      "pid": 10956,
+      "started_at_utc": "2026-11-02T08:12:00.039423+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20310450176,
+      "peak_private": 18967658496,
+      "minimum_system_available": 38054068224
+    }
+  },
+  "nvfp4-old-controls-eager-preview/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-controls-eager-preview\\results.json",
+    "sha256": "bce02d421b71e9d30ab091d87e51acbd2ab3882b508bb07d9fb26b55b51f62e5",
+    "bytes": 69583,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_eager_isolation.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "denoise:32",
+        "--prompts",
+        "Python,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-controls-eager-preview"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T082333Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T082333Z-nvfp4-old-controls-eager-preview",
+      "pid": 13588,
+      "exit_code": 0,
+      "elapsed_seconds": 50.29700000002049
+    },
+    "host_memory": {
+      "pid": 13588,
+      "started_at_utc": "2026-11-02T08:23:34.098012+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20359675904,
+      "peak_private": 19000999936,
+      "minimum_system_available": 38210621440
+    }
+  },
+  "nvfp4-old-controls-eager-both/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-controls-eager-both\\results.json",
+    "sha256": "ce15824c636c5d6894e07477c4c0d2b0b5b0f07d707a5cb0a1ac1e28e369a16b",
+    "bytes": 69636,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\bench_eager_isolation.py",
+        "--eager-verify",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "4096",
+        "--modes",
+        "denoise:32",
+        "--prompts",
+        "Python,Chinese",
+        "--tokens",
+        "256",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-old-controls-eager-both"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T082424Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T082424Z-nvfp4-old-controls-eager-both",
+      "pid": 16568,
+      "exit_code": 0,
+      "elapsed_seconds": 37.26500000001397
+    },
+    "host_memory": {
+      "pid": 16568,
+      "started_at_utc": "2026-11-02T08:24:24.572646+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20641443840,
+      "peak_private": 18848645120,
+      "minimum_system_available": 37927428096
+    }
+  },
+  "q8-initial-preview-hf-numerics/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-hf-numerics\\results.json",
+    "sha256": "9f28adc5f6cae0794b051ea33b9b7e2755349078828c7b65aa78e6fdb8842c49",
+    "bytes": 21756,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\compare_initial_preview.py",
+        "--source",
+        "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+        "--checkpoint",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--native-results",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\results.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-hf-numerics"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081756Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081756Z-q8-initial-preview-hf-numerics",
+      "pid": 11708,
+      "exit_code": 0,
+      "elapsed_seconds": 70.45300000003772
+    },
+    "host_memory": {
+      "pid": 11708,
+      "started_at_utc": "2026-11-02T08:17:56.832507+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 24603222016,
+      "peak_private": 19257757696,
+      "minimum_system_available": 34005741568
+    }
+  },
+  "q8-initial-preview-capture/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\results.json",
+    "sha256": "9031c47877d59aa9255238fa943825e98b69c4846d966145d8d475abb6b27616",
+    "bytes": 10018,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\capture_initial_preview.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--prompts-json",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\manifest.json",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T081649Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081649Z-q8-initial-preview-capture",
+      "pid": 10748,
+      "exit_code": 0,
+      "elapsed_seconds": 67.40600000001723
+    },
+    "host_memory": {
+      "pid": 10748,
+      "started_at_utc": "2026-11-02T08:16:49.240023+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 37124780032,
+      "peak_private": 19824410624,
+      "minimum_system_available": 21166006272
+    }
+  },
+  "q8-initial-preview-capture/Count-W32-step0.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\Count-W32-step0.pt",
+    "sha256": "bb358e7c0651e9b396c0c8520513ca9b956da9981857e46394af9c35ff037385",
+    "bytes": 31786593
+  },
+  "q8-initial-preview-capture/Count-W32-step1.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\Count-W32-step1.pt",
+    "sha256": "3302d8a940434ed638a1bed611275f57019559fa15e0f3e883db493927943914",
+    "bytes": 31786593
+  },
+  "q8-initial-preview-capture/JSON-W8-step0.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W8-step0.pt",
+    "sha256": "5f8678bd8b04c054a506765c959625ef213c46a9262b48ba98d915c372ac0f63",
+    "bytes": 7947859
+  },
+  "q8-initial-preview-capture/JSON-W8-step1.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W8-step1.pt",
+    "sha256": "44f23b0e1614a8d8ac251d7bd7802938f5d8cbd05b3e93ef38ac4cba43b14b97",
+    "bytes": 7947859
+  },
+  "q8-initial-preview-capture/JSON-W16-step0.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W16-step0.pt",
+    "sha256": "1a56a776220598220da23d287d0f90362912e7d8342e471c726fe176870c0493",
+    "bytes": 15894106
+  },
+  "q8-initial-preview-capture/JSON-W16-step1.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W16-step1.pt",
+    "sha256": "bb316293d6c2832d4127851e54ea13bc9ef4980675b61ba965a328383626a4e0",
+    "bytes": 15894106
+  },
+  "q8-initial-preview-capture/JSON-W32-step0.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W32-step0.pt",
+    "sha256": "7600bdef00a84441ac143085f792b207fa31b1147bbb48ba72d52e27be7c9c42",
+    "bytes": 31786586
+  },
+  "q8-initial-preview-capture/JSON-W32-step1.pt": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-initial-preview-capture\\JSON-W32-step1.pt",
+    "sha256": "1bb261ae953e71e2eaeb71f214f80d6a8c0e9a8b2284f0c48ea2789991bf2014",
+    "bytes": 31786586
+  },
+  "q8-p1-code-json-behavior.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-p1-code-json-behavior.json",
+    "sha256": "1e4227ec661ac86f39beed651cf43cd548633faf93e6b45fbeaba105794cab21",
+    "bytes": 4825
+  },
+  "nvfp4-before-code-json-behavior.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-before-code-json-behavior.json",
+    "sha256": "dfd6bf8ad31bb877125babd2042c87feba53c47bfaf4cf8599838947503cbb10",
+    "bytes": 4727
+  },
+  "nvfp4-final-code-json-behavior.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-final-code-json-behavior.json",
+    "sha256": "77d0f9f8227b680185e07023c4cea481c49fc64e405ece6fe0525cb3851b8903",
+    "bytes": 5266
+  },
+  "machine-and-source-provenance/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\machine-and-source-provenance\\results.json",
+    "sha256": "c47ee481ed65483c5c7c1b61b85107289e3bbc16c9a9b99cad04a956a17e9922",
+    "bytes": 3632,
+    "run": {
+      "command": [
+        "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+        "C:/workspace/tasks/T-20261102-clover-q8/machine_snapshot.py",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/machine-and-source-provenance"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T054008Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T054008Z-machine-and-source-provenance",
+      "pid": 15556,
+      "exit_code": 0,
+      "elapsed_seconds": 1.827999999979511
+    }
+  },
+  "runtime-final-inventory/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\runtime-final-inventory\\results.json",
+    "sha256": "7a73022765228a2c5ca5d11cec4c33238d01eae54d3181bf6921cb34e6a4de5c",
+    "bytes": 15023,
+    "run": {
+      "command": [
+        "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+        "C:/workspace/tasks/T-20261102-clover-q8/runtime_inventory.py",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/runtime-final-inventory"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T082416Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T082416Z-runtime-final-inventory",
+      "pid": 8120,
+      "exit_code": 0,
+      "elapsed_seconds": 0.20400000002700835
+    }
+  },
+  "official-q8-adapter-contracts/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\official-q8-adapter-contracts\\results.json",
+    "sha256": "92a94e7d786a6ea8eac98bb47ca091ccc73a318517cb497e339562e952a3e995",
+    "bytes": 26686,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\check_official_adapter.py",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/official-q8-adapter-contracts"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T043634Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043634Z-official-q8-adapter-contracts",
+      "pid": 13212,
+      "exit_code": 0,
+      "elapsed_seconds": 32.23399999999674
+    },
+    "host_memory": {
+      "pid": 13212,
+      "started_at_utc": "2026-11-02T04:36:35.076040+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 9163444224,
+      "peak_private": 8429785088,
+      "minimum_system_available": 49875357696
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T043634Z-official-q8-adapter-contracts.patch",
+      "sha256": "0f2eda4cfe1e34bf068f518bdabf4efbe621daa6370316264af1171ece14b49d"
+    }
+  },
+  "q8-sized-pinned-bank-probe/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\q8-sized-pinned-bank-probe\\results.json",
+    "sha256": "728395ee8cf3a21437763bb8e10e5c4c438f62739a9dfffdd573945c7f8cb6bf",
+    "bytes": 6258,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\probe_pinned.py",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/q8-sized-pinned-bank-probe"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M benchmarks/clover_gguf_decode.py\n M benchmarks/clover_gguf_reference.py\n M python/freetoken/kernel/causal_conv1d.py\n M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/fused_gguf.py\n M tests/kernels/test_clover_gguf.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? python/freetoken/kernel/triton/clover_align.py\n?? python/freetoken/kernel/triton/clover_pick.py\n?? python/freetoken/models/clover_moe/graph.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T035455Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T035455Z-q8-sized-pinned-bank-probe",
+      "pid": 3032,
+      "exit_code": 0,
+      "elapsed_seconds": 14.15600000001723
+    },
+    "host_memory": {
+      "pid": 3032,
+      "started_at_utc": "2026-11-02T03:54:55.609194+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 34988417024,
+      "peak_private": 1955520512,
+      "minimum_system_available": 22142435328
+    },
+    "source_patch_bundle": {
+      "path": "patches/20261102T035455Z-q8-sized-pinned-bank-probe.patch",
+      "sha256": "2786a29a27aed2192aa14f4aeb8cbd48c16dd19147d6c0e30e95d8bbc0c4206a"
+    }
+  },
+  "stock-q8-preview-perf/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-preview-perf\\results.json",
+    "sha256": "09437fca3d845747e5284b323b9608ae31d186c1d3ad23bb6d24763566a72a74",
+    "bytes": 20084,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\run_stock_preview.py",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\stock-q8-preview-perf"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+      "dirty": "?? benchmarks/bench_clover_gpu_resources.py\n",
+      "started_at": "20261102T053018Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T053018Z-stock-q8-preview-perf",
+      "pid": 8584,
+      "exit_code": 0,
+      "elapsed_seconds": 106.59399999998277
+    },
+    "host_memory": {
+      "pid": 8584,
+      "started_at_utc": "2026-11-02T05:30:18.776046+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 18770210816,
+      "peak_private": 14142271488,
+      "minimum_system_available": 39360274432
+    }
+  },
+  "nvfp4-cache5120-final-p1/results.json": {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-cache5120-final-p1\\results.json",
+    "sha256": "95495c605ddc751f5f8ab25a89f1b903c7e4fb40a54de15209bd94d9f5b705c7",
+    "bytes": 334439,
+    "run": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--cache-slots",
+        "5120",
+        "--memory-ratio",
+        ".95",
+        "--modes",
+        "causal",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--output",
+        "C:\\workspace\\runs\\T-20261102-clover-q8\\nvfp4-cache5120-final-p1"
+      ],
+      "cwd": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "1d7caadbcc7abd588f02d1f78ee21059ee27c187",
+      "dirty": "",
+      "started_at": "20261102T081009Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T081009Z-nvfp4-cache5120-final-p1",
+      "pid": 14712,
+      "exit_code": 0,
+      "elapsed_seconds": 77.42200000002049
+    },
+    "host_memory": {
+      "pid": 14712,
+      "started_at_utc": "2026-11-02T08:10:10.070924+00:00",
+      "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling",
+      "state": "complete",
+      "peak_rss": 20665413632,
+      "peak_private": 18560974848,
+      "minimum_system_available": 37706018816
+    }
+  }
+}

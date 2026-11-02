@@ -1,10 +1,12 @@
 # Supported models
 
-FreeToken loads HF safetensors checkpoints directly. The checkpoints below are known-good — the prebuilt kernels are tuned
+FreeToken loads HF safetensors checkpoints directly. This Clover feature branch also loads the qualified official Q8 GGUF file.
+The checkpoints below are known-good — the prebuilt kernels are tuned
 for them; other checkpoints of the same architectures work too.
 
-| Model | HF checkpoints |
+| Model | Checkpoints |
 |---|---|
+| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [qualified weights, decoding and limits](clover-runtime-performance.md) |
 | DeepSeek-V4.1-Flash | [deepseek-ai/DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) |
 | DeepSeek-V4 | [deepseek-ai/DeepSeek-V4-Flash-0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) |
 | GLM-5.3-Flash | [RedHatAI/GLM-5.3-Flash-NVFP4](https://huggingface.co/RedHatAI/GLM-5.3-Flash-NVFP4) |

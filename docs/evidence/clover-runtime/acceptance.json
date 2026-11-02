@@ -1,0 +1,60 @@
+{
+  "T1": true,
+  "T2": true,
+  "T3_conservative": true,
+  "T4": true,
+  "C_preview_state_unchanged": true,
+  "C_graph_vs_eager_qualified_inputs": true,
+  "C_causal_not_below_previous": true,
+  "C_selfspec_aggregate": true,
+  "C_denoise_aggregate": false,
+  "C_denoise_failed": [
+    {
+      "prompt": "Count",
+      "width": 32,
+      "relative_difference": 0.33333333333333326
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "relative_difference": -0.3571428571428571
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "relative_difference": -0.37037037037037035
+    },
+    {
+      "prompt": "JSON",
+      "width": 32,
+      "relative_difference": -0.33333333333333337
+    }
+  ],
+  "R_with_documented_skips": true,
+  "N_speed_all_25": true,
+  "N_speed_ratio_min": 1.4396434731376233,
+  "N_speed_ratio_max": 3.90466230510295,
+  "N_W32_numeric_reproduction_remaining": [
+    {
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 32,
+      "repeat": 1,
+      "same_token_ids": false,
+      "old_tokens": 197,
+      "new_tokens": 215,
+      "first_difference": 71
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "denoise",
+      "width": 32,
+      "repeat": 1,
+      "same_token_ids": false,
+      "old_tokens": 106,
+      "new_tokens": 104,
+      "first_difference": 86
+    }
+  ],
+  "scope": "Performance and executed regression gates pass; C denoise progress has four failures; two NVFP4 W32 output differences remain incompletely isolated; never interpret this as all acceptance criteria passed"
+}

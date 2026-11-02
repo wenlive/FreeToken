@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "-ra",
+    "tests/kernels/test_clover_gguf.py"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+  "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/kernel/csrc/gguf/gguf_kernel.cu\n M python/freetoken/kernel/csrc/gguf/moe.cuh\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+  "started_at": "20261102T044322Z",
+  "state": "passed",
+  "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T044322Z-mmq-large-slot-regression",
+  "pid": 13276,
+  "exit_code": 0,
+  "elapsed_seconds": 48.09299999999348
+}

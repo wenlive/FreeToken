@@ -1,0 +1,625 @@
+{
+  "q8": {
+    "source_sha256": "08e47ab67194c02a533617991f1ddecbdd861a68a184fde2227afb7b41d5fc7c",
+    "cases": [
+      {
+        "prompt": "Count",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Sky",
+        "mode": "causal",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 32
+      },
+      {
+        "prompt": "Python",
+        "mode": "causal",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 8,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 24, in <module>\n  File \"<humaneval>\", line 10, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 16,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 23, in <module>\n  File \"<humaneval>\", line 9, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 32,
+        "valid": false,
+        "error": "SyntaxError"
+      },
+      {
+        "prompt": "JSON",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "causal",
+        "width": 8,
+        "chinese_characters": 180,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 8,
+        "chinese_characters": 171,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 16,
+        "chinese_characters": 180,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 8,
+        "chinese_characters": 160,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 16,
+        "chinese_characters": 146,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 32,
+        "chinese_characters": 125,
+        "paragraphs": 2
+      }
+    ]
+  },
+  "nvfp4_before": {
+    "source_sha256": "0d6e6da8ab78345e2b8efd7ae644d1a473337f0779e5d9e13187bdb22f32471e",
+    "cases": [
+      {
+        "prompt": "Count",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Sky",
+        "mode": "causal",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 32
+      },
+      {
+        "prompt": "Python",
+        "mode": "causal",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 8,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 24, in <module>\n  File \"<humaneval>\", line 10, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 16,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 30, in <module>\nAssertionError\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 32,
+        "valid": false,
+        "error": "SyntaxError"
+      },
+      {
+        "prompt": "JSON",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 8,
+        "valid": false,
+        "error": "JSONDecodeError"
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "causal",
+        "width": 8,
+        "chinese_characters": 166,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 8,
+        "chinese_characters": 146,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 16,
+        "chinese_characters": 167,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 8,
+        "chinese_characters": 146,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 16,
+        "chinese_characters": 115,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 32,
+        "chinese_characters": 162,
+        "paragraphs": 2
+      }
+    ]
+  },
+  "nvfp4_after": {
+    "source_sha256": "244ea0cbecab14d04387562ec63f33ca81f8fe26670144eeda9342177818d231",
+    "cases": [
+      {
+        "prompt": "Count",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "Count",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Sky",
+        "mode": "causal",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "selfspec",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 8
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 16
+      },
+      {
+        "prompt": "Sky",
+        "mode": "denoise",
+        "width": 32
+      },
+      {
+        "prompt": "Python",
+        "mode": "causal",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true,
+        "grade": {
+          "returncode": 0,
+          "stderr": ""
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 8,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 24, in <module>\n  File \"<humaneval>\", line 10, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 16,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 30, in <module>\nAssertionError\n"
+        }
+      },
+      {
+        "prompt": "Python",
+        "mode": "denoise",
+        "width": 32,
+        "valid": false,
+        "grade": {
+          "returncode": 1,
+          "stderr": "Traceback (most recent call last):\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 111, in <module>\n    main()\n  File \"C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\clover_eval_worker.py\", line 103, in main\n    exec(\n  File \"<humaneval>\", line 24, in <module>\n  File \"<humaneval>\", line 10, in merge_intervals\nUnboundLocalError: cannot access local variable 'sorted' where it is not associated with a value\n"
+        }
+      },
+      {
+        "prompt": "JSON",
+        "mode": "causal",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 8,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "selfspec",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 8,
+        "valid": false,
+        "error": "JSONDecodeError"
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 16,
+        "valid": true
+      },
+      {
+        "prompt": "JSON",
+        "mode": "denoise",
+        "width": 32,
+        "valid": true
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "causal",
+        "width": 8,
+        "chinese_characters": 166,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 8,
+        "chinese_characters": 146,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "selfspec",
+        "width": 16,
+        "chinese_characters": 167,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 8,
+        "chinese_characters": 167,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 16,
+        "chinese_characters": 131,
+        "paragraphs": 2
+      },
+      {
+        "prompt": "Chinese",
+        "mode": "denoise",
+        "width": 32,
+        "chinese_characters": 162,
+        "paragraphs": 2
+      }
+    ]
+  }
+}

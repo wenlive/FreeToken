@@ -1,0 +1,455 @@
+{
+  "T1": [
+    {
+      "prompt": "Count",
+      "freetoken": 58.404687634089086,
+      "stock": 42.17351618265989,
+      "ratio": 1.3848664498622674,
+      "passed": true,
+      "stock_ordinary_load": 42.17351618265989,
+      "passed_ordinary_load": true,
+      "stock_mmap": 24.14818485275237,
+      "ratio_vs_best_loading": 1.3848664498622674
+    },
+    {
+      "prompt": "Sky",
+      "freetoken": 61.05876191057673,
+      "stock": 42.358363048776326,
+      "ratio": 1.4414806785679275,
+      "passed": true,
+      "stock_ordinary_load": 42.358363048776326,
+      "passed_ordinary_load": true,
+      "stock_mmap": 22.262557303698383,
+      "ratio_vs_best_loading": 1.4414806785679275
+    },
+    {
+      "prompt": "Python",
+      "freetoken": 72.98837344531344,
+      "stock": 48.95467718145816,
+      "ratio": 1.4909376927309852,
+      "passed": true,
+      "stock_ordinary_load": 48.95467718145816,
+      "passed_ordinary_load": true,
+      "stock_mmap": 25.872954014371036,
+      "ratio_vs_best_loading": 1.4909376927309852
+    },
+    {
+      "prompt": "JSON",
+      "freetoken": 63.620819913217254,
+      "stock": 41.397047314322336,
+      "ratio": 1.5368443896530286,
+      "passed": true,
+      "stock_ordinary_load": 41.397047314322336,
+      "passed_ordinary_load": true,
+      "stock_mmap": 24.813483934099544,
+      "ratio_vs_best_loading": 1.5368443896530286
+    },
+    {
+      "prompt": "Chinese",
+      "freetoken": 83.81828520230351,
+      "stock": 56.72664013927168,
+      "ratio": 1.477582402139773,
+      "passed": true,
+      "stock_ordinary_load": 56.72664013927168,
+      "passed_ordinary_load": true,
+      "stock_mmap": 33.33113214889758,
+      "ratio_vs_best_loading": 1.477582402139773
+    }
+  ],
+  "T2": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "rule": "exact",
+      "freetoken": 65.41895278686553,
+      "stock": 35.23884241338285,
+      "ratio": 1.8564444319550355,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Count",
+      "width": 8,
+      "rule": "threshold",
+      "freetoken": 56.28796623030764,
+      "stock": 27.847964963547014,
+      "ratio": 2.021259589488445,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 65.29777855377344
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "rule": "exact",
+      "freetoken": 62.34925768396149,
+      "stock": 34.56111303396821,
+      "ratio": 1.8040292169607455,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "rule": "threshold",
+      "freetoken": 54.83068375933956,
+      "stock": 22.53329858197952,
+      "ratio": 2.43331812072952,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 62.32819492194147
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "rule": "exact",
+      "freetoken": 40.63125913586942,
+      "stock": 20.592211407658976,
+      "ratio": 1.9731372377401493,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "rule": "threshold",
+      "freetoken": 45.710347951650974,
+      "stock": 23.02974531500613,
+      "ratio": 1.984839490251167,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 47.63708418055225
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "rule": "exact",
+      "freetoken": 29.8828106600665,
+      "stock": 14.74892821868011,
+      "ratio": 2.0261004879133333,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "rule": "threshold",
+      "freetoken": 31.13348724806024,
+      "stock": 13.778877153559558,
+      "ratio": 2.2595082967277484,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 32.54849508781571
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "rule": "exact",
+      "freetoken": 78.73800976964255,
+      "stock": 42.35921147515879,
+      "ratio": 1.858816701907159,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "rule": "threshold",
+      "freetoken": 77.54845559425169,
+      "stock": 37.483061451976766,
+      "ratio": 2.0688933238179232,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 79.00709949557803
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "rule": "exact",
+      "freetoken": 70.93268610689809,
+      "stock": 33.3539076748562,
+      "ratio": 2.126667939432194,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "rule": "threshold",
+      "freetoken": 75.39528033481541,
+      "stock": 31.70976705376168,
+      "ratio": 2.37766742994321,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 76.08226945230986
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "rule": "exact",
+      "freetoken": 59.246885193086406,
+      "stock": 29.470768844588758,
+      "ratio": 2.010361029449863,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "rule": "threshold",
+      "freetoken": 58.72138490683723,
+      "stock": 27.689440329574357,
+      "ratio": 2.120714041450613,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 61.11313086254617
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "rule": "exact",
+      "freetoken": 50.91077106676959,
+      "stock": 21.030560067557968,
+      "ratio": 2.420799584187263,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "rule": "threshold",
+      "freetoken": 53.85130147881803,
+      "stock": 18.353773731790323,
+      "ratio": 2.934072429232519,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 55.19435957849317
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "rule": "exact",
+      "freetoken": 59.59289116404032,
+      "stock": 22.722291070784337,
+      "ratio": 2.622662080086771,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "rule": "threshold",
+      "freetoken": 58.82301523515286,
+      "stock": 23.343507565736907,
+      "ratio": 2.51988759913236,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 61.26130500219911
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "rule": "exact",
+      "freetoken": 40.67784465163373,
+      "stock": 15.539247726936619,
+      "ratio": 2.617748643077517,
+      "passed": true,
+      "cache_scope": "resident / resident"
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "rule": "threshold",
+      "freetoken": 44.262952568367595,
+      "stock": 16.08453471986685,
+      "ratio": 2.751895117842365,
+      "passed": true,
+      "cache_scope": "native explicit cold reset / fresh stock CLI",
+      "native_resident": 45.644507520536536
+    }
+  ],
+  "T3": [
+    {
+      "prompt": "Count",
+      "freetoken": 70.82584349763316,
+      "stock_best_W16": 34.56111303396821,
+      "freetoken_cold": 57.703093734689965,
+      "stock_best_any_width": 35.23884241338285,
+      "ratio_vs_W16": 2.0492928982935923,
+      "ratio_vs_any_width": 2.0098799690064517,
+      "conservative_ratio": 1.6374855069806649,
+      "passed": true,
+      "passed_stricter_any_width": true
+    },
+    {
+      "prompt": "Sky",
+      "freetoken": 30.70933776548315,
+      "stock_best_W16": 14.74892821868011,
+      "freetoken_cold": 29.25980890545299,
+      "stock_best_any_width": 23.02974531500613,
+      "ratio_vs_W16": 2.082140295902216,
+      "ratio_vs_any_width": 1.33346406334216,
+      "conservative_ratio": 1.2705224701893407,
+      "passed": true,
+      "passed_stricter_any_width": true
+    },
+    {
+      "prompt": "Python",
+      "freetoken": 52.37339585012623,
+      "stock_best_W16": 33.3539076748562,
+      "freetoken_cold": 52.318676916058024,
+      "stock_best_any_width": 42.35921147515879,
+      "ratio_vs_W16": 1.5702326804006788,
+      "ratio_vs_any_width": 1.236411019615891,
+      "conservative_ratio": 1.2351192360306302,
+      "passed": true,
+      "passed_stricter_any_width": true
+    },
+    {
+      "prompt": "JSON",
+      "freetoken": 44.31114589609337,
+      "stock_best_W16": 21.030560067557968,
+      "freetoken_cold": 43.08723004937126,
+      "stock_best_any_width": 29.470768844588758,
+      "ratio_vs_W16": 2.106988389931106,
+      "ratio_vs_any_width": 1.5035626023115958,
+      "conservative_ratio": 1.462032778194135,
+      "passed": true,
+      "passed_stricter_any_width": true
+    },
+    {
+      "prompt": "Chinese",
+      "freetoken": 37.945788675852604,
+      "stock_best_W16": 16.08453471986685,
+      "freetoken_cold": 36.72017643758391,
+      "stock_best_any_width": 23.343507565736907,
+      "ratio_vs_W16": 2.3591474255692195,
+      "ratio_vs_any_width": 1.625539288343651,
+      "conservative_ratio": 1.5730359430422953,
+      "passed": true,
+      "passed_stricter_any_width": true
+    }
+  ],
+  "T4": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "native_ms": 11.492416381835938,
+      "stock_decode_ms": 19.351,
+      "stock_wall_ms": 29.284,
+      "causal_ms": 10.798863887786865,
+      "anchor": 16,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "native_ms": 14.58732795715332,
+      "stock_decode_ms": 48.794,
+      "stock_wall_ms": 59.148,
+      "causal_ms": 10.798863887786865,
+      "anchor": 16,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "native_ms": 11.536928176879883,
+      "stock_decode_ms": 19.644,
+      "stock_wall_ms": 29.512,
+      "causal_ms": 10.322879791259766,
+      "anchor": 29108,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "native_ms": 14.718048095703125,
+      "stock_decode_ms": 49.737,
+      "stock_wall_ms": 59.9,
+      "causal_ms": 10.322879791259766,
+      "anchor": 29108,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "native_ms": 11.3057279586792,
+      "stock_decode_ms": 19.546,
+      "stock_wall_ms": 29.664,
+      "causal_ms": 12.08176040649414,
+      "anchor": 71093,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "native_ms": 14.419936180114746,
+      "stock_decode_ms": 48.704,
+      "stock_wall_ms": 59.325,
+      "causal_ms": 12.08176040649414,
+      "anchor": 71093,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "native_ms": 11.609024047851562,
+      "stock_decode_ms": 19.875,
+      "stock_wall_ms": 29.873,
+      "causal_ms": 11.497023582458496,
+      "anchor": 4754,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "native_ms": 14.756511688232422,
+      "stock_decode_ms": 48.865,
+      "stock_wall_ms": 59.567,
+      "causal_ms": 11.497023582458496,
+      "anchor": 4754,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "native_ms": 11.498496055603027,
+      "stock_decode_ms": 18.661,
+      "stock_wall_ms": 28.721,
+      "causal_ms": 8.87827205657959,
+      "anchor": 97035,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "native_ms": 14.557791709899902,
+      "stock_decode_ms": 48.271,
+      "stock_wall_ms": 58.357,
+      "causal_ms": 8.87827205657959,
+      "anchor": 97035,
+      "same_anchor": true,
+      "passed_stock": true,
+      "passed_2x_causal": true
+    }
+  ]
+}
