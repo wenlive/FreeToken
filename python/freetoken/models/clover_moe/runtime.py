@@ -197,6 +197,13 @@ class CloverRuntime:
             batch, self.engine.device, max_verify_rows=len(tokens)
         )
         self.engine.attn_backend.prepare_metadata(batch)
+        if getattr(self.engine.config,'clover_split_kv',False):
+            metadata = batch.attn_metadata
+            batch.clover_valid = torch.ones(len(tokens),device=self.engine.device,dtype=torch.bool)
+            batch.clover_kv_splits = 8
+            batch.clover_attention = dict(q_indptr=metadata.cu_seqlens_q_gpu,
+                kv_indptr=metadata.indptr,indices=metadata.indices,
+                prefix_lens=metadata.prefix_lens,block_ends=None)
         if self.transactions is None or self.transactions.capacity < capacity:
             # Free the old window before allocating a larger one on a 16GB GPU.
             self.transactions = None

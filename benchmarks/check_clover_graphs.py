@@ -26,11 +26,13 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--cache-slots", type=int, default=4096)
     parser.add_argument("--memory-ratio", type=float, default=.85)
+    parser.add_argument("--split-kv", action="store_true")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
         expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
+        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True,
+        clover_split_kv=args.split_kv)
     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
     runtime = engine.mtp_runtime
     original = engine.forward_batch

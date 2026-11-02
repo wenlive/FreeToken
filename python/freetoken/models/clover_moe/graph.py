@@ -102,6 +102,7 @@ class CloverBlockGraphs:
             torch.ones(1, dtype=torch.bool, device=engine.device), is_verify=not preview)
         batch.clover_clean = self.clean
         batch.clover_preview = preview
+        batch.clover_kv_splits = 8 if getattr(engine.config,'clover_split_kv',False) else 1
         batch.clover_coreset_top_p = coreset
         batch.clover_valid = torch.ones(rows, dtype=torch.bool, device=engine.device)
         batch.clover_attention = dict(q_indptr=cu, kv_indptr=indptr, indices=indices,

@@ -133,10 +133,17 @@ def attention_preview(mixer, hidden, ctx, *, preview=True):
     indices = metadata.get("indices")
     if indices is None:
         indices = ctx.page_table[req.table_idx, :prefix]
-    output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
-        indices, metadata["prefix_lens"], width, dim ** -.5,
-        k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
-        block_ends=metadata["block_ends"] if preview else None)
+    if getattr(batch, 'clover_kv_splits', 1) > 1:
+        from freetoken.kernel.triton.clover_attention import split_kv_attention
+
+        output = split_kv_attention(q,keys,values,indices,metadata['prefix_lens'],
+            k.reshape(width,kh,dim),v.reshape(width,kh,dim),preview=preview,
+            splits=batch.clover_kv_splits)
+    else:
+        output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
+            indices, metadata["prefix_lens"], width, dim ** -.5,
+            k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
+            block_ends=metadata["block_ends"] if preview else None)
     return mixer._combine(output, gate)
 
 
@@ -199,6 +206,7 @@ def make_preview_batch(engine, request, tokens, *, coreset_top_p=.9):
     batch.fla_metadata = FLAMetadata(torch.tensor([0,width], device=engine.device, dtype=torch.int32),
         batch.linear_table_idx, torch.ones(1, device=engine.device, dtype=torch.bool))
     batch.clover_preview = True
+    batch.clover_kv_splits = 8 if getattr(getattr(engine,'config',None),'clover_split_kv',False) else 1
     batch.clover_valid = torch.ones(width, device=engine.device, dtype=torch.bool)
     batch.clover_coreset_top_p = coreset_top_p
     batch.clover_attention = dict(q_indptr=torch.tensor([0,width], device=engine.device, dtype=torch.int32),

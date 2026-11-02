@@ -155,3 +155,25 @@ def test_padded_verify_attention_is_causal_and_stores_only_valid_rows(valid_rows
     frozen_k[prefix:prefix+valid_rows] = k[:valid_rows]
     frozen_v[prefix:prefix+valid_rows] = v[:valid_rows]
     assert torch.equal(keys,frozen_k) and torch.equal(values,frozen_v)
+
+
+@pytest.mark.parametrize('width,prefix,dim',[(8,0,64),(16,19,64),(32,513,64),(16,16384,64),(16,4096,256)])
+@pytest.mark.parametrize('preview',[True,False])
+def test_split_kv_matches_independent_attention_without_cache_writes(width,prefix,dim,preview):
+    from freetoken.kernel.triton.clover_attention import split_kv_attention
+
+    torch.manual_seed(width+prefix)
+    heads,kv_heads=4,2
+    q=torch.randn(width,heads,dim,device='cuda',dtype=torch.bfloat16)
+    keys,values=[torch.randn(max(1,prefix)+3,kv_heads,dim,device='cuda',dtype=torch.bfloat16) for _ in range(2)]
+    k,v=[torch.randn(width,kv_heads,dim,device='cuda',dtype=torch.bfloat16) for _ in range(2)]
+    indices=torch.randperm(keys.shape[0],device='cuda')[:prefix].int()
+    frozen_k,frozen_v=keys.clone(),values.clone()
+    actual=split_kv_attention(q,keys,values,indices,
+        torch.tensor([prefix],device='cuda',dtype=torch.int32),k,v,preview=preview)
+    all_k=torch.cat((keys[indices.long()],k)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
+    all_v=torch.cat((values[indices.long()],v)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
+    allowed=None if preview else torch.arange(prefix+width,device='cuda')[None,:] <= prefix+torch.arange(width,device='cuda')[:,None]
+    expected=F.scaled_dot_product_attention(q.transpose(0,1).float(),all_k,all_v,attn_mask=allowed).transpose(0,1)
+    torch.testing.assert_close(actual.float(),expected,rtol=.02,atol=.01)
+    assert torch.equal(keys,frozen_k) and torch.equal(values,frozen_v)
