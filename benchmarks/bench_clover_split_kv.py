@@ -55,6 +55,12 @@ def main():
                     graphs.append((temporary,graph,scores))
                 reference,actual=logits
                 error=float((actual-reference).norm()/reference.norm())
+                if not torch.isfinite(actual).all() or error >= .05:
+                    result['state']='numerical_gate_failed'
+                    result['failure']=dict(prefix=current,width=width,relative_l2=error,
+                        finite=bool(torch.isfinite(actual).all()),
+                        argmax_agreement=float((actual.argmax(-1)==reference.argmax(-1)).float().mean()))
+                    save()
                 assert torch.isfinite(actual).all() and error<.05
                 row=dict(prefix=current,width=width,relative_l2=error,
                     argmax_agreement=float((actual.argmax(-1)==reference.argmax(-1)).float().mean()),turns=[])

@@ -30,14 +30,15 @@ def _partials(Q, KC, VC, K, V, INDICES, PREFIX, PARTS, LSE,
         cached_k = tl.load(KC + slot[None, :] * (KV_HEADS * D) + kv_head * D + dim[:, None], past[None, :], other=0)
         live_k = tl.load(K + (col[None, :] - prefix) * KS + kv_head * KH + dim[:, None], current[None, :], other=0)
         key = tl.where(past[None, :], cached_k, live_k)
-        scores = tl.dot(q, key) * SCALE
+        scores = tl.dot(q, key)
         allowed = (col[None, :] < end) & (row[:, None] < W)
         if not PREVIEW:
             allowed &= col[None, :] <= prefix + row[:, None]
         scores = tl.where(allowed, scores, -float('inf'))
-        new_max = tl.maximum(maximum, tl.max(scores, 1))
-        alpha = tl.where(new_max == -float('inf'), 0., tl.exp(maximum - new_max))
-        probabilities = tl.where(scores == -float('inf'), 0., tl.exp(scores - new_max[:, None]))
+        scale_log2 = SCALE * 1.4426950408889634
+        new_max = tl.maximum(maximum, tl.max(scores, 1) * scale_log2)
+        alpha = tl.where(new_max == -float('inf'), 0., tl.exp2(maximum - new_max))
+        probabilities = tl.where(scores == -float('inf'), 0., tl.exp2(scores * scale_log2 - new_max[:, None]))
         cached_v = tl.load(VC + slot[:, None] * (KV_HEADS * D) + kv_head * D + dim[None, :], past[:, None], other=0)
         live_v = tl.load(V + (col[:, None] - prefix) * VS + kv_head * VH + dim[None, :], current[:, None], other=0)
         value = tl.where(past[:, None], cached_v, live_v)
@@ -45,7 +46,7 @@ def _partials(Q, KC, VC, K, V, INDICES, PREFIX, PARTS, LSE,
         normalizer = normalizer * alpha + tl.sum(probabilities, 1)
         maximum = new_max
     output = accumulator / tl.where(normalizer > 0, normalizer, 1.)[:, None]
-    lse = tl.where(normalizer > 0, maximum + tl.log(normalizer), -float('inf'))
+    lse = tl.where(normalizer > 0, maximum + tl.log2(normalizer), -float('inf'))
     tl.store(PARTS + ((head * SPLITS + split) * W + row[:, None]) * D + dim[None, :], output, row[:, None] < W)
     tl.store(LSE + (head * SPLITS + split) * W + row, lse, row < W)
 
@@ -57,7 +58,7 @@ def _merge(PARTS, LSE, OUT, HEADS: tl.constexpr, D: tl.constexpr,
     split, dim = tl.arange(0, SPLITS), tl.arange(0, D)
     lse = tl.load(LSE + (head * SPLITS + split) * W + row)
     maximum = tl.max(lse, 0)
-    weights = tl.exp(lse - maximum)
+    weights = tl.exp2(lse - maximum)
     values = tl.load(PARTS + ((head * SPLITS + split[:, None]) * W + row) * D + dim[None, :])
     output = tl.sum(values * weights[:, None], 0) / tl.sum(weights, 0)
     tl.store(OUT + (row * HEADS + head) * D + dim, output)
