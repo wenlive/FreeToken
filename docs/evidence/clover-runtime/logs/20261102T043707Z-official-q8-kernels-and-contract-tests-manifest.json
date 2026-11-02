@@ -1,0 +1,27 @@
+{
+  "command": [
+    "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "-ra",
+    "tests/kernels/test_clover_gguf.py",
+    "tests/kernels/test_clover_preview.py",
+    "tests/models/test_clover_gguf.py",
+    "tests/models/test_clover_generation.py",
+    "tests/models/test_clover_model.py",
+    "tests/scheduler/test_clover_prefill_bundle.py"
+  ],
+  "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+  "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+  "started_at": "20261102T043707Z",
+  "state": "passed",
+  "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043707Z-official-q8-kernels-and-contract-tests",
+  "pid": 12588,
+  "exit_code": 0,
+  "elapsed_seconds": 16.15700000000652
+}

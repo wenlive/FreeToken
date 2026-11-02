@@ -1,0 +1,4 @@
+........................................................................ [ 51%]
+...................................................................      [100%]
+139 passed in 14.64s
+{"pid": 12588, "started_at_utc": "2026-11-02T04:37:07.464564+00:00", "scope": "Sampled process working set/private bytes plus system available RAM; no GPU polling", "state": "complete", "peak_rss": 2580131840, "peak_private": 3984289792, "minimum_system_available": 56437719040}

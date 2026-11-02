@@ -1,0 +1,1693 @@
+{
+  "environment": {
+    "state": "complete",
+    "observed_at": "2026-11-02T05:40:09.926972+00:00",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.11.0+cu130",
+      "triton-windows": "3.6.0.post26",
+      "triton": null,
+      "transformers": "5.16.1",
+      "gguf": "0.19.0",
+      "numpy": "2.4.6",
+      "safetensors": "0.8.0",
+      "flashinfer-python": null,
+      "pytest": "9.1.1"
+    },
+    "torch_cuda_runtime": "13.0",
+    "cuda_initialized": false,
+    "official_weight_provenance": {
+      "repository": "Diffuspace/Clover-35B-A3B-Preview-GGUF",
+      "revision": "32e22a02b885e173177b7ce7661ad13448b4f89e",
+      "filename": "Clover-35B-A3B-Preview-Q8_0.gguf",
+      "expected_bytes": 37863343264,
+      "expected_sha256": "834529e7aae000305ae94656782726bcf0ed77976f95a56383447d8903afddab",
+      "destination": "C:\\workspace\\models\\inputs\\clover-gguf-diffuspace\\32e22a02b885e173177b7ce7661ad13448b4f89e\\Clover-35B-A3B-Preview-Q8_0.gguf",
+      "started_at": "20261102T035249Z",
+      "state": "verified",
+      "downloaded_bytes": 37863343264,
+      "elapsed_seconds": 1685.734999999986,
+      "actual_bytes": 37863343264,
+      "actual_sha256": "834529e7aae000305ae94656782726bcf0ed77976f95a56383447d8903afddab"
+    },
+    "design_sha256": "da463cea3018369b3653ef023dcd81face531b36a549ca8c9e3fc23c9875fafc",
+    "sources": {
+      "q8": {
+        "path": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+        "commit": "ab8add297ef5d1b99db3484b19d9c3d45bfb28ce",
+        "dirty": "?? benchmarks/bench_clover_gpu_resources.py"
+      },
+      "nvfp4": {
+        "path": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken",
+        "commit": "301acc755b0d9ccc86225e8ca7b75863d1cfd257",
+        "dirty": "?? benchmarks/bench_clover_gpu_resources.py"
+      },
+      "stock": {
+        "path": "C:\\workspace\\wt\\T-20261031-clover-gguf\\llama.cpp",
+        "commit": "cb09d4355d8bf968bb907c5de03cf42d8aa073ce",
+        "dirty": ""
+      }
+    },
+    "baseline_binaries": {
+      "ggml-cuda.dll": {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\ggml-cuda.dll",
+        "sha256": "313bd9e6d08c89c7ef2ae00a6722be82a7abad51e4492d023e3b693f13a5c00c",
+        "bytes": 58712576
+      },
+      "llama-server.exe": {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-server.exe",
+        "sha256": "9aa8292305d761d5f99c17592e708d6f3460af638a8cb20ef5e7e4ce42868f59",
+        "bytes": 10752
+      },
+      "llama-speculative-simple.exe": {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama-speculative-simple.exe",
+        "sha256": "86e4c02e1c727ec48c763073d1b157ecc25a67c777cfcd8828ae01717a53bac1",
+        "bytes": 36864
+      },
+      "llama.dll": {
+        "path": "C:\\workspace\\builds\\T-20261031-clover-gguf\\llama-official-cb09-sm120\\bin\\llama.dll",
+        "sha256": "da08c9d160f09818e0138f835ab5fbe9d9990ed297b9794140c53b82b85ef4ef",
+        "bytes": 3051520
+      }
+    },
+    "cmake_flags": [
+      "CMAKE_BUILD_TYPE:STRING=Release",
+      "CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=120",
+      "CMAKE_CUDA_COMPILER:FILEPATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v13.2/bin/nvcc.exe",
+      "GGML_CUDA:BOOL=ON",
+      "GGML_CUDA_FA_ALL_QUANTS:BOOL=OFF",
+      "LLAMA_BUILD_SERVER:BOOL=ON",
+      "LLAMA_BUILD_TESTS:BOOL=OFF",
+      "LLAMA_CURL:UNINITIALIZED=OFF"
+    ],
+    "nvfp4_cuda_kernel_changes": ""
+  },
+  "runtime_inventory": {
+    "state": "complete",
+    "observed_at": "2026-11-02T08:24:17.087226+00:00",
+    "executable": "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "prefix": "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime",
+    "base_prefix": "C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312",
+    "source_mode": "Explicit per-process PYTHONPATH; immutable dependency site from previous verified environment; no editable install",
+    "packages": [
+      {
+        "name": "annotated-doc",
+        "version": "0.0.5",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "apache-tvm-ffi",
+        "version": "0.1.13.post3",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.7.22",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "charset-normalizer",
+        "version": "3.5.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "click",
+        "version": "8.5.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "colorama",
+        "version": "0.4.6",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "distro",
+        "version": "1.9.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "einops",
+        "version": "0.8.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "fastapi",
+        "version": "0.142.4",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "filelock",
+        "version": "4.0.12",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "flashlib",
+        "version": "0.3.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "freetoken",
+        "version": "0.1.3+speed.mtpdecode2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "fsspec",
+        "version": "2026.7.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "gguf",
+        "version": "0.19.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "hf-xet",
+        "version": "1.7.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "huggingface_hub",
+        "version": "1.33.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "idna",
+        "version": "3.20",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "iniconfig",
+        "version": "2.3.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "Jinja2",
+        "version": "3.1.6",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "jiter",
+        "version": "0.17.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "llvmlite",
+        "version": "0.50.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "markdown-it-py",
+        "version": "4.2.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "MarkupSafe",
+        "version": "3.0.4",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "mdurl",
+        "version": "0.1.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "modelscope",
+        "version": "1.40.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "modelscope-hub",
+        "version": "0.4.5",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "mpmath",
+        "version": "1.3.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "msgpack",
+        "version": "1.2.3",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "networkx",
+        "version": "3.7",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "ninja",
+        "version": "1.13.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "numba",
+        "version": "0.68.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "numpy",
+        "version": "2.4.6",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "openai",
+        "version": "2.54.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "opentelemetry-api",
+        "version": "1.45.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "packaging",
+        "version": "26.3",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "partial-json-parser",
+        "version": "0.2.1.1.post7",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pillow",
+        "version": "12.3.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pip",
+        "version": "26.2.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pluggy",
+        "version": "1.7.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "prompt_toolkit",
+        "version": "3.0.53",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "psutil",
+        "version": "7.2.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.5",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.5",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "Pygments",
+        "version": "2.21.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pytest",
+        "version": "9.1.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "PyYAML",
+        "version": "6.0.3",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "pyzmq",
+        "version": "27.2.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "regex",
+        "version": "2026.9.29",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "requests",
+        "version": "2.34.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "rich",
+        "version": "15.0.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "safetensors",
+        "version": "0.8.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "setuptools",
+        "version": "78.1.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "shellingham",
+        "version": "1.5.4",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "sniffio",
+        "version": "1.3.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "starlette",
+        "version": "1.7.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "sympy",
+        "version": "1.14.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "tokenizers",
+        "version": "0.23.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "torch",
+        "version": "2.11.0+cu130",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "torchvision",
+        "version": "0.26.0+cu130",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "tqdm",
+        "version": "4.70.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "transformers",
+        "version": "5.16.1",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "triton-windows",
+        "version": "3.6.0.post26",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "typer",
+        "version": "0.27.3",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "urllib3",
+        "version": "2.8.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "uvicorn",
+        "version": "0.54.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "wcwidth",
+        "version": "0.9.2",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      },
+      {
+        "name": "wheel",
+        "version": "0.48.0",
+        "path": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages"
+      }
+    ],
+    "modules": {
+      "torch": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\torch\\__init__.py",
+      "triton": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\triton\\__init__.py",
+      "transformers": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\transformers\\__init__.py",
+      "numpy": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\numpy\\__init__.py",
+      "gguf": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\gguf\\__init__.py",
+      "pytest": "C:\\workspace\\envs\\T-20261031-clover-gguf\\runtime\\Lib\\site-packages\\pytest\\__init__.py"
+    },
+    "pth": [
+      {
+        "path": "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Lib\\site-packages\\qualified-dependencies.pth",
+        "bytes": 68,
+        "sha256": "351654e1bc611ef920e0db10d0eaa6beb6ac3560eeab45a712aa0cfa76bcb465",
+        "content": "C:/workspace/envs/T-20261031-clover-gguf/runtime/Lib/site-packages\n"
+      }
+    ],
+    "native_extensions": [
+      {
+        "path": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\python\\freetoken\\kernel\\_cpu_moe.cp312-win_amd64.pyd",
+        "bytes": 302592,
+        "sha256": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b"
+      },
+      {
+        "path": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\python\\freetoken\\kernel\\_pinned_tensor.cp312-win_amd64.pyd",
+        "bytes": 278528,
+        "sha256": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69"
+      },
+      {
+        "path": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\python\\freetoken\\kernel\\_row_store.cp312-win_amd64.pyd",
+        "bytes": 346624,
+        "sha256": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+      },
+      {
+        "path": "C:\\workspace\\builds\\T-20261102-clover-q8\\torch-extensions\\freetoken_gguf_kernels\\freetoken_gguf_kernels.pyd",
+        "bytes": 3974144,
+        "sha256": "b3edb6b0d5d80ad1fa2137f8f4f60cc82d7a8d68e8beec8c2060a469d49c2eb6"
+      }
+    ]
+  },
+  "adapter": {
+    "state": "complete",
+    "model": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "source": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "dense_buffers": 613,
+    "packed_dense_bytes": 1492910080,
+    "other_dense_bytes": 2088008576,
+    "exact_source_parameters": 481,
+    "exact_names": [
+      "model.norm.weight",
+      "model.layers.0.input_layernorm.weight",
+      "model.layers.0.mlp.gate.weight",
+      "model.layers.0.mlp.shared_expert_gate.weight",
+      "model.layers.0.post_attention_layernorm.weight",
+      "model.layers.0.linear_attn.A_log",
+      "model.layers.0.linear_attn.in_proj_a.weight",
+      "model.layers.0.linear_attn.bd_softmax_history_bias",
+      "model.layers.0.linear_attn.bd_softmax_history_c",
+      "model.layers.0.linear_attn.bd_softmax_logit_scale",
+      "model.layers.0.linear_attn.in_proj_b.weight",
+      "model.layers.0.linear_attn.conv1d.weight",
+      "model.layers.0.linear_attn.conv_right_weight",
+      "model.layers.0.linear_attn.dt_bias",
+      "model.layers.0.linear_attn.norm.weight",
+      "model.layers.1.input_layernorm.weight",
+      "model.layers.1.mlp.gate.weight",
+      "model.layers.1.mlp.shared_expert_gate.weight",
+      "model.layers.1.post_attention_layernorm.weight",
+      "model.layers.1.linear_attn.A_log",
+      "model.layers.1.linear_attn.in_proj_a.weight",
+      "model.layers.1.linear_attn.bd_softmax_history_bias",
+      "model.layers.1.linear_attn.bd_softmax_history_c",
+      "model.layers.1.linear_attn.bd_softmax_logit_scale",
+      "model.layers.1.linear_attn.in_proj_b.weight",
+      "model.layers.1.linear_attn.conv1d.weight",
+      "model.layers.1.linear_attn.conv_right_weight",
+      "model.layers.1.linear_attn.dt_bias",
+      "model.layers.1.linear_attn.norm.weight",
+      "model.layers.2.input_layernorm.weight",
+      "model.layers.2.mlp.gate.weight",
+      "model.layers.2.mlp.shared_expert_gate.weight",
+      "model.layers.2.post_attention_layernorm.weight",
+      "model.layers.2.linear_attn.A_log",
+      "model.layers.2.linear_attn.in_proj_a.weight",
+      "model.layers.2.linear_attn.bd_softmax_history_bias",
+      "model.layers.2.linear_attn.bd_softmax_history_c",
+      "model.layers.2.linear_attn.bd_softmax_logit_scale",
+      "model.layers.2.linear_attn.in_proj_b.weight",
+      "model.layers.2.linear_attn.conv1d.weight",
+      "model.layers.2.linear_attn.conv_right_weight",
+      "model.layers.2.linear_attn.dt_bias",
+      "model.layers.2.linear_attn.norm.weight",
+      "model.layers.3.self_attn.k_norm.weight",
+      "model.layers.3.input_layernorm.weight",
+      "model.layers.3.self_attn.q_norm.weight",
+      "model.layers.3.mlp.gate.weight",
+      "model.layers.3.mlp.shared_expert_gate.weight",
+      "model.layers.3.post_attention_layernorm.weight",
+      "model.layers.4.input_layernorm.weight",
+      "model.layers.4.mlp.gate.weight",
+      "model.layers.4.mlp.shared_expert_gate.weight",
+      "model.layers.4.post_attention_layernorm.weight",
+      "model.layers.4.linear_attn.A_log",
+      "model.layers.4.linear_attn.in_proj_a.weight",
+      "model.layers.4.linear_attn.bd_softmax_history_bias",
+      "model.layers.4.linear_attn.bd_softmax_history_c",
+      "model.layers.4.linear_attn.bd_softmax_logit_scale",
+      "model.layers.4.linear_attn.in_proj_b.weight",
+      "model.layers.4.linear_attn.conv1d.weight",
+      "model.layers.4.linear_attn.conv_right_weight",
+      "model.layers.4.linear_attn.dt_bias",
+      "model.layers.4.linear_attn.norm.weight",
+      "model.layers.5.input_layernorm.weight",
+      "model.layers.5.mlp.gate.weight",
+      "model.layers.5.mlp.shared_expert_gate.weight",
+      "model.layers.5.post_attention_layernorm.weight",
+      "model.layers.5.linear_attn.A_log",
+      "model.layers.5.linear_attn.in_proj_a.weight",
+      "model.layers.5.linear_attn.bd_softmax_history_bias",
+      "model.layers.5.linear_attn.bd_softmax_history_c",
+      "model.layers.5.linear_attn.bd_softmax_logit_scale",
+      "model.layers.5.linear_attn.in_proj_b.weight",
+      "model.layers.5.linear_attn.conv1d.weight",
+      "model.layers.5.linear_attn.conv_right_weight",
+      "model.layers.5.linear_attn.dt_bias",
+      "model.layers.5.linear_attn.norm.weight",
+      "model.layers.6.input_layernorm.weight",
+      "model.layers.6.mlp.gate.weight",
+      "model.layers.6.mlp.shared_expert_gate.weight",
+      "model.layers.6.post_attention_layernorm.weight",
+      "model.layers.6.linear_attn.A_log",
+      "model.layers.6.linear_attn.in_proj_a.weight",
+      "model.layers.6.linear_attn.bd_softmax_history_bias",
+      "model.layers.6.linear_attn.bd_softmax_history_c",
+      "model.layers.6.linear_attn.bd_softmax_logit_scale",
+      "model.layers.6.linear_attn.in_proj_b.weight",
+      "model.layers.6.linear_attn.conv1d.weight",
+      "model.layers.6.linear_attn.conv_right_weight",
+      "model.layers.6.linear_attn.dt_bias",
+      "model.layers.6.linear_attn.norm.weight",
+      "model.layers.7.self_attn.k_norm.weight",
+      "model.layers.7.input_layernorm.weight",
+      "model.layers.7.self_attn.q_norm.weight",
+      "model.layers.7.mlp.gate.weight",
+      "model.layers.7.mlp.shared_expert_gate.weight",
+      "model.layers.7.post_attention_layernorm.weight",
+      "model.layers.8.input_layernorm.weight",
+      "model.layers.8.mlp.gate.weight",
+      "model.layers.8.mlp.shared_expert_gate.weight",
+      "model.layers.8.post_attention_layernorm.weight",
+      "model.layers.8.linear_attn.A_log",
+      "model.layers.8.linear_attn.in_proj_a.weight",
+      "model.layers.8.linear_attn.bd_softmax_history_bias",
+      "model.layers.8.linear_attn.bd_softmax_history_c",
+      "model.layers.8.linear_attn.bd_softmax_logit_scale",
+      "model.layers.8.linear_attn.in_proj_b.weight",
+      "model.layers.8.linear_attn.conv1d.weight",
+      "model.layers.8.linear_attn.conv_right_weight",
+      "model.layers.8.linear_attn.dt_bias",
+      "model.layers.8.linear_attn.norm.weight",
+      "model.layers.9.input_layernorm.weight",
+      "model.layers.9.mlp.gate.weight",
+      "model.layers.9.mlp.shared_expert_gate.weight",
+      "model.layers.9.post_attention_layernorm.weight",
+      "model.layers.9.linear_attn.A_log",
+      "model.layers.9.linear_attn.in_proj_a.weight",
+      "model.layers.9.linear_attn.bd_softmax_history_bias",
+      "model.layers.9.linear_attn.bd_softmax_history_c",
+      "model.layers.9.linear_attn.bd_softmax_logit_scale",
+      "model.layers.9.linear_attn.in_proj_b.weight",
+      "model.layers.9.linear_attn.conv1d.weight",
+      "model.layers.9.linear_attn.conv_right_weight",
+      "model.layers.9.linear_attn.dt_bias",
+      "model.layers.9.linear_attn.norm.weight",
+      "model.layers.10.input_layernorm.weight",
+      "model.layers.10.mlp.gate.weight",
+      "model.layers.10.mlp.shared_expert_gate.weight",
+      "model.layers.10.post_attention_layernorm.weight",
+      "model.layers.10.linear_attn.A_log",
+      "model.layers.10.linear_attn.in_proj_a.weight",
+      "model.layers.10.linear_attn.bd_softmax_history_bias",
+      "model.layers.10.linear_attn.bd_softmax_history_c",
+      "model.layers.10.linear_attn.bd_softmax_logit_scale",
+      "model.layers.10.linear_attn.in_proj_b.weight",
+      "model.layers.10.linear_attn.conv1d.weight",
+      "model.layers.10.linear_attn.conv_right_weight",
+      "model.layers.10.linear_attn.dt_bias",
+      "model.layers.10.linear_attn.norm.weight",
+      "model.layers.11.self_attn.k_norm.weight",
+      "model.layers.11.input_layernorm.weight",
+      "model.layers.11.self_attn.q_norm.weight",
+      "model.layers.11.mlp.gate.weight",
+      "model.layers.11.mlp.shared_expert_gate.weight",
+      "model.layers.11.post_attention_layernorm.weight",
+      "model.layers.12.input_layernorm.weight",
+      "model.layers.12.mlp.gate.weight",
+      "model.layers.12.mlp.shared_expert_gate.weight",
+      "model.layers.12.post_attention_layernorm.weight",
+      "model.layers.12.linear_attn.A_log",
+      "model.layers.12.linear_attn.in_proj_a.weight",
+      "model.layers.12.linear_attn.bd_softmax_history_bias",
+      "model.layers.12.linear_attn.bd_softmax_history_c",
+      "model.layers.12.linear_attn.bd_softmax_logit_scale",
+      "model.layers.12.linear_attn.in_proj_b.weight",
+      "model.layers.12.linear_attn.conv1d.weight",
+      "model.layers.12.linear_attn.conv_right_weight",
+      "model.layers.12.linear_attn.dt_bias",
+      "model.layers.12.linear_attn.norm.weight",
+      "model.layers.13.input_layernorm.weight",
+      "model.layers.13.mlp.gate.weight",
+      "model.layers.13.mlp.shared_expert_gate.weight",
+      "model.layers.13.post_attention_layernorm.weight",
+      "model.layers.13.linear_attn.A_log",
+      "model.layers.13.linear_attn.in_proj_a.weight",
+      "model.layers.13.linear_attn.bd_softmax_history_bias",
+      "model.layers.13.linear_attn.bd_softmax_history_c",
+      "model.layers.13.linear_attn.bd_softmax_logit_scale",
+      "model.layers.13.linear_attn.in_proj_b.weight",
+      "model.layers.13.linear_attn.conv1d.weight",
+      "model.layers.13.linear_attn.conv_right_weight",
+      "model.layers.13.linear_attn.dt_bias",
+      "model.layers.13.linear_attn.norm.weight",
+      "model.layers.14.input_layernorm.weight",
+      "model.layers.14.mlp.gate.weight",
+      "model.layers.14.mlp.shared_expert_gate.weight",
+      "model.layers.14.post_attention_layernorm.weight",
+      "model.layers.14.linear_attn.A_log",
+      "model.layers.14.linear_attn.in_proj_a.weight",
+      "model.layers.14.linear_attn.bd_softmax_history_bias",
+      "model.layers.14.linear_attn.bd_softmax_history_c",
+      "model.layers.14.linear_attn.bd_softmax_logit_scale",
+      "model.layers.14.linear_attn.in_proj_b.weight",
+      "model.layers.14.linear_attn.conv1d.weight",
+      "model.layers.14.linear_attn.conv_right_weight",
+      "model.layers.14.linear_attn.dt_bias",
+      "model.layers.14.linear_attn.norm.weight",
+      "model.layers.15.self_attn.k_norm.weight",
+      "model.layers.15.input_layernorm.weight",
+      "model.layers.15.self_attn.q_norm.weight",
+      "model.layers.15.mlp.gate.weight",
+      "model.layers.15.mlp.shared_expert_gate.weight",
+      "model.layers.15.post_attention_layernorm.weight",
+      "model.layers.16.input_layernorm.weight",
+      "model.layers.16.mlp.gate.weight",
+      "model.layers.16.mlp.shared_expert_gate.weight",
+      "model.layers.16.post_attention_layernorm.weight",
+      "model.layers.16.linear_attn.A_log",
+      "model.layers.16.linear_attn.in_proj_a.weight",
+      "model.layers.16.linear_attn.bd_softmax_history_bias",
+      "model.layers.16.linear_attn.bd_softmax_history_c",
+      "model.layers.16.linear_attn.bd_softmax_logit_scale",
+      "model.layers.16.linear_attn.in_proj_b.weight",
+      "model.layers.16.linear_attn.conv1d.weight",
+      "model.layers.16.linear_attn.conv_right_weight",
+      "model.layers.16.linear_attn.dt_bias",
+      "model.layers.16.linear_attn.norm.weight",
+      "model.layers.17.input_layernorm.weight",
+      "model.layers.17.mlp.gate.weight",
+      "model.layers.17.mlp.shared_expert_gate.weight",
+      "model.layers.17.post_attention_layernorm.weight",
+      "model.layers.17.linear_attn.A_log",
+      "model.layers.17.linear_attn.in_proj_a.weight",
+      "model.layers.17.linear_attn.bd_softmax_history_bias",
+      "model.layers.17.linear_attn.bd_softmax_history_c",
+      "model.layers.17.linear_attn.bd_softmax_logit_scale",
+      "model.layers.17.linear_attn.in_proj_b.weight",
+      "model.layers.17.linear_attn.conv1d.weight",
+      "model.layers.17.linear_attn.conv_right_weight",
+      "model.layers.17.linear_attn.dt_bias",
+      "model.layers.17.linear_attn.norm.weight",
+      "model.layers.18.input_layernorm.weight",
+      "model.layers.18.mlp.gate.weight",
+      "model.layers.18.mlp.shared_expert_gate.weight",
+      "model.layers.18.post_attention_layernorm.weight",
+      "model.layers.18.linear_attn.A_log",
+      "model.layers.18.linear_attn.in_proj_a.weight",
+      "model.layers.18.linear_attn.bd_softmax_history_bias",
+      "model.layers.18.linear_attn.bd_softmax_history_c",
+      "model.layers.18.linear_attn.bd_softmax_logit_scale",
+      "model.layers.18.linear_attn.in_proj_b.weight",
+      "model.layers.18.linear_attn.conv1d.weight",
+      "model.layers.18.linear_attn.conv_right_weight",
+      "model.layers.18.linear_attn.dt_bias",
+      "model.layers.18.linear_attn.norm.weight",
+      "model.layers.19.self_attn.k_norm.weight",
+      "model.layers.19.input_layernorm.weight",
+      "model.layers.19.self_attn.q_norm.weight",
+      "model.layers.19.mlp.gate.weight",
+      "model.layers.19.mlp.shared_expert_gate.weight",
+      "model.layers.19.post_attention_layernorm.weight",
+      "model.layers.20.input_layernorm.weight",
+      "model.layers.20.mlp.gate.weight",
+      "model.layers.20.mlp.shared_expert_gate.weight",
+      "model.layers.20.post_attention_layernorm.weight",
+      "model.layers.20.linear_attn.A_log",
+      "model.layers.20.linear_attn.in_proj_a.weight",
+      "model.layers.20.linear_attn.bd_softmax_history_bias",
+      "model.layers.20.linear_attn.bd_softmax_history_c",
+      "model.layers.20.linear_attn.bd_softmax_logit_scale",
+      "model.layers.20.linear_attn.in_proj_b.weight",
+      "model.layers.20.linear_attn.conv1d.weight",
+      "model.layers.20.linear_attn.conv_right_weight",
+      "model.layers.20.linear_attn.dt_bias",
+      "model.layers.20.linear_attn.norm.weight",
+      "model.layers.21.input_layernorm.weight",
+      "model.layers.21.mlp.gate.weight",
+      "model.layers.21.mlp.shared_expert_gate.weight",
+      "model.layers.21.post_attention_layernorm.weight",
+      "model.layers.21.linear_attn.A_log",
+      "model.layers.21.linear_attn.in_proj_a.weight",
+      "model.layers.21.linear_attn.bd_softmax_history_bias",
+      "model.layers.21.linear_attn.bd_softmax_history_c",
+      "model.layers.21.linear_attn.bd_softmax_logit_scale",
+      "model.layers.21.linear_attn.in_proj_b.weight",
+      "model.layers.21.linear_attn.conv1d.weight",
+      "model.layers.21.linear_attn.conv_right_weight",
+      "model.layers.21.linear_attn.dt_bias",
+      "model.layers.21.linear_attn.norm.weight",
+      "model.layers.22.input_layernorm.weight",
+      "model.layers.22.mlp.gate.weight",
+      "model.layers.22.mlp.shared_expert_gate.weight",
+      "model.layers.22.post_attention_layernorm.weight",
+      "model.layers.22.linear_attn.A_log",
+      "model.layers.22.linear_attn.in_proj_a.weight",
+      "model.layers.22.linear_attn.bd_softmax_history_bias",
+      "model.layers.22.linear_attn.bd_softmax_history_c",
+      "model.layers.22.linear_attn.bd_softmax_logit_scale",
+      "model.layers.22.linear_attn.in_proj_b.weight",
+      "model.layers.22.linear_attn.conv1d.weight",
+      "model.layers.22.linear_attn.conv_right_weight",
+      "model.layers.22.linear_attn.dt_bias",
+      "model.layers.22.linear_attn.norm.weight",
+      "model.layers.23.self_attn.k_norm.weight",
+      "model.layers.23.input_layernorm.weight",
+      "model.layers.23.self_attn.q_norm.weight",
+      "model.layers.23.mlp.gate.weight",
+      "model.layers.23.mlp.shared_expert_gate.weight",
+      "model.layers.23.post_attention_layernorm.weight",
+      "model.layers.24.input_layernorm.weight",
+      "model.layers.24.mlp.gate.weight",
+      "model.layers.24.mlp.shared_expert_gate.weight",
+      "model.layers.24.post_attention_layernorm.weight",
+      "model.layers.24.linear_attn.A_log",
+      "model.layers.24.linear_attn.in_proj_a.weight",
+      "model.layers.24.linear_attn.bd_softmax_history_bias",
+      "model.layers.24.linear_attn.bd_softmax_history_c",
+      "model.layers.24.linear_attn.bd_softmax_logit_scale",
+      "model.layers.24.linear_attn.in_proj_b.weight",
+      "model.layers.24.linear_attn.conv1d.weight",
+      "model.layers.24.linear_attn.conv_right_weight",
+      "model.layers.24.linear_attn.dt_bias",
+      "model.layers.24.linear_attn.norm.weight",
+      "model.layers.25.input_layernorm.weight",
+      "model.layers.25.mlp.gate.weight",
+      "model.layers.25.mlp.shared_expert_gate.weight",
+      "model.layers.25.post_attention_layernorm.weight",
+      "model.layers.25.linear_attn.A_log",
+      "model.layers.25.linear_attn.in_proj_a.weight",
+      "model.layers.25.linear_attn.bd_softmax_history_bias",
+      "model.layers.25.linear_attn.bd_softmax_history_c",
+      "model.layers.25.linear_attn.bd_softmax_logit_scale",
+      "model.layers.25.linear_attn.in_proj_b.weight",
+      "model.layers.25.linear_attn.conv1d.weight",
+      "model.layers.25.linear_attn.conv_right_weight",
+      "model.layers.25.linear_attn.dt_bias",
+      "model.layers.25.linear_attn.norm.weight",
+      "model.layers.26.input_layernorm.weight",
+      "model.layers.26.mlp.gate.weight",
+      "model.layers.26.mlp.shared_expert_gate.weight",
+      "model.layers.26.post_attention_layernorm.weight",
+      "model.layers.26.linear_attn.A_log",
+      "model.layers.26.linear_attn.in_proj_a.weight",
+      "model.layers.26.linear_attn.bd_softmax_history_bias",
+      "model.layers.26.linear_attn.bd_softmax_history_c",
+      "model.layers.26.linear_attn.bd_softmax_logit_scale",
+      "model.layers.26.linear_attn.in_proj_b.weight",
+      "model.layers.26.linear_attn.conv1d.weight",
+      "model.layers.26.linear_attn.conv_right_weight",
+      "model.layers.26.linear_attn.dt_bias",
+      "model.layers.26.linear_attn.norm.weight",
+      "model.layers.27.self_attn.k_norm.weight",
+      "model.layers.27.input_layernorm.weight",
+      "model.layers.27.self_attn.q_norm.weight",
+      "model.layers.27.mlp.gate.weight",
+      "model.layers.27.mlp.shared_expert_gate.weight",
+      "model.layers.27.post_attention_layernorm.weight",
+      "model.layers.28.input_layernorm.weight",
+      "model.layers.28.mlp.gate.weight",
+      "model.layers.28.mlp.shared_expert_gate.weight",
+      "model.layers.28.post_attention_layernorm.weight",
+      "model.layers.28.linear_attn.A_log",
+      "model.layers.28.linear_attn.in_proj_a.weight",
+      "model.layers.28.linear_attn.bd_softmax_history_bias",
+      "model.layers.28.linear_attn.bd_softmax_history_c",
+      "model.layers.28.linear_attn.bd_softmax_logit_scale",
+      "model.layers.28.linear_attn.in_proj_b.weight",
+      "model.layers.28.linear_attn.conv1d.weight",
+      "model.layers.28.linear_attn.conv_right_weight",
+      "model.layers.28.linear_attn.dt_bias",
+      "model.layers.28.linear_attn.norm.weight",
+      "model.layers.29.input_layernorm.weight",
+      "model.layers.29.mlp.gate.weight",
+      "model.layers.29.mlp.shared_expert_gate.weight",
+      "model.layers.29.post_attention_layernorm.weight",
+      "model.layers.29.linear_attn.A_log",
+      "model.layers.29.linear_attn.in_proj_a.weight",
+      "model.layers.29.linear_attn.bd_softmax_history_bias",
+      "model.layers.29.linear_attn.bd_softmax_history_c",
+      "model.layers.29.linear_attn.bd_softmax_logit_scale",
+      "model.layers.29.linear_attn.in_proj_b.weight",
+      "model.layers.29.linear_attn.conv1d.weight",
+      "model.layers.29.linear_attn.conv_right_weight",
+      "model.layers.29.linear_attn.dt_bias",
+      "model.layers.29.linear_attn.norm.weight",
+      "model.layers.30.input_layernorm.weight",
+      "model.layers.30.mlp.gate.weight",
+      "model.layers.30.mlp.shared_expert_gate.weight",
+      "model.layers.30.post_attention_layernorm.weight",
+      "model.layers.30.linear_attn.A_log",
+      "model.layers.30.linear_attn.in_proj_a.weight",
+      "model.layers.30.linear_attn.bd_softmax_history_bias",
+      "model.layers.30.linear_attn.bd_softmax_history_c",
+      "model.layers.30.linear_attn.bd_softmax_logit_scale",
+      "model.layers.30.linear_attn.in_proj_b.weight",
+      "model.layers.30.linear_attn.conv1d.weight",
+      "model.layers.30.linear_attn.conv_right_weight",
+      "model.layers.30.linear_attn.dt_bias",
+      "model.layers.30.linear_attn.norm.weight",
+      "model.layers.31.self_attn.k_norm.weight",
+      "model.layers.31.input_layernorm.weight",
+      "model.layers.31.self_attn.q_norm.weight",
+      "model.layers.31.mlp.gate.weight",
+      "model.layers.31.mlp.shared_expert_gate.weight",
+      "model.layers.31.post_attention_layernorm.weight",
+      "model.layers.32.input_layernorm.weight",
+      "model.layers.32.mlp.gate.weight",
+      "model.layers.32.mlp.shared_expert_gate.weight",
+      "model.layers.32.post_attention_layernorm.weight",
+      "model.layers.32.linear_attn.A_log",
+      "model.layers.32.linear_attn.in_proj_a.weight",
+      "model.layers.32.linear_attn.bd_softmax_history_bias",
+      "model.layers.32.linear_attn.bd_softmax_history_c",
+      "model.layers.32.linear_attn.bd_softmax_logit_scale",
+      "model.layers.32.linear_attn.in_proj_b.weight",
+      "model.layers.32.linear_attn.conv1d.weight",
+      "model.layers.32.linear_attn.conv_right_weight",
+      "model.layers.32.linear_attn.dt_bias",
+      "model.layers.32.linear_attn.norm.weight",
+      "model.layers.33.input_layernorm.weight",
+      "model.layers.33.mlp.gate.weight",
+      "model.layers.33.mlp.shared_expert_gate.weight",
+      "model.layers.33.post_attention_layernorm.weight",
+      "model.layers.33.linear_attn.A_log",
+      "model.layers.33.linear_attn.in_proj_a.weight",
+      "model.layers.33.linear_attn.bd_softmax_history_bias",
+      "model.layers.33.linear_attn.bd_softmax_history_c",
+      "model.layers.33.linear_attn.bd_softmax_logit_scale",
+      "model.layers.33.linear_attn.in_proj_b.weight",
+      "model.layers.33.linear_attn.conv1d.weight",
+      "model.layers.33.linear_attn.conv_right_weight",
+      "model.layers.33.linear_attn.dt_bias",
+      "model.layers.33.linear_attn.norm.weight",
+      "model.layers.34.input_layernorm.weight",
+      "model.layers.34.mlp.gate.weight",
+      "model.layers.34.mlp.shared_expert_gate.weight",
+      "model.layers.34.post_attention_layernorm.weight",
+      "model.layers.34.linear_attn.A_log",
+      "model.layers.34.linear_attn.in_proj_a.weight",
+      "model.layers.34.linear_attn.bd_softmax_history_bias",
+      "model.layers.34.linear_attn.bd_softmax_history_c",
+      "model.layers.34.linear_attn.bd_softmax_logit_scale",
+      "model.layers.34.linear_attn.in_proj_b.weight",
+      "model.layers.34.linear_attn.conv1d.weight",
+      "model.layers.34.linear_attn.conv_right_weight",
+      "model.layers.34.linear_attn.dt_bias",
+      "model.layers.34.linear_attn.norm.weight",
+      "model.layers.35.self_attn.k_norm.weight",
+      "model.layers.35.input_layernorm.weight",
+      "model.layers.35.self_attn.q_norm.weight",
+      "model.layers.35.mlp.gate.weight",
+      "model.layers.35.mlp.shared_expert_gate.weight",
+      "model.layers.35.post_attention_layernorm.weight",
+      "model.layers.36.input_layernorm.weight",
+      "model.layers.36.mlp.gate.weight",
+      "model.layers.36.mlp.shared_expert_gate.weight",
+      "model.layers.36.post_attention_layernorm.weight",
+      "model.layers.36.linear_attn.A_log",
+      "model.layers.36.linear_attn.in_proj_a.weight",
+      "model.layers.36.linear_attn.bd_softmax_history_bias",
+      "model.layers.36.linear_attn.bd_softmax_history_c",
+      "model.layers.36.linear_attn.bd_softmax_logit_scale",
+      "model.layers.36.linear_attn.in_proj_b.weight",
+      "model.layers.36.linear_attn.conv1d.weight",
+      "model.layers.36.linear_attn.conv_right_weight",
+      "model.layers.36.linear_attn.dt_bias",
+      "model.layers.36.linear_attn.norm.weight",
+      "model.layers.37.input_layernorm.weight",
+      "model.layers.37.mlp.gate.weight",
+      "model.layers.37.mlp.shared_expert_gate.weight",
+      "model.layers.37.post_attention_layernorm.weight",
+      "model.layers.37.linear_attn.A_log",
+      "model.layers.37.linear_attn.in_proj_a.weight",
+      "model.layers.37.linear_attn.bd_softmax_history_bias",
+      "model.layers.37.linear_attn.bd_softmax_history_c",
+      "model.layers.37.linear_attn.bd_softmax_logit_scale",
+      "model.layers.37.linear_attn.in_proj_b.weight",
+      "model.layers.37.linear_attn.conv1d.weight",
+      "model.layers.37.linear_attn.conv_right_weight",
+      "model.layers.37.linear_attn.dt_bias",
+      "model.layers.37.linear_attn.norm.weight",
+      "model.layers.38.input_layernorm.weight",
+      "model.layers.38.mlp.gate.weight",
+      "model.layers.38.mlp.shared_expert_gate.weight",
+      "model.layers.38.post_attention_layernorm.weight",
+      "model.layers.38.linear_attn.A_log",
+      "model.layers.38.linear_attn.in_proj_a.weight",
+      "model.layers.38.linear_attn.bd_softmax_history_bias",
+      "model.layers.38.linear_attn.bd_softmax_history_c",
+      "model.layers.38.linear_attn.bd_softmax_logit_scale",
+      "model.layers.38.linear_attn.in_proj_b.weight",
+      "model.layers.38.linear_attn.conv1d.weight",
+      "model.layers.38.linear_attn.conv_right_weight",
+      "model.layers.38.linear_attn.dt_bias",
+      "model.layers.38.linear_attn.norm.weight",
+      "model.layers.39.self_attn.k_norm.weight",
+      "model.layers.39.input_layernorm.weight",
+      "model.layers.39.self_attn.q_norm.weight",
+      "model.layers.39.mlp.gate.weight",
+      "model.layers.39.mlp.shared_expert_gate.weight",
+      "model.layers.39.post_attention_layernorm.weight"
+    ],
+    "norm_delta_rounding": [
+      "model.layers.0.input_layernorm.weight",
+      "model.layers.6.input_layernorm.weight",
+      "model.layers.8.input_layernorm.weight",
+      "model.layers.31.input_layernorm.weight",
+      "model.layers.35.self_attn.k_norm.weight",
+      "model.layers.38.input_layernorm.weight"
+    ],
+    "tokenizer_ids_checked": 248077,
+    "tokenizer_probes": 4,
+    "cuda_initialized": false,
+    "expert_types": [
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        8,
+        8
+      ]
+    ],
+    "conventions": "inverse even/odd V-head order; raw A_log; folded +1 norms; plain ssm_norm; separate packed gate/up/down"
+  },
+  "pinned_host": {
+    "target_bytes": 34225520640,
+    "layers": [
+      {
+        "layer": 0,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.14100000000325963
+      },
+      {
+        "layer": 1,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.21899999998277053
+      },
+      {
+        "layer": 2,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.2809999999590218
+      },
+      {
+        "layer": 3,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.34399999998277053
+      },
+      {
+        "layer": 4,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.42199999996228144
+      },
+      {
+        "layer": 5,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.48499999998603016
+      },
+      {
+        "layer": 6,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.5469999999622814
+      },
+      {
+        "layer": 7,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.6099999999860302
+      },
+      {
+        "layer": 8,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.6719999999622814
+      },
+      {
+        "layer": 9,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.75
+      },
+      {
+        "layer": 10,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.8129999999655411
+      },
+      {
+        "layer": 11,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.875
+      },
+      {
+        "layer": 12,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 0.9379999999655411
+      },
+      {
+        "layer": 13,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.0
+      },
+      {
+        "layer": 14,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.077999999979511
+      },
+      {
+        "layer": 15,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.1559999999590218
+      },
+      {
+        "layer": 16,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.2189999999827705
+      },
+      {
+        "layer": 17,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.2809999999590218
+      },
+      {
+        "layer": 18,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.3439999999827705
+      },
+      {
+        "layer": 19,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.4219999999622814
+      },
+      {
+        "layer": 20,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.4849999999860302
+      },
+      {
+        "layer": 21,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.562999999965541
+      },
+      {
+        "layer": 22,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.7969999999622814
+      },
+      {
+        "layer": 23,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 1.937999999965541
+      },
+      {
+        "layer": 24,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.0939999999827705
+      },
+      {
+        "layer": 25,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.23499999998603
+      },
+      {
+        "layer": 26,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.3910000000032596
+      },
+      {
+        "layer": 27,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.530999999959022
+      },
+      {
+        "layer": 28,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.6719999999622814
+      },
+      {
+        "layer": 29,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.7969999999622814
+      },
+      {
+        "layer": 30,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 2.9219999999622814
+      },
+      {
+        "layer": 31,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.062999999965541
+      },
+      {
+        "layer": 32,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.202999999979511
+      },
+      {
+        "layer": 33,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.327999999979511
+      },
+      {
+        "layer": 34,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.4689999999827705
+      },
+      {
+        "layer": 35,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.60999999998603
+      },
+      {
+        "layer": 36,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.75
+      },
+      {
+        "layer": 37,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 3.875
+      },
+      {
+        "layer": 38,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 4.030999999959022
+      },
+      {
+        "layer": 39,
+        "bytes": 855638016,
+        "pinned": "pinned",
+        "device_alias": true,
+        "seconds": 4.171999999962281
+      }
+    ],
+    "state": "passed",
+    "allocated_bytes": 34225520640,
+    "seconds": 4.171999999962281
+  },
+  "canonical_prompts": {
+    "state": "complete",
+    "source": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "source_revision": "4b0402b65e523d0183a14c431955438714cb16ff",
+    "matches_actual_official_q8_native_ids": true,
+    "matches_recorded_stock_inputs": true,
+    "prompts": {
+      "Count": {
+        "text": "<|im_start|>user\nCount from 1 to 10.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        "user_text": "Count from 1 to 10.",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          2427,
+          494,
+          220,
+          16,
+          310,
+          220,
+          16,
+          15,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "tokens": 21,
+        "file": "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\Count.txt",
+        "sha256": "189f5d5dbe8cc5064f69dd4f101dc50c23d9291437888a0fa584bbf24d2e1a9a"
+      },
+      "Sky": {
+        "text": "<|im_start|>user\nExplain why the sky is blue in two sentences.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        "user_text": "Explain why the sky is blue in two sentences.",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          814,
+          20139,
+          3069,
+          279,
+          12515,
+          369,
+          6105,
+          303,
+          1330,
+          22157,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "tokens": 23,
+        "file": "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\Sky.txt",
+        "sha256": "b35165ed761ba0e760e9ca865d1e6ab1bffa00220aa89776912e10064af22eee"
+      },
+      "Python": {
+        "text": "<|im_start|>user\nWrite a Python function that merges overlapping integer intervals. Include type hints and three assert-based examples. Output only Python code.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        "user_text": "Write a Python function that merges overlapping integer intervals. Include type hints and three assert-based examples. Output only Python code.",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          7734,
+          264,
+          12654,
+          709,
+          421,
+          78161,
+          48142,
+          7308,
+          26126,
+          13,
+          28763,
+          913,
+          29642,
+          321,
+          2250,
+          1992,
+          5792,
+          9989,
+          13,
+          8984,
+          1132,
+          12654,
+          1970,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "tokens": 36,
+        "file": "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\Python.txt",
+        "sha256": "df1f14160fd55034cfdba83d35698acff93fb0f0006a9191146991f04f5c1aba"
+      },
+      "JSON": {
+        "text": "<|im_start|>user\nReturn only a JSON object describing three books. Use the keys \"books\", \"title\", \"author\", \"year\", and \"tags\". Each book must have exactly two tags.<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        "user_text": "Return only a JSON object describing three books. Use the keys \"books\", \"title\", \"author\", \"year\", and \"tags\". Each book must have exactly two tags.",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          5423,
+          1132,
+          264,
+          4566,
+          1576,
+          21988,
+          2250,
+          6265,
+          13,
+          5272,
+          279,
+          6679,
+          328,
+          11766,
+          487,
+          328,
+          2034,
+          487,
+          328,
+          2994,
+          487,
+          328,
+          3056,
+          487,
+          321,
+          328,
+          13679,
+          3158,
+          8618,
+          2236,
+          1902,
+          599,
+          6681,
+          1330,
+          9212,
+          13,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "tokens": 48,
+        "file": "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\JSON.txt",
+        "sha256": "98c84e4c5f3f4a0014fc9eae53d83c4f173e6139969a444889a9ce9bc40168f6"
+      },
+      "Chinese": {
+        "text": "<|im_start|>user\n请用中文解释城市为什么会形成热岛效应，并给出三项缓解措施。分成两个自然段，约二百字。<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        "user_text": "请用中文解释城市为什么会形成热岛效应，并给出三项缓解措施。分成两个自然段，约二百字。",
+        "prompt_ids": [
+          248045,
+          846,
+          198,
+          139054,
+          99986,
+          98682,
+          97035,
+          115644,
+          99123,
+          96230,
+          97463,
+          108859,
+          3709,
+          96172,
+          110334,
+          117099,
+          104007,
+          97505,
+          1710,
+          110833,
+          97889,
+          133736,
+          3709,
+          96581,
+          116700,
+          96356,
+          1710,
+          248046,
+          198,
+          248045,
+          74455,
+          198,
+          248068,
+          271,
+          248069,
+          271
+        ],
+        "tokens": 36,
+        "file": "C:\\workspace\\tasks\\T-20261102-clover-q8\\short-prompts\\Chinese.txt",
+        "sha256": "90de56ba69459e5f5671cdd90b37a9b17a86e405ad4dc34d569b9cb095e00a04"
+      }
+    }
+  }
+}

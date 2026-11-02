@@ -1,5 +1,12 @@
 # Clover NVFP4 on a 16 GB desktop GPU
 
+Runtime update (2026-11-02): preview/verify graphs, static block metadata, fused
+picking and merged pending-state handling are now qualified. See the
+[new five-prompt matrix and official Q8 llama comparison](clover-runtime-performance.md)
+for current speeds, changed denoise outputs, quality checks and limits.
+The measurements below and their evidence describe the earlier `2fd00ce`
+runtime and are retained as the before control.
+
 This feature branch loads `DiffuSpace/Clover-35B-A3B-Preview` revision
 `4b0402b65e523d0183a14c431955438714cb16ff` under its native `clover_moe`
 architecture. Routed experts use NVFP4 W4A16, group 16; all other parameters stay

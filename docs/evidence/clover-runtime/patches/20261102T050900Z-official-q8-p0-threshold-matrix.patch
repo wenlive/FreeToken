@@ -1,0 +1,87 @@
+diff --git a/benchmarks/clover_gguf_reference.py b/benchmarks/clover_gguf_reference.py
+index efe1fe7..17b2a52 100644
+--- a/benchmarks/clover_gguf_reference.py
++++ b/benchmarks/clover_gguf_reference.py
+@@ -52,6 +52,18 @@ class ReferenceFunctional:
+         return output.to(value.dtype)
+ 
+ 
++class ReferenceQ8Linear(torch.nn.Module):
++    """Independent Q8_0 weights and Q8_1 activation arithmetic for dense operators."""
++    def __init__(self, module):
++        super().__init__()
++        self.weight = module.weight
++        self.bias = module.bias
++        self.in_features, self.out_features = module.in_features, module.out_features
++
++    def forward(self, value):
++        return functional.linear(q8_1_activations(value), self.weight, self.bias).to(value.dtype)
++
++
+ class GGUFExpertStorage:
+     def __init__(
+         self,
+@@ -149,7 +161,8 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
+     expected = dict(model.named_parameters())
+     config = parse_gguf_config(cached_load_hf_config(str(checkpoint)))
+     loaded = set()
+-    for name, value in iter_hf_gguf_weights(str(checkpoint), config):
++    q8_dense = []
++    for name, value in iter_hf_gguf_weights(str(checkpoint), config, preserve_q8=True):
+         if (
+             name not in expected
+             or name in loaded
+@@ -163,10 +176,15 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
+             torch.nn.Parameter(value.to(device), requires_grad=False),
+         )
+         loaded.add(name)
++        if value.dtype == torch.float32 and isinstance(model.get_submodule(parent), torch.nn.Linear):
++            q8_dense.append(parent)
+     if loaded != set(expected) or any(p.is_meta for p in model.parameters()):
+         raise ValueError("Incomplete GGUF reference dense weights")
+-    # nn.Linear dense operators stay unchanged. Only the expert F.linear sites
+-    # in the official Python module see the independent Q8_1 dot reference.
++    for path in q8_dense:
++        parent, leaf = path.rsplit(".", 1)
++        setattr(model.get_submodule(parent), leaf, ReferenceQ8Linear(model.get_submodule(path)))
++    # The model's HF control flow is unchanged. Quantized dense/expert arithmetic
++    # is a mathematical oracle, independent of serving GGML CUDA kernels.
+     reference = ReferenceFunctional()
+     original_fp32_linear = model_code.linear_fp32_output
+ 
+diff --git a/python/freetoken/models/clover_moe/gguf.py b/python/freetoken/models/clover_moe/gguf.py
+index 4b13740..5c403eb 100644
+--- a/python/freetoken/models/clover_moe/gguf.py
++++ b/python/freetoken/models/clover_moe/gguf.py
+@@ -186,7 +186,7 @@ def restore_v_heads(value, axis, nk, nv, head_dim):
+     return value.reshape(split).transpose(axis, axis + 1).reshape(shape).contiguous()
+ 
+ 
+-def _restore_dense(name, value, config):
++def _restore_dense(name, value, config, *, dtype=torch.bfloat16):
+     group = config.linear_attention_group()
+     nk, nv, dk, dv = (
+         group.num_key_heads,
+@@ -214,10 +214,10 @@ def _restore_dense(name, value, config):
+         value = value.float() - 1.0
+     if name.endswith(".shared_expert_gate.weight"):
+         value = value.reshape(1, config.hidden_size)
+-    return value.to(torch.bfloat16)
++    return value.to(dtype)
+ 
+ 
+-def iter_hf_gguf_weights(model_path, config):
++def iter_hf_gguf_weights(model_path, config, *, preserve_q8=False):
+     """Dense tensors in original Clover key/head order for independent HF oracles."""
+     import gguf
+     import numpy as np
+@@ -240,7 +240,8 @@ def iter_hf_gguf_weights(model_path, config):
+         raw = tensor._raw
+         values = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
+         value = torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape)
+-        yield name, _restore_dense(name, value, config)
++        dtype = torch.float32 if preserve_q8 and tensor.ggml_type == 8 else torch.bfloat16
++        yield name, _restore_dense(name, value, config, dtype=dtype)
+ 
+ 
+ def iter_gguf_weights(

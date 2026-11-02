@@ -1,0 +1,791 @@
+diff --git a/benchmarks/clover_gguf_decode.py b/benchmarks/clover_gguf_decode.py
+index f4ed700..b1ef90b 100644
+--- a/benchmarks/clover_gguf_decode.py
++++ b/benchmarks/clover_gguf_decode.py
+@@ -2,6 +2,8 @@
+ 
+ Format reference: ggml-org/llama.cpp@4838ffb0c8ade92f34d9157deea38d92758ab824,
+ gguf-py/gguf/quants.py, Q4_K and IQ4_XS (MIT).
++Additional formats: Maphist0/llama.cpp-pub@cb09d4355d8bf968bb907c5de03cf42d8aa073ce,
++gguf-py/gguf/quants.py, Q8_0/Q4_0/Q6_K (MIT); ported to eager Torch below.
+ Qualified bitwise against installed gguf-py0.19.0's NumPy decoder.
+ Copyright (c) 2023-2026 The ggml authors; see LICENSE.clover-gguf-reference.
+ """
+@@ -11,12 +13,26 @@ import torch
+ 
+ 
+ def decode_expert(raw, kind, *, device):
+-    if kind not in (12, 23):
++    if kind not in (2, 8, 12, 14, 23):
+         raise ValueError(f"Unsupported independent GGUF expert type {kind}")
+-    size = 144 if kind == 12 else 136
++    size = {2: 18, 8: 34, 12: 144, 14: 210, 23: 136}[kind]
+     rows = raw.shape[0]
+     packed = torch.from_numpy(np.array(raw, copy=True)).to(device).reshape(-1, size)
++    if kind == 14:
++        scale = packed[:, -2:].contiguous().view(torch.float16).float()
++        scales = packed[:, 192:208].contiguous().view(torch.int8).float()
++        low = packed[:, :128].reshape(-1, 2, 1, 64)
++        low = ((low >> torch.tensor([0, 4], device=device).reshape(1, 1, 2, 1)) & 15).reshape(-1, 8, 32)
++        high = packed[:, 128:192].reshape(-1, 2, 1, 32)
++        high = ((high >> torch.tensor([0, 2, 4, 6], device=device).reshape(1, 1, 4, 1)) & 3).reshape(-1, 8, 32)
++        codes = ((low | (high << 4)).int() - 32).reshape(-1, 16, 16).float()
++        return ((scale * scales).unsqueeze(-1) * codes).reshape(rows, -1)
+     scale = packed[:, :2].contiguous().view(torch.float16).float()
++    if kind == 8:
++        return (scale * packed[:, 2:].contiguous().view(torch.int8).float()).reshape(rows, -1)
++    if kind == 2:
++        codes = torch.cat((packed[:, 2:] & 15, packed[:, 2:] >> 4), -1).float() - 8
++        return (scale * codes).reshape(rows, -1)
+     if kind == 23:
+         high = packed[:, 2:4].contiguous().view(torch.int16).int()
+         low = packed[:, 4:8]
+diff --git a/benchmarks/clover_gguf_reference.py b/benchmarks/clover_gguf_reference.py
+index f52f67c..efe1fe7 100644
+--- a/benchmarks/clover_gguf_reference.py
++++ b/benchmarks/clover_gguf_reference.py
+@@ -46,7 +46,7 @@ class ReferenceFunctional:
+         kind = getattr(weight, "_clover_ggml_type", None)
+         if kind is None:
+             return functional.linear(value, weight, bias)
+-        if kind not in (12, 23):
++        if kind not in (2, 8, 12, 14, 23):
+             raise ValueError(f"Unsupported GGUF reference expert type {kind}")
+         output = functional.linear(q8_1_activations(value), weight.float(), bias)
+         return output.to(value.dtype)
+diff --git a/python/freetoken/kernel/causal_conv1d.py b/python/freetoken/kernel/causal_conv1d.py
+index 81f1fab..95e815e 100644
+--- a/python/freetoken/kernel/causal_conv1d.py
++++ b/python/freetoken/kernel/causal_conv1d.py
+@@ -22,6 +22,8 @@ def causal_conv1d_varlen(
+     cu_seqlens: torch.Tensor,   # [batch+1] int32 prefix sums of per-request lengths
+     cache_indices: torch.Tensor,    # [batch] int32 slot id per request
+     has_initial_state: torch.Tensor,  # [batch] bool (carry conv state across chunks)
++    *,
++    max_seq_len: int | None = None,
+ ) -> torch.Tensor:
+     """Varlen (prefill) depthwise causal conv with silu; writes silu(conv) into ``x``
+     in place and refreshes ``conv_states[cache_indices]`` with each request's tail."""
+@@ -33,7 +35,8 @@ def causal_conv1d_varlen(
+         )
+ 
+         return triton_causal_conv1d_varlen(
+-            x, weight, conv_states, cu_seqlens, cache_indices, has_initial_state
++            x, weight, conv_states, cu_seqlens, cache_indices, has_initial_state,
++            max_seq_len=max_seq_len,
+         )
+ 
+     from sgl_kernel import causal_conv1d_fwd
+diff --git a/python/freetoken/layers/moe.py b/python/freetoken/layers/moe.py
+index da48000..d94b867 100644
+--- a/python/freetoken/layers/moe.py
++++ b/python/freetoken/layers/moe.py
+@@ -457,9 +457,17 @@ class OffloadMoELayer(MoELayer):
+             from freetoken.moe.fused_gguf import fused_experts_gguf
+ 
+             gate_up, down = views
++            if n is not None:
++                gate_up, down = gate_up[:n], down[:n]
++            gate_type, down_type = self.gguf_types
++            gate_bytes, down_bytes = self.gguf_row_bytes
++            gate_up = gate_up.as_strided((gate_up.shape[0], gate_up.shape[1], gate_bytes),
++                                        (gate_up.stride(0), gate_bytes, 1))
++            down = down.as_strided((down.shape[0], down.shape[1], down_bytes),
++                                  (down.stride(0), down_bytes, 1))
+             return fused_experts_gguf(
+                 hidden_states, gate_up, down, topk_weights, topk_ids, self.activation,
+-                gate_up_type=23, down_type=12,
++                gate_up_type=gate_type, down_type=down_type,
+             )
+         if fmt == "q4_0":
+             # Native GGUF Q4_0 experts: dequant-in-kernel grouped GEMV (MMVQ) over the
+diff --git a/python/freetoken/models/clover_moe/generation.py b/python/freetoken/models/clover_moe/generation.py
+index e49a8da..34506f1 100644
+--- a/python/freetoken/models/clover_moe/generation.py
++++ b/python/freetoken/models/clover_moe/generation.py
+@@ -236,6 +236,19 @@ def resolve_low_confidence(preview, state, *, width, mask_id, threshold, device)
+     block = torch.full((width,), mask_id, device=device, dtype=torch.int32)
+     pending = torch.ones(width, device=device, dtype=torch.bool)
+     steps = []
++    if block.is_cuda and not state.gen.do_sample:
++        from freetoken.kernel.triton.clover_pick import pick_with_confidence, resolve_step
++
++        result = torch.empty(2, device=device, dtype=torch.int32)
++        for _ in range(width):
++            logits = preview(block)
++            prediction, confidence = pick_with_confidence(logits, state, block, mask_id)
++            resolve_step(block, pending, prediction, confidence, threshold, result)
++            count, remaining = result.cpu().tolist()
++            steps.append(count)
++            if remaining == 0:
++                return block, steps
++        raise RuntimeError("LowConfidence failed to resolve its full block")
+     for _ in range(width):
+         logits = preview(block).float().clone()
+         logits[:, mask_id] = -float("inf")
+diff --git a/python/freetoken/models/clover_moe/gguf.py b/python/freetoken/models/clover_moe/gguf.py
+index 1b00ddd..7114b54 100644
+--- a/python/freetoken/models/clover_moe/gguf.py
++++ b/python/freetoken/models/clover_moe/gguf.py
+@@ -16,10 +16,11 @@ from freetoken.models.qwen3_5_moe.config import parse_config as parse_qwen
+ from freetoken.models.qwen3_5_moe.weight import _DenseReader, _is_gemma_norm
+ from freetoken.models.register import get_model_spec
+ 
+-from .model import CloverMoeModelLM as CloverMoeModelLM
++from .model import CloverMoeModelLM as BaseCloverModel
+ 
+ EXPERT_FORMAT = "clover_gguf"
+-GATE_UP_TYPE, DOWN_TYPE = 23, 12  # IQ4_XS, Q4_K
++GATE_UP_TYPE, DOWN_TYPE = 23, 12  # Legacy file contract; execution reads descriptors.
++SUPPORTED_EXPERT_TYPES = {2, 8, 12, 14, 23}
+ _EXPERT = re.compile(r"^blk\.(\d+)\.ffn_(gate|up|down)_exps\.weight$")
+ _SCALARS = {
+     "ssm_a": "A_log",
+@@ -68,6 +69,7 @@ def _validate_experts(path, config):
+         for role in ("gate", "up", "down")
+     }
+     seen = set()
++    descriptors = {}
+     for tensor in iter_gguf_tensors(path):
+         match = _EXPERT.fullmatch(tensor.name)
+         if not match:
+@@ -80,18 +82,21 @@ def _validate_experts(path, config):
+             )
+         h, i, e = config.hidden_size, config.moe_intermediate_size, config.num_experts
+         shape = (e, h, i) if role == "down" else (e, i, h)
+-        kind = DOWN_TYPE if role == "down" else GATE_UP_TYPE
+-        if tensor.shape != shape or tensor.ggml_type != kind:
++        if tensor.shape != shape or tensor.ggml_type not in SUPPORTED_EXPERT_TYPES:
+             raise ValueError(
+-                f"{tensor.name}: expected shape {shape}, GGML type {kind}; "
+-                f"got {tensor.shape}, type {tensor.ggml_type}. This adapter serves "
+-                "IQ4_XS gate/up and Q4_K down without requantizing."
++                f"{tensor.name}: expected shape {shape}, supported packed GGML type; "
++                f"got {tensor.shape}, type {tensor.ggml_type}"
+             )
+         seen.add(key)
++        descriptors[key] = (tensor.ggml_type, tensor.row_bytes)
+     if seen != expected:
+         raise ValueError(
+             f"Missing Clover GGUF expert tensors: {sorted(expected - seen)[:8]}"
+         )
++    for layer in range(config.num_layers):
++        if descriptors[layer, "gate"] != descriptors[layer, "up"]:
++            raise ValueError(f"Layer {layer} gate/up expert types differ")
++    return descriptors
+ 
+ 
+ def parse_gguf_config(shim):
+@@ -139,8 +144,37 @@ def parse_gguf_config(shim):
+     config = replace(
+         parse_qwen(hf), expert_quant=EXPERT_FORMAT, moe_weight_format=EXPERT_FORMAT
+     )
+-    _validate_experts(shim.model_path, config)
+-    return config
++    experts = _validate_experts(shim.model_path, config)
++    from .packed import CloverDenseGroups
++
++    groups = CloverDenseGroups()
++    dense = {}
++    for tensor in iter_gguf_tensors(shim.model_path):
++        if tensor.ggml_type not in (2, 8, 12, 14) or _EXPERT.fullmatch(tensor.name):
++            continue
++        match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
++        if match is None or match[2] not in _LAYER:
++            continue
++        module = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}".removesuffix(".weight")
++        target, _, _ = groups.target(module)
++        rows, cols = tensor.shape
++        previous = dense.get(target)
++        if previous is not None:
++            if previous[1:] != (cols, tensor.ggml_type, tensor.row_bytes):
++                raise ValueError(f"Incompatible packed projection group {target}")
++            rows += previous[0]
++        dense[target] = (rows, cols, tensor.ggml_type, tensor.row_bytes)
++    return replace(config, expert_source=dict(dense=dense,
++        types=[(experts[l, "gate"][0], experts[l, "down"][0]) for l in range(layers)],
++        row_bytes=[(experts[l, "gate"][1], experts[l, "down"][1]) for l in range(layers)]))
++
++
++class CloverMoeModelLM(BaseCloverModel):
++    def __init__(self, config):
++        super().__init__(config)
++        from .packed import install_packed_linears
++
++        install_packed_linears(self, config)
+ 
+ 
+ def restore_v_heads(value, axis, nk, nv, head_dim):
+@@ -218,18 +252,58 @@ def iter_gguf_weights(
+     from freetoken.utils import cached_load_hf_config
+ 
+     config = parse_gguf_config(cached_load_hf_config(model_path))
+-    reader = _DenseReader(None, get_model_spec("CloverMoeModelLM"))
+-    for name, value in iter_hf_gguf_weights(model_path, config):
+-        merged = reader.add(name, value)
+-        if merged is None:
+-            yield name, value.to(device)
++    from .packed import CloverDenseGroups
++    import gguf
++    import numpy as np
++
++    reader, pending = CloverDenseGroups(), {}
++    globals_ = {"token_embd.weight": "model.embed_tokens.weight", "output.weight": "lm_head.weight",
++                "output_norm.weight": "model.norm.weight"}
++    for tensor in iter_gguf_tensors(model_path):
++        if _EXPERT.fullmatch(tensor.name):
++            continue
++        name = globals_.get(tensor.name)
++        if name is None:
++            match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
++            if match is None or match[2] not in _LAYER:
++                raise ValueError(f"Unmapped Clover tensor {tensor.name}")
++            name = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}"
++        target, index, count = reader.target(name.removesuffix(".weight"))
++        if target in config.expert_source["dense"]:
++            value = tensor.packed().clone()
++            group = config.linear_attention_group()
++            nk, nv, dv = group.num_key_heads, group.num_value_heads, group.value_head_dim
++            if name.endswith(".linear_attn.in_proj_qkv.weight"):
++                boundary = 2 * nk * group.key_head_dim
++                value = torch.cat((value[:boundary], restore_v_heads(value[boundary:], 0, nk, nv, dv)))
++            elif name.endswith(".linear_attn.in_proj_z.weight"):
++                value = restore_v_heads(value, 0, nk, nv, dv)
++            elif name.endswith(".linear_attn.out_proj.weight"):
++                block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(tensor.ggml_type)]
++                if dv % block:
++                    raise ValueError("Packed GDN output permutation crosses quantization blocks")
++                value = restore_v_heads(value, 1, nk, nv, dv // block * size)
++            parts = pending.setdefault(target, {})
++            parts[index] = value
++            if len(parts) == count:
++                yield target + ".weight", torch.cat([parts[i] for i in range(count)]).to(device)
++                del pending[target]
+         else:
+-            for target, tensor in merged:
+-                yield target, tensor.to(device)
+-    if reader.missing():
+-        raise ValueError(
+-            f"Incomplete Clover GGUF projection groups: {reader.missing()}"
+-        )
++            values = gguf.dequantize(tensor._raw, gguf.GGMLQuantizationType(tensor.ggml_type))
++            value = _restore_dense(name, torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape), config)
++            # BF16 b/a must follow the split projection used by the packed model.
++            if target.endswith(".in_proj_ba"):
++                parts = pending.setdefault(target, {})
++                parts[index] = value
++                if len(parts) == count:
++                    yield target + ".weight", torch.cat([parts[i] for i in range(count)]).to(device)
++                    del pending[target]
++            else:
++                yield name, value.to(device)
++    if pending:
++        raise ValueError(f"Incomplete Clover projections: {list(pending)}")
++    from freetoken.models.gguf.reader import _reader
++    _reader.cache_clear()
+ 
+ 
+ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=False):
+@@ -243,14 +317,16 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
+         raise NotImplementedError(
+             "Clover GGUF requires real packed weights; dummy banks are not defined"
+         )
+-    _validate_experts(model_path, config)
++    descriptors = _validate_experts(model_path, config)
+     e, h, i = config.num_experts, config.hidden_size, config.moe_intermediate_size
+     if h % 256 or i % 256:
+         raise ValueError("Mixed Clover GGUF expert widths must be multiples of 256")
++    gate_bytes = max(v[1] for (l, role), v in descriptors.items() if role == "gate")
++    down_bytes = max(v[1] for (l, role), v in descriptors.items() if role == "down")
+     hb = alloc_layer_banks(
+         {
+-            "gate_up": ((e, 2 * i, h // 256 * 136), torch.uint8),
+-            "down": ((e, h, i // 256 * 144), torch.uint8),
++            "gate_up": ((e, 2 * i, gate_bytes), torch.uint8),
++            "down": ((e, h, down_bytes), torch.uint8),
+         },
+         config.num_layers,
+     )
+@@ -260,17 +336,39 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
+ 
+     def fill(sink):
+         tracker = LayerCompletionTracker(3, hb, sink) if sink is not None else None
++        import gguf
++        # Only the tensor directory is consulted; readinto never faults payload
++        # into a persistent file mapping alongside the 32 GiB pinned banks.
++        directory = gguf.GGUFReader(model_path)
++        by_name = {t.name: t for t in directory.tensors}
+         for tensor in iter_gguf_tensors(model_path):
+             match = _EXPERT.fullmatch(tensor.name)
+             if match is None:
+                 continue
+             layer, role = int(match[1]), match[2]
+-            if role == "down":
+-                destination = banks["down"][layer]
+-            else:
+-                begin = 0 if role == "gate" else i
+-                destination = banks["gate_up"][layer][:, begin : begin + i]
+-            destination.copy_(tensor.packed().reshape(destination.shape))
++            bank = banks["down" if role == "down" else "gate_up"][layer]
++            rb = descriptors[layer, role][1]
++            rows = h if role == "down" else i
++            offset = i * rb if role == "up" else 0
++            destination = bank.as_strided((e, rows * rb), (bank.stride(0), 1), offset)
++            file_tensor = by_name[tensor.name]
++            with open(model_path, "rb", buffering=0) as stream:
++                stream.seek(file_tensor.data_offset)
++                if destination.is_contiguous():
++                    view = memoryview(destination.numpy()).cast("B")
++                    while view:
++                        n = stream.readinto(view)
++                        if not n:
++                            raise ValueError(f"Truncated Clover expert {tensor.name}")
++                        view = view[n:]
++                else:
++                    for expert in destination:
++                        view = memoryview(expert.numpy()).cast("B")
++                        while view:
++                            n = stream.readinto(view)
++                            if not n:
++                                raise ValueError(f"Truncated Clover expert {tensor.name}")
++                            view = view[n:]
+             if tracker is not None:
+                 tracker.note(layer)
+ 
+@@ -281,4 +379,6 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
+             fill(pins)
+     else:
+         fill(None)
++    from freetoken.models.gguf.reader import _reader
++    _reader.cache_clear()
+     return banks
+diff --git a/python/freetoken/models/clover_moe/preview.py b/python/freetoken/models/clover_moe/preview.py
+index 4b22e6d..aac72b4 100644
+--- a/python/freetoken/models/clover_moe/preview.py
++++ b/python/freetoken/models/clover_moe/preview.py
+@@ -63,6 +63,7 @@ def _project(mixer, hidden):
+ 
+ def gdn_forward(mixer, hidden, ctx, *, preview):
+     batch, pool = ctx.batch, ctx.linear_state_pool
++    source = getattr(batch, "clover_clean", pool)
+     if len(batch.reqs) != 1:
+         raise ValueError("Clover block forwards currently require one request")
+     raw, z, b, a = _project(mixer, hidden)
+@@ -71,23 +72,21 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
+     li = pool.local_index(mixer.layer_id)
+     if preview:
+         valid = batch.clover_valid
+-        mixed = clover_local_memory_conv(raw, clean_conv_states=pool.conv_states[li], cache_indices=indices,
++        mixed = clover_local_memory_conv(raw, clean_conv_states=source.conv_states[li], cache_indices=indices,
+             conv_weights=mixer._conv_weight(), bias=None, activation="silu", block_size=total,
+             active_valid_mask=valid, conv_mode="independent_symmetric", conv_right_weight=mixer.conv_right_weight)
+     else:
+         transaction = batch.clover_transactions
+         if transaction.width != total:
+             raise ValueError("Clover verify input does not match the active transaction")
+-        slot = batch.reqs[0].linear_slot_idx
+-        if slot is None:
+-            slot = batch.reqs[0].table_idx
+-        clean = pool.conv_states[li, slot:slot + 1]
++        clean = source.conv_states[li].index_select(0, indices.long())
+         # Save raw-input windows before a causal-convolution implementation is
+         # allowed to overwrite its input. Scratch history never aliases live.
+         joined = torch.cat((clean[0].T, raw), dim=0)
+         transaction.conv[li, :total].copy_(joined.unfold(0, mixer.conv_kernel_size - 1, 1)[1:total + 1])
+         mixed = causal_conv1d_varlen(raw.T.contiguous().clone(), mixer._conv_weight(), clean.clone(),
+-            batch.fla_metadata.cu_seqlens, transaction.zero, transaction.initial).T.contiguous()
++            batch.fla_metadata.cu_seqlens, transaction.zero, transaction.initial,
++            max_seq_len=total).T.contiguous()
+     qf, kf, vf = torch.split(mixed, [mixer.key_dim, mixer.key_dim, mixer.value_dim], dim=-1)
+     q = qf.reshape(1, total, mixer.num_k_heads, mixer.head_k_dim).to(dtype)
+     k = kf.reshape(1, total, mixer.num_k_heads, mixer.head_k_dim).to(dtype)
+@@ -95,7 +94,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
+     if preview:
+         g, _ = mixer._gate_params(a, b)
+         output = clover_local_memory_triton(q, k, v, g.reshape(1, total, mixer.num_v_heads),
+-            clean_ssm_states=pool.recurrent_states[li], cache_indices=indices, active_valid_mask=valid,
++            clean_ssm_states=source.recurrent_states[li], cache_indices=indices, active_valid_mask=valid,
+             scale=mixer.head_k_dim ** -.5, softmax_logit_scale=mixer.bd_softmax_logit_scale,
+             softmax_history_bias=mixer.bd_softmax_history_bias, softmax_history_c=mixer.bd_softmax_history_c)
+     else:
+@@ -103,7 +102,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
+ 
+         output = fused_sigmoid_gating_delta_rule_update(A_log=mixer.A_log, a=a, dt_bias=mixer.dt_bias,
+             softplus_beta=1., softplus_threshold=20., q=q, k=k, v=v, b=b,
+-            initial_state_source=pool.recurrent_states[li], initial_state_indices=indices,
++            initial_state_source=source.recurrent_states[li], initial_state_indices=indices,
+             scale=mixer.head_k_dim ** -.5, use_qk_l2norm_in_kernel=True,
+             cu_seqlens=batch.fla_metadata.cu_seqlens, disable_state_update=True,
+             intermediate_states_buffer=transaction.recurrent[li].unsqueeze(0),
+@@ -122,8 +121,11 @@ def attention_preview(mixer, hidden, ctx):
+     keys = ctx.kv_cache.k_cache(mixer.layer_id).view(-1, kh, dim)
+     values = ctx.kv_cache.v_cache(mixer.layer_id).view(-1, kh, dim)
+     metadata = batch.clover_attention
++    indices = metadata.get("indices")
++    if indices is None:
++        indices = ctx.page_table[req.table_idx, :prefix]
+     output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
+-        ctx.page_table[req.table_idx, :prefix], metadata["prefix_lens"], width, dim ** -.5,
++        indices, metadata["prefix_lens"], width, dim ** -.5,
+         k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim), block_ends=metadata["block_ends"])
+     return mixer._combine(output, gate)
+ 
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index c1c0c1a..f0ca01d 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -49,22 +49,45 @@ class CloverRuntime:
+         self.rounds = deque(maxlen=4096)
+ 
+     def prepare_graphs(self):
+-        # Preview/verify start eager; native causal retains the existing graph.
+-        # Rebuild invalidates every view of the old recurrent-state pool.
++        from .graph import CloverBlockGraphs
++
+         self.transactions = None
+         self.states.clear()
++        self.block_graphs = CloverBlockGraphs(self.engine)
+ 
+     def close_graphs(self):
++        if getattr(self, "block_graphs", None) is not None:
++            self.block_graphs.close()
++            self.block_graphs = None
+         self.transactions = None
+         self.states.clear()
+ 
+     def before_native(self, batch):
+-        if batch.is_prefill:
++        if batch.is_prefill and self.transactions is not None and self.transactions.capacity == 32:
+             # A previous W32 window owns ~2 GiB. Release it before a new prompt's
+             # full-layer prefill workspace, then allocate lazily at verification.
++            self.block_graphs.clear_verify()
+             self.transactions = None
+         return None
+ 
++    def _blocks(self):
++        if getattr(self, "block_graphs", None) is None:
++            from .graph import CloverBlockGraphs
++
++            self.block_graphs = CloverBlockGraphs(self.engine)
++        return self.block_graphs
++
++    def _preview(self, req, tokens):
++        return self._blocks().run(req, tokens, preview=True,
++            coreset=self.engine.config.clover_coreset_top_p)
++
++    def _verify(self, req, tokens, capacity):
++        if self.transactions is None or self.transactions.capacity < capacity:
++            self._blocks().clear_verify()
++            self.transactions = None
++            self.transactions = CloverTransactions(self.engine.linear_state_pool, capacity)
++        return self._blocks().run(req, tokens, preview=False, transaction=self.transactions)
++
+     def after_native(self, batch, native_state):
+         pass
+ 
+@@ -282,22 +305,14 @@ class CloverRuntime:
+             (width,), self.mask_id, device=self.engine.device, dtype=torch.int32
+         )
+         preview_tokens[:1].copy_(batch.input_ids[:1])
+-        preview = make_preview_batch(
+-            self.engine,
+-            req,
+-            preview_tokens,
+-            coreset_top_p=self.engine.config.clover_coreset_top_p,
+-        )
+-        with self.engine.ctx.forward_batch(preview):
+-            draft_scores = self.engine.model.forward().float()
+-        draft_scores[:, self.mask_id] = -float("inf")
+-        state.apply(draft_scores[1:], preview_tokens[1:], self.mask_id)
+-        candidates = draft_scores[1:].argmax(-1).to(torch.int32)
++        self._blocks().prepare_clean(req)
++        draft_scores = self._preview(req, preview_tokens)
++        from freetoken.kernel.triton.clover_pick import pick_with_confidence
++
++        candidates, _ = pick_with_confidence(draft_scores[1:], state, preview_tokens[1:], self.mask_id)
+         inputs = torch.cat((batch.input_ids[:1], candidates))
+         manager.allocate_paged([req], reserve_tokens=width - 1)
+-        verify = self._verify_batch(req, inputs)
+-        with self.engine.ctx.forward_batch(verify):
+-            scores = self.engine.model.forward()
++        scores = self._verify(req, inputs, width)
+         scores = self._penalize_verify(scores, inputs, state)
+         counts = clover_correct_drafts(
+             scores.unsqueeze(0),
+@@ -368,23 +383,16 @@ class CloverRuntime:
+         self._require_block_backend(manager)
+         started = time.perf_counter()
+         old_device = req.device_len
+-        # Scheduler invariant: every active request retains one pending token.
+-        # At subsequent block boundaries flush that token first. This deliberately
+-        # costs an extra one-row causal forward per block, measured in benchmarks,
+-        # while avoiding changes to generic scheduler/cache lifetime semantics.
+-        self._advance_without_sampling(batch)
++        graphs = self._blocks()
++        ahead = graphs.prepare_clean(req, allow_ahead=True)
++        if not ahead:
++            self._advance_without_sampling(batch)
++            graphs.prepare_clean(req)
+         req.cached_len = old_device
+         state = self.state(req)
+ 
+         def preview(tokens):
+-            temporary = make_preview_batch(
+-                self.engine,
+-                req,
+-                tokens,
+-                coreset_top_p=self.engine.config.clover_coreset_top_p,
+-            )
+-            with self.engine.ctx.forward_batch(temporary):
+-                return self.engine.model.forward()
++            return self._preview(req, tokens)
+ 
+         block, steps = resolve_low_confidence(
+             preview,
+@@ -403,12 +411,8 @@ class CloverRuntime:
+                 "Insufficient KV pages to commit the resolved Clover block"
+             )
+         manager.allocate_paged([req], reserve_tokens=len(tokens))
++        self._verify(req, tokens, width)
+         if len(tokens) > 1:
+-            verify = self._verify_batch(
+-                req, tokens[:-1], capacity=32 if width == 32 else 16
+-            )
+-            with self.engine.ctx.forward_batch(verify):
+-                self.engine.model.forward()
+             self._snapshot_boundary(
+                 req,
+                 old_device,
+@@ -425,8 +429,11 @@ class CloverRuntime:
+                 if req.linear_slot_idx is not None
+                 else req.table_idx,
+             )
++        else:
++            graphs.restore_clean(req)
+         req.device_len = old_device + len(tokens)
+         req.cached_len = req.device_len - 1
++        graphs.save_ahead(req, self.transactions, len(tokens))
+         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
+         bundle = tokens.cpu()
+         event = torch.cuda.Event()
+diff --git a/python/freetoken/moe/expert_banks.py b/python/freetoken/moe/expert_banks.py
+index 952c528..3de551b 100644
+--- a/python/freetoken/moe/expert_banks.py
++++ b/python/freetoken/moe/expert_banks.py
+@@ -297,6 +297,11 @@ def bank_bytes_estimate(model_config, method=None) -> int | None:
+         )
+         return layers * method.cfg.num_experts * per_expert
+     expert_quant = getattr(model_config, "expert_quant", "none")
++    if expert_quant == "clover_gguf" and model_config.expert_source is not None:
++        rows = model_config.expert_source["row_bytes"]
++        per_slot = (2 * model_config.moe_intermediate_size * max(r[0] for r in rows)
++                    + model_config.hidden_size * max(r[1] for r in rows))
++        return model_config.num_moe_layers * model_config.num_experts * per_slot
+     fmt = expert_quant if expert_quant != "none" else (
+         getattr(model_config, "moe_weight_format", None) or "bf16"
+     )
+diff --git a/python/freetoken/moe/fused_gguf.py b/python/freetoken/moe/fused_gguf.py
+index 31fd75f..fe1a82d 100644
+--- a/python/freetoken/moe/fused_gguf.py
++++ b/python/freetoken/moe/fused_gguf.py
+@@ -7,8 +7,9 @@ keeps its declared GGML type; weights are never requantized or expanded in HBM.
+ import torch
+ 
+ from freetoken.kernel import moe_sum_reduce_triton
+-from freetoken.kernel.gguf import ggml_moe_a8_vec
++from freetoken.kernel.gguf import ggml_moe_a8_vec, ggml_moe_a8, ggml_moe_get_block_size
+ from freetoken.layers.activation import silu_and_mul
++from freetoken.kernel.triton.clover_align import align_clover_routes
+ 
+ 
+ def fused_experts_gguf(
+@@ -26,19 +27,26 @@ def fused_experts_gguf(
+         raise NotImplementedError("Mixed Clover GGUF currently requires SwiGLU")
+     count, hidden = hidden_states.shape
+     top_k = topk_ids.shape[1]
+-    gate_up = ggml_moe_a8_vec(
+-        hidden_states,
+-        gate_up_q,
+-        topk_ids,
+-        top_k,
+-        gate_up_type,
+-        gate_up_q.shape[1],
+-        count,
+-    )
++    grouped = count > 1 or not gate_up_q.is_contiguous() or not down_q.is_contiguous()
++    if grouped and gate_up_type in (2, 8, 12, 14) and down_type in (2, 8, 12, 14):
++        block_size = ggml_moe_get_block_size(gate_up_type)
++        sorted_ids, expert_ids, padded = align_clover_routes(topk_ids, block_size, gate_up_q.shape[0])
++        gate_up = ggml_moe_a8(hidden_states, gate_up_q, sorted_ids, expert_ids, padded,
++                              gate_up_type, gate_up_q.shape[1], top_k, count)
++    else:
++        grouped = False
++        gate_up = ggml_moe_a8_vec(hidden_states, gate_up_q, topk_ids, top_k,
++                                 gate_up_type, gate_up_q.shape[1], count)
+     intermediate = silu_and_mul(gate_up)
+-    output = ggml_moe_a8_vec(
+-        intermediate.float(), down_q, topk_ids, 1, down_type, hidden, count * top_k
+-    )
++    if grouped:
++        if ggml_moe_get_block_size(down_type) != block_size:
++            sorted_ids, expert_ids, padded = align_clover_routes(
++                topk_ids, ggml_moe_get_block_size(down_type), down_q.shape[0])
++        output = ggml_moe_a8(intermediate.float(), down_q, sorted_ids, expert_ids, padded,
++                             down_type, hidden, 1, count * top_k)
++    else:
++        output = ggml_moe_a8_vec(intermediate.float(), down_q, topk_ids, 1,
++                                 down_type, hidden, count * top_k)
+     # Clover rounds each FP32 down*router contribution once, then sums in FP32.
+     # Casting down or router weights earlier loses information before routing.
+     routed = (
+diff --git a/tests/kernels/test_clover_gguf.py b/tests/kernels/test_clover_gguf.py
+index 6add3ae..5745981 100644
+--- a/tests/kernels/test_clover_gguf.py
++++ b/tests/kernels/test_clover_gguf.py
+@@ -78,6 +78,8 @@ def packed_fixture(kind, experts=3, rows=64, width=256):
+     raw[..., :2] = np.array([0.0125], dtype=np.float16).view(np.uint8)
+     if kind == 12:
+         raw[..., 2:4] = np.array([0.009], dtype=np.float16).view(np.uint8)
++    if kind == 14:
++        raw[..., -2:] = np.array([0.0125], dtype=np.float16).view(np.uint8)
+     flat = raw.reshape(experts, rows, -1)
+     dense = gguf.dequantize(flat, gguf.GGMLQuantizationType(kind))
+     return torch.from_numpy(flat.copy()), torch.from_numpy(dense.copy())
+@@ -109,7 +111,7 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
+     assert storage.cpu_bytes <= storage.cpu_limit and storage.bytes == 0
+ 
+ 
+-@pytest.mark.parametrize("kind", [12, 23])
++@pytest.mark.parametrize("kind", [2, 8, 12, 14, 23])
+ @pytest.mark.parametrize("device", ["cpu", "cuda"])
+ def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
+     if device == "cuda" and not torch.cuda.is_available():
+@@ -237,3 +239,49 @@ def test_mixed_swiglu_routing_matches_independent_q8_reference(reference, width)
+     error = (actual.float() - expected.float()).norm() / expected.float().norm()
+     assert torch.isfinite(actual).all()
+     assert error < 0.01, float(error)
++
++
++@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
++@pytest.mark.parametrize("kind", [2, 8, 12, 14])
++@pytest.mark.parametrize("width", [8, 16, 32])
++def test_mmq_matches_independent_dense_q8_dot(reference, kind, width):
++    from freetoken.kernel.gguf import ggml_moe_a8, ggml_moe_get_block_size
++    from freetoken.kernel.triton.clover_align import align_clover_routes
++
++    packed, dense = packed_fixture(kind, rows=64, width=512)
++    value = torch.randn(width, 512, device="cuda", dtype=torch.float32)
++    ids = torch.tensor([[2, 0, 2]] * width, device="cuda", dtype=torch.int32)
++    order, experts, total = align_clover_routes(ids, ggml_moe_get_block_size(kind), 3)
++    actual = ggml_moe_a8(value, packed.cuda(), order, experts, total, kind, 64, 3, width)
++    if kind == 2:
++        # MMVQ and MMQ use the same independent Q8_1 original-sum correction;
++        # the separately qualified vector path is an additional shape oracle.
++        from freetoken.kernel.gguf import ggml_moe_a8_vec
++        expected = ggml_moe_a8_vec(value, packed.cuda(), ids, 3, kind, 64, width)
++    else:
++        dense = dense.cuda()
++        activation = reference.q8_1_activations(value)
++        expected = torch.stack([torch.nn.functional.linear(activation, dense[e]) for e in (2, 0, 2)], 1).reshape(-1, 64)
++    relative = (actual - expected).norm() / expected.norm()
++    assert relative < 0.001, float(relative)
++
++
++@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
++def test_short_route_grouping_replays_with_different_high_cache_slots():
++    from freetoken.kernel.triton.clover_align import align_clover_routes
++
++    ids = torch.tensor([[2999, 17, 2999], [2100, 17, 17]], device="cuda", dtype=torch.int32)
++    align_clover_routes(ids, 4, 3000)
++    graph = torch.cuda.CUDAGraph()
++    with torch.cuda.graph(graph):
++        order, experts, total = align_clover_routes(ids, 4, 3000)
++    for routes in ([[2999, 17, 2999], [2100, 17, 17]], [[2, 2, 2], [2999, 2, 2999]]):
++        ids.copy_(torch.tensor(routes, device="cuda", dtype=torch.int32))
++        graph.replay()
++        n = int(total.cpu())
++        sorted_ids = order[:n].cpu().tolist()
++        owners = experts[:n // 4].cpu().tolist()
++        assert sorted(i for i in sorted_ids if i < ids.numel()) == list(range(ids.numel()))
++        flattened = [e for row in routes for e in row]
++        for block, owner in enumerate(owners):
++            assert all(flattened[i] == owner for i in sorted_ids[block * 4:(block + 1) * 4] if i < ids.numel())
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index 2821adf..a435fdd 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -243,3 +243,27 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
+         expected = reference.apply(logits.clone(), block, 151669)
+         actual = native.apply(logits.clone(), block, 151669)
+         torch.testing.assert_close(actual, expected, rtol=0, atol=0)
++@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
++@pytest.mark.parametrize("width", [8, 16, 32])
++def test_fused_pick_matches_torch_penalties_and_confidence(width):
++    from types import SimpleNamespace
++    from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
++    from freetoken.kernel.triton.clover_pick import pick_with_confidence
++
++    vocab, mask = 248320, 151669
++    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False,
++        "presence_penalty": .9, "frequency_penalty": .15, "repetition_penalty": 1.05,
++        "dllm_length_penalty": 3., "dllm_length_penalty_start": 0, "dllm_length_penalty_window": 100,
++        "dllm_think_end_bias": 2., "dllm_think_end_start": 0, "dllm_think_end_window": 100,
++        "dllm_think_end_token_id": 123})
++    state = CloverPenaltyState(gen, vocab, "cuda", [248046, 248044])
++    state.commit(torch.tensor([9, 9, 111, 221], device="cuda"))
++    block = torch.full((width,), mask, device="cuda", dtype=torch.int32)
++    logits = torch.randn(width, vocab, device="cuda", dtype=torch.bfloat16)
++    expected = logits.float().clone()
++    expected[:, mask] = -float("inf")
++    state.apply(expected, block, mask)
++    picks, confidence = pick_with_confidence(logits, state, block, mask)
++    assert torch.equal(picks.long(), expected.argmax(-1))
++    torch.testing.assert_close(confidence, expected.softmax(-1).max(-1).values, rtol=2e-5, atol=1e-7)
++
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index 235fb19..1ba49c6 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -55,6 +55,7 @@ def shim(monkeypatch):
+             name=f"blk.{layer}.ffn_{role}_exps.weight",
+             shape=(4, 256, 256),
+             ggml_type=12 if role == "down" else 23,
++            row_bytes=144 if role == "down" else 136,
+         )
+         for layer in range(4)
+         for role in ("gate", "up", "down")
+@@ -91,7 +92,7 @@ def test_incomplete_or_incompatible_experts_fail_before_allocation(shim, damage)
+     elif damage == "duplicate":
+         tensors.append(tensors[0])
+     elif damage == "type":
+-        tensors[0].ggml_type = 2
++        tensors[0].ggml_type = 99
+     elif damage == "shape":
+         tensors[0].shape = (4, 128, 256)
+     else:
+@@ -115,6 +116,25 @@ def test_cyclic_head_order_is_inverted_with_asymmetric_groups(axis):
+     torch.testing.assert_close(restored, original, rtol=0, atol=0)
+ 
+ 
++def test_expert_types_are_read_per_layer_and_role(shim):
++    import gguf
++
++    value, tensors = shim
++    expected = [(8, 8), (12, 14), (2, 2), (14, 8)]
++    for tensor in tensors:
++        layer = int(tensor.name.split(".")[1])
++        kind = expected[layer][int("down" in tensor.name)]
++        block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(kind)]
++        tensor.ggml_type = kind
++        tensor.row_bytes = 256 // block * size
++    config = adapter.parse_gguf_config(value)
++    assert config.expert_source["types"] == expected
++    assert config.expert_source["row_bytes"][1] == (144, 210)
++    from freetoken.moe.expert_banks import bank_bytes_estimate
++    # A unified slot pool reserves the largest packed row of each role.
++    assert bank_bytes_estimate(config) == 4 * 4 * (512 + 256) * 272
++
++
+ def test_raw_alog_is_restored_without_exponentiation():
+     group = SimpleNamespace(
+         num_key_heads=2, num_value_heads=4, key_head_dim=2, value_head_dim=2

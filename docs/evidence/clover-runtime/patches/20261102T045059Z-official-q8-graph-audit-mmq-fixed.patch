@@ -1,0 +1,215 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index 8826c25..1c4b6b3 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -48,6 +48,8 @@ def main():
+     parser.add_argument("--repeats", type=int, default=5)
+     parser.add_argument("--cache-slots", type=int, default=4096)
+     parser.add_argument("--memory-ratio", type=float, default=0.85)
++    parser.add_argument("--context-size", type=int, default=4096)
++    parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -123,12 +125,13 @@ def main():
+         expert_load="serial",
+         max_running_req=1,
+         memory_ratio=args.memory_ratio,
+-        num_token_override=4096,
+-        max_seq_len_override=4096,
+-        max_extend_tokens=4096,
++        num_token_override=args.context_size,
++        max_seq_len_override=args.context_size,
++        max_extend_tokens=args.context_size,
+         cuda_graph_bs=[1],
+         moe_collect_stats=True,
+         clover_disable_penalties=args.no_penalties,
++        clover_accept_rule=args.accept_rule,
+     )
+     result = dict(
+         state="running",
+@@ -139,7 +142,8 @@ def main():
+         settings=dict(
+             cache_slots=args.cache_slots,
+             memory_ratio=args.memory_ratio,
+-            context=4096,
++            context=args.context_size,
++            accept_rule=args.accept_rule,
+             token_budget=args.tokens,
+             warmups=args.warmups,
+             repeats=args.repeats,
+diff --git a/benchmarks/bench_clover_llama.py b/benchmarks/bench_clover_llama.py
+index 2c9a6fe..9a81982 100644
+--- a/benchmarks/bench_clover_llama.py
++++ b/benchmarks/bench_clover_llama.py
+@@ -231,6 +231,9 @@ def main():
+     parser.add_argument("--warmups", type=int, default=2)
+     parser.add_argument("--repeats", type=int, default=5)
+     parser.add_argument("--cache-mib", type=int, default=6656)
++    parser.add_argument("--context-size", type=int, default=4096)
++    parser.add_argument("--batch-size", type=int, default=256)
++    parser.add_argument("--ubatch-size", type=int, default=256)
+     parser.add_argument("--load-mode", choices=["mmap", "none"], default="mmap")
+     args = parser.parse_args()
+     if args.frontend == "server" and any(
+@@ -280,11 +283,11 @@ def main():
+                     "-m",
+                     str(args.model),
+                     "-c",
+-                    "4096",
++                    str(args.context_size),
+                     "-b",
+-                    "256",
++                    str(args.batch_size),
+                     "-ub",
+-                    "256",
++                    str(args.ubatch_size),
+                     "-ngl",
+                     "99",
+                     "--cpu-moe",
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index 0134a61..6830161 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -28,7 +28,7 @@ def main():
+     args.output.mkdir(parents=True, exist_ok=False)
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+         expert_load="serial", max_running_req=1, memory_ratio=.85, num_token_override=4096,
+-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1])
++        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+     original = engine.forward_batch
+@@ -55,6 +55,13 @@ def main():
+                 runtime._blocks().prepare_clean(req)
+                 actual = runtime._preview(req, tokens)
+                 torch.testing.assert_close(actual.float().cpu(), reference, rtol=0, atol=0)
++                engine.moe_offload_cache.reset()
++                engine.moe_offload_cache.reset_stats()
++                actual = runtime._preview(req, tokens)
++                torch.testing.assert_close(actual.float().cpu(), reference, rtol=0, atol=0)
++                cold_stats = engine.moe_offload_cache.decode_miss_stats()
++                static_batch = runtime._blocks().entries[(True, width, engine.config.clover_coreset_top_p)][0]
++                updates = static_batch._clover_metadata_updates
+                 after = persistent_hashes(engine)
+                 if frozen != after:
+                     raise AssertionError("Preview capture or replay changed persistent KV/GDN bytes")
+@@ -66,8 +73,9 @@ def main():
+                     done.record(engine.stream)
+                     done.synchronize()
+                     times.append(begin.elapsed_time(done))
++                assert updates == static_batch._clover_metadata_updates
+                 result["previews"].append(dict(prefix=req.cached_len, width=width,
+-                    hashes_before=frozen, hashes_after=after, logits_bitwise_equal=True,
++                    hashes_before=frozen, hashes_after=after, logits_bitwise_equal=True, cold_stats=cold_stats,
+                     warmups=2, repeats=5, milliseconds=times[2:], median_ms=statistics.median(times[2:])))
+                 save()
+             # Compare the actual private transaction at every possible commit row.
+diff --git a/benchmarks/clover_gguf_reference.py b/benchmarks/clover_gguf_reference.py
+index efe1fe7..17b2a52 100644
+--- a/benchmarks/clover_gguf_reference.py
++++ b/benchmarks/clover_gguf_reference.py
+@@ -52,6 +52,18 @@ class ReferenceFunctional:
+         return output.to(value.dtype)
+ 
+ 
++class ReferenceQ8Linear(torch.nn.Module):
++    """Independent Q8_0 weights and Q8_1 activation arithmetic for dense operators."""
++    def __init__(self, module):
++        super().__init__()
++        self.weight = module.weight
++        self.bias = module.bias
++        self.in_features, self.out_features = module.in_features, module.out_features
++
++    def forward(self, value):
++        return functional.linear(q8_1_activations(value), self.weight, self.bias).to(value.dtype)
++
++
+ class GGUFExpertStorage:
+     def __init__(
+         self,
+@@ -149,7 +161,8 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
+     expected = dict(model.named_parameters())
+     config = parse_gguf_config(cached_load_hf_config(str(checkpoint)))
+     loaded = set()
+-    for name, value in iter_hf_gguf_weights(str(checkpoint), config):
++    q8_dense = []
++    for name, value in iter_hf_gguf_weights(str(checkpoint), config, preserve_q8=True):
+         if (
+             name not in expected
+             or name in loaded
+@@ -163,10 +176,15 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
+             torch.nn.Parameter(value.to(device), requires_grad=False),
+         )
+         loaded.add(name)
++        if value.dtype == torch.float32 and isinstance(model.get_submodule(parent), torch.nn.Linear):
++            q8_dense.append(parent)
+     if loaded != set(expected) or any(p.is_meta for p in model.parameters()):
+         raise ValueError("Incomplete GGUF reference dense weights")
+-    # nn.Linear dense operators stay unchanged. Only the expert F.linear sites
+-    # in the official Python module see the independent Q8_1 dot reference.
++    for path in q8_dense:
++        parent, leaf = path.rsplit(".", 1)
++        setattr(model.get_submodule(parent), leaf, ReferenceQ8Linear(model.get_submodule(path)))
++    # The model's HF control flow is unchanged. Quantized dense/expert arithmetic
++    # is a mathematical oracle, independent of serving GGML CUDA kernels.
+     reference = ReferenceFunctional()
+     original_fp32_linear = model_code.linear_fp32_output
+ 
+diff --git a/benchmarks/eval_clover_quality.py b/benchmarks/eval_clover_quality.py
+index 9aa0b74..1dd7ab4 100644
+--- a/benchmarks/eval_clover_quality.py
++++ b/benchmarks/eval_clover_quality.py
+@@ -75,6 +75,7 @@ def main():
+     )
+     parser.add_argument("--tokens", type=int, default=512)
+     parser.add_argument("--limit", type=int, default=50)
++    parser.add_argument("--cache-slots", type=int, default=4096)
+     parser.add_argument("--datasets", default="gsm8k,humaneval")
+     parser.add_argument(
+         "--resume",
+@@ -115,7 +116,7 @@ def main():
+         llm = LLM(
+             str(args.checkpoint),
+             moe_strategy="offload",
+-            moe_cache_size=4096,
++            moe_cache_size=args.cache_slots,
+             expert_load="serial",
+             max_running_req=1,
+             memory_ratio=0.85,
+diff --git a/python/freetoken/models/clover_moe/gguf.py b/python/freetoken/models/clover_moe/gguf.py
+index 4b13740..5c403eb 100644
+--- a/python/freetoken/models/clover_moe/gguf.py
++++ b/python/freetoken/models/clover_moe/gguf.py
+@@ -186,7 +186,7 @@ def restore_v_heads(value, axis, nk, nv, head_dim):
+     return value.reshape(split).transpose(axis, axis + 1).reshape(shape).contiguous()
+ 
+ 
+-def _restore_dense(name, value, config):
++def _restore_dense(name, value, config, *, dtype=torch.bfloat16):
+     group = config.linear_attention_group()
+     nk, nv, dk, dv = (
+         group.num_key_heads,
+@@ -214,10 +214,10 @@ def _restore_dense(name, value, config):
+         value = value.float() - 1.0
+     if name.endswith(".shared_expert_gate.weight"):
+         value = value.reshape(1, config.hidden_size)
+-    return value.to(torch.bfloat16)
++    return value.to(dtype)
+ 
+ 
+-def iter_hf_gguf_weights(model_path, config):
++def iter_hf_gguf_weights(model_path, config, *, preserve_q8=False):
+     """Dense tensors in original Clover key/head order for independent HF oracles."""
+     import gguf
+     import numpy as np
+@@ -240,7 +240,8 @@ def iter_hf_gguf_weights(model_path, config):
+         raw = tensor._raw
+         values = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
+         value = torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape)
+-        yield name, _restore_dense(name, value, config)
++        dtype = torch.float32 if preserve_q8 and tensor.ggml_type == 8 else torch.bfloat16
++        yield name, _restore_dense(name, value, config, dtype=dtype)
+ 
+ 
+ def iter_gguf_weights(

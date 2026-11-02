@@ -1,0 +1,367 @@
+[
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033024Z-environment-setup\\manifest.json",
+    "manifest": {
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "--offline",
+        "--cache-dir",
+        "C:\\workspace\\cache\\uv",
+        "-r",
+        "C:\\workspace\\tasks\\T-20261031-clover-gguf\\runtime-requirements.txt"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "dirty": " M python/freetoken/attention/linear.py\n M python/freetoken/core.py\n M python/freetoken/engine/config.py\n M python/freetoken/engine/engine.py\n M python/freetoken/kernel/aot_models.py\n M python/freetoken/kernel/csrc/gguf/gguf_kernel.cu\n M python/freetoken/kernel/gguf.py\n M python/freetoken/layers/moe.py\n M python/freetoken/models/gguf/config.py\n M python/freetoken/models/gguf/tokenizer.py\n M python/freetoken/models/qwen4_exp/mtp_runtime.py\n M python/freetoken/models/register.py\n M python/freetoken/models/weight.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/offload_cache.py\n M python/freetoken/scheduler/scheduler.py\n?? benchmarks/LICENSE.clover-gguf-reference\n?? benchmarks/bench_clover.py\n?? benchmarks/bench_clover_cpu.py\n?? benchmarks/bench_clover_llama.py\n?? benchmarks/check_clover_hf_denoise.py\n?? benchmarks/check_clover_hf_preview.py\n?? benchmarks/check_clover_hf_selfspec.py\n?? benchmarks/check_clover_lifecycle.py\n?? benchmarks/check_clover_preview.py\n?? benchmarks/check_clover_prompt_outputs.py\n?? benchmarks/check_clover_quantization.py\n?? benchmarks/check_clover_verify.py\n?? benchmarks/check_qwen4_mtp.py\n?? benchmarks/clover_eval_worker.py\n?? benchmarks/clover_gguf_decode.py\n?? benchmarks/clover_gguf_reference.py\n?? benchmarks/clover_hf_reference.py\n?? benchmarks/clover_metrics.py\n?? benchmarks/eval_clover_quality.py\n?? benchmarks/fetch_clover_eval_data.py\n?? python/freetoken/engine/speculative.py\n?? python/freetoken/kernel/csrc/gguf/bindings.cpp\n?? python/freetoken/kernel/triton/clover_conv.py\n?? python/freetoken/kernel/triton/clover_coreset.py\n?? python/freetoken/kernel/triton/clover_gdn.py\n?? python/freetoken/models/clover_moe/\n?? python/freetoken/moe/fused_gguf.py\n?? tests/kernels/test_clover_gguf.py\n?? tests/kernels/test_clover_preview.py\n?? tests/models/test_clover_bf16_blocks.py\n?? tests/models/test_clover_eval.py\n?? tests/models/test_clover_generation.py\n?? tests/models/test_clover_gguf.py\n?? tests/models/test_clover_llama_metrics.py\n?? tests/models/test_clover_model.py\n?? tests/models/test_clover_offload.py\n?? tests/models/test_clover_real_layers.py\n?? tests/scheduler/test_clover_prefill_bundle.py\n",
+      "started_at": "20261102T033024Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033024Z-environment-setup",
+      "pid": 3040,
+      "exit_code": 1,
+      "elapsed_seconds": 0.375
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033146Z-foundation-tests\\manifest.json",
+    "manifest": {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/models/test_clover_model.py",
+        "tests/models/test_clover_generation.py",
+        "tests/models/test_clover_gguf.py",
+        "tests/models/test_clover_eval.py",
+        "tests/models/test_clover_llama_metrics.py",
+        "tests/scheduler/test_clover_prefill_bundle.py"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "f417397f339050e6f400e75db0f1e6acbc40f13a",
+      "dirty": " M python/freetoken/attention/linear.py\n M python/freetoken/core.py\n M python/freetoken/engine/config.py\n M python/freetoken/engine/engine.py\n M python/freetoken/kernel/aot_models.py\n M python/freetoken/kernel/csrc/gguf/gguf_kernel.cu\n M python/freetoken/kernel/gguf.py\n M python/freetoken/layers/moe.py\n M python/freetoken/models/gguf/config.py\n M python/freetoken/models/gguf/tokenizer.py\n M python/freetoken/models/qwen4_exp/mtp_runtime.py\n M python/freetoken/models/register.py\n M python/freetoken/models/weight.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/offload_cache.py\n M python/freetoken/scheduler/scheduler.py\n?? benchmarks/LICENSE.clover-gguf-reference\n?? benchmarks/bench_clover.py\n?? benchmarks/bench_clover_cpu.py\n?? benchmarks/bench_clover_llama.py\n?? benchmarks/check_clover_hf_denoise.py\n?? benchmarks/check_clover_hf_preview.py\n?? benchmarks/check_clover_hf_selfspec.py\n?? benchmarks/check_clover_lifecycle.py\n?? benchmarks/check_clover_preview.py\n?? benchmarks/check_clover_prompt_outputs.py\n?? benchmarks/check_clover_quantization.py\n?? benchmarks/check_clover_verify.py\n?? benchmarks/check_qwen4_mtp.py\n?? benchmarks/clover_eval_worker.py\n?? benchmarks/clover_gguf_decode.py\n?? benchmarks/clover_gguf_reference.py\n?? benchmarks/clover_hf_reference.py\n?? benchmarks/clover_metrics.py\n?? benchmarks/eval_clover_quality.py\n?? benchmarks/fetch_clover_eval_data.py\n?? python/freetoken/engine/speculative.py\n?? python/freetoken/kernel/csrc/gguf/bindings.cpp\n?? python/freetoken/kernel/triton/clover_conv.py\n?? python/freetoken/kernel/triton/clover_coreset.py\n?? python/freetoken/kernel/triton/clover_gdn.py\n?? python/freetoken/models/clover_moe/\n?? python/freetoken/moe/fused_gguf.py\n?? tests/kernels/test_clover_gguf.py\n?? tests/kernels/test_clover_preview.py\n?? tests/models/test_clover_bf16_blocks.py\n?? tests/models/test_clover_eval.py\n?? tests/models/test_clover_generation.py\n?? tests/models/test_clover_gguf.py\n?? tests/models/test_clover_llama_metrics.py\n?? tests/models/test_clover_model.py\n?? tests/models/test_clover_offload.py\n?? tests/models/test_clover_real_layers.py\n?? tests/scheduler/test_clover_prefill_bundle.py\n",
+      "started_at": "20261102T033146Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033146Z-foundation-tests",
+      "pid": 12524,
+      "exit_code": 1,
+      "elapsed_seconds": 0.03200000000651926
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033603Z-packed-loader-unit-tests\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/models/test_clover_gguf.py",
+        "tests/models/test_clover_model.py"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/moe/fused_gguf.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T033603Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T033603Z-packed-loader-unit-tests",
+      "pid": 13192,
+      "exit_code": 1,
+      "elapsed_seconds": 4.375
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T034744Z-fused-pick-and-mmq-tests\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/models/test_clover_generation.py",
+        "tests/kernels/test_clover_gguf.py"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/fused_gguf.py\n M tests/kernels/test_clover_gguf.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? python/freetoken/kernel/triton/clover_align.py\n?? python/freetoken/kernel/triton/clover_pick.py\n?? python/freetoken/models/clover_moe/graph.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T034744Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T034744Z-fused-pick-and-mmq-tests",
+      "pid": 2168,
+      "exit_code": 1,
+      "elapsed_seconds": 15.702999999979511
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T034948Z-nvfp4-after-first-graphs\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/nvfp4-after-first-graphs",
+        "--modes",
+        "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+        "--prompts",
+        "Count",
+        "--tokens",
+        "64",
+        "--warmups",
+        "1",
+        "--repeats",
+        "1"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/fused_gguf.py\n M tests/kernels/test_clover_gguf.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? python/freetoken/kernel/triton/clover_align.py\n?? python/freetoken/kernel/triton/clover_pick.py\n?? python/freetoken/models/clover_moe/graph.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T034948Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T034948Z-nvfp4-after-first-graphs",
+      "pid": 16476,
+      "exit_code": 1,
+      "elapsed_seconds": 26.20300000003772
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T035738Z-nvfp4-graph-state-and-latency-audit\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_graphs.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/nvfp4-graph-state-and-latency-audit"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M benchmarks/clover_gguf_decode.py\n M benchmarks/clover_gguf_reference.py\n M python/freetoken/kernel/causal_conv1d.py\n M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/fused_gguf.py\n M tests/kernels/test_clover_gguf.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? benchmarks/check_clover_graphs.py\n?? python/freetoken/kernel/triton/clover_align.py\n?? python/freetoken/kernel/triton/clover_pick.py\n?? python/freetoken/models/clover_moe/graph.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T035738Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T035738Z-nvfp4-graph-state-and-latency-audit",
+      "pid": 10796,
+      "exit_code": 1,
+      "elapsed_seconds": 34.25
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T035942Z-nvfp4-graph-state-audit-diagnostic\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_graphs.py",
+        "--model",
+        "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/nvfp4-graph-state-audit-diagnostic"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "afc0997c82fc1f21eb76aa2017b59a94a5cbac14",
+      "dirty": " M benchmarks/clover_gguf_decode.py\n M benchmarks/clover_gguf_reference.py\n M python/freetoken/kernel/causal_conv1d.py\n M python/freetoken/layers/moe.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/gguf.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/expert_banks.py\n M python/freetoken/moe/fused_gguf.py\n M tests/kernels/test_clover_gguf.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? benchmarks/check_clover_graphs.py\n?? python/freetoken/kernel/triton/clover_align.py\n?? python/freetoken/kernel/triton/clover_pick.py\n?? python/freetoken/models/clover_moe/graph.py\n?? python/freetoken/models/clover_moe/packed.py\n",
+      "started_at": "20261102T035942Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T035942Z-nvfp4-graph-state-audit-diagnostic",
+      "pid": 8784,
+      "exit_code": 1,
+      "elapsed_seconds": 27.54699999996228
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043716Z-stock-preview-probe-build\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+        "-NoProfile",
+        "-File",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\build_preview_probe.ps1"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T043716Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043716Z-stock-preview-probe-build",
+      "error": "FileNotFoundError(2, '系统找不到指定的文件。', None, 2, None)",
+      "elapsed_seconds": 0.0
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043723Z-official-q8-native-count-p0\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/bench_clover.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/official-q8-native-count-p0",
+        "--cache-slots",
+        "2560",
+        "--no-penalties",
+        "--modes",
+        "causal",
+        "--prompts",
+        "Count",
+        "--tokens",
+        "256",
+        "--warmups",
+        "2",
+        "--repeats",
+        "5",
+        "--capture-first-logits",
+        "--capture-logits-steps",
+        "32"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T043723Z",
+      "state": "passed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043723Z-official-q8-native-count-p0",
+      "pid": 10256,
+      "exit_code": 0,
+      "elapsed_seconds": 88.5
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": true,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043852Z-official-q8-graph-state-audit\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "benchmarks/check_clover_graphs.py",
+        "--model",
+        "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "--cache-slots",
+        "2560",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/official-q8-graph-state-audit"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T043852Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T043852Z-official-q8-graph-state-audit",
+      "pid": 13108,
+      "exit_code": 1,
+      "elapsed_seconds": 68.43800000002375
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": true,
+    "expected_before_fix_failure": false
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T044452Z-mmq-pre-fix-high-slot-reproducer-expected-failure\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "C:\\workspace\\tasks\\T-20261102-clover-q8\\reproduce_mmq_before_fix.py"
+      ],
+      "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "25fb44bf31a7b26f9ee096a719cda4ab905cdec3",
+      "dirty": " M benchmarks/bench_clover.py\n M benchmarks/bench_clover_llama.py\n M benchmarks/check_clover_graphs.py\n M benchmarks/clover_gguf_reference.py\n M benchmarks/eval_clover_quality.py\n M python/freetoken/kernel/csrc/gguf/gguf_kernel.cu\n M python/freetoken/kernel/csrc/gguf/moe.cuh\n M python/freetoken/models/clover_moe/gguf.py\n M tests/kernels/test_clover_gguf.py\n?? benchmarks/bench_clover_long.py\n?? benchmarks/clover_llama_preview.cpp\n",
+      "started_at": "20261102T044452Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T044452Z-mmq-pre-fix-high-slot-reproducer-expected-failure",
+      "pid": 6572,
+      "exit_code": 1,
+      "elapsed_seconds": 38.48399999999674
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": true
+  },
+  {
+    "path": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T082918Z-performance-report-final-v1\\manifest.json",
+    "manifest": {
+      "command": [
+        "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+        "C:/workspace/tasks/T-20261102-clover-q8/render_report.py",
+        "--evidence",
+        "C:/workspace/runs/T-20261102-clover-q8/evidence-final-v1",
+        "--output",
+        "C:/workspace/runs/T-20261102-clover-q8/performance-report-final-v1/report.md"
+      ],
+      "cwd": "C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "commit": "592916070b05c80c0fa4f62400a0a752dab43968",
+      "dirty": "",
+      "started_at": "20261102T082918Z",
+      "state": "failed",
+      "output": "C:\\workspace\\runs\\T-20261102-clover-q8\\20261102T082918Z-performance-report-final-v1",
+      "pid": 6516,
+      "exit_code": 1,
+      "elapsed_seconds": 0.125
+    },
+    "excluded_from_performance": true,
+    "invalid_early_q8_numerics": false,
+    "expected_before_fix_failure": false
+  }
+]
