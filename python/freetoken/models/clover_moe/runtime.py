@@ -61,14 +61,7 @@ class CloverRuntime:
         self.states.clear()
 
     def before_native(self, batch):
-        if not batch.is_prefill or self.transactions is None or self.transactions.capacity != 32:
-            return None
-        sparse_limit = self.engine.model.model.layers.op_list[0].mlp.sparse_prefill_limit
-        if len(batch.input_ids) > sparse_limit:
-            # A previous W32 window owns ~2 GiB. Release it before a new prompt's
-            # full-layer prefill workspace, then allocate lazily at verification.
-            self.block_graphs.clear_verify()
-            self.transactions = None
+        # Startup/rebuild reserve the window separately from graph/prefill headroom.
         return None
 
     def _blocks(self):

@@ -436,8 +436,14 @@ class Engine:
         available_memory -= runtime_reserve
         self.num_pages = self._pool_cls.solve_num_pages(config, available_memory)
         if runtime_reserve:
+            from .cache_budget import net_cache_budget_bytes, required_bytes
+
             page_bytes, fixed_bytes, _, _ = self._pool_cls.kv_cost(config)
-            if self.num_pages * page_bytes + fixed_bytes > available_memory:
+            target_moe, per_expert_bytes = self._target_moe_and_expert_bytes(None)
+            budget = net_cache_budget_bytes(config.memory_ratio, self._baseline_free,
+                self._weights_bytes, fixed_bytes + state_pool_bytes(config) + runtime_reserve)
+            need = required_bytes(target_moe, self.num_pages, per_expert_bytes, page_bytes)
+            if need > budget:
                 raise ValueError("KV/expert budget leaves no room for the reserved Clover transaction; "
                                  "reduce moe_cache_size, context or clover_max_width")
             logger.info_rank0(f"Reserved Clover private runtime: {mem_GB(runtime_reserve)}")
