@@ -1,0 +1,45 @@
+{
+  "state": "passed",
+  "jobs": [
+    {
+      "name": "q8-frozen-abab-0-before",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-before",
+      "state": "passed"
+    },
+    {
+      "name": "q8-frozen-abab-1-after",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-reviewed",
+      "state": "passed"
+    },
+    {
+      "name": "q8-frozen-abab-2-before",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-before",
+      "state": "passed"
+    },
+    {
+      "name": "q8-frozen-abab-3-after",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-q8-reviewed",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-frozen-abab-0-before",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-nvfp4-before",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-frozen-abab-1-after",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-nvfp4-reviewed",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-frozen-abab-2-before",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-nvfp4-before",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-frozen-abab-3-after",
+      "source": "C:/workspace/wt/T-20261102-clover-review/FreeToken-nvfp4-reviewed",
+      "state": "passed"
+    }
+  ]
+}

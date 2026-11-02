@@ -1,0 +1,35 @@
+{
+  "name": "original-abab-0-old",
+  "started_at_utc": "20261102T102215Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261102-clover-q8/FreeToken-q8-runtime-before/benchmarks/bench_clover.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/original-abab-0-old",
+    "--cache-slots",
+    "2560",
+    "--memory-ratio",
+    ".95",
+    "--modes",
+    "causal",
+    "--tokens",
+    "256",
+    "--warmups",
+    "2",
+    "--repeats",
+    "5"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken-q8-runtime-before",
+  "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+  "dirty": " M benchmarks/bench_clover.py\n M python/freetoken/kernel/causal_conv1d.py\n M python/freetoken/models/clover_moe/generation.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n",
+  "patch_sha256": "08078a9985c926100a2ebcc39e7130f670fac2442e670c13dad2f07c41af7dd3",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken-q8-runtime-before/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken-q8-runtime-before"
+  },
+  "pid": 1208,
+  "exit_code": 0,
+  "elapsed_seconds": 159.0
+}

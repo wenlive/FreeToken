@@ -1,0 +1,37 @@
+{
+  "name": "q8-preview-ab-reference-shared-state",
+  "started_at_utc": "20261102T110850Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/check_clover_preview_ab.py",
+    "--stage",
+    "reference",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--source",
+    "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "--native-output",
+    "C:/workspace/runs/T-20261102-clover-review/q8-preview-ab-native-shared-state",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/q8-preview-ab-reference-shared-state"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+  "dirty": "?? benchmarks/check_clover_preview_ab.py\n",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken"
+  },
+  "script_receipts": {
+    "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\check_clover_preview_ab.py": "a47967827a74fc82f5026c7abe7adf090690dff82ccc7eb0fa0d77432c27317b"
+  },
+  "pid": 2072,
+  "exit_code": 0,
+  "elapsed_seconds": 61.88999999999942
+}

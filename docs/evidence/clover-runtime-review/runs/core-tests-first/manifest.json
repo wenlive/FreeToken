@@ -1,0 +1,29 @@
+{
+  "name": "core-tests-first",
+  "started_at_utc": "20261102T103550Z",
+  "state": "failed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "-ra",
+    "tests/models/test_clover_generation.py",
+    "tests/models/test_clover_gguf.py",
+    "tests/kvcache/test_linear_state_pool_alloc.py",
+    "tests/engine/test_cache_budget.py"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+  "dirty": " M benchmarks/bench_clover.py\n M benchmarks/check_clover_graphs.py\n M python/freetoken/engine/config.py\n M python/freetoken/engine/engine.py\n M python/freetoken/engine/speculative.py\n M python/freetoken/kernel/aot_models.py\n M python/freetoken/kvcache/cache_status.py\n M python/freetoken/models/clover_moe/graph.py\n M python/freetoken/models/clover_moe/preview.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/moe/offload_cache.py\n M tests/kvcache/test_linear_state_pool_alloc.py\n M tests/models/test_clover_generation.py\n M tests/models/test_clover_gguf.py\n?? benchmarks/bench_clover_context.py\n?? python/freetoken/kernel/triton/clover_store.py\n?? python/freetoken/kernel/triton/clover_verify.py\n",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "c14d8f8f225e029e6e5a2c08df0796e97314e40d1c35e8559b9ab64ab1d0afdf",
+  "environment_overrides": {},
+  "pid": 14196,
+  "exit_code": 1,
+  "elapsed_seconds": 6.485000000000582
+}

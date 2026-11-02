@@ -1,0 +1,376 @@
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index 6218903..036be87 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -29,3 +29,15 @@ python benchmarks/bench_offload_cache_copy.py
+ 
+ For host RAM vs PCIe bandwidth and the offload/hybrid backend pick, use `ft bench bw`
+ instead — it writes the JSON profile the engine reads.
++
++Clover branch measurements are indexed in [the performance record](../docs/clover-performance.md).
++`bench_clover.py` records visible outputs, TTFT, arrival-based decode and expert
++payload. Use `--runtime-breakdown` only for a separate event-instrumented run;
++`--phase-cache-stats` adds GPU counter snapshots and is also diagnostic.
++`--cache-auto --memory-ratio .9 --clover-max-width 32` includes the private block
++window in capacity planning; `--embedding-host` tests the optional mapped table.
++`bench_clover_context.py` measures exact 1K/4K/16K/32K prefixes;
++`bench_clover_split_kv.py` compares two read-only preview graphs on identical state.
++`analyze_clover_budget.py` combines measured costs with recorded HF progress,
++and `summarize_clover_abab.py` retains both chronological ratios and process drift
++for four before/after/before/after result files. Their `--help` gives the arguments.
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index de7791c..71e2a41 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -54,6 +54,10 @@ def main():
+     parser.add_argument("--runtime-breakdown", action="store_true",
+         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
++    parser.add_argument("--cache-auto", action="store_true")
++    parser.add_argument("--embedding-host", action="store_true")
++    parser.add_argument("--phase-cache-stats", action="store_true",
++        help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -69,6 +73,8 @@ def main():
+         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
+     )
+     args = parser.parse_args()
++    if args.phase_cache_stats and not args.runtime_breakdown:
++        parser.error('--phase-cache-stats requires --runtime-breakdown')
+     args.output.mkdir(parents=True, exist_ok=False)
+     if args.indexed_clover_penalty:
+         from freetoken.models.clover_moe import generation
+@@ -126,7 +132,10 @@ def main():
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+-        moe_cache_size=args.cache_slots,
++        moe_cache_size=0 if args.cache_auto else args.cache_slots,
++        moe_cache_auto=args.cache_auto,
++        kv_reserve_tokens=args.context_size,
++        gguf_embedding_host=args.embedding_host,
+         expert_load="serial",
+         max_running_req=1,
+         memory_ratio=args.memory_ratio,
+@@ -156,7 +165,9 @@ def main():
+                 output = original(*positional, **keywords)
+                 end.record(llm.engine.stream)
+                 actual_phase = ('native_prefill' if phase == 'causal' and not positional[0].is_decode else phase)
+-                runtime_trace.append((actual_phase, start, end, block_index[0]))
++                snapshot = (llm.engine.moe_offload_cache.lru_stats.clone()
++                    if args.phase_cache_stats and phase in ('preview','verify','advance') else None)
++                runtime_trace.append((actual_phase, start, end, block_index[0], snapshot))
+                 return output
+             setattr(owner, name, observed)
+ 
+@@ -178,7 +189,10 @@ def main():
+         startup_seconds=time.perf_counter() - started,
+         checkpoint=args.model,
+         settings=dict(
+-            cache_slots=args.cache_slots,
++            cache_slots=llm.engine.moe_offload_cache.cache_size,
++            cache_auto=args.cache_auto,
++            embedding_host=args.embedding_host,
++            mapped_host_table_bytes=llm.engine._host_tables_bytes,
+             memory_ratio=args.memory_ratio,
+             context=args.context_size,
+             accept_rule=args.accept_rule,
+@@ -330,8 +344,21 @@ def main():
+                         reserved=torch.cuda.memory_reserved(),
+                     )
+                     if args.runtime_breakdown:
+-                        row["runtime_breakdown"] = [dict(phase=phase, block_index=index, cuda_ms=start.elapsed_time(end))
+-                            for phase, start, end, index in runtime_trace]
++                        previous = [0,0,0]
++                        row['runtime_breakdown'] = []
++                        payload = 0
++                        for phase,start,end,index,snapshot in runtime_trace:
++                            item = dict(phase=phase,block_index=index,cuda_ms=start.elapsed_time(end))
++                            if snapshot is not None:
++                                values = snapshot.cpu().sum(0).tolist()
++                                active,missing,calls = [int(a-b) for a,b in zip(values,previous)]
++                                previous = values
++                                item.update(active_experts=active,missing_experts=missing,layer_calls=calls,
++                                    logical_expert_h2d_bytes=missing*per_expert)
++                                payload += missing*per_expert
++                            row['runtime_breakdown'].append(item)
++                        if args.phase_cache_stats and mode == 'denoise':
++                            assert payload == row['decode_expert_copy_payload_bytes']
+                     if mode == "causal":
+                         causal_ids = answer["token_ids"]
+                     elif mode == "selfspec" and causal_ids is not None:
+@@ -380,6 +407,14 @@ def main():
+             cuda_peak_allocated=torch.cuda.max_memory_allocated(),
+             cuda_peak_reserved=torch.cuda.max_memory_reserved(),
+         )
++        import psutil
++
++        memory = psutil.Process().memory_info()
++        result['host_memory'] = dict(current_rss_bytes=memory.rss,
++            peak_working_set_bytes=getattr(memory,'peak_wset',None),
++            current_private_bytes=getattr(memory,'private',None))
++        result['host_bank_payload_bytes'] = sum(t.numel()*t.element_size()
++            for layers in cache.bank_sources.values() for t in layers)
+         result["state"] = (
+             "validation_failed" if args.require_exact and mismatch else "complete"
+         )
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index eab1820..0683d40 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -26,11 +26,13 @@ def main():
+     parser.add_argument("--output", type=Path, required=True)
+     parser.add_argument("--cache-slots", type=int, default=4096)
+     parser.add_argument("--memory-ratio", type=float, default=.85)
++    parser.add_argument("--split-kv", action="store_true")
+     args = parser.parse_args()
+     args.output.mkdir(parents=True, exist_ok=False)
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+         expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
+-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
++        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True,
++        clover_split_kv=args.split_kv)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+     original = engine.forward_batch
+diff --git a/docs/clover-runtime-performance.md b/docs/clover-runtime-performance.md
+index fd7cd92..69ef661 100644
+--- a/docs/clover-runtime-performance.md
++++ b/docs/clover-runtime-performance.md
+@@ -1,5 +1,11 @@
+ # Clover 官方 Q8 GGUF 与块去噪运行时实测
+ 
++> **R0 历史报告，保留原始测量。** 当前入口为 [性能记录](clover-performance.md)，
++> review 修复、冻结 ABAB 复测、长上下文及成本分析见 [R1](clover-runtime-review.md)。
++> 下文 runtime-before 的 causal 对照存在明显波动，旧整体加速范围不能全部归因于代码修复。
++> R1 的旧源码交替复测未重现原先低值；不覆盖这批原始证据，也不把 R0 llama.cpp 数字称为最终源码的重测。
++> “按实际行数捕获”等描述对应 R0；R1 已改为固定物理宽度与有效行屏蔽。
++
+ 本报告针对 Windows、RTX 5070 Ti 16 GB、Ryzen 7 9700X、64 GB 内存、单请求 TP1。
+ Q8 分支从 main `f417397` 创建；NVFP4 分支从 `2fd00ce` 追加提交。
+ 完整测量、输入、源码版本、输出、缓存与内存记录见 [evidence](evidence/clover-runtime/sources.json)。
+diff --git a/docs/models.md b/docs/models.md
+index c72eda6..1c6b91d 100644
+--- a/docs/models.md
++++ b/docs/models.md
+@@ -6,7 +6,7 @@ for them; other checkpoints of the same architectures work too.
+ 
+ | Model | Checkpoints |
+ |---|---|
+-| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [qualified weights, decoding and limits](clover-runtime-performance.md) |
++| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [performance history, decoding and limits](clover-performance.md) |
+ | DeepSeek-V4.1-Flash | [deepseek-ai/DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) |
+ | DeepSeek-V4 | [deepseek-ai/DeepSeek-V4-Flash-0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) |
+ | GLM-5.3-Flash | [RedHatAI/GLM-5.3-Flash-NVFP4](https://huggingface.co/RedHatAI/GLM-5.3-Flash-NVFP4) |
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index c3c17b8..ca95105 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -117,6 +117,7 @@ class EngineConfig:
+     clover_mode: str = "causal"
+     clover_width: int = 8
+     clover_max_width: int = 32
++    clover_split_kv: bool = False
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+     clover_accept_ratio: float = .9
+diff --git a/python/freetoken/models/clover_moe/graph.py b/python/freetoken/models/clover_moe/graph.py
+index ff2801b..5c51d3d 100644
+--- a/python/freetoken/models/clover_moe/graph.py
++++ b/python/freetoken/models/clover_moe/graph.py
+@@ -102,6 +102,7 @@ class CloverBlockGraphs:
+             torch.ones(1, dtype=torch.bool, device=engine.device), is_verify=not preview)
+         batch.clover_clean = self.clean
+         batch.clover_preview = preview
++        batch.clover_kv_splits = 8 if getattr(engine.config,'clover_split_kv',False) else 1
+         batch.clover_coreset_top_p = coreset
+         batch.clover_valid = torch.ones(rows, dtype=torch.bool, device=engine.device)
+         batch.clover_attention = dict(q_indptr=cu, kv_indptr=indptr, indices=indices,
+diff --git a/python/freetoken/models/clover_moe/model.py b/python/freetoken/models/clover_moe/model.py
+index 273b29c..a3ff644 100644
+--- a/python/freetoken/models/clover_moe/model.py
++++ b/python/freetoken/models/clover_moe/model.py
+@@ -26,6 +26,26 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
+ 
+ 
+ class CloverMoeModelLM(Qwen3_5ForCausalLM):
++    def place_input_embedding(self):
++        """Optional exact-byte mapped-host table; output weights remain resident."""
++        from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
++
++        embedding = self.model.embed_tokens
++        if self.lm_head.tied_embedding is not None:
++            raise ValueError("Mapped Clover input embeddings require an untied output head")
++        if hasattr(embedding, '_mapped_host'):
++            return embedding._mapped_host.owner.numel()
++        weight = embedding.weight
++        if not weight.is_cuda or torch.cuda.is_current_stream_capturing():
++            raise ValueError("Map Clover embeddings after loading and before graph capture")
++        host = alloc_pinned_tensor(weight.numel()*weight.element_size(), dtype=torch.uint8)
++        host.copy_(weight.view(torch.uint8).flatten().cpu())
++        mapping = MappedHostBytes(host)
++        view = mapping.cuda_view(weight.device).view(weight.dtype).reshape(weight.shape)
++        embedding._mapped_host = mapping
++        embedding.weight = view
++        return host.numel()
++
+     def __init__(self, config):
+         super().__init__(config)
+         self.model.norm = CloverPlusOneRMSNorm(config.hidden_size, config.rms_norm_eps)
+diff --git a/python/freetoken/models/clover_moe/preview.py b/python/freetoken/models/clover_moe/preview.py
+index cb74fa6..d24095f 100644
+--- a/python/freetoken/models/clover_moe/preview.py
++++ b/python/freetoken/models/clover_moe/preview.py
+@@ -133,10 +133,17 @@ def attention_preview(mixer, hidden, ctx, *, preview=True):
+     indices = metadata.get("indices")
+     if indices is None:
+         indices = ctx.page_table[req.table_idx, :prefix]
+-    output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
+-        indices, metadata["prefix_lens"], width, dim ** -.5,
+-        k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
+-        block_ends=metadata["block_ends"] if preview else None)
++    if getattr(batch, 'clover_kv_splits', 1) > 1:
++        from freetoken.kernel.triton.clover_attention import split_kv_attention
++
++        output = split_kv_attention(q,keys,values,indices,metadata['prefix_lens'],
++            k.reshape(width,kh,dim),v.reshape(width,kh,dim),preview=preview,
++            splits=batch.clover_kv_splits)
++    else:
++        output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
++            indices, metadata["prefix_lens"], width, dim ** -.5,
++            k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
++            block_ends=metadata["block_ends"] if preview else None)
+     return mixer._combine(output, gate)
+ 
+ 
+@@ -199,6 +206,7 @@ def make_preview_batch(engine, request, tokens, *, coreset_top_p=.9):
+     batch.fla_metadata = FLAMetadata(torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+         batch.linear_table_idx, torch.ones(1, device=engine.device, dtype=torch.bool))
+     batch.clover_preview = True
++    batch.clover_kv_splits = 8 if getattr(getattr(engine,'config',None),'clover_split_kv',False) else 1
+     batch.clover_valid = torch.ones(width, device=engine.device, dtype=torch.bool)
+     batch.clover_coreset_top_p = coreset_top_p
+     batch.clover_attention = dict(q_indptr=torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index 399f086..ef99b66 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -198,6 +198,13 @@ class CloverRuntime:
+             batch, self.engine.device, max_verify_rows=len(tokens)
+         )
+         self.engine.attn_backend.prepare_metadata(batch)
++        if getattr(self.engine.config,'clover_split_kv',False):
++            metadata = batch.attn_metadata
++            batch.clover_valid = torch.ones(len(tokens),device=self.engine.device,dtype=torch.bool)
++            batch.clover_kv_splits = 8
++            batch.clover_attention = dict(q_indptr=metadata.cu_seqlens_q_gpu,
++                kv_indptr=metadata.indptr,indices=metadata.indices,
++                prefix_lens=metadata.prefix_lens,block_ends=None)
+         if self.transactions is None or self.transactions.capacity < capacity:
+             # Free the old window before allocating a larger one on a 16GB GPU.
+             self.transactions = None
+diff --git a/tests/kernels/test_clover_preview.py b/tests/kernels/test_clover_preview.py
+index b619909..639d272 100644
+--- a/tests/kernels/test_clover_preview.py
++++ b/tests/kernels/test_clover_preview.py
+@@ -155,3 +155,25 @@ def test_padded_verify_attention_is_causal_and_stores_only_valid_rows(valid_rows
+     frozen_k[prefix:prefix+valid_rows] = k[:valid_rows]
+     frozen_v[prefix:prefix+valid_rows] = v[:valid_rows]
+     assert torch.equal(keys,frozen_k) and torch.equal(values,frozen_v)
++
++
++@pytest.mark.parametrize('width,prefix,dim',[(8,0,64),(16,19,64),(32,513,64),(16,16384,64),(16,4096,256)])
++@pytest.mark.parametrize('preview',[True,False])
++def test_split_kv_matches_independent_attention_without_cache_writes(width,prefix,dim,preview):
++    from freetoken.kernel.triton.clover_attention import split_kv_attention
++
++    torch.manual_seed(width+prefix)
++    heads,kv_heads=4,2
++    q=torch.randn(width,heads,dim,device='cuda',dtype=torch.bfloat16)
++    keys,values=[torch.randn(max(1,prefix)+3,kv_heads,dim,device='cuda',dtype=torch.bfloat16) for _ in range(2)]
++    k,v=[torch.randn(width,kv_heads,dim,device='cuda',dtype=torch.bfloat16) for _ in range(2)]
++    indices=torch.randperm(keys.shape[0],device='cuda')[:prefix].int()
++    frozen_k,frozen_v=keys.clone(),values.clone()
++    actual=split_kv_attention(q,keys,values,indices,
++        torch.tensor([prefix],device='cuda',dtype=torch.int32),k,v,preview=preview)
++    all_k=torch.cat((keys[indices.long()],k)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
++    all_v=torch.cat((values[indices.long()],v)).repeat_interleave(heads//kv_heads,1).transpose(0,1).float()
++    allowed=None if preview else torch.arange(prefix+width,device='cuda')[None,:] <= prefix+torch.arange(width,device='cuda')[:,None]
++    expected=F.scaled_dot_product_attention(q.transpose(0,1).float(),all_k,all_v,attn_mask=allowed).transpose(0,1)
++    torch.testing.assert_close(actual.float(),expected,rtol=.02,atol=.01)
++    assert torch.equal(keys,frozen_k) and torch.equal(values,frozen_v)
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index 01e9b05..af30439 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -287,6 +287,29 @@ def test_transaction_rejects_padding_and_incorrect_layer_set():
+     assert torch.all(pool.recurrent_states == 7) and torch.all(pool.conv_states == 9)
+ 
+ 
++@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
++def test_clover_mapped_embedding_preserves_exact_rows_and_owner():
++    from freetoken.models.clover_moe.model import CloverMoeModelLM
++    from freetoken.kernel import indexing
++
++    weight = torch.randn(512,128,device='cuda',dtype=torch.bfloat16)
++    embedding = SimpleNamespace(weight=weight)
++    model = SimpleNamespace(model=SimpleNamespace(embed_tokens=embedding),
++                            lm_head=SimpleNamespace(tied_embedding=None))
++    ids = torch.tensor([0,511,17,17,256],device='cuda',dtype=torch.int32)
++    expected = weight[ids.long()].clone()
++    size = CloverMoeModelLM.place_input_embedding(model)
++    assert size == weight.numel()*weight.element_size()
++    assert embedding.weight.data_ptr() == embedding._mapped_host.ptr
++    assert embedding._mapped_host.owner.is_pinned()
++    actual = indexing(weights=embedding.weight,indices=ids)
++    assert torch.equal(actual,expected)
++    assert CloverMoeModelLM.place_input_embedding(model) == size
++    model.lm_head.tied_embedding = embedding
++    with pytest.raises(ValueError,match='untied'):
++        CloverMoeModelLM.place_input_embedding(model)
++
++
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+ def test_padded_verify_kv_never_writes_unowned_locations():
+     from freetoken.kernel.triton.clover_store import store_verify_kv
+diff --git a/tests/models/test_clover_llama_metrics.py b/tests/models/test_clover_llama_metrics.py
+index 1bb27ab..bb87966 100644
+--- a/tests/models/test_clover_llama_metrics.py
++++ b/tests/models/test_clover_llama_metrics.py
+@@ -5,6 +5,34 @@ from pathlib import Path
+ import pytest
+ 
+ 
++def test_abab_retains_process_drift_and_rejects_mismatched_controls():
++    import copy
++    import runpy
++
++    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/summarize_clover_abab.py'))['summarize']
++    turns = []
++    for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
++        rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
++                     token_ids=[1,2],end_to_end_tokens_per_second=value) for value in values]
++        rows.append(dict(rows[0],warmup=True,end_to_end_tokens_per_second=1000.))
++        turns.append(dict(state='complete',settings=dict(repeats=2,warmups=1),
++                          prompts={'fixture':[7]},runs=rows,startup_seconds=1.))
++    case = summarize(turns)['cases'][0]
++    metric = case['metrics']['end_to_end_tokens_per_second']
++    assert metric['process_medians'] == [11.,22.,21.,32.]
++    assert metric['before_median'] == 16. and metric['after_median'] == 27.
++    assert metric['after_over_before_pairs'] == [2.,32./21.]
++    assert case['all_measured_output_ids_equal']
++    changed = copy.deepcopy(turns)
++    changed[3]['prompts']['fixture'] = [8]
++    with pytest.raises(ValueError,match='input tokens'):
++        summarize(changed)
++    changed = copy.deepcopy(turns)
++    changed[0]['runs'].pop(0)
++    with pytest.raises(ValueError,match='repetitions'):
++        summarize(changed)
++
++
+ @pytest.mark.parametrize('native_tokens', [8, 12])
+ def test_denoise_budget_uses_visible_progress_and_keeps_hf_attainment_unclamped(native_tokens):
+     import runpy

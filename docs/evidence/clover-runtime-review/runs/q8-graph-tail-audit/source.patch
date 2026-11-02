@@ -1,0 +1,776 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index 1d0b76c..60a830a 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -51,6 +51,9 @@ def main():
+     parser.add_argument("--context-size", type=int, default=4096)
+     parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
+     parser.add_argument("--reuse-prefix", action="store_true", help="Diagnostic only; default benchmark recomputes the complete prompt")
++    parser.add_argument("--runtime-breakdown", action="store_true",
++        help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
++    parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -119,6 +122,7 @@ def main():
+ 
+         qwen_weight._DenseReader = Bf16BenchmarkReader
+     started = time.perf_counter()
++    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+@@ -133,7 +137,31 @@ def main():
+         moe_collect_stats=True,
+         clover_disable_penalties=args.no_penalties,
+         clover_accept_rule=args.accept_rule,
++        **runtime_options,
+     )
++    runtime_trace = []
++    if args.runtime_breakdown:
++        from freetoken.models.clover_moe.preview import CloverTransactions
++        from freetoken.models.clover_moe.graph import CloverBlockGraphs
++
++        def instrument(owner, name, phase):
++            original = getattr(owner, name)
++            def observed(*positional, **keywords):
++                start = torch.cuda.Event(enable_timing=True)
++                end = torch.cuda.Event(enable_timing=True)
++                start.record(llm.engine.stream)
++                output = original(*positional, **keywords)
++                end.record(llm.engine.stream)
++                runtime_trace.append((phase, start, end))
++                return output
++            setattr(owner, name, observed)
++
++        runtime = llm.engine.mtp_runtime
++        for name, phase in (("_preview", "preview"), ("_verify", "verify"),
++                            ("_advance_without_sampling", "advance")):
++            instrument(runtime, name, phase)
++        instrument(CloverTransactions, "commit", "state_commit")
++        instrument(CloverBlockGraphs, "save_ahead", "save_ahead")
+     if not args.reuse_prefix:
+         match = llm.cache_manager.match_req
+         llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
+@@ -213,6 +241,7 @@ def main():
+             for mode, width in modes:
+                 rows = []
+                 for repeat in range(args.warmups + args.repeats):
++                    runtime_trace.clear()
+                     arrivals.clear()
+                     captured.clear()
+                     cache.reset_stats()
+@@ -293,6 +322,9 @@ def main():
+                         allocated=torch.cuda.memory_allocated(),
+                         reserved=torch.cuda.memory_reserved(),
+                     )
++                    if args.runtime_breakdown:
++                        row["runtime_breakdown"] = [dict(phase=phase, cuda_ms=start.elapsed_time(end))
++                            for phase, start, end in runtime_trace]
+                     if mode == "causal":
+                         causal_ids = answer["token_ids"]
+                     elif mode == "selfspec" and causal_ids is not None:
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index 6830161..eab1820 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -5,6 +5,7 @@ import hashlib
+ import json
+ from pathlib import Path
+ import statistics
++import time
+ 
+ import torch
+ 
+@@ -24,10 +25,11 @@ def main():
+     parser.add_argument("--model", required=True)
+     parser.add_argument("--output", type=Path, required=True)
+     parser.add_argument("--cache-slots", type=int, default=4096)
++    parser.add_argument("--memory-ratio", type=float, default=.85)
+     args = parser.parse_args()
+     args.output.mkdir(parents=True, exist_ok=False)
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+-        expert_load="serial", max_running_req=1, memory_ratio=.85, num_token_override=4096,
++        expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
+         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+@@ -113,6 +115,22 @@ def main():
+                     raise AssertionError("Private verify graph changed live recurrent state")
+                 result["verifies"].append(dict(prefix=req.cached_len, width=width,
+                     logits_bitwise_equal=True, state_hashes=state_hashes, live_state_unchanged=True))
++                if hasattr(runtime.transactions, 'valid_width'):
++                    keys_before = set(runtime._blocks().entries)
++                    tails = []
++                    for valid in range(1, width + 1):
++                        begin = time.perf_counter()
++                        tail = runtime._verify(req, tokens[:valid], width).float().cpu()
++                        assert set(runtime._blocks().entries) == keys_before
++                        assert runtime.transactions.valid_width == valid
++                        torch.testing.assert_close(tail, reference[:valid], rtol=0, atol=0)
++                        hashes = (digest(runtime.transactions.recurrent[:, valid - 1]),
++                                  digest(runtime.transactions.conv[:, valid - 1]))
++                        assert hashes == state_hashes[valid - 1]
++                        tails.append(dict(valid_rows=valid, new_capture=False,
++                            logits_bitwise_equal=True, state_bitwise_equal=True,
++                            audit_wall_seconds=time.perf_counter()-begin))
++                    result.setdefault('tails', []).append(dict(prefix=req.cached_len, width=width, cases=tails))
+                 eager = None
+                 save()
+         return output
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index 2dc9e6b..c3c17b8 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -116,6 +116,7 @@ class EngineConfig:
+     mtp_draft_policy: str = "full"
+     clover_mode: str = "causal"
+     clover_width: int = 8
++    clover_max_width: int = 32
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+     clover_accept_ratio: float = .9
+@@ -128,6 +129,10 @@ class EngineConfig:
+             raise ValueError("Clover mode must be causal, selfspec or denoise")
+         if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+             raise ValueError("Invalid Clover block width or acceptance rule")
++        if self.clover_max_width not in (0, 8, 16, 32):
++            raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
++        if self.clover_mode != "causal" and self.clover_width > self.clover_max_width:
++            raise ValueError("Clover block width exceeds the reserved maximum")
+         if not 0 < self.clover_threshold < 1 or not 0 < self.clover_coreset_top_p <= 1:
+             raise ValueError("Clover confidence threshold and coreset top-p are out of range")
+         if not 0 <= self.clover_accept_ratio <= 1 or not 0 <= self.clover_accept_delta <= 1:
+diff --git a/python/freetoken/engine/engine.py b/python/freetoken/engine/engine.py
+index 2ad6612..b51b001 100644
+--- a/python/freetoken/engine/engine.py
++++ b/python/freetoken/engine/engine.py
+@@ -28,6 +28,7 @@ from freetoken.utils import align_ceil, init_logger, is_sm90_family, is_sm100_fa
+ 
+ from .config import EngineConfig
+ from .graph import GraphRunner, get_free_memory
++from .speculative import runtime_reserve_bytes
+ from .sample import BatchSamplingArgs, Sampler
+ from freetoken.kvcache import create_kv_pool, resolve_pool_class
+ from freetoken.kvcache.base import CacheRebuildRejected
+@@ -431,7 +432,15 @@ class Engine:
+         # off it; the KV pool family owns every geometry-specific formula behind the rest.
+         available_memory = _startup_kv_budget(config.memory_ratio, init_free_memory, new_free)
+         available_memory -= state_pool_bytes(config)
++        runtime_reserve = runtime_reserve_bytes(config)
++        available_memory -= runtime_reserve
+         self.num_pages = self._pool_cls.solve_num_pages(config, available_memory)
++        if runtime_reserve:
++            page_bytes, fixed_bytes, _, _ = self._pool_cls.kv_cost(config)
++            if self.num_pages * page_bytes + fixed_bytes > available_memory:
++                raise ValueError("KV/expert budget leaves no room for the reserved Clover transaction; "
++                                 "reduce moe_cache_size, context or clover_max_width")
++            logger.info_rank0(f"Reserved Clover private runtime: {mem_GB(runtime_reserve)}")
+         num_tokens = self.num_pages * config.page_size
+         self.ctx.kv_cache = self.kv_cache = create_kv_pool(
+             config, self.num_pages, device=self.device, dtype=self.dtype
+@@ -639,6 +648,7 @@ class Engine:
+ 
+         cache_per_page, fixed_cache_size, page_tokens, min_reserve = self._pool_cls.kv_cost(config)
+         fixed_cache_size += state_pool_bytes(config)  # sibling GDN state pool, engine-summed
++        fixed_cache_size += runtime_reserve_bytes(config)
+         num_experts = config.model_config.num_experts
+         total_experts = config.model_config.num_moe_layers * num_experts
+         return resolve_moe_cache_auto(
+@@ -1019,7 +1029,7 @@ class Engine:
+                 weights_bytes=self._weights_bytes, current_num_pages=self.num_pages,
+                 extra_fixed_bytes=(
+                     state_pool_bytes(config, target_mamba) if target_mamba is not None else 0
+-                ),
++                ) + runtime_reserve_bytes(config),
+                 extra_note=(
+                     f", mamba={target_mamba - 1} slots" if target_mamba is not None else ""
+                 ),
+diff --git a/python/freetoken/engine/speculative.py b/python/freetoken/engine/speculative.py
+index b10f8ef..5657c7e 100644
+--- a/python/freetoken/engine/speculative.py
++++ b/python/freetoken/engine/speculative.py
+@@ -27,3 +27,18 @@ def create_runtime(engine):
+ 
+         return CloverRuntime(engine)
+     return None
++
++
++def runtime_reserve_bytes(config):
++    """Price Clover's private clean state and largest permitted transaction."""
++    if getattr(config.model_config, "model_type", None) != "clover_moe":
++        return 0
++    width = config.clover_max_width
++    if not width:
++        return 0
++    from freetoken.kvcache.linear_state_pool import linear_state_bytes_per_req, linear_state_dtypes
++
++    conv_dtype, recurrent_dtype = linear_state_dtypes(config)
++    row = linear_state_bytes_per_req(config.model_config.linear_attention_group(),
++        config.tp_info.size, conv_dtype, recurrent_dtype=recurrent_dtype)
++    return (width + 1) * row + 5
+diff --git a/python/freetoken/kernel/aot_models.py b/python/freetoken/kernel/aot_models.py
+index e80dbe9..474a0a5 100644
+--- a/python/freetoken/kernel/aot_models.py
++++ b/python/freetoken/kernel/aot_models.py
+@@ -70,7 +70,8 @@ def fp8_block_scale_pad(rows: int, cols: int) -> int:
+     return cols
+ 
+ 
+-def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int) -> dict[str, int]:
++def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int,
++                         *, gguf_types: tuple[int, int] = (8, 8)) -> dict[str, int]:
+     """Per-expert row bytes for each offload bank a format registers.
+ 
+     Bank names and layouts follow moe/offload_cache.py ``_BANK_SCHEMAS`` and the
+@@ -95,8 +96,12 @@ def expert_bank_row_bytes(fmt: str, hidden_size: int, moe_intermediate_size: int
+         # gemma4/gguf.py _q4_0_expert_specs: GGML Q4_0 rows, 32 elems -> 18 bytes
+         return {"gate_up": 2 * I * (H // 32 * 18), "down": H * (I // 32 * 18)}
+     if fmt == "clover_gguf":
+-        # IQ4_XS gate/up and Q4_K down retain their distinct 256-value blocks.
+-        return {"gate_up": 2 * I * (H // 256 * 136), "down": H * (I // 256 * 144)}
++        blocks = {2: (32, 18), 8: (32, 34), 12: (256, 144),
++                  14: (256, 210), 23: (256, 136)}
++        gate_block, gate_bytes = blocks[gguf_types[0]]
++        down_block, down_bytes = blocks[gguf_types[1]]
++        return {"gate_up": 2 * I * (H // gate_block * gate_bytes),
++                "down": H * (I // down_block * down_bytes)}
+     if fmt in ("nvfp4", "nvfp4_marlin", "nvfp4_b12x"):
+         # models/nvfp4_banks.py: packed e2m1 pairs + per-16 fp8-e4m3 scales + fp16
+         # per-row globals; marlin/b12x repacks are byte-identical with the globals
+@@ -437,6 +442,10 @@ def fast_index_copy_feature_sizes(model: AotModel) -> set[int]:
+         sizes.update(
+             expert_bank_row_bytes(fmt, model.hidden_size, model.moe_intermediate_size).values()
+         )
++        if fmt == "clover_gguf":
++            for kind in (2, 8, 12, 14, 23):
++                sizes.update(expert_bank_row_bytes(fmt, model.hidden_size,
++                    model.moe_intermediate_size, gguf_types=(kind, kind)).values())
+     return sizes
+ 
+ 
+diff --git a/python/freetoken/kvcache/cache_status.py b/python/freetoken/kvcache/cache_status.py
+index 5b531ce..b83472b 100644
+--- a/python/freetoken/kvcache/cache_status.py
++++ b/python/freetoken/kvcache/cache_status.py
+@@ -188,7 +188,11 @@ def compute_cache_status_meta(engine: "Engine") -> Dict[str, Any]:
+         _baseline = int(engine._baseline_free or 0)
+         _weights = int(engine._weights_bytes or 0)
+         _mr = float(cfg.memory_ratio) if cfg is not None else 1.0
+-        meta["cache_budget_bytes"] = max(0, _net_budget(_mr, _baseline, _weights, 0)) if _baseline > 0 else 0
++        from freetoken.engine.speculative import runtime_reserve_bytes
++
++        reserve = runtime_reserve_bytes(cfg) if cfg is not None else 0
++        meta["runtime_reserve_bytes"] = reserve
++        meta["cache_budget_bytes"] = max(0, _net_budget(_mr, _baseline, _weights, reserve)) if _baseline > 0 else 0
+     except Exception:  # noqa: BLE001 -- best-effort; readiness must not depend on this
+         meta["cache_budget_bytes"] = 0
+     return meta
+diff --git a/python/freetoken/models/clover_moe/graph.py b/python/freetoken/models/clover_moe/graph.py
+index f9ac326..ff2801b 100644
+--- a/python/freetoken/models/clover_moe/graph.py
++++ b/python/freetoken/models/clover_moe/graph.py
+@@ -18,13 +18,15 @@ from freetoken.core import Batch
+ 
+ @triton.jit
+ def _stage(packet, table, positions, out_loc, indices, prefix_lens, kv_indptr,
+-           block_ends, WIDTH: tl.constexpr, MAX_SEQ: tl.constexpr,
++           block_ends, valid, WIDTH: tl.constexpr, MAX_SEQ: tl.constexpr,
+            STRIDE: tl.constexpr, BLOCK: tl.constexpr):
+     col = tl.program_id(0) * BLOCK + tl.arange(0, BLOCK)
+     prefix = tl.load(packet)
+     owner = tl.load(packet + 1).to(tl.int64)
++    rows = tl.load(packet + 2)
+     tl.store(positions + col, prefix + col, col < WIDTH)
+-    location = tl.load(table + owner * STRIDE + prefix + col, col < WIDTH, 0)
++    tl.store(valid + col, col < rows, col < WIDTH)
++    location = tl.load(table + owner * STRIDE + prefix + col, (col < rows) & (col < WIDTH), 0)
+     tl.store(out_loc + col, location, col < WIDTH)
+     slot = tl.load(table + owner * STRIDE + col, col < MAX_SEQ, 0)
+     tl.store(indices + col, slot, col < MAX_SEQ)
+@@ -41,8 +43,10 @@ class CloverBlockGraphs:
+         self.clean = None
+         self.clean_owner = None
+         self.clean_position = None
+-        self.packet_host = torch.empty(2, dtype=torch.int32, pin_memory=True)
+-        self.packet = torch.empty(2, dtype=torch.int32, device=engine.device)
++        self.packet_hosts = [torch.empty(3, dtype=torch.int32, pin_memory=True) for _ in range(2)]
++        self.packet_events = [None, None]
++        self.packet_index = 0
++        self.packet = torch.empty(3, dtype=torch.int32, device=engine.device)
+         self.pool = None
+ 
+     def _allocate_clean(self):
+@@ -113,52 +117,83 @@ class CloverBlockGraphs:
+         _stage[(triton.cdiv(self.engine.max_seq_len, 256),)](
+             self.packet, self.engine.page_table, batch.positions, batch.out_loc,
+             meta["indices"], meta["prefix_lens"], meta["kv_indptr"], meta["block_ends"],
++            batch.clover_valid,
+             len(batch.input_ids), self.engine.max_seq_len, self.engine.page_table.stride(0), 256)
+ 
+-    def update_metadata(self, req, batch):
++    def update_metadata(self, req, batch, valid_rows=None):
++        valid_rows = len(batch.input_ids) if valid_rows is None else valid_rows
+         if (getattr(batch, "_clover_owner", None) is req
+-                and batch._clover_prefix == req.cached_len):
++                and batch._clover_prefix == req.cached_len
++                and batch._clover_valid_rows == valid_rows):
+             return
+-        self.packet_host[0] = req.cached_len
+-        self.packet_host[1] = req.table_idx
+-        self.packet.copy_(self.packet_host, non_blocking=True)
++        index = self.packet_index
++        event = self.packet_events[index]
++        if event is not None:
++            event.synchronize()
++        packet_host = self.packet_hosts[index]
++        packet_host[0] = req.cached_len
++        packet_host[1] = req.table_idx
++        packet_host[2] = valid_rows
++        self.packet.copy_(packet_host, non_blocking=True)
++        event = torch.cuda.Event()
++        event.record(self.engine.stream)
++        self.packet_events[index] = event
++        self.packet_index = 1 - index
+         self.stage(batch)
+         batch._clover_owner = req
+         batch._clover_prefix = req.cached_len
++        batch._clover_valid_rows = valid_rows
+         batch._clover_metadata_updates = getattr(batch, "_clover_metadata_updates", 0) + 1
+ 
+-    def run(self, req, tokens, *, preview, coreset=.9, transaction=None):
+-        rows = len(tokens)
++    def run(self, req, tokens, *, preview, coreset=.9, transaction=None, width=None):
++        valid_rows = len(tokens)
++        rows = valid_rows if width is None else width
++        if not 1 <= valid_rows <= rows:
++            raise ValueError("Invalid Clover graph row count")
+         key = (preview, rows, coreset if preview else 1.)
+         if not preview:
+-            transaction.begin(rows)
++            transaction.begin(rows, valid_rows)
+         if key not in self.entries:
+             batch = self._batch(req, rows, preview, coreset, transaction)
+-            batch.input_ids.copy_(tokens)
+-            self.update_metadata(req, batch)
++            batch.input_ids.zero_()
++            batch.input_ids[:valid_rows].copy_(tokens)
++            self.update_metadata(req, batch, valid_rows)
+             with self.engine.ctx.forward_batch(batch):
+                 for _ in range(2):
+                     self.engine.model.forward()
+             torch.cuda.synchronize(self.engine.device)
++            if not preview:
++                transaction.written.clear()
+             graph = torch.cuda.CUDAGraph()
+             with torch.cuda.graph(graph, pool=self.pool, stream=self.engine.stream):
+                 with self.engine.ctx.forward_batch(batch):
+                     output = self.engine.model.forward()
++            if not preview:
++                if transaction.written != set(range(transaction.recurrent.shape[0])):
++                    raise ValueError("Captured Clover verification omitted a state layer")
++                batch._clover_written = frozenset(transaction.written)
+             if self.pool is None:
+                 self.pool = graph.pool()
+             self.entries[key] = (batch, graph, output)
+         batch, graph, output = self.entries[key]
+-        self.update_metadata(req, batch)
+-        batch.input_ids.copy_(tokens)
++        self.update_metadata(req, batch, valid_rows)
++        batch.input_ids.zero_()
++        batch.input_ids[:valid_rows].copy_(tokens)
+         if not preview:
+-            transaction.written.update(range(transaction.recurrent.shape[0]))
++            if batch.clover_transactions is not transaction:
++                raise ValueError("Captured Clover transaction storage has changed")
+         graph.replay()
+-        return output
++        if not preview:
++            transaction.written.update(batch._clover_written)
++        return output[:valid_rows]
+ 
+     def clear_verify(self):
+         self.entries = {key: entry for key, entry in self.entries.items() if key[0]}
+ 
+     def close(self):
++        for event in self.packet_events:
++            if event is not None:
++                event.synchronize()
+         self.entries.clear()
+         self.pool = None
+         self.clean = None
+diff --git a/python/freetoken/models/clover_moe/preview.py b/python/freetoken/models/clover_moe/preview.py
+index aac72b4..43495b2 100644
+--- a/python/freetoken/models/clover_moe/preview.py
++++ b/python/freetoken/models/clover_moe/preview.py
+@@ -31,16 +31,21 @@ class CloverTransactions:
+         self.zero = torch.zeros(1, dtype=torch.int32, device=pool.device)
+         self.initial = torch.ones(1, dtype=torch.bool, device=pool.device)
+         self.width = 0
++        self.valid_width = 0
+         self.written = set()
+ 
+-    def begin(self, width):
++    def begin(self, width, valid_width=None):
+         if not 1 <= width <= self.capacity:
+             raise ValueError("Verify rows exceed the owned transaction capacity")
+         self.width = width
++        self.valid_width = width if valid_width is None else valid_width
++        if not 1 <= self.valid_width <= width:
++            raise ValueError("Valid verify rows exceed the physical transaction width")
+         self.written.clear()
+ 
+     def commit(self, pool, count, destination):
+-        if not 1 <= count <= self.width or len(self.written) != self.recurrent.shape[0]:
++        if (not 1 <= count <= self.valid_width
++                or self.written != set(range(self.recurrent.shape[0]))):
+             raise ValueError("Cannot commit an incomplete or out-of-range Clover prefix")
+         pool.recurrent_states[:, destination].copy_(self.recurrent[:, count - 1])
+         pool.conv_states[:, destination].copy_(self.conv[:, count - 1])
+@@ -112,7 +117,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
+     return mixer.out_proj.forward(normalized.reshape(total, -1))
+ 
+ 
+-def attention_preview(mixer, hidden, ctx):
++def attention_preview(mixer, hidden, ctx, *, preview=True):
+     batch = ctx.batch
+     req = batch.reqs[0]
+     q, k, v, gate = mixer._project(hidden)
+@@ -120,6 +125,10 @@ def attention_preview(mixer, hidden, ctx):
+     kh, dim = mixer.num_kv, mixer.head_dim
+     keys = ctx.kv_cache.k_cache(mixer.layer_id).view(-1, kh, dim)
+     values = ctx.kv_cache.v_cache(mixer.layer_id).view(-1, kh, dim)
++    if not preview:
++        from freetoken.kernel.triton.clover_store import store_verify_kv
++
++        store_verify_kv(keys, values, batch.out_loc, k, v, batch.clover_valid)
+     metadata = batch.clover_attention
+     indices = metadata.get("indices")
+     if indices is None:
+@@ -132,9 +141,13 @@ def attention_preview(mixer, hidden, ctx):
+ 
+ def moe_preview(mixer, hidden, ctx):
+     router = mixer.gate.forward(hidden)
+-    if ctx.batch.clover_coreset_top_p < 1.:
++    preview = getattr(ctx.batch, "clover_preview", False)
++    if preview and ctx.batch.clover_coreset_top_p < 1.:
+         router = clover_block_coreset_triton(router, hidden.shape[0], mixer.experts.top_k,
+                                             ctx.batch.clover_coreset_top_p)
++    if not preview and getattr(ctx.batch, "clover_valid", None) is not None:
++        # Padding reuses an existing route, so it cannot churn unrelated experts.
++        router = torch.where(ctx.batch.clover_valid[:, None], router, router[:1])
+     # The routed kernel can overwrite its input, so shared projections go first.
+     shared = mixer.shared_expert.forward(hidden) * torch.sigmoid(mixer.shared_expert_gate.forward(hidden))
+     return mixer.experts.forward(hidden_states=hidden, router_logits=router) + shared
+@@ -152,12 +165,14 @@ def block_forward(model, ctx, *, preview):
+             hidden, residual = layer.input_layernorm.forward_add_residual(hidden, residual)
+         if layer._is_linear:
+             hidden = gdn_forward(layer.linear_attn, hidden, ctx, preview=preview)
+-        elif preview:
+-            hidden = attention_preview(layer.self_attn, hidden, ctx)
++        elif preview or getattr(batch, "clover_valid", None) is not None:
++            hidden = attention_preview(layer.self_attn, hidden, ctx, preview=preview)
+         else:
+             hidden = layer.self_attn.forward(hidden)
+         hidden, residual = layer.post_attention_layernorm.forward_add_residual(hidden, residual)
+-        hidden = moe_preview(layer.mlp, hidden, ctx) if preview else layer.mlp.forward(hidden)
++        hidden = (moe_preview(layer.mlp, hidden, ctx)
++                  if preview or getattr(batch, "clover_valid", None) is not None
++                  else layer.mlp.forward(hidden))
+     hidden, _ = model.model.norm.forward_add_residual(hidden, residual)
+     return model.lm_head.forward(hidden)
+ 
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index 2804406..64a3e69 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -89,7 +89,8 @@ class CloverRuntime:
+             self._blocks().clear_verify()
+             self.transactions = None
+             self.transactions = CloverTransactions(self.engine.linear_state_pool, capacity)
+-        return self._blocks().run(req, tokens, preview=False, transaction=self.transactions)
++        return self._blocks().run(req, tokens, preview=False,
++            transaction=self.transactions, width=capacity)
+ 
+     def after_native(self, batch, native_state):
+         pass
+@@ -111,9 +112,11 @@ class CloverRuntime:
+             raise ValueError("Invalid request-level Clover mode, width or threshold")
+         if mode == "selfspec" and width == 32:
+             raise ValueError("Clover selfspec currently supports W=8/16")
++        if mode != "causal" and width > getattr(config, "clover_max_width", 32):
++            raise ValueError("Requested Clover width exceeds the reserved maximum")
+         return mode, width, threshold
+ 
+-    def state(self, req):
++    def state(self, req, pending=None):
+         state = self.states.get(req)
+         history = req.input_ids[req.prompt_len :]
+         if state is None or state.length > history.numel():
+@@ -125,22 +128,23 @@ class CloverRuntime:
+             )
+             self.states[req] = state
+         if state.length < history.numel():
++            delta = history.numel() - state.length
+             state.commit(
+-                history[state.length :].to(device=self.engine.device, dtype=torch.int64)
++                pending.long() if pending is not None and delta == pending.numel()
++                else history[state.length :].to(device=self.engine.device, dtype=torch.int64)
+             )
+         return state
+ 
+     def process_logits(self, batch, logits):
+-        scores = logits.float().clone()
++        from freetoken.kernel.triton.clover_verify import penalize_logits
++
++        scores = torch.empty_like(logits, dtype=torch.float32)
+         for row, req in enumerate(batch.reqs):
+-            mode, _, _ = self.settings(req)
+-            state = self.state(req)
+-            scores[row, self.mask_id] = -float("inf")
+-            state.apply(
+-                scores[row : row + 1],
+-                torch.full((1,), self.mask_id, device=scores.device),
+-                self.mask_id,
+-            )
++            self.settings(req)
++            pending = batch.input_ids[row:row + 1] if batch.is_decode else None
++            state = self.state(req, pending)
++            penalize_logits(logits[row:row + 1], state, self.mask_id,
++                            output=scores[row:row + 1])
+         return scores
+ 
+     def eligible(self, batch):
+@@ -316,26 +320,14 @@ class CloverRuntime:
+         inputs = torch.cat((batch.input_ids[:1], candidates))
+         manager.allocate_paged([req], reserve_tokens=width - 1)
+         scores = self._verify(req, inputs, width)
+-        scores = self._penalize_verify(scores, inputs, state)
+-        counts = clover_correct_drafts(
+-            scores.unsqueeze(0),
+-            inputs.unsqueeze(0),
+-            accept_ratio=self.engine.config.clover_accept_ratio,
+-            accept_delta=self.engine.config.clover_accept_delta,
+-            accept_rule=self.engine.config.clover_accept_rule,
+-        )
+-        accepted = int(counts.item())
+-        chosen = scores.argmax(-1)
+-        delivered = (
+-            torch.cat(
+-                (
+-                    inputs[1 : accepted + 1],
+-                    chosen[accepted : accepted + 1].to(torch.int32),
+-                )
+-            )
+-            .cpu()
+-            .tolist()
+-        )
++        from freetoken.kernel.triton.clover_verify import verify_and_deliver
++
++        packet = verify_and_deliver(scores, inputs, state, self.mask_id,
++            rule=self.engine.config.clover_accept_rule,
++            ratio=self.engine.config.clover_accept_ratio,
++            delta=self.engine.config.clover_accept_delta).cpu().tolist()
++        accepted = packet[0]
++        delivered = packet[1:accepted + 2]
+         limit = clip(req, delivered)
+         delivered = delivered[: limit.count]
+         committed = len(delivered)
+@@ -345,11 +337,12 @@ class CloverRuntime:
+             committed,
+             req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx,
+         )
+-        tokens = torch.tensor(delivered, device=self.engine.device, dtype=torch.int32)
++        bundle = torch.tensor(delivered, dtype=torch.int32)
++        tokens = bundle.to(self.engine.device)
++        state.commit(tokens.long())
+         req.cached_len = position + committed
+         req.device_len = old_device + committed
+         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
+-        bundle = tokens.cpu()
+         event = torch.cuda.Event()
+         event.record(self.engine.stream)
+         batch.mtp_token_ids = bundle
+@@ -408,7 +401,8 @@ class CloverRuntime:
+         delivered = block[: req.remain_len].cpu().tolist()
+         limit = clip(req, delivered)
+         delivered = delivered[: limit.count]
+-        tokens = torch.tensor(delivered, device=self.engine.device, dtype=torch.int32)
++        bundle = torch.tensor(delivered, dtype=torch.int32)
++        tokens = bundle.to(self.engine.device)
+         if old_device + len(tokens) > req.mtp_reserved_len + manager.available_size:
+             raise RuntimeError(
+                 "Insufficient KV pages to commit the resolved Clover block"
+@@ -438,7 +432,7 @@ class CloverRuntime:
+         req.cached_len = req.device_len - 1
+         graphs.save_ahead(req, self.transactions, len(tokens))
+         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
+-        bundle = tokens.cpu()
++        state.commit(tokens.long())
+         event = torch.cuda.Event()
+         event.record(self.engine.stream)
+         batch.mtp_token_ids = bundle
+diff --git a/python/freetoken/moe/offload_cache.py b/python/freetoken/moe/offload_cache.py
+index 46979d2..d18ff3d 100644
+--- a/python/freetoken/moe/offload_cache.py
++++ b/python/freetoken/moe/offload_cache.py
+@@ -81,7 +81,7 @@ _BANK_SCHEMAS: dict[str, tuple[str, ...]] = {
+ }
+ 
+ # lives in kernel/aot_models.py: the AOT row table shares it and must stay importable in the torch-only kernel-cache build env, which cannot import freetoken.moe
+-from freetoken.kernel.aot_models import fp8_block_scale_pad
++from freetoken.kernel.aot_models import fp8_block_scale_pad, expert_bank_row_bytes
+ 
+ 
+ # bytes per (expert, layer) as f(hidden, moe_intermediate), from the bank shapes above; keep in sync with _BANK_SCHEMAS
+@@ -93,7 +93,7 @@ _BANK_BYTES_PER_EXPERT = {
+         + (H // 128) * fp8_block_scale_pad(H // 128, I // 128)
+     ) * 2,
+     "q4_0": lambda H, I: 2 * I * (H // 32) * 18 + H * (I // 32) * 18,
+-    "clover_gguf": lambda h, i: 2 * i * (h // 256) * 136 + h * (i // 256) * 144,
++    "clover_gguf": lambda h, i: sum(expert_bank_row_bytes("clover_gguf", h, i).values()),
+     "q2_0": lambda H, I: 3 * I * H // 64 * 18,
+     "nvfp4": lambda H, I: 2 * I * (H // 2 + H // 16 + 2) + H * (I // 2 + I // 16 + 2),
+     "mxfp4": lambda H, I: 2 * I * (H // 2 + H // 32 + 2) + H * (I // 2 + I // 32 + 2),
+diff --git a/tests/kvcache/test_linear_state_pool_alloc.py b/tests/kvcache/test_linear_state_pool_alloc.py
+index e5d014a..adb2c24 100644
+--- a/tests/kvcache/test_linear_state_pool_alloc.py
++++ b/tests/kvcache/test_linear_state_pool_alloc.py
+@@ -28,6 +28,25 @@ def _pool(num_slots=8, device="cpu", slot_states=()):
+                            device=torch.device(device), tp_size=1, slot_states=slot_states)
+ 
+ 
++@pytest.mark.parametrize('width', [0, 8, 16, 32])
++def test_clover_runtime_reserve_matches_actual_transaction_and_clean_storage(width):
++    from freetoken.engine.speculative import runtime_reserve_bytes
++    from freetoken.models.clover_moe.preview import CloverTransactions
++
++    group = _group()
++    config = SimpleNamespace(model_config=SimpleNamespace(model_type='clover_moe',
++        quant=SimpleNamespace(dialect=None), linear_attention_group=lambda: group),
++        clover_max_width=width, dtype=torch.bfloat16, tp_info=SimpleNamespace(size=1))
++    if width:
++        pool = _pool()
++        transaction = CloverTransactions(pool, width)
++        assert runtime_reserve_bytes(config) == transaction.owned_bytes + pool.bytes_per_slot()
++    else:
++        assert runtime_reserve_bytes(config) == 0
++    config.model_config.model_type = 'qwen3_5_moe'
++    assert runtime_reserve_bytes(config) == 0
++
++
+ def test_alloc_free_roundtrip():
+     pool = _pool(num_slots=8)
+     assert pool.num_free_slots == 7          # slots 1..7 (slot 0 = padding)
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index c511ddc..01e9b05 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -266,3 +266,86 @@ def test_fused_pick_matches_torch_penalties_and_confidence(width):
+     picks, confidence = pick_with_confidence(logits, state, block, mask)
+     assert torch.equal(picks.long(), expected.argmax(-1))
+     torch.testing.assert_close(confidence, expected.softmax(-1).max(-1).values, rtol=2e-5, atol=1e-7)
++
++
++def test_transaction_rejects_padding_and_incorrect_layer_set():
++    from freetoken.models.clover_moe.preview import CloverTransactions
++
++    pool = SimpleNamespace(device='cpu', recurrent_states=torch.zeros(2, 1, 2, 2),
++                           conv_states=torch.zeros(2, 1, 2, 3))
++    transaction = CloverTransactions(pool, 8)
++    transaction.begin(8, 3)
++    transaction.written.update((0, 2))
++    with pytest.raises(ValueError, match='incomplete'):
++        transaction.commit(pool, 2, 0)
++    transaction.written = {0, 1}
++    with pytest.raises(ValueError, match='out-of-range'):
++        transaction.commit(pool, 4, 0)
++    transaction.recurrent[:, 1].fill_(7)
++    transaction.conv[:, 1].fill_(9)
++    transaction.commit(pool, 2, 0)
++    assert torch.all(pool.recurrent_states == 7) and torch.all(pool.conv_states == 9)
++
++
++@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
++def test_padded_verify_kv_never_writes_unowned_locations():
++    from freetoken.kernel.triton.clover_store import store_verify_kv
++
++    keys = torch.full((16, 2, 64), 17., device='cuda', dtype=torch.bfloat16)
++    values = keys.clone()
++    k = torch.randn(8, 2, 64, device='cuda', dtype=torch.bfloat16)
++    v = torch.randn_like(k)
++    locations = torch.tensor([3, 7, 11, -100, 1000000, -1, -1, -1], device='cuda', dtype=torch.int32)
++    valid = torch.arange(8, device='cuda') < 3
++    expected_k, expected_v = keys.clone(), values.clone()
++    expected_k[locations[:3]] = k[:3]
++    expected_v[locations[:3]] = v[:3]
++    store_verify_kv(keys, values, locations, k, v, valid)
++    assert torch.equal(keys, expected_k) and torch.equal(values, expected_v)
++
++
++@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
++@pytest.mark.parametrize('width', [8, 16])
++@pytest.mark.parametrize('rule', ['exact', 'threshold'])
++@pytest.mark.parametrize('break_row', [None, 3])
++def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
++    import copy
++    from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
++
++    vocab, mask = 257, 256
++    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
++        'frequency_penalty': .15, 'repetition_penalty': 1.05,
++        'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
++        'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
++        'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
++        'dllm_think_end_token_id': 123})
++    state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
++    state.commit(torch.tensor([7, 7, 18], device='cuda'))
++    state.length = 8190
++    inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
++    inputs[0] = 123
++    logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
++    logits[:, 7] = 12
++    if break_row is not None:
++        logits[break_row, 7] = -10
++        logits[break_row, 11] = 20
++    reference = logits.float().clone()
++    reference[:, mask] = -float('inf')
++    hypothetical = copy.copy(state)
++    hypothetical.counts = state.counts.clone()
++    for row in range(width):
++        hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
++        if row + 1 < width:
++            hypothetical.commit(inputs[row+1:row+2].long())
++    frozen = state.counts.clone()
++    actual = penalize_logits(logits, state, mask, inputs)
++    torch.testing.assert_close(actual, reference, rtol=0, atol=0)
++    accepted = int(clover_correct_drafts(reference[None], inputs[None], accept_rule=rule).item())
++    packet = verify_and_deliver(logits, inputs, state, mask, rule=rule).cpu().tolist()
++    assert packet[0] == accepted
++    assert packet[1:accepted+2] == inputs[1:accepted+1].tolist() + [int(reference[accepted].argmax())]
++    assert torch.equal(state.counts, frozen) and state.length == 8190
++    causal = logits[:1].float().clone()
++    causal[:, mask] = -float('inf')
++    state.apply(causal, torch.tensor([mask], device='cuda'), mask)
++    torch.testing.assert_close(penalize_logits(logits[:1], state, mask), causal, rtol=0, atol=0)
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index fbeb5ea..beba507 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -23,8 +23,14 @@ def test_aot_claims_gguf_architecture_and_both_actual_expert_rows():
+     rows = expert_bank_row_bytes(
+         adapter.EXPERT_FORMAT, entry.hidden_size, entry.moe_intermediate_size
+     )
+-    assert rows == {"gate_up": 1_114_112, "down": 589_824}
+-    assert sum(rows.values()) == 1_703_936
++    assert rows == {"gate_up": 2_228_224, "down": 1_114_112}
++    assert sum(rows.values()) == 3_342_336
++    mixed = expert_bank_row_bytes(adapter.EXPERT_FORMAT, entry.hidden_size,
++        entry.moe_intermediate_size, gguf_types=(23, 12))
++    assert mixed == {"gate_up": 1_114_112, "down": 589_824}
++    from freetoken.kernel.aot_models import fast_index_copy_feature_sizes
++
++    assert set(rows.values()) | set(mixed.values()) <= fast_index_copy_feature_sizes(entry)
+ 
+ 
+ @pytest.fixture

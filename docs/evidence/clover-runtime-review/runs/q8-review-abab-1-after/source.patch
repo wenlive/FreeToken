@@ -1,0 +1,206 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index de7791c..92fc62e 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -54,6 +54,10 @@ def main():
+     parser.add_argument("--runtime-breakdown", action="store_true",
+         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
++    parser.add_argument("--cache-auto", action="store_true")
++    parser.add_argument("--embedding-host", action="store_true")
++    parser.add_argument("--phase-cache-stats", action="store_true",
++        help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -69,6 +73,8 @@ def main():
+         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
+     )
+     args = parser.parse_args()
++    if args.phase_cache_stats and not args.runtime_breakdown:
++        parser.error('--phase-cache-stats requires --runtime-breakdown')
+     args.output.mkdir(parents=True, exist_ok=False)
+     if args.indexed_clover_penalty:
+         from freetoken.models.clover_moe import generation
+@@ -126,7 +132,10 @@ def main():
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+-        moe_cache_size=args.cache_slots,
++        moe_cache_size=0 if args.cache_auto else args.cache_slots,
++        moe_cache_auto=args.cache_auto,
++        kv_reserve_tokens=args.context_size,
++        gguf_embedding_host=args.embedding_host,
+         expert_load="serial",
+         max_running_req=1,
+         memory_ratio=args.memory_ratio,
+@@ -156,7 +165,9 @@ def main():
+                 output = original(*positional, **keywords)
+                 end.record(llm.engine.stream)
+                 actual_phase = ('native_prefill' if phase == 'causal' and not positional[0].is_decode else phase)
+-                runtime_trace.append((actual_phase, start, end, block_index[0]))
++                snapshot = (llm.engine.moe_offload_cache.lru_stats.clone()
++                    if args.phase_cache_stats and phase in ('preview','verify','advance') else None)
++                runtime_trace.append((actual_phase, start, end, block_index[0], snapshot))
+                 return output
+             setattr(owner, name, observed)
+ 
+@@ -178,7 +189,10 @@ def main():
+         startup_seconds=time.perf_counter() - started,
+         checkpoint=args.model,
+         settings=dict(
+-            cache_slots=args.cache_slots,
++            cache_slots=llm.engine.moe_offload_cache.cache_size,
++            cache_auto=args.cache_auto,
++            embedding_host=args.embedding_host,
++            mapped_host_table_bytes=llm.engine._host_tables_bytes,
+             memory_ratio=args.memory_ratio,
+             context=args.context_size,
+             accept_rule=args.accept_rule,
+@@ -330,8 +344,21 @@ def main():
+                         reserved=torch.cuda.memory_reserved(),
+                     )
+                     if args.runtime_breakdown:
+-                        row["runtime_breakdown"] = [dict(phase=phase, block_index=index, cuda_ms=start.elapsed_time(end))
+-                            for phase, start, end, index in runtime_trace]
++                        previous = [0,0,0]
++                        row['runtime_breakdown'] = []
++                        payload = 0
++                        for phase,start,end,index,snapshot in runtime_trace:
++                            item = dict(phase=phase,block_index=index,cuda_ms=start.elapsed_time(end))
++                            if snapshot is not None:
++                                values = snapshot.cpu().sum(0).tolist()
++                                active,missing,calls = [int(a-b) for a,b in zip(values,previous)]
++                                previous = values
++                                item.update(active_experts=active,missing_experts=missing,layer_calls=calls,
++                                    logical_expert_h2d_bytes=missing*per_expert)
++                                payload += missing*per_expert
++                            row['runtime_breakdown'].append(item)
++                        if args.phase_cache_stats and mode == 'denoise':
++                            assert payload == row['decode_expert_copy_payload_bytes']
+                     if mode == "causal":
+                         causal_ids = answer["token_ids"]
+                     elif mode == "selfspec" and causal_ids is not None:
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index c3c17b8..ca95105 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -117,6 +117,7 @@ class EngineConfig:
+     clover_mode: str = "causal"
+     clover_width: int = 8
+     clover_max_width: int = 32
++    clover_split_kv: bool = False
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+     clover_accept_ratio: float = .9
+diff --git a/python/freetoken/models/clover_moe/graph.py b/python/freetoken/models/clover_moe/graph.py
+index ff2801b..c3afd3d 100644
+--- a/python/freetoken/models/clover_moe/graph.py
++++ b/python/freetoken/models/clover_moe/graph.py
+@@ -102,6 +102,7 @@ class CloverBlockGraphs:
+             torch.ones(1, dtype=torch.bool, device=engine.device), is_verify=not preview)
+         batch.clover_clean = self.clean
+         batch.clover_preview = preview
++        batch.clover_kv_splits = 8 if engine.config.clover_split_kv else 1
+         batch.clover_coreset_top_p = coreset
+         batch.clover_valid = torch.ones(rows, dtype=torch.bool, device=engine.device)
+         batch.clover_attention = dict(q_indptr=cu, kv_indptr=indptr, indices=indices,
+diff --git a/python/freetoken/models/clover_moe/model.py b/python/freetoken/models/clover_moe/model.py
+index 273b29c..a3ff644 100644
+--- a/python/freetoken/models/clover_moe/model.py
++++ b/python/freetoken/models/clover_moe/model.py
+@@ -26,6 +26,26 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
+ 
+ 
+ class CloverMoeModelLM(Qwen3_5ForCausalLM):
++    def place_input_embedding(self):
++        """Optional exact-byte mapped-host table; output weights remain resident."""
++        from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
++
++        embedding = self.model.embed_tokens
++        if self.lm_head.tied_embedding is not None:
++            raise ValueError("Mapped Clover input embeddings require an untied output head")
++        if hasattr(embedding, '_mapped_host'):
++            return embedding._mapped_host.owner.numel()
++        weight = embedding.weight
++        if not weight.is_cuda or torch.cuda.is_current_stream_capturing():
++            raise ValueError("Map Clover embeddings after loading and before graph capture")
++        host = alloc_pinned_tensor(weight.numel()*weight.element_size(), dtype=torch.uint8)
++        host.copy_(weight.view(torch.uint8).flatten().cpu())
++        mapping = MappedHostBytes(host)
++        view = mapping.cuda_view(weight.device).view(weight.dtype).reshape(weight.shape)
++        embedding._mapped_host = mapping
++        embedding.weight = view
++        return host.numel()
++
+     def __init__(self, config):
+         super().__init__(config)
+         self.model.norm = CloverPlusOneRMSNorm(config.hidden_size, config.rms_norm_eps)
+diff --git a/python/freetoken/models/clover_moe/preview.py b/python/freetoken/models/clover_moe/preview.py
+index cb74fa6..d24095f 100644
+--- a/python/freetoken/models/clover_moe/preview.py
++++ b/python/freetoken/models/clover_moe/preview.py
+@@ -133,10 +133,17 @@ def attention_preview(mixer, hidden, ctx, *, preview=True):
+     indices = metadata.get("indices")
+     if indices is None:
+         indices = ctx.page_table[req.table_idx, :prefix]
+-    output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
+-        indices, metadata["prefix_lens"], width, dim ** -.5,
+-        k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
+-        block_ends=metadata["block_ends"] if preview else None)
++    if getattr(batch, 'clover_kv_splits', 1) > 1:
++        from freetoken.kernel.triton.clover_attention import split_kv_attention
++
++        output = split_kv_attention(q,keys,values,indices,metadata['prefix_lens'],
++            k.reshape(width,kh,dim),v.reshape(width,kh,dim),preview=preview,
++            splits=batch.clover_kv_splits)
++    else:
++        output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
++            indices, metadata["prefix_lens"], width, dim ** -.5,
++            k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
++            block_ends=metadata["block_ends"] if preview else None)
+     return mixer._combine(output, gate)
+ 
+ 
+@@ -199,6 +206,7 @@ def make_preview_batch(engine, request, tokens, *, coreset_top_p=.9):
+     batch.fla_metadata = FLAMetadata(torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+         batch.linear_table_idx, torch.ones(1, device=engine.device, dtype=torch.bool))
+     batch.clover_preview = True
++    batch.clover_kv_splits = 8 if getattr(getattr(engine,'config',None),'clover_split_kv',False) else 1
+     batch.clover_valid = torch.ones(width, device=engine.device, dtype=torch.bool)
+     batch.clover_coreset_top_p = coreset_top_p
+     batch.clover_attention = dict(q_indptr=torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index 01e9b05..af30439 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -287,6 +287,29 @@ def test_transaction_rejects_padding_and_incorrect_layer_set():
+     assert torch.all(pool.recurrent_states == 7) and torch.all(pool.conv_states == 9)
+ 
+ 
++@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
++def test_clover_mapped_embedding_preserves_exact_rows_and_owner():
++    from freetoken.models.clover_moe.model import CloverMoeModelLM
++    from freetoken.kernel import indexing
++
++    weight = torch.randn(512,128,device='cuda',dtype=torch.bfloat16)
++    embedding = SimpleNamespace(weight=weight)
++    model = SimpleNamespace(model=SimpleNamespace(embed_tokens=embedding),
++                            lm_head=SimpleNamespace(tied_embedding=None))
++    ids = torch.tensor([0,511,17,17,256],device='cuda',dtype=torch.int32)
++    expected = weight[ids.long()].clone()
++    size = CloverMoeModelLM.place_input_embedding(model)
++    assert size == weight.numel()*weight.element_size()
++    assert embedding.weight.data_ptr() == embedding._mapped_host.ptr
++    assert embedding._mapped_host.owner.is_pinned()
++    actual = indexing(weights=embedding.weight,indices=ids)
++    assert torch.equal(actual,expected)
++    assert CloverMoeModelLM.place_input_embedding(model) == size
++    model.lm_head.tied_embedding = embedding
++    with pytest.raises(ValueError,match='untied'):
++        CloverMoeModelLM.place_input_embedding(model)
++
++
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+ def test_padded_verify_kv_never_writes_unowned_locations():
+     from freetoken.kernel.triton.clover_store import store_verify_kv

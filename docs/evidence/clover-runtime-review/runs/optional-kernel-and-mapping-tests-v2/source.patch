@@ -1,0 +1,108 @@
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index 6218903..036be87 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -29,3 +29,15 @@ python benchmarks/bench_offload_cache_copy.py
+ 
+ For host RAM vs PCIe bandwidth and the offload/hybrid backend pick, use `ft bench bw`
+ instead — it writes the JSON profile the engine reads.
++
++Clover branch measurements are indexed in [the performance record](../docs/clover-performance.md).
++`bench_clover.py` records visible outputs, TTFT, arrival-based decode and expert
++payload. Use `--runtime-breakdown` only for a separate event-instrumented run;
++`--phase-cache-stats` adds GPU counter snapshots and is also diagnostic.
++`--cache-auto --memory-ratio .9 --clover-max-width 32` includes the private block
++window in capacity planning; `--embedding-host` tests the optional mapped table.
++`bench_clover_context.py` measures exact 1K/4K/16K/32K prefixes;
++`bench_clover_split_kv.py` compares two read-only preview graphs on identical state.
++`analyze_clover_budget.py` combines measured costs with recorded HF progress,
++and `summarize_clover_abab.py` retains both chronological ratios and process drift
++for four before/after/before/after result files. Their `--help` gives the arguments.
+diff --git a/benchmarks/bench_clover_split_kv.py b/benchmarks/bench_clover_split_kv.py
+index 3fd90f0..96f3564 100644
+--- a/benchmarks/bench_clover_split_kv.py
++++ b/benchmarks/bench_clover_split_kv.py
+@@ -55,6 +55,12 @@ def main():
+                     graphs.append((temporary,graph,scores))
+                 reference,actual=logits
+                 error=float((actual-reference).norm()/reference.norm())
++                if not torch.isfinite(actual).all() or error >= .05:
++                    result['state']='numerical_gate_failed'
++                    result['failure']=dict(prefix=current,width=width,relative_l2=error,
++                        finite=bool(torch.isfinite(actual).all()),
++                        argmax_agreement=float((actual.argmax(-1)==reference.argmax(-1)).float().mean()))
++                    save()
+                 assert torch.isfinite(actual).all() and error<.05
+                 row=dict(prefix=current,width=width,relative_l2=error,
+                     argmax_agreement=float((actual.argmax(-1)==reference.argmax(-1)).float().mean()),turns=[])
+diff --git a/docs/clover-runtime-performance.md b/docs/clover-runtime-performance.md
+index fd7cd92..69ef661 100644
+--- a/docs/clover-runtime-performance.md
++++ b/docs/clover-runtime-performance.md
+@@ -1,5 +1,11 @@
+ # Clover 官方 Q8 GGUF 与块去噪运行时实测
+ 
++> **R0 历史报告，保留原始测量。** 当前入口为 [性能记录](clover-performance.md)，
++> review 修复、冻结 ABAB 复测、长上下文及成本分析见 [R1](clover-runtime-review.md)。
++> 下文 runtime-before 的 causal 对照存在明显波动，旧整体加速范围不能全部归因于代码修复。
++> R1 的旧源码交替复测未重现原先低值；不覆盖这批原始证据，也不把 R0 llama.cpp 数字称为最终源码的重测。
++> “按实际行数捕获”等描述对应 R0；R1 已改为固定物理宽度与有效行屏蔽。
++
+ 本报告针对 Windows、RTX 5070 Ti 16 GB、Ryzen 7 9700X、64 GB 内存、单请求 TP1。
+ Q8 分支从 main `f417397` 创建；NVFP4 分支从 `2fd00ce` 追加提交。
+ 完整测量、输入、源码版本、输出、缓存与内存记录见 [evidence](evidence/clover-runtime/sources.json)。
+diff --git a/docs/models.md b/docs/models.md
+index c72eda6..1c6b91d 100644
+--- a/docs/models.md
++++ b/docs/models.md
+@@ -6,7 +6,7 @@ for them; other checkpoints of the same architectures work too.
+ 
+ | Model | Checkpoints |
+ |---|---|
+-| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [qualified weights, decoding and limits](clover-runtime-performance.md) |
++| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [performance history, decoding and limits](clover-performance.md) |
+ | DeepSeek-V4.1-Flash | [deepseek-ai/DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) |
+ | DeepSeek-V4 | [deepseek-ai/DeepSeek-V4-Flash-0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) |
+ | GLM-5.3-Flash | [RedHatAI/GLM-5.3-Flash-NVFP4](https://huggingface.co/RedHatAI/GLM-5.3-Flash-NVFP4) |
+diff --git a/python/freetoken/kernel/triton/clover_attention.py b/python/freetoken/kernel/triton/clover_attention.py
+index 0f1edc7..5a8b5ef 100644
+--- a/python/freetoken/kernel/triton/clover_attention.py
++++ b/python/freetoken/kernel/triton/clover_attention.py
+@@ -30,14 +30,15 @@ def _partials(Q, KC, VC, K, V, INDICES, PREFIX, PARTS, LSE,
+         cached_k = tl.load(KC + slot[None, :] * (KV_HEADS * D) + kv_head * D + dim[:, None], past[None, :], other=0)
+         live_k = tl.load(K + (col[None, :] - prefix) * KS + kv_head * KH + dim[:, None], current[None, :], other=0)
+         key = tl.where(past[None, :], cached_k, live_k)
+-        scores = tl.dot(q, key) * SCALE
++        scores = tl.dot(q, key)
+         allowed = (col[None, :] < end) & (row[:, None] < W)
+         if not PREVIEW:
+             allowed &= col[None, :] <= prefix + row[:, None]
+         scores = tl.where(allowed, scores, -float('inf'))
+-        new_max = tl.maximum(maximum, tl.max(scores, 1))
+-        alpha = tl.where(new_max == -float('inf'), 0., tl.exp(maximum - new_max))
+-        probabilities = tl.where(scores == -float('inf'), 0., tl.exp(scores - new_max[:, None]))
++        scale_log2 = SCALE * 1.4426950408889634
++        new_max = tl.maximum(maximum, tl.max(scores, 1) * scale_log2)
++        alpha = tl.where(new_max == -float('inf'), 0., tl.exp2(maximum - new_max))
++        probabilities = tl.where(scores == -float('inf'), 0., tl.exp2(scores * scale_log2 - new_max[:, None]))
+         cached_v = tl.load(VC + slot[:, None] * (KV_HEADS * D) + kv_head * D + dim[None, :], past[:, None], other=0)
+         live_v = tl.load(V + (col[:, None] - prefix) * VS + kv_head * VH + dim[None, :], current[:, None], other=0)
+         value = tl.where(past[:, None], cached_v, live_v)
+@@ -45,7 +46,7 @@ def _partials(Q, KC, VC, K, V, INDICES, PREFIX, PARTS, LSE,
+         normalizer = normalizer * alpha + tl.sum(probabilities, 1)
+         maximum = new_max
+     output = accumulator / tl.where(normalizer > 0, normalizer, 1.)[:, None]
+-    lse = tl.where(normalizer > 0, maximum + tl.log(normalizer), -float('inf'))
++    lse = tl.where(normalizer > 0, maximum + tl.log2(normalizer), -float('inf'))
+     tl.store(PARTS + ((head * SPLITS + split) * W + row[:, None]) * D + dim[None, :], output, row[:, None] < W)
+     tl.store(LSE + (head * SPLITS + split) * W + row, lse, row < W)
+ 
+@@ -57,7 +58,7 @@ def _merge(PARTS, LSE, OUT, HEADS: tl.constexpr, D: tl.constexpr,
+     split, dim = tl.arange(0, SPLITS), tl.arange(0, D)
+     lse = tl.load(LSE + (head * SPLITS + split) * W + row)
+     maximum = tl.max(lse, 0)
+-    weights = tl.exp(lse - maximum)
++    weights = tl.exp2(lse - maximum)
+     values = tl.load(PARTS + ((head * SPLITS + split[:, None]) * W + row) * D + dim[None, :])
+     output = tl.sum(values * weights[:, None], 0) / tl.sum(weights, 0)
+     tl.store(OUT + (row * HEADS + head) * D + dim, output)

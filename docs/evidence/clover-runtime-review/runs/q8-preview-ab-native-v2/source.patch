@@ -1,0 +1,174 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index 1d0b76c..493f900 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -51,6 +51,9 @@ def main():
+     parser.add_argument("--context-size", type=int, default=4096)
+     parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
+     parser.add_argument("--reuse-prefix", action="store_true", help="Diagnostic only; default benchmark recomputes the complete prompt")
++    parser.add_argument("--runtime-breakdown", action="store_true",
++        help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
++    parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -119,6 +122,7 @@ def main():
+ 
+         qwen_weight._DenseReader = Bf16BenchmarkReader
+     started = time.perf_counter()
++    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+@@ -133,7 +137,35 @@ def main():
+         moe_collect_stats=True,
+         clover_disable_penalties=args.no_penalties,
+         clover_accept_rule=args.accept_rule,
++        **runtime_options,
+     )
++    runtime_trace = []
++    block_index = [-1]
++    if args.runtime_breakdown:
++        from freetoken.models.clover_moe.preview import CloverTransactions
++        from freetoken.models.clover_moe.graph import CloverBlockGraphs
++
++        def instrument(owner, name, phase, *, count_round=False):
++            original = getattr(owner, name)
++            def observed(*positional, **keywords):
++                if count_round:
++                    block_index[0] += 1
++                start = torch.cuda.Event(enable_timing=True)
++                end = torch.cuda.Event(enable_timing=True)
++                start.record(llm.engine.stream)
++                output = original(*positional, **keywords)
++                end.record(llm.engine.stream)
++                runtime_trace.append((phase, start, end, block_index[0]))
++                return output
++            setattr(owner, name, observed)
++
++        runtime = llm.engine.mtp_runtime
++        for name, phase in (("_preview", "preview"), ("_verify", "verify"),
++                            ("_advance_without_sampling", "advance")):
++            instrument(runtime, name, phase)
++        instrument(CloverTransactions, "commit", "state_commit")
++        instrument(CloverBlockGraphs, "save_ahead", "save_ahead")
++        instrument(runtime, "_denoise", "round", count_round=True)
+     if not args.reuse_prefix:
+         match = llm.cache_manager.match_req
+         llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
+@@ -213,6 +245,8 @@ def main():
+             for mode, width in modes:
+                 rows = []
+                 for repeat in range(args.warmups + args.repeats):
++                    runtime_trace.clear()
++                    block_index[0] = -1
+                     arrivals.clear()
+                     captured.clear()
+                     cache.reset_stats()
+@@ -293,6 +327,9 @@ def main():
+                         allocated=torch.cuda.memory_allocated(),
+                         reserved=torch.cuda.memory_reserved(),
+                     )
++                    if args.runtime_breakdown:
++                        row["runtime_breakdown"] = [dict(phase=phase, block_index=index, cuda_ms=start.elapsed_time(end))
++                            for phase, start, end, index in runtime_trace]
+                     if mode == "causal":
+                         causal_ids = answer["token_ids"]
+                     elif mode == "selfspec" and causal_ids is not None:
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index 6830161..eab1820 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -5,6 +5,7 @@ import hashlib
+ import json
+ from pathlib import Path
+ import statistics
++import time
+ 
+ import torch
+ 
+@@ -24,10 +25,11 @@ def main():
+     parser.add_argument("--model", required=True)
+     parser.add_argument("--output", type=Path, required=True)
+     parser.add_argument("--cache-slots", type=int, default=4096)
++    parser.add_argument("--memory-ratio", type=float, default=.85)
+     args = parser.parse_args()
+     args.output.mkdir(parents=True, exist_ok=False)
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+-        expert_load="serial", max_running_req=1, memory_ratio=.85, num_token_override=4096,
++        expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
+         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+@@ -113,6 +115,22 @@ def main():
+                     raise AssertionError("Private verify graph changed live recurrent state")
+                 result["verifies"].append(dict(prefix=req.cached_len, width=width,
+                     logits_bitwise_equal=True, state_hashes=state_hashes, live_state_unchanged=True))
++                if hasattr(runtime.transactions, 'valid_width'):
++                    keys_before = set(runtime._blocks().entries)
++                    tails = []
++                    for valid in range(1, width + 1):
++                        begin = time.perf_counter()
++                        tail = runtime._verify(req, tokens[:valid], width).float().cpu()
++                        assert set(runtime._blocks().entries) == keys_before
++                        assert runtime.transactions.valid_width == valid
++                        torch.testing.assert_close(tail, reference[:valid], rtol=0, atol=0)
++                        hashes = (digest(runtime.transactions.recurrent[:, valid - 1]),
++                                  digest(runtime.transactions.conv[:, valid - 1]))
++                        assert hashes == state_hashes[valid - 1]
++                        tails.append(dict(valid_rows=valid, new_capture=False,
++                            logits_bitwise_equal=True, state_bitwise_equal=True,
++                            audit_wall_seconds=time.perf_counter()-begin))
++                    result.setdefault('tails', []).append(dict(prefix=req.cached_len, width=width, cases=tails))
+                 eager = None
+                 save()
+         return output
+diff --git a/benchmarks/check_clover_lifecycle.py b/benchmarks/check_clover_lifecycle.py
+index e2b4867..b670737 100644
+--- a/benchmarks/check_clover_lifecycle.py
++++ b/benchmarks/check_clover_lifecycle.py
+@@ -17,10 +17,11 @@ def main():
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+-        moe_cache_size=4096,
++        moe_cache_auto=True,
++        kv_reserve_tokens=4096,
+         expert_load="serial",
+         max_running_req=1,
+-        memory_ratio=0.85,
++        memory_ratio=0.9,
+         num_token_override=4096,
+         max_seq_len_override=4096,
+         max_extend_tokens=4096,
+@@ -57,7 +58,9 @@ def main():
+             )[0]
+             transaction = llm.engine.mtp_runtime.transactions
+             if mode == "causal":
+-                assert len(ids) > 128 and transaction is None
++                assert len(ids) > 128 and transaction is owned_transaction
++            elif mode == "denoise":
++                owned_transaction = transaction
+             result["cases"].append(
+                 dict(
+                     mode=mode,
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index 59d6461..399f086 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -62,14 +62,7 @@ class CloverRuntime:
+         self.states.clear()
+ 
+     def before_native(self, batch):
+-        if not batch.is_prefill or self.transactions is None or self.transactions.capacity != 32:
+-            return None
+-        sparse_limit = self.engine.model.model.layers.op_list[0].mlp.sparse_prefill_limit
+-        if len(batch.input_ids) > sparse_limit:
+-            # A previous W32 window owns ~2 GiB. Release it before a new prompt's
+-            # full-layer prefill workspace, then allocate lazily at verification.
+-            self.block_graphs.clear_verify()
+-            self.transactions = None
++        # Startup/rebuild reserve the window separately from graph/prefill headroom.
+         return None
+ 
+     def _blocks(self):

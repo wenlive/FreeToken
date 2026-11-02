@@ -1,0 +1,37 @@
+{
+  "state": "passed",
+  "jobs": [
+    {
+      "name": "nvfp4-budget-summary-tests",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-split-graph-audit",
+      "state": "passed"
+    },
+    {
+      "name": "q8-auto-w32-resource-off",
+      "state": "passed"
+    },
+    {
+      "name": "q8-auto-w32-resource-on",
+      "state": "passed"
+    },
+    {
+      "name": "q8-threshold-correctness-before",
+      "state": "passed"
+    },
+    {
+      "name": "q8-threshold-correctness-after",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-threshold-correctness-before",
+      "state": "passed"
+    },
+    {
+      "name": "nvfp4-threshold-correctness-after",
+      "state": "passed"
+    }
+  ]
+}

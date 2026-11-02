@@ -1,0 +1,394 @@
+{
+  "state": "complete",
+  "scope": "Count/JSON, selfspec8/16, cap64, P1; correctness supplement, not ABAB timings",
+  "cases": {
+    "q8": {
+      "checks": [
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        }
+      ],
+      "inputs": [
+        {
+          "path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-threshold-correctness-before\\results.json",
+          "sha256": "efd1a3715c7d3b8c330e94695f5d1c33277fe433c4d4d9d3c9ee4e1b00dcc441"
+        },
+        {
+          "path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-threshold-correctness-after\\results.json",
+          "sha256": "41d0744716495f11fa9b30f4870620f9b2ce9254e26b253390c18972e4eb5285"
+        }
+      ]
+    },
+    "nvfp4": {
+      "checks": [
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "Count",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 8,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 0,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 1,
+          "warmup": true,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 2,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 3,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        },
+        {
+          "prompt": "JSON",
+          "mode": "selfspec",
+          "width": 16,
+          "repeat": 4,
+          "warmup": false,
+          "tokens_equal": true,
+          "acceptance_trace_equal": true
+        }
+      ],
+      "inputs": [
+        {
+          "path": "C:\\workspace\\runs\\T-20261102-clover-review\\nvfp4-threshold-correctness-before\\results.json",
+          "sha256": "679930d9d7b9d3f9233b970633ab8afcfa26a474cb6ca4a1aa45cf6726c1be9e"
+        },
+        {
+          "path": "C:\\workspace\\runs\\T-20261102-clover-review\\nvfp4-threshold-correctness-after\\results.json",
+          "sha256": "2c0987937aeb46c76987ef963f15e0de7644f60daf175ac999663397a766c0de"
+        }
+      ]
+    }
+  }
+}

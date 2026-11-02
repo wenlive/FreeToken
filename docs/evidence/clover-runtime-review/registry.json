@@ -1,0 +1,976 @@
+{
+  "created_at_utc": "2026-11-02T13:04:18.864946+00:00",
+  "experiments": [
+    {
+      "name": "original-abab-0-old",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T102215Z-original-abab-0-old",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "started_at_utc": "20261102T102215Z",
+      "manifest": "runs/original-abab-0-old/manifest.json",
+      "results": "runs/original-abab-0-old/data/results.json"
+    },
+    {
+      "name": "original-abab-1-delivered",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T102454Z-original-abab-1-delivered",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T102454Z",
+      "manifest": "runs/original-abab-1-delivered/manifest.json",
+      "results": null
+    },
+    {
+      "name": "original-abab-v2-0-old",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T102626Z-original-abab-v2-0-old",
+      "category": "legacy-control-repeat",
+      "reason": "Captured clean R0 source and retained revert snapshot; causal only, separate from R1 frozen full-mode ABAB.",
+      "state": "passed",
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "started_at_utc": "20261102T102626Z",
+      "manifest": "runs/original-abab-v2-0-old/manifest.json",
+      "results": "runs/original-abab-v2-0-old/data/results.json"
+    },
+    {
+      "name": "original-abab-v2-1-delivered",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T102821Z-original-abab-v2-1-delivered",
+      "category": "legacy-control-repeat",
+      "reason": "Captured clean R0 source and retained revert snapshot; causal only, separate from R1 frozen full-mode ABAB.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T102821Z",
+      "manifest": "runs/original-abab-v2-1-delivered/manifest.json",
+      "results": "runs/original-abab-v2-1-delivered/data/results.json"
+    },
+    {
+      "name": "original-abab-v2-2-old",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103049Z-original-abab-v2-2-old",
+      "category": "legacy-control-repeat",
+      "reason": "Captured clean R0 source and retained revert snapshot; causal only, separate from R1 frozen full-mode ABAB.",
+      "state": "passed",
+      "commit": "72ec6af861265a5435962ab2f68bfca409a08bf8",
+      "started_at_utc": "20261102T103049Z",
+      "manifest": "runs/original-abab-v2-2-old/manifest.json",
+      "results": "runs/original-abab-v2-2-old/data/results.json"
+    },
+    {
+      "name": "original-abab-v2-3-delivered",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103318Z-original-abab-v2-3-delivered",
+      "category": "legacy-control-repeat",
+      "reason": "Captured clean R0 source and retained revert snapshot; causal only, separate from R1 frozen full-mode ABAB.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103318Z",
+      "manifest": "runs/original-abab-v2-3-delivered/manifest.json",
+      "results": "runs/original-abab-v2-3-delivered/data/results.json"
+    },
+    {
+      "name": "core-tests-first",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103550Z-core-tests-first",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103550Z",
+      "manifest": "runs/core-tests-first/manifest.json"
+    },
+    {
+      "name": "core-tests-fused-params",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103633Z-core-tests-fused-params",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103633Z",
+      "manifest": "runs/core-tests-fused-params/manifest.json"
+    },
+    {
+      "name": "core-tests-reciprocal",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103726Z-core-tests-reciprocal",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103726Z",
+      "manifest": "runs/core-tests-reciprocal/manifest.json"
+    },
+    {
+      "name": "core-tests-scalar-rounding",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103825Z-core-tests-scalar-rounding",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103825Z",
+      "manifest": "runs/core-tests-scalar-rounding/manifest.json"
+    },
+    {
+      "name": "q8-smoke-all-modes",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T103845Z-q8-smoke-all-modes",
+      "category": "excluded",
+      "reason": "Early attempt before the corrected causal attention mask; superseded by all-tail audits.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T103845Z",
+      "manifest": "runs/q8-smoke-all-modes/manifest.json",
+      "results": null
+    },
+    {
+      "name": "q8-smoke-six-modes",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104014Z-q8-smoke-six-modes",
+      "category": "excluded",
+      "reason": "Early attempt before the corrected causal attention mask; superseded by all-tail audits.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T104014Z",
+      "manifest": "runs/q8-smoke-six-modes/manifest.json",
+      "results": "runs/q8-smoke-six-modes/data/results.json"
+    },
+    {
+      "name": "q8-graph-tail-audit",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104251Z-q8-graph-tail-audit",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T104251Z",
+      "manifest": "runs/q8-graph-tail-audit/manifest.json",
+      "results": "runs/q8-graph-tail-audit/data/results.json"
+    },
+    {
+      "name": "q8-graph-tail-causal-mask",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104445Z-q8-graph-tail-causal-mask",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T104445Z",
+      "manifest": "runs/q8-graph-tail-causal-mask/manifest.json",
+      "results": "runs/q8-graph-tail-causal-mask/data/results.json"
+    },
+    {
+      "name": "shared-runtime-tests",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104622Z-shared-runtime-tests",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "7b547888662a16afa497080494290d989016dfbd",
+      "started_at_utc": "20261102T104622Z",
+      "manifest": "runs/shared-runtime-tests/manifest.json"
+    },
+    {
+      "name": "attention-and-budget-tests",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104904Z-attention-and-budget-tests",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "7b547888662a16afa497080494290d989016dfbd",
+      "started_at_utc": "20261102T104904Z",
+      "manifest": "runs/attention-and-budget-tests/manifest.json"
+    },
+    {
+      "name": "baseline-budget-test-limitations",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104923Z-baseline-budget-test-limitations",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T104923Z",
+      "manifest": "runs/baseline-budget-test-limitations/manifest.json"
+    },
+    {
+      "name": "q8-preview-ab-native",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T104937Z-q8-preview-ab-native",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "00db29d3c3045ba41b50688f5f3c1b45de24c873",
+      "started_at_utc": "20261102T104937Z",
+      "manifest": "runs/q8-preview-ab-native/manifest.json",
+      "results": null,
+      "large_local_artifacts_not_embedded": [
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native\\JSON-native.pt",
+          "bytes": 15894085,
+          "sha256": "63da4904e9aa45fbdac890c77c4cf5a4891aba00811f2f25bb3f852379509a38"
+        }
+      ]
+    },
+    {
+      "name": "q8-preview-ab-native-v2",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T105159Z-q8-preview-ab-native-v2",
+      "category": "numerical-diagnostic",
+      "reason": "No speed claim; paired arithmetic and/or identical native clean-state comparison.",
+      "state": "passed",
+      "commit": "00db29d3c3045ba41b50688f5f3c1b45de24c873",
+      "started_at_utc": "20261102T105159Z",
+      "manifest": "runs/q8-preview-ab-native-v2/manifest.json",
+      "results": "runs/q8-preview-ab-native-v2/data/results.json",
+      "large_local_artifacts_not_embedded": [
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-all_torch_no_activation.pt",
+          "bytes": 31786819,
+          "sha256": "567d39fca1e1c4b3d3b382243be989d7efc1d7e70ef1f8827601414c1f883a54"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-all_torch_q8_1.pt",
+          "bytes": 31786628,
+          "sha256": "a4a7be0e8a39021f2d6ee95ed58a3e8c0cf126285039cc5521c4142602c8b066"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-f32_q8_1_dense.pt",
+          "bytes": 31786628,
+          "sha256": "9d7e64ecb5cf873724183f8c49c0ce0e4ce51cb0d1beccda5cca8cad8826a2f7"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-f32_q8_1_dense_moe.pt",
+          "bytes": 31786720,
+          "sha256": "30fced94dd60f96170bd59ebe223f26404ec0334fb7679938371cd779ad1ccf3"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-native.pt",
+          "bytes": 31786572,
+          "sha256": "da7e2da6dc2f175ee76f2bab4a4e183c48cd9272fccd0ded7d1a2c0c50a473b4"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-torch_conv.pt",
+          "bytes": 31786600,
+          "sha256": "76df35a003930d8d1208beab3207d65a2e31c5ad0fc160b8a2c7b52b51241a06"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-torch_coreset.pt",
+          "bytes": 31786621,
+          "sha256": "661cbeb2fa08f189c3b2a7ce102a78d7b64555fec93e7f4ef942c2db8b249233"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-torch_gdn.pt",
+          "bytes": 31786593,
+          "sha256": "dcd5344c2e5b640cdce27b0207aa4e9c5f2fb6fca2fe7e843ea0317b0a927d3c"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\Count-torch_preview_ops.pt",
+          "bytes": 31786713,
+          "sha256": "963103845583d5d8fe926b088ad58a7b548243c395c1cfe1004edfa2fc3b8d2d"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-all_torch_no_activation.pt",
+          "bytes": 15894332,
+          "sha256": "3a0ec758f8f74ca750aa8504351de404fc542bb3b25180fe5e40c233ab2109cb"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-all_torch_q8_1.pt",
+          "bytes": 15894141,
+          "sha256": "b81e3042bf37e14d08e6314738a317944c12d805395045d3012bebe1d2606756"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-f32_q8_1_dense.pt",
+          "bytes": 15894141,
+          "sha256": "f3600cab3b082cf54bddcd1dacb098c2f0d59659b7efc182c795d771b8915ac8"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-f32_q8_1_dense_moe.pt",
+          "bytes": 15894233,
+          "sha256": "f28878b5cf46f053a23916932df9abbfc8faf3cec00f3e527c01ede2d705073e"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-native.pt",
+          "bytes": 15894085,
+          "sha256": "63da4904e9aa45fbdac890c77c4cf5a4891aba00811f2f25bb3f852379509a38"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-torch_conv.pt",
+          "bytes": 15894113,
+          "sha256": "d021b56752ba7b5b8b59082938b4f91dc03c5e33b804b50ab953dc2da567f772"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-torch_coreset.pt",
+          "bytes": 15894134,
+          "sha256": "ebb4cb038af241d269e52d5078467ec6b7883b9f3b171411dfc50f0fa49927fb"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-torch_gdn.pt",
+          "bytes": 15894106,
+          "sha256": "6d739390127b2b4962ce01c213380855a32822eaf903b5a516e5ba0507086c79"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-v2\\JSON-torch_preview_ops.pt",
+          "bytes": 15894226,
+          "sha256": "01c3bdcfd9ab6406a30921a2c70d73198e6966da6d1243e3925e8bc8cf99cc19"
+        }
+      ]
+    },
+    {
+      "name": "q8-preview-ab-reference",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T105431Z-q8-preview-ab-reference",
+      "category": "numerical-diagnostic",
+      "reason": "No speed claim; paired arithmetic and/or identical native clean-state comparison.",
+      "state": "passed",
+      "commit": "00db29d3c3045ba41b50688f5f3c1b45de24c873",
+      "started_at_utc": "20261102T105431Z",
+      "manifest": "runs/q8-preview-ab-reference/manifest.json",
+      "results": "runs/q8-preview-ab-reference/data/results.json",
+      "large_local_artifacts_not_embedded": [
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference\\Count-no_activation_quantization.pt",
+          "bytes": 31786840,
+          "sha256": "be76f872fbb65de4d5704d89247be10018c79bb793e63d62b55f67eadd59692a"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference\\Count-q8_1.pt",
+          "bytes": 31786558,
+          "sha256": "f5967ad4741ccde7437c1a05bbcd75a51e890758cd421964c20e32b5899b8763"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference\\JSON-no_activation_quantization.pt",
+          "bytes": 15894353,
+          "sha256": "3f6a00ffbd63d342eef8a830dd6cdb6aae58277f4e9d684091bdce6797b95ee3"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference\\JSON-q8_1.pt",
+          "bytes": 15894071,
+          "sha256": "e5ec1001776dfc6852b85ea5d1319d8c7bb6edab51d2ec5c88603d43fface852"
+        }
+      ]
+    },
+    {
+      "name": "q8-auto-lifecycle",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T105552Z-q8-auto-lifecycle",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "00db29d3c3045ba41b50688f5f3c1b45de24c873",
+      "started_at_utc": "20261102T105552Z",
+      "manifest": "runs/q8-auto-lifecycle/manifest.json",
+      "results": null
+    },
+    {
+      "name": "q8-auto-lifecycle-v2",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T105856Z-q8-auto-lifecycle-v2",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "baf3191a8769b3b50dbafa9c3d1f9e572f46c2f0",
+      "started_at_utc": "20261102T105856Z",
+      "manifest": "runs/q8-auto-lifecycle-v2/manifest.json",
+      "results": "runs/q8-auto-lifecycle-v2/data/results.json"
+    },
+    {
+      "name": "q8-retained-graph-audit-v2",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110000Z-q8-retained-graph-audit-v2",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "b6dd53a0c3d1d95266f8477467beabae18b0dc9e",
+      "started_at_utc": "20261102T110000Z",
+      "manifest": "runs/q8-retained-graph-audit-v2/manifest.json",
+      "results": "runs/q8-retained-graph-audit-v2/data/results.json"
+    },
+    {
+      "name": "nvfp4-graph-tail-audit",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110133Z-nvfp4-graph-tail-audit",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "b725d8d15fb79213c032c0649d85d2b0f339857d",
+      "started_at_utc": "20261102T110133Z",
+      "manifest": "runs/nvfp4-graph-tail-audit/manifest.json",
+      "results": "runs/nvfp4-graph-tail-audit/data/results.json"
+    },
+    {
+      "name": "budget-metrics-tests",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110528Z-budget-metrics-tests",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "b6dd53a0c3d1d95266f8477467beabae18b0dc9e",
+      "started_at_utc": "20261102T110528Z",
+      "manifest": "runs/budget-metrics-tests/manifest.json"
+    },
+    {
+      "name": "q8-preview-ab-native-shared-state",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110732Z-q8-preview-ab-native-shared-state",
+      "category": "numerical-diagnostic",
+      "reason": "No speed claim; paired arithmetic and/or identical native clean-state comparison.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T110732Z",
+      "manifest": "runs/q8-preview-ab-native-shared-state/manifest.json",
+      "results": "runs/q8-preview-ab-native-shared-state/data/results.json",
+      "large_local_artifacts_not_embedded": [
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-all_torch_no_activation.pt",
+          "bytes": 31786819,
+          "sha256": "567d39fca1e1c4b3d3b382243be989d7efc1d7e70ef1f8827601414c1f883a54"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-all_torch_q8_1.pt",
+          "bytes": 31786628,
+          "sha256": "a4a7be0e8a39021f2d6ee95ed58a3e8c0cf126285039cc5521c4142602c8b066"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-f32_q8_1_dense.pt",
+          "bytes": 31786628,
+          "sha256": "9d7e64ecb5cf873724183f8c49c0ce0e4ce51cb0d1beccda5cca8cad8826a2f7"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-f32_q8_1_dense_moe.pt",
+          "bytes": 31786720,
+          "sha256": "30fced94dd60f96170bd59ebe223f26404ec0334fb7679938371cd779ad1ccf3"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-native.pt",
+          "bytes": 31786572,
+          "sha256": "da7e2da6dc2f175ee76f2bab4a4e183c48cd9272fccd0ded7d1a2c0c50a473b4"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-prefix-cache.pt",
+          "bytes": 64843429,
+          "sha256": "c44ad63194ea104c1f49bb79386f469a7cd4acd1853262f71eefd4ea85e613a5"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-torch_conv.pt",
+          "bytes": 31786600,
+          "sha256": "76df35a003930d8d1208beab3207d65a2e31c5ad0fc160b8a2c7b52b51241a06"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-torch_coreset.pt",
+          "bytes": 31786621,
+          "sha256": "661cbeb2fa08f189c3b2a7ce102a78d7b64555fec93e7f4ef942c2db8b249233"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-torch_gdn.pt",
+          "bytes": 31786593,
+          "sha256": "dcd5344c2e5b640cdce27b0207aa4e9c5f2fb6fca2fe7e843ea0317b0a927d3c"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\Count-torch_preview_ops.pt",
+          "bytes": 31786713,
+          "sha256": "963103845583d5d8fe926b088ad58a7b548243c395c1cfe1004edfa2fc3b8d2d"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-all_torch_no_activation.pt",
+          "bytes": 15894332,
+          "sha256": "3a0ec758f8f74ca750aa8504351de404fc542bb3b25180fe5e40c233ab2109cb"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-all_torch_q8_1.pt",
+          "bytes": 15894141,
+          "sha256": "b81e3042bf37e14d08e6314738a317944c12d805395045d3012bebe1d2606756"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-f32_q8_1_dense.pt",
+          "bytes": 15894141,
+          "sha256": "f3600cab3b082cf54bddcd1dacb098c2f0d59659b7efc182c795d771b8915ac8"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-f32_q8_1_dense_moe.pt",
+          "bytes": 15894233,
+          "sha256": "f28878b5cf46f053a23916932df9abbfc8faf3cec00f3e527c01ede2d705073e"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-native.pt",
+          "bytes": 15894085,
+          "sha256": "63da4904e9aa45fbdac890c77c4cf5a4891aba00811f2f25bb3f852379509a38"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-prefix-cache.pt",
+          "bytes": 65396303,
+          "sha256": "ade4f4eaffa393393a19bcd21856009a77b0d78ca564c420e1bb2e59446cdac3"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-torch_conv.pt",
+          "bytes": 15894113,
+          "sha256": "d021b56752ba7b5b8b59082938b4f91dc03c5e33b804b50ab953dc2da567f772"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-torch_coreset.pt",
+          "bytes": 15894134,
+          "sha256": "ebb4cb038af241d269e52d5078467ec6b7883b9f3b171411dfc50f0fa49927fb"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-torch_gdn.pt",
+          "bytes": 15894106,
+          "sha256": "6d739390127b2b4962ce01c213380855a32822eaf903b5a516e5ba0507086c79"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-native-shared-state\\JSON-torch_preview_ops.pt",
+          "bytes": 15894226,
+          "sha256": "01c3bdcfd9ab6406a30921a2c70d73198e6966da6d1243e3925e8bc8cf99cc19"
+        }
+      ]
+    },
+    {
+      "name": "q8-preview-ab-reference-shared-state",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110850Z-q8-preview-ab-reference-shared-state",
+      "category": "numerical-diagnostic",
+      "reason": "No speed claim; paired arithmetic and/or identical native clean-state comparison.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T110850Z",
+      "manifest": "runs/q8-preview-ab-reference-shared-state/manifest.json",
+      "results": "runs/q8-preview-ab-reference-shared-state/data/results.json",
+      "large_local_artifacts_not_embedded": [
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference-shared-state\\Count-no_activation_quantization.pt",
+          "bytes": 31786840,
+          "sha256": "be76f872fbb65de4d5704d89247be10018c79bb793e63d62b55f67eadd59692a"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference-shared-state\\Count-q8_1.pt",
+          "bytes": 31786558,
+          "sha256": "f5967ad4741ccde7437c1a05bbcd75a51e890758cd421964c20e32b5899b8763"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference-shared-state\\JSON-no_activation_quantization.pt",
+          "bytes": 15894353,
+          "sha256": "3f6a00ffbd63d342eef8a830dd6cdb6aae58277f4e9d684091bdce6797b95ee3"
+        },
+        {
+          "local_path": "C:\\workspace\\runs\\T-20261102-clover-review\\q8-preview-ab-reference-shared-state\\JSON-q8_1.pt",
+          "bytes": 15894071,
+          "sha256": "e5ec1001776dfc6852b85ea5d1319d8c7bb6edab51d2ec5c88603d43fface852"
+        }
+      ]
+    },
+    {
+      "name": "q8-breakdown64-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T110952Z-q8-breakdown64-before",
+      "category": "instrumented-cost",
+      "reason": "CUDA call envelopes or optional counter snapshots; separate from the primary uninstrumented matrix.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T110952Z",
+      "manifest": "runs/q8-breakdown64-before/manifest.json",
+      "results": "runs/q8-breakdown64-before/data/results.json"
+    },
+    {
+      "name": "q8-breakdown64-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T111419Z-q8-breakdown64-after",
+      "category": "instrumented-cost",
+      "reason": "CUDA call envelopes or optional counter snapshots; separate from the primary uninstrumented matrix.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T111419Z",
+      "manifest": "runs/q8-breakdown64-after/manifest.json",
+      "results": "runs/q8-breakdown64-after/data/results.json"
+    },
+    {
+      "name": "q8-context-sweep",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T111844Z-q8-context-sweep",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T111844Z",
+      "manifest": "runs/q8-context-sweep/manifest.json",
+      "results": "runs/q8-context-sweep/data/results.json"
+    },
+    {
+      "name": "nvfp4-auto-lifecycle",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T112031Z-nvfp4-auto-lifecycle",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "b373273af9f0229d14ac8c61fb193f4ef84a8d5a",
+      "started_at_utc": "20261102T112031Z",
+      "manifest": "runs/nvfp4-auto-lifecycle/manifest.json",
+      "results": "runs/nvfp4-auto-lifecycle/data/results.json"
+    },
+    {
+      "name": "q8-review-abab-0-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T112107Z-q8-review-abab-0-before",
+      "category": "diagnostic",
+      "reason": "Unpaired run; not a formal before/after result.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T112107Z",
+      "manifest": "runs/q8-review-abab-0-before/manifest.json",
+      "results": "runs/q8-review-abab-0-before/data/results.json"
+    },
+    {
+      "name": "q8-review-abab-1-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T112951Z-q8-review-abab-1-after",
+      "category": "excluded",
+      "reason": "Development source was extended during this run; replaced by immutable frozen ABAB.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T112951Z",
+      "manifest": "runs/q8-review-abab-1-after/manifest.json",
+      "results": "runs/q8-review-abab-1-after/data/results.json"
+    },
+    {
+      "name": "q8-frozen-abab-0-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T113831Z-q8-frozen-abab-0-before",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T113831Z",
+      "manifest": "runs/q8-frozen-abab-0-before/manifest.json",
+      "results": "runs/q8-frozen-abab-0-before/data/results.json"
+    },
+    {
+      "name": "q8-frozen-abab-1-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T114723Z-q8-frozen-abab-1-after",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T114723Z",
+      "manifest": "runs/q8-frozen-abab-1-after/manifest.json",
+      "results": "runs/q8-frozen-abab-1-after/data/results.json"
+    },
+    {
+      "name": "q8-frozen-abab-2-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T115601Z-q8-frozen-abab-2-before",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T115601Z",
+      "manifest": "runs/q8-frozen-abab-2-before/manifest.json",
+      "results": "runs/q8-frozen-abab-2-before/data/results.json"
+    },
+    {
+      "name": "q8-frozen-abab-3-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T120412Z-q8-frozen-abab-3-after",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+      "started_at_utc": "20261102T120412Z",
+      "manifest": "runs/q8-frozen-abab-3-after/manifest.json",
+      "results": "runs/q8-frozen-abab-3-after/data/results.json"
+    },
+    {
+      "name": "nvfp4-frozen-abab-0-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T121214Z-nvfp4-frozen-abab-0-before",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "c7d7836bd2b806d7006f036dac383ab7142f1a0b",
+      "started_at_utc": "20261102T121214Z",
+      "manifest": "runs/nvfp4-frozen-abab-0-before/manifest.json",
+      "results": "runs/nvfp4-frozen-abab-0-before/data/results.json"
+    },
+    {
+      "name": "nvfp4-frozen-abab-1-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T121722Z-nvfp4-frozen-abab-1-after",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "b373273af9f0229d14ac8c61fb193f4ef84a8d5a",
+      "started_at_utc": "20261102T121722Z",
+      "manifest": "runs/nvfp4-frozen-abab-1-after/manifest.json",
+      "results": "runs/nvfp4-frozen-abab-1-after/data/results.json"
+    },
+    {
+      "name": "nvfp4-frozen-abab-2-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T122205Z-nvfp4-frozen-abab-2-before",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "c7d7836bd2b806d7006f036dac383ab7142f1a0b",
+      "started_at_utc": "20261102T122205Z",
+      "manifest": "runs/nvfp4-frozen-abab-2-before/manifest.json",
+      "results": "runs/nvfp4-frozen-abab-2-before/data/results.json"
+    },
+    {
+      "name": "nvfp4-frozen-abab-3-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T122658Z-nvfp4-frozen-abab-3-after",
+      "category": "controlled-comparison",
+      "reason": "Independent immutable imports; two warmups and five measurements per process/case.",
+      "state": "passed",
+      "commit": "b373273af9f0229d14ac8c61fb193f4ef84a8d5a",
+      "started_at_utc": "20261102T122658Z",
+      "manifest": "runs/nvfp4-frozen-abab-3-after/manifest.json",
+      "results": "runs/nvfp4-frozen-abab-3-after/data/results.json"
+    },
+    {
+      "name": "optional-kernel-and-mapping-tests",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123145Z-optional-kernel-and-mapping-tests",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "b49fafb3994a94c86f69e2c2e1d0be056a5b5314",
+      "started_at_utc": "20261102T123145Z",
+      "manifest": "runs/optional-kernel-and-mapping-tests/manifest.json"
+    },
+    {
+      "name": "q8-paired-split-kv",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123157Z-q8-paired-split-kv",
+      "category": "excluded",
+      "reason": "Failed attempt retained for provenance; not used as performance acceptance.",
+      "state": "failed",
+      "commit": "b49fafb3994a94c86f69e2c2e1d0be056a5b5314",
+      "started_at_utc": "20261102T123157Z",
+      "manifest": "runs/q8-paired-split-kv/manifest.json",
+      "results": "runs/q8-paired-split-kv/data/results.json"
+    },
+    {
+      "name": "optional-kernel-and-mapping-tests-v2",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123613Z-optional-kernel-and-mapping-tests-v2",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "9423190d19ea0c1b0fc46fe974528704eb157c59",
+      "started_at_utc": "20261102T123613Z",
+      "manifest": "runs/optional-kernel-and-mapping-tests-v2/manifest.json"
+    },
+    {
+      "name": "q8-paired-split-kv-v2",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123622Z-q8-paired-split-kv-v2",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "9423190d19ea0c1b0fc46fe974528704eb157c59",
+      "started_at_utc": "20261102T123622Z",
+      "manifest": "runs/q8-paired-split-kv-v2/manifest.json",
+      "results": "runs/q8-paired-split-kv-v2/data/results.json"
+    },
+    {
+      "name": "q8-split-graph-audit",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123812Z-q8-split-graph-audit",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T123812Z",
+      "manifest": "runs/q8-split-graph-audit/manifest.json",
+      "results": "runs/q8-split-graph-audit/data/results.json"
+    },
+    {
+      "name": "q8-host-embedding-off",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T123948Z-q8-host-embedding-off",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T123948Z",
+      "manifest": "runs/q8-host-embedding-off/manifest.json",
+      "results": "runs/q8-host-embedding-off/data/results.json"
+    },
+    {
+      "name": "q8-host-embedding-on",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124134Z-q8-host-embedding-on",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124134Z",
+      "manifest": "runs/q8-host-embedding-on/manifest.json",
+      "results": "runs/q8-host-embedding-on/data/results.json"
+    },
+    {
+      "name": "q8-host-w32-capacity",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124319Z-q8-host-w32-capacity",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124319Z",
+      "manifest": "runs/q8-host-w32-capacity/manifest.json",
+      "results": "runs/q8-host-w32-capacity/data/results.json"
+    },
+    {
+      "name": "q8-phase-expert-traffic",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124423Z-q8-phase-expert-traffic",
+      "category": "instrumented-cost",
+      "reason": "CUDA call envelopes or optional counter snapshots; separate from the primary uninstrumented matrix.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124423Z",
+      "manifest": "runs/q8-phase-expert-traffic/manifest.json",
+      "results": "runs/q8-phase-expert-traffic/data/results.json"
+    },
+    {
+      "name": "nvfp4-block-costs64",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124557Z-nvfp4-block-costs64",
+      "category": "instrumented-cost",
+      "reason": "CUDA call envelopes or optional counter snapshots; separate from the primary uninstrumented matrix.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T124557Z",
+      "manifest": "runs/nvfp4-block-costs64/manifest.json",
+      "results": "runs/nvfp4-block-costs64/data/results.json"
+    },
+    {
+      "name": "q8-review-regressions",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124721Z-q8-review-regressions",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124721Z",
+      "manifest": "runs/q8-review-regressions/manifest.json",
+      "results": "runs/q8-review-regressions/data/results.json"
+    },
+    {
+      "name": "mtp-q8-review-off",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124758Z-mtp-q8-review-off",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124758Z",
+      "manifest": "runs/mtp-q8-review-off/manifest.json",
+      "results": "runs/mtp-q8-review-off/data/results.json"
+    },
+    {
+      "name": "mtp-q8-review-on",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124839Z-mtp-q8-review-on",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124839Z",
+      "manifest": "runs/mtp-q8-review-on/manifest.json",
+      "results": "runs/mtp-q8-review-on/data/results.json"
+    },
+    {
+      "name": "qwen35-q8-review",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124919Z-qwen35-q8-review",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T124919Z",
+      "manifest": "runs/qwen35-q8-review/manifest.json",
+      "results": "runs/qwen35-q8-review/data/results.json"
+    },
+    {
+      "name": "nvfp4-review-regressions",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T124959Z-nvfp4-review-regressions",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T124959Z",
+      "manifest": "runs/nvfp4-review-regressions/manifest.json",
+      "results": "runs/nvfp4-review-regressions/data/results.json"
+    },
+    {
+      "name": "mtp-nvfp4-review-off",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125017Z-mtp-nvfp4-review-off",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T125017Z",
+      "manifest": "runs/mtp-nvfp4-review-off/manifest.json",
+      "results": "runs/mtp-nvfp4-review-off/data/results.json"
+    },
+    {
+      "name": "mtp-nvfp4-review-on",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125053Z-mtp-nvfp4-review-on",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T125053Z",
+      "manifest": "runs/mtp-nvfp4-review-on/manifest.json",
+      "results": "runs/mtp-nvfp4-review-on/data/results.json"
+    },
+    {
+      "name": "qwen35-nvfp4-review",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125130Z-qwen35-nvfp4-review",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T125130Z",
+      "manifest": "runs/qwen35-nvfp4-review/manifest.json",
+      "results": "runs/qwen35-nvfp4-review/data/results.json"
+    },
+    {
+      "name": "nvfp4-budget-summary-tests",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125233Z-nvfp4-budget-summary-tests",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T125233Z",
+      "manifest": "runs/nvfp4-budget-summary-tests/manifest.json"
+    },
+    {
+      "name": "nvfp4-split-graph-audit",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125237Z-nvfp4-split-graph-audit",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T125237Z",
+      "manifest": "runs/nvfp4-split-graph-audit/manifest.json",
+      "results": "runs/nvfp4-split-graph-audit/data/results.json"
+    },
+    {
+      "name": "q8-auto-w32-resource-off",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125341Z-q8-auto-w32-resource-off",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T125341Z",
+      "manifest": "runs/q8-auto-w32-resource-off/manifest.json",
+      "results": "runs/q8-auto-w32-resource-off/data/results.json"
+    },
+    {
+      "name": "q8-auto-w32-resource-on",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125449Z-q8-auto-w32-resource-on",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T125449Z",
+      "manifest": "runs/q8-auto-w32-resource-on/manifest.json",
+      "results": "runs/q8-auto-w32-resource-on/data/results.json"
+    },
+    {
+      "name": "q8-threshold-correctness-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125557Z-q8-threshold-correctness-before",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "39a26c16f8ba64692e9356513477d7ce9cc3f7e8",
+      "started_at_utc": "20261102T125557Z",
+      "manifest": "runs/q8-threshold-correctness-before/manifest.json",
+      "results": "runs/q8-threshold-correctness-before/data/results.json"
+    },
+    {
+      "name": "q8-threshold-correctness-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125751Z-q8-threshold-correctness-after",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "86076d32103f947abb6040cba73396c252fec2b5",
+      "started_at_utc": "20261102T125751Z",
+      "manifest": "runs/q8-threshold-correctness-after/manifest.json",
+      "results": "runs/q8-threshold-correctness-after/data/results.json"
+    },
+    {
+      "name": "nvfp4-threshold-correctness-before",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T125944Z-nvfp4-threshold-correctness-before",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "c7d7836bd2b806d7006f036dac383ab7142f1a0b",
+      "started_at_utc": "20261102T125944Z",
+      "manifest": "runs/nvfp4-threshold-correctness-before/manifest.json",
+      "results": "runs/nvfp4-threshold-correctness-before/data/results.json"
+    },
+    {
+      "name": "nvfp4-threshold-correctness-after",
+      "local_source": "C:\\workspace\\runs\\T-20261102-clover-review\\20261102T130028Z-nvfp4-threshold-correctness-after",
+      "category": "supplement",
+      "reason": "See exact command and result scope; not silently merged with the core ABAB cohort.",
+      "state": "passed",
+      "commit": "bc912a1cc87694d23354e655e1b3cf782826b0ea",
+      "started_at_utc": "20261102T130028Z",
+      "manifest": "runs/nvfp4-threshold-correctness-after/manifest.json",
+      "results": "runs/nvfp4-threshold-correctness-after/data/results.json"
+    }
+  ]
+}

@@ -6,7 +6,7 @@ for them; other checkpoints of the same architectures work too.
 
 | Model | Checkpoints |
 |---|---|
-| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [qualified weights, decoding and limits](clover-runtime-performance.md) |
+| Clover-35B-A3B Preview (official Q8 GGUF) | [Diffuspace/Clover-35B-A3B-Preview-GGUF](https://huggingface.co/Diffuspace/Clover-35B-A3B-Preview-GGUF); see [performance history, decoding and limits](clover-performance.md) |
 | DeepSeek-V4.1-Flash | [deepseek-ai/DeepSeek-V4.1-Flash](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) |
 | DeepSeek-V4 | [deepseek-ai/DeepSeek-V4-Flash-0731](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731) |
 | GLM-5.3-Flash | [RedHatAI/GLM-5.3-Flash-NVFP4](https://huggingface.co/RedHatAI/GLM-5.3-Flash-NVFP4) |

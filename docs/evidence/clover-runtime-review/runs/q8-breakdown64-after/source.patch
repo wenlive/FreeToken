@@ -1,0 +1,102 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index de7791c..e956a15 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -54,6 +54,8 @@ def main():
+     parser.add_argument("--runtime-breakdown", action="store_true",
+         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
++    parser.add_argument("--cache-auto", action="store_true")
++    parser.add_argument("--embedding-host", action="store_true")
+     parser.add_argument("--no-penalties", action="store_true")
+     parser.add_argument("--require-exact", action="store_true")
+     parser.add_argument("--capture-first-logits", action="store_true")
+@@ -126,7 +128,10 @@ def main():
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+-        moe_cache_size=args.cache_slots,
++        moe_cache_size=0 if args.cache_auto else args.cache_slots,
++        moe_cache_auto=args.cache_auto,
++        kv_reserve_tokens=args.context_size,
++        gguf_embedding_host=args.embedding_host,
+         expert_load="serial",
+         max_running_req=1,
+         memory_ratio=args.memory_ratio,
+@@ -178,7 +183,10 @@ def main():
+         startup_seconds=time.perf_counter() - started,
+         checkpoint=args.model,
+         settings=dict(
+-            cache_slots=args.cache_slots,
++            cache_slots=llm.engine.moe_offload_cache.cache_size,
++            cache_auto=args.cache_auto,
++            embedding_host=args.embedding_host,
++            mapped_host_table_bytes=llm.engine._host_tables_bytes,
+             memory_ratio=args.memory_ratio,
+             context=args.context_size,
+             accept_rule=args.accept_rule,
+diff --git a/python/freetoken/models/clover_moe/model.py b/python/freetoken/models/clover_moe/model.py
+index 273b29c..a3ff644 100644
+--- a/python/freetoken/models/clover_moe/model.py
++++ b/python/freetoken/models/clover_moe/model.py
+@@ -26,6 +26,26 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
+ 
+ 
+ class CloverMoeModelLM(Qwen3_5ForCausalLM):
++    def place_input_embedding(self):
++        """Optional exact-byte mapped-host table; output weights remain resident."""
++        from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
++
++        embedding = self.model.embed_tokens
++        if self.lm_head.tied_embedding is not None:
++            raise ValueError("Mapped Clover input embeddings require an untied output head")
++        if hasattr(embedding, '_mapped_host'):
++            return embedding._mapped_host.owner.numel()
++        weight = embedding.weight
++        if not weight.is_cuda or torch.cuda.is_current_stream_capturing():
++            raise ValueError("Map Clover embeddings after loading and before graph capture")
++        host = alloc_pinned_tensor(weight.numel()*weight.element_size(), dtype=torch.uint8)
++        host.copy_(weight.view(torch.uint8).flatten().cpu())
++        mapping = MappedHostBytes(host)
++        view = mapping.cuda_view(weight.device).view(weight.dtype).reshape(weight.shape)
++        embedding._mapped_host = mapping
++        embedding.weight = view
++        return host.numel()
++
+     def __init__(self, config):
+         super().__init__(config)
+         self.model.norm = CloverPlusOneRMSNorm(config.hidden_size, config.rms_norm_eps)
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index 01e9b05..af30439 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -287,6 +287,29 @@ def test_transaction_rejects_padding_and_incorrect_layer_set():
+     assert torch.all(pool.recurrent_states == 7) and torch.all(pool.conv_states == 9)
+ 
+ 
++@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
++def test_clover_mapped_embedding_preserves_exact_rows_and_owner():
++    from freetoken.models.clover_moe.model import CloverMoeModelLM
++    from freetoken.kernel import indexing
++
++    weight = torch.randn(512,128,device='cuda',dtype=torch.bfloat16)
++    embedding = SimpleNamespace(weight=weight)
++    model = SimpleNamespace(model=SimpleNamespace(embed_tokens=embedding),
++                            lm_head=SimpleNamespace(tied_embedding=None))
++    ids = torch.tensor([0,511,17,17,256],device='cuda',dtype=torch.int32)
++    expected = weight[ids.long()].clone()
++    size = CloverMoeModelLM.place_input_embedding(model)
++    assert size == weight.numel()*weight.element_size()
++    assert embedding.weight.data_ptr() == embedding._mapped_host.ptr
++    assert embedding._mapped_host.owner.is_pinned()
++    actual = indexing(weights=embedding.weight,indices=ids)
++    assert torch.equal(actual,expected)
++    assert CloverMoeModelLM.place_input_embedding(model) == size
++    model.lm_head.tied_embedding = embedding
++    with pytest.raises(ValueError,match='untied'):
++        CloverMoeModelLM.place_input_embedding(model)
++
++
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+ def test_padded_verify_kv_never_writes_unowned_locations():
+     from freetoken.kernel.triton.clover_store import store_verify_kv

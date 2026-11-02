@@ -1,0 +1,33 @@
+{
+  "name": "q8-context-sweep",
+  "started_at_utc": "20261102T111844Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261102-clover-q8/FreeToken/benchmarks/bench_clover_context.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/q8-context-sweep",
+    "--cache-slots",
+    "2304"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "2fe3afd47084a363bb9e19030305dcfdead221f3",
+  "dirty": " M benchmarks/bench_clover.py\n M python/freetoken/models/clover_moe/model.py\n M tests/models/test_clover_generation.py\n?? benchmarks/check_clover_preview_ab.py\n",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "8adfc53f90751775be7efd8f9b3b6e820767e9090473c7fe902e99f67f812df8",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken"
+  },
+  "script_receipts": {
+    "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\benchmarks\\bench_clover_context.py": "c4bebdee5e66ce6382b9b7a4267097db4b941b0518c7bb0a74ed4d5a82091825"
+  },
+  "pid": 7016,
+  "exit_code": 0,
+  "elapsed_seconds": 107.23499999999967
+}

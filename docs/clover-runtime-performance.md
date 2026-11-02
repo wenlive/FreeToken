@@ -1,5 +1,11 @@
 # Clover 官方 Q8 GGUF 与块去噪运行时实测
 
+> **R0 历史报告，保留原始测量。** 当前入口为 [性能记录](clover-performance.md)，
+> review 修复、冻结 ABAB 复测、长上下文及成本分析见 [R1](clover-runtime-review.md)。
+> 下文 runtime-before 的 causal 对照存在明显波动，旧整体加速范围不能全部归因于代码修复。
+> R1 的旧源码交替复测未重现原先低值；不覆盖这批原始证据，也不把 R0 llama.cpp 数字称为最终源码的重测。
+> “按实际行数捕获”等描述对应 R0；R1 已改为固定物理宽度与有效行屏蔽。
+
 本报告针对 Windows、RTX 5070 Ti 16 GB、Ryzen 7 9700X、64 GB 内存、单请求 TP1。
 Q8 分支从 main `f417397` 创建；NVFP4 分支从 `2fd00ce` 追加提交。
 完整测量、输入、源码版本、输出、缓存与内存记录见 [evidence](evidence/clover-runtime/sources.json)。

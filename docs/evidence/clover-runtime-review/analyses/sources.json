@@ -1,0 +1,26 @@
+{
+  "q8-budget-before": {
+    "native": "../runs/q8-breakdown64-before/data/results.json",
+    "native_sha256": "d591054c8f02fc38b2650dc9cda6b92fa5512e20d8efcb337bd7ebac6e5acf62",
+    "hf": "../../clover-runtime/correctness.json",
+    "hf_sha256": "44d6227329ae3416d8db98bea32269301acb5745dc7b0cf5705bbee71567943e",
+    "script": "benchmarks/analyze_clover_budget.py",
+    "reference_scope": "Same-Q8 HF arithmetic for Q8; for NVFP4, Q8 progress is only a counterfactual scenario and not a same-weight oracle. Report uses NVFP4 native progress budgets."
+  },
+  "q8-budget-after": {
+    "native": "../runs/q8-breakdown64-after/data/results.json",
+    "native_sha256": "e7e0c7bba21740514c04d04f9144dc97c6c390dc1e12ec1397f1addf513cd467",
+    "hf": "../../clover-runtime/correctness.json",
+    "hf_sha256": "44d6227329ae3416d8db98bea32269301acb5745dc7b0cf5705bbee71567943e",
+    "script": "benchmarks/analyze_clover_budget.py",
+    "reference_scope": "Same-Q8 HF arithmetic for Q8; for NVFP4, Q8 progress is only a counterfactual scenario and not a same-weight oracle. Report uses NVFP4 native progress budgets."
+  },
+  "nvfp4-budget-after": {
+    "native": "../runs/nvfp4-block-costs64/data/results.json",
+    "native_sha256": "6dfe351a7743858178589d05f0dfbd8bdbb899ac42a9f0fa2821c02527966692",
+    "hf": "../../clover-runtime/correctness.json",
+    "hf_sha256": "44d6227329ae3416d8db98bea32269301acb5745dc7b0cf5705bbee71567943e",
+    "script": "benchmarks/analyze_clover_budget.py",
+    "reference_scope": "Same-Q8 HF arithmetic for Q8; for NVFP4, Q8 progress is only a counterfactual scenario and not a same-weight oracle. Report uses NVFP4 native progress budgets."
+  }
+}

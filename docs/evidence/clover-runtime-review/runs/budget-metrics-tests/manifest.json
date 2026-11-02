@@ -1,0 +1,28 @@
+{
+  "name": "budget-metrics-tests",
+  "started_at_utc": "20261102T110528Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/models/test_clover_llama_metrics.py"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "b6dd53a0c3d1d95266f8477467beabae18b0dc9e",
+  "dirty": " M benchmarks/bench_clover.py\n M tests/models/test_clover_llama_metrics.py\n?? benchmarks/analyze_clover_budget.py\n?? benchmarks/check_clover_preview_ab.py\n",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "5804a6308b1719c961e1ab6766f196df05d8ce5f3b9a332037db027772cd409a",
+  "environment_overrides": {},
+  "script_receipts": {
+    "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken\\tests\\models\\test_clover_llama_metrics.py": "ecc389156e9ef44a324867748b72b050f7f1a019382881e01ccfcbd90bf4e827"
+  },
+  "pid": 15656,
+  "exit_code": 0,
+  "elapsed_seconds": 3.75
+}

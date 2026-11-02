@@ -1,0 +1,31 @@
+{
+  "name": "nvfp4-auto-lifecycle",
+  "started_at_utc": "20261102T112031Z",
+  "state": "passed",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken/benchmarks/check_clover_lifecycle.py",
+    "--model",
+    "C:/workspace/models/bundles/clover-nvfp4/4b0402b6-routed-v1",
+    "--output",
+    "C:/workspace/runs/T-20261102-clover-review/nvfp4-auto-lifecycle"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken",
+  "commit": "b373273af9f0229d14ac8c61fb193f4ef84a8d5a",
+  "dirty": "",
+  "native_extensions": {
+    "_cpu_moe.cp312-win_amd64.pyd": "09ab94699fe8b0d1e516fa9ae0d6d2e7ef21e6fa7cf9135a16ae65d75a900f0b",
+    "_pinned_tensor.cp312-win_amd64.pyd": "7e63a32214c532ab0b25b569e74b0a4af5cad322f42ad5e39e1b1854d0323a69",
+    "_row_store.cp312-win_amd64.pyd": "59d939e443237525efd2a1f64522c9082b886b589eb70eb867fdad7b8207076f"
+  },
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "environment_overrides": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken/python;C:/workspace/wt/T-20261030-clover-nvfp4/FreeToken"
+  },
+  "script_receipts": {
+    "C:\\workspace\\wt\\T-20261030-clover-nvfp4\\FreeToken\\benchmarks\\check_clover_lifecycle.py": "32c2bdd8fd71207a9dfa28af1cb40d30c647e433613d7e9b4c60d58ffc46f020"
+  },
+  "pid": 9500,
+  "exit_code": 0,
+  "elapsed_seconds": 35.5
+}
