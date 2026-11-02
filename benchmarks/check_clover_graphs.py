@@ -28,7 +28,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
         expert_load="serial", max_running_req=1, memory_ratio=.85, num_token_override=4096,
-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1])
+        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
     runtime = engine.mtp_runtime
     original = engine.forward_batch
@@ -55,6 +55,13 @@ def main():
                 runtime._blocks().prepare_clean(req)
                 actual = runtime._preview(req, tokens)
                 torch.testing.assert_close(actual.float().cpu(), reference, rtol=0, atol=0)
+                engine.moe_offload_cache.reset()
+                engine.moe_offload_cache.reset_stats()
+                actual = runtime._preview(req, tokens)
+                torch.testing.assert_close(actual.float().cpu(), reference, rtol=0, atol=0)
+                cold_stats = engine.moe_offload_cache.decode_miss_stats()
+                static_batch = runtime._blocks().entries[(True, width, engine.config.clover_coreset_top_p)][0]
+                updates = static_batch._clover_metadata_updates
                 after = persistent_hashes(engine)
                 if frozen != after:
                     raise AssertionError("Preview capture or replay changed persistent KV/GDN bytes")
@@ -66,8 +73,9 @@ def main():
                     done.record(engine.stream)
                     done.synchronize()
                     times.append(begin.elapsed_time(done))
+                assert updates == static_batch._clover_metadata_updates
                 result["previews"].append(dict(prefix=req.cached_len, width=width,
-                    hashes_before=frozen, hashes_after=after, logits_bitwise_equal=True,
+                    hashes_before=frozen, hashes_after=after, logits_bitwise_equal=True, cold_stats=cold_stats,
                     warmups=2, repeats=5, milliseconds=times[2:], median_ms=statistics.median(times[2:])))
                 save()
             # Compare the actual private transaction at every possible commit row.

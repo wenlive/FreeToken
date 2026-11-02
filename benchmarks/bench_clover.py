@@ -48,6 +48,9 @@ def main():
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--cache-slots", type=int, default=4096)
     parser.add_argument("--memory-ratio", type=float, default=0.85)
+    parser.add_argument("--context-size", type=int, default=4096)
+    parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
+    parser.add_argument("--reuse-prefix", action="store_true", help="Diagnostic only; default benchmark recomputes the complete prompt")
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
@@ -123,13 +126,17 @@ def main():
         expert_load="serial",
         max_running_req=1,
         memory_ratio=args.memory_ratio,
-        num_token_override=4096,
-        max_seq_len_override=4096,
-        max_extend_tokens=4096,
+        num_token_override=args.context_size,
+        max_seq_len_override=args.context_size,
+        max_extend_tokens=args.context_size,
         cuda_graph_bs=[1],
         moe_collect_stats=True,
         clover_disable_penalties=args.no_penalties,
+        clover_accept_rule=args.accept_rule,
     )
+    if not args.reuse_prefix:
+        match = llm.cache_manager.match_req
+        llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
     result = dict(
         state="running",
         scope="offline scheduler; actual output length, EOS respected",
@@ -139,7 +146,9 @@ def main():
         settings=dict(
             cache_slots=args.cache_slots,
             memory_ratio=args.memory_ratio,
-            context=4096,
+            context=args.context_size,
+            accept_rule=args.accept_rule,
+            prefix_cache_reuse=args.reuse_prefix,
             token_budget=args.tokens,
             warmups=args.warmups,
             repeats=args.repeats,

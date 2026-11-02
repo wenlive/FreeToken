@@ -231,6 +231,9 @@ def main():
     parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--repeats", type=int, default=5)
     parser.add_argument("--cache-mib", type=int, default=6656)
+    parser.add_argument("--context-size", type=int, default=4096)
+    parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--ubatch-size", type=int, default=256)
     parser.add_argument("--load-mode", choices=["mmap", "none"], default="mmap")
     args = parser.parse_args()
     if args.frontend == "server" and any(
@@ -280,11 +283,11 @@ def main():
                     "-m",
                     str(args.model),
                     "-c",
-                    "4096",
+                    str(args.context_size),
                     "-b",
-                    "256",
+                    str(args.batch_size),
                     "-ub",
-                    "256",
+                    str(args.ubatch_size),
                     "-ngl",
                     "99",
                     "--cpu-moe",

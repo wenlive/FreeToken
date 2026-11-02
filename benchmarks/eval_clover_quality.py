@@ -75,6 +75,7 @@ def main():
     )
     parser.add_argument("--tokens", type=int, default=512)
     parser.add_argument("--limit", type=int, default=50)
+    parser.add_argument("--cache-slots", type=int, default=4096)
     parser.add_argument("--datasets", default="gsm8k,humaneval")
     parser.add_argument(
         "--resume",
@@ -115,7 +116,7 @@ def main():
         llm = LLM(
             str(args.checkpoint),
             moe_strategy="offload",
-            moe_cache_size=4096,
+            moe_cache_size=args.cache_slots,
             expert_load="serial",
             max_running_req=1,
             memory_ratio=0.85,
