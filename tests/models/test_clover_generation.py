@@ -288,6 +288,29 @@ def test_transaction_rejects_padding_and_incorrect_layer_set():
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+def test_clover_mapped_embedding_preserves_exact_rows_and_owner():
+    from freetoken.models.clover_moe.model import CloverMoeModelLM
+    from freetoken.kernel import indexing
+
+    weight = torch.randn(512,128,device='cuda',dtype=torch.bfloat16)
+    embedding = SimpleNamespace(weight=weight)
+    model = SimpleNamespace(model=SimpleNamespace(embed_tokens=embedding),
+                            lm_head=SimpleNamespace(tied_embedding=None))
+    ids = torch.tensor([0,511,17,17,256],device='cuda',dtype=torch.int32)
+    expected = weight[ids.long()].clone()
+    size = CloverMoeModelLM.place_input_embedding(model)
+    assert size == weight.numel()*weight.element_size()
+    assert embedding.weight.data_ptr() == embedding._mapped_host.ptr
+    assert embedding._mapped_host.owner.is_pinned()
+    actual = indexing(weights=embedding.weight,indices=ids)
+    assert torch.equal(actual,expected)
+    assert CloverMoeModelLM.place_input_embedding(model) == size
+    model.lm_head.tied_embedding = embedding
+    with pytest.raises(ValueError,match='untied'):
+        CloverMoeModelLM.place_input_embedding(model)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
 def test_padded_verify_kv_never_writes_unowned_locations():
     from freetoken.kernel.triton.clover_store import store_verify_kv
 

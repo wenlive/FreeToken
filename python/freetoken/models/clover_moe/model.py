@@ -26,6 +26,26 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
 
 
 class CloverMoeModelLM(Qwen3_5ForCausalLM):
+    def place_input_embedding(self):
+        """Optional exact-byte mapped-host table; output weights remain resident."""
+        from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
+
+        embedding = self.model.embed_tokens
+        if self.lm_head.tied_embedding is not None:
+            raise ValueError("Mapped Clover input embeddings require an untied output head")
+        if hasattr(embedding, '_mapped_host'):
+            return embedding._mapped_host.owner.numel()
+        weight = embedding.weight
+        if not weight.is_cuda or torch.cuda.is_current_stream_capturing():
+            raise ValueError("Map Clover embeddings after loading and before graph capture")
+        host = alloc_pinned_tensor(weight.numel()*weight.element_size(), dtype=torch.uint8)
+        host.copy_(weight.view(torch.uint8).flatten().cpu())
+        mapping = MappedHostBytes(host)
+        view = mapping.cuda_view(weight.device).view(weight.dtype).reshape(weight.shape)
+        embedding._mapped_host = mapping
+        embedding.weight = view
+        return host.numel()
+
     def __init__(self, config):
         super().__init__(config)
         self.model.norm = CloverPlusOneRMSNorm(config.hidden_size, config.rms_norm_eps)
