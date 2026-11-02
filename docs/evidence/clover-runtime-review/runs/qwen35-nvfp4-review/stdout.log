@@ -1,0 +1,17 @@
+[1m[2026-11-02|20:51:34|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-02|20:51:34|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-02|20:51:34|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-02|20:51:34|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-02|20:51:37|core|rank=0][0m [32mINFO    [0m MoE experts: nvfp4 via triton
+[1m[2026-11-02|20:51:37|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-02|20:52:02|core|rank=0][0m [32mINFO    [0m Multimodal disabled: --mm-disable
+[1m[2026-11-02|20:52:02|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-02|20:52:02|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 4.60 GiB
+[1m[2026-11-02|20:52:02|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-02|20:52:02|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 4.60 GiB
+[1m[2026-11-02|20:52:03|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 4.56 GiB
+[1m[2026-11-02|20:52:04|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.943 s
+[1m[2026-11-02|20:52:05|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 45.48
+[1m[2026-11-02|20:52:05|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 34.91
+[1m[2026-11-02|20:52:06|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 26, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 59.96
+[1m[2026-11-02|20:52:06|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 34, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 24.60, #queue-req: 0

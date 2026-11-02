@@ -1,0 +1,20 @@
+[1m[2026-11-02|20:54:54|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-02|20:55:02|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-02|20:55:02|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-02|20:55:02|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-02|20:55:08|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=2596 num_pages=4233 (prefill_overlap=True)
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 1.98 GiB
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 3.46 GiB
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-02|20:55:37|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 3.46 GiB
+ninja: no work to do.
+[1m[2026-11-02|20:55:38|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 3.42 GiB
+[1m[2026-11-02|20:55:39|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.548 s
+[1m[2026-11-02|20:55:48|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, #running-req: 0, #queue-req: 0, input throughput (token/s): 15.61
+{"prompt": "Count", "mode": "denoise", "width": 32, "warmup": true, "output_tokens": 30, "wall_seconds": 1.319945999999618, "ttft_seconds": 1.318384899999728, "tokens_per_round": 31, "matches_causal": null}
+[1m[2026-11-02|20:55:49|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, #running-req: 0, #queue-req: 0, input throughput (token/s): 40.03
+{"prompt": "Count", "mode": "denoise", "width": 32, "warmup": false, "output_tokens": 30, "wall_seconds": 0.4986495000011928, "ttft_seconds": 0.4985022000000754, "tokens_per_round": 31, "matches_causal": null}
+[1m[2026-11-02|20:55:49|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, #running-req: 0, #queue-req: 0, input throughput (token/s): 42.39
+{"prompt": "Count", "mode": "denoise", "width": 32, "warmup": false, "output_tokens": 30, "wall_seconds": 0.494314999999915, "ttft_seconds": 0.4942270000010467, "tokens_per_round": 31, "matches_causal": null}

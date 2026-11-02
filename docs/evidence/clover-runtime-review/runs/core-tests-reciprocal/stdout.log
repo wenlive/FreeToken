@@ -1,0 +1,388 @@
+.....................FFFFFFFF....................................        [100%]
+================================== FAILURES ===================================
+___ test_fused_verify_matches_sequential_hypothetical_history[None-exact-8] ___
+
+width = 8, rule = 'exact', break_row = None
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 5 / 2056 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.0270338890450148e-07 at index (7, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+__ test_fused_verify_matches_sequential_hypothetical_history[None-exact-16] ___
+
+width = 16, rule = 'exact', break_row = None
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 9 / 4112 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.1314779868598634e-07 at index (13, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+_ test_fused_verify_matches_sequential_hypothetical_history[None-threshold-8] _
+
+width = 8, rule = 'threshold', break_row = None
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 5 / 2056 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.0270338890450148e-07 at index (7, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+_ test_fused_verify_matches_sequential_hypothetical_history[None-threshold-16] _
+
+width = 16, rule = 'threshold', break_row = None
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 9 / 4112 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.1314779868598634e-07 at index (13, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+____ test_fused_verify_matches_sequential_hypothetical_history[3-exact-8] _____
+
+width = 8, rule = 'exact', break_row = 3
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 5 / 2056 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.0270338890450148e-07 at index (7, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+____ test_fused_verify_matches_sequential_hypothetical_history[3-exact-16] ____
+
+width = 16, rule = 'exact', break_row = 3
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 9 / 4112 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.1314779868598634e-07 at index (13, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+__ test_fused_verify_matches_sequential_hypothetical_history[3-threshold-8] ___
+
+width = 8, rule = 'threshold', break_row = 3
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 5 / 2056 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.0270338890450148e-07 at index (7, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+__ test_fused_verify_matches_sequential_hypothetical_history[3-threshold-16] __
+
+width = 16, rule = 'threshold', break_row = 3
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason='requires CUDA')
+    @pytest.mark.parametrize('width', [8, 16])
+    @pytest.mark.parametrize('rule', ['exact', 'threshold'])
+    @pytest.mark.parametrize('break_row', [None, 3])
+    def test_fused_verify_matches_sequential_hypothetical_history(width, rule, break_row):
+        import copy
+        from freetoken.kernel.triton.clover_verify import penalize_logits, verify_and_deliver
+    
+        vocab, mask = 257, 256
+        gen = SimpleNamespace(**{**PENALTY_DEFAULTS, 'presence_penalty': .9,
+            'frequency_penalty': .15, 'repetition_penalty': 1.05,
+            'dllm_length_penalty': 3., 'dllm_length_penalty_start': 8192,
+            'dllm_length_penalty_window': 10, 'dllm_think_end_bias': 2.,
+            'dllm_think_end_start': 8192, 'dllm_think_end_window': 10,
+            'dllm_think_end_token_id': 123})
+        state = CloverPenaltyState(gen, vocab, 'cuda', [253, 254])
+        state.commit(torch.tensor([7, 7, 18], device='cuda'))
+        state.length = 8190
+        inputs = torch.full((width,), 7, dtype=torch.int32, device='cuda')
+        inputs[0] = 123
+        logits = torch.zeros(width, vocab, device='cuda', dtype=torch.bfloat16)
+        logits[:, 7] = 12
+        if break_row is not None:
+            logits[break_row, 7] = -10
+            logits[break_row, 11] = 20
+        reference = logits.float().clone()
+        reference[:, mask] = -float('inf')
+        hypothetical = copy.copy(state)
+        hypothetical.counts = state.counts.clone()
+        for row in range(width):
+            hypothetical.apply(reference[row:row+1], inputs[row:row+1], mask)
+            if row + 1 < width:
+                hypothetical.commit(inputs[row+1:row+2].long())
+        frozen = state.counts.clone()
+        actual = penalize_logits(logits, state, mask, inputs)
+>       torch.testing.assert_close(actual, reference, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 9 / 4112 (0.2%)
+E       Greatest absolute difference: 9.5367431640625e-07 at index (0, 7)
+E       Greatest relative difference: 1.1314779868598634e-07 at index (13, 7)
+
+tests\models\test_clover_generation.py:342: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[None-exact-8]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[None-exact-16]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[None-threshold-8]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[None-threshold-16]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[3-exact-8]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[3-exact-16]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[3-threshold-8]
+FAILED tests/models/test_clover_generation.py::test_fused_verify_matches_sequential_hypothetical_history[3-threshold-16]
+8 failed, 57 passed in 4.34s
