@@ -1,0 +1,7 @@
+[1m[2026-11-02|18:55:55|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-02|18:56:03|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-02|18:56:03|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-02|18:56:03|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-02|18:56:08|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-02|18:56:35|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=2292 num_pages=4182 (prefill_overlap=True)
+[1m[2026-11-02|18:56:35|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB

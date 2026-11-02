@@ -1,0 +1,33 @@
+[1m[2026-11-02|19:07:35|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-02|19:07:43|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-02|19:07:43|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-02|19:07:43|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-02|19:07:49|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-02|19:08:18|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-02|19:08:18|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 1.98 GiB
+[1m[2026-11-02|19:08:18|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 4.22 GiB
+[1m[2026-11-02|19:08:18|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-02|19:08:18|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 4.22 GiB
+ninja: no work to do.
+[1m[2026-11-02|19:08:19|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 4.18 GiB
+[1m[2026-11-02|19:08:20|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.540 s
+JSON native
+JSON torch_conv
+JSON torch_gdn
+JSON torch_coreset
+JSON torch_preview_ops
+JSON f32_q8_1_dense
+JSON f32_q8_1_dense_moe
+JSON all_torch_q8_1
+JSON all_torch_no_activation
+[1m[2026-11-02|19:08:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 48, #cached-token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, #running-req: 0, #queue-req: 0, input throughput (token/s): 5.23
+Count native
+Count torch_conv
+Count torch_gdn
+Count torch_coreset
+Count torch_preview_ops
+Count f32_q8_1_dense
+Count f32_q8_1_dense_moe
+Count all_torch_q8_1
+Count all_torch_no_activation
+[1m[2026-11-02|19:08:42|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, #running-req: 0, #queue-req: 0, input throughput (token/s): 3.57
