@@ -356,6 +356,7 @@ torch::Tensor ggml_moe_a8(
   cudaStream_t stream = at::cuda::getCurrentCUDAStream().stream();
   options = torch::TensorOptions().dtype(torch::kInt32).device(W.device());
   at::Tensor quant_X = torch::empty({tokens, padded / 32 * 9}, options);
+  // Expert ids are offload-cache slots; the MMQ header supports large banks.
   DISPATCH_FLOAT_TYPES(X.scalar_type(), "ggml_moe_a8", [&] {
     quantize_row_q8_1_cuda((scalar_t*)X.data_ptr(), (void*)quant_X.data_ptr(), col, tokens, stream);
     switch (type) {

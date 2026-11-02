@@ -304,3 +304,40 @@ def test_mmvq_honors_padded_expert_slot_stride(kind):
     expected = ggml_moe_a8_vec(value, packed, ids, 2, kind, 64, 1)
     actual = ggml_moe_a8_vec(value, view, ids, 2, kind, 64, 1)
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("width", [1, 8, 16, 32, 1024])
+def test_packed_dense_q8_mmvq_and_mmq_match_independent_dot(reference, width):
+    from freetoken.models.clover_moe.packed import CloverPackedLinear
+
+    packed, dense = packed_fixture(8, rows=128, width=512)
+    layer = CloverPackedLinear(128, 512, 8, 544)
+    layer.weight = packed[2].cuda()
+    value = torch.randn(width, 512, device="cuda", dtype=torch.bfloat16)
+    expected = torch.nn.functional.linear(reference.q8_1_activations(value), dense[2].cuda()).bfloat16()
+    actual = layer.forward(value)
+    relative = (actual.float() - expected.float()).norm() / expected.float().norm()
+    assert layer.weight.dtype == torch.uint8
+    assert relative < .003, float(relative)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("stride", [34816, 4 << 20])
+def test_mmq_large_cache_slots_and_byte_offsets_above_2gib(reference, stride):
+    from freetoken.kernel.gguf import ggml_moe_a8, ggml_moe_get_block_size
+    from freetoken.kernel.triton.clover_align import align_clover_routes
+
+    packed, dense = packed_fixture(8, rows=64, width=512)
+    storage = torch.empty(513, stride, dtype=torch.uint8, device="cuda")
+    slots = (0, 256, 512)
+    for expert, slot in enumerate(slots):
+        storage[slot, :packed[expert].numel()].copy_(packed[expert].reshape(-1))
+    weights = storage.as_strided((513, 64, 544), (stride, 544, 1))
+    value = torch.randn(8, 512, device="cuda", dtype=torch.float32)
+    ids = torch.tensor([list(slots)] * 8, device="cuda", dtype=torch.int32)
+    order, experts, total = align_clover_routes(ids, ggml_moe_get_block_size(8), 513)
+    actual = ggml_moe_a8(value, weights, order, experts, total, 8, 64, 3, 8)
+    activation = reference.q8_1_activations(value)
+    expected = torch.stack([torch.nn.functional.linear(activation, w.cuda()) for w in dense], 1).reshape(-1, 64)
+    torch.testing.assert_close(actual, expected, rtol=2e-4, atol=2e-4)

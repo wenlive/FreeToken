@@ -1,5 +1,9 @@
 // copied from
 // https://github.com/vllm-project/vllm/blob/4492e3a55428e161ca8db381edc28263e5da4c8d/csrc/quantization/gguf/moe.cuh
+// Source: vllm-project/vllm@4492e3a55428e161ca8db381edc28263e5da4c8d,
+// csrc/quantization/gguf/moe.cuh (Apache-2.0; llama.cpp-derived arithmetic is MIT).
+// Local changes: allow offload slot ids above255, use64-bit byte offsets, and
+// reject padded grid blocks before reading their uninitialized expert ids.
 #include <cstdint>
 
 /* Adapted from ./csrc/quantization/gguf/mmq.cuh
@@ -42,6 +46,7 @@ static __device__ __forceinline__ void moe_q(
   const int& row_x_0 = row_dst_0;
 
   const auto col_dst_0 = blockIdx.y * mmq_x;
+  if (col_dst_0 >= num_tokens_post_padded[0]) return;
 
   int token_offs[mmq_x / nwarps];
   for (int i = 0; i < mmq_x; i += nwarps) {
@@ -49,10 +54,9 @@ static __device__ __forceinline__ void moe_q(
   }
 
   const int exp_idx = expert_ids[blockIdx.y];
-  if (exp_idx > 255 || exp_idx < 0) return;
-  if (blockIdx.y * mmq_x > num_tokens_post_padded[0]) return;
+  if (exp_idx < 0) return;
 
-  const block_q_t* x = (const block_q_t*)((char*)vx + exp_idx * exp_stride);
+  const block_q_t* x = (const block_q_t*)((const char*)vx + int64_t(exp_idx) * exp_stride);
   const block_q8_1* y = (const block_q8_1*)(vy);
 
   int* tile_x_ql = nullptr;
