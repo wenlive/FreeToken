@@ -4,22 +4,18 @@ from __future__ import annotations
 import copy
 import time
 from collections import deque
-from typing import NamedTuple
 
 import torch
 
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch
+# Preserve the former module-level type as an explicit compatibility re-export.
+from freetoken.engine.speculative import DeliveryLimit as DeliveryLimit
 from freetoken.kernel.pinned import alloc_pinned_tensor
 from freetoken.kernel.triton.mtp_metadata import stage_verify_metadata
 from .mtp_draft_graph import DraftGraphs
 from .mtp_draft_policy import PairedPolicy
 from .mtp_state import MTP_LAST_RESIDUAL
-
-
-class DeliveryLimit(NamedTuple):
-    count: int
-    finished: bool
 
 
 def verified_prefix(candidates, picks, eos_ids, ignore_eos):
@@ -164,7 +160,6 @@ class MtpRuntime:
 
     def after_native(self, batch, native_state):
         base, previous = native_state
-        req = batch.reqs[0]
         if previous is not None:
             self.draft.prime(previous, batch.input_ids[:1], start=base - 1)
             self.aux.publish(batch.out_loc[:1], self.draft.keys[base-1:base], self.draft.values[base-1:base])

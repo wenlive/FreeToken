@@ -403,16 +403,11 @@ class Scheduler(SchedulerIOMixin):
                         self._free_req_resources(req)
                         new_finished_reqs.add(req)
                         break
-                    elif batch.is_prefill and req.table_idx != -1:
-                        # for prefill, non-chunk req, cache the prefix.
-                        # Polymorphic: the DSV4 naive manager keeps the request's slots (no-op);
-                        # the generic manager inserts the prefix into its radix/naive cache.
-                        # table_idx == -1 is defense-in-depth: aborts mark in-flight requests
-                        # instead of freeing them (handled above), so a freed request should
-                        # never reach this commit -- but if a future path frees one early, skip
-                        # rather than re-read the freed page-table row (and on hybrid, deref the
-                        # None'd GDN ping-pong slots).
-                        self.cache_manager.cache_req(req, finished=False)
+                if not finished and batch.is_prefill and req.table_idx != -1:
+                    # A block may be delivered by the final prefill. Append the
+                    # complete bundle before caching its committed prefix; an
+                    # intermediate host view is shorter than cached_len.
+                    self.cache_manager.cache_req(req, finished=False)
 
         self.finished_reqs = new_finished_reqs
         if batch.mtp_token_ids is not None:
@@ -928,7 +923,7 @@ class Scheduler(SchedulerIOMixin):
         return forward_output
 
     def _mtp_delivery_limit(self, req, tokens):
-        from freetoken.models.qwen4_exp.mtp_runtime import DeliveryLimit
+        from freetoken.engine.speculative import DeliveryLimit
         history = req.input_ids.tolist()
         prompt_len = req.max_device_len - req.output_len
         for i, token in enumerate(tokens):

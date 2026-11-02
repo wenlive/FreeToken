@@ -52,6 +52,9 @@ def _module():
     from torch.utils.cpp_extension import load
 
     extra_cuda_cflags = ["-O3", "--expt-relaxed-constexpr"]
+    if os.name == "nt":
+        # CUDA 13's CCCL headers reject MSVC's traditional preprocessor.
+        extra_cuda_cflags += ["-Xcompiler=/Zc:preprocessor"]
     host_cxx = _host_compiler()
     if host_cxx is not None:
         # Point both nvcc's host pass (-ccbin) and torch's C++ compile (CXX) at a
@@ -62,12 +65,15 @@ def _module():
         os.environ["CXX"] = cxx_path
         os.environ["CC"] = _c_compiler_for(cxx_path)
 
-    # gguf_kernel.cu carries its own PYBIND11_MODULE (appended at the end), so a
-    # plain `load` of the single source compiles + binds the ggml_* ops.
+    sources = [str(_CSRC / "gguf_kernel.cu")]
+    if os.name == "nt":
+        # Keep Python/libtorch binding templates out of nvcc's MSVC host pass.
+        sources.append(str(_CSRC / "bindings.cpp"))
     return load(
         name="freetoken_gguf_kernels",
-        sources=[str(_CSRC / "gguf_kernel.cu")],
+        sources=sources,
         extra_include_paths=[str(_CSRC)],
+        extra_cflags=["/O2", "/Zc:preprocessor"] if os.name == "nt" else [],
         extra_cuda_cflags=extra_cuda_cflags,
         verbose=True,
     )
