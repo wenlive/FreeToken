@@ -31,16 +31,21 @@ class CloverTransactions:
         self.zero = torch.zeros(1, dtype=torch.int32, device=pool.device)
         self.initial = torch.ones(1, dtype=torch.bool, device=pool.device)
         self.width = 0
+        self.valid_width = 0
         self.written = set()
 
-    def begin(self, width):
+    def begin(self, width, valid_width=None):
         if not 1 <= width <= self.capacity:
             raise ValueError("Verify rows exceed the owned transaction capacity")
         self.width = width
+        self.valid_width = width if valid_width is None else valid_width
+        if not 1 <= self.valid_width <= width:
+            raise ValueError("Valid verify rows exceed the physical transaction width")
         self.written.clear()
 
     def commit(self, pool, count, destination):
-        if not 1 <= count <= self.width or len(self.written) != self.recurrent.shape[0]:
+        if (not 1 <= count <= self.valid_width
+                or self.written != set(range(self.recurrent.shape[0]))):
             raise ValueError("Cannot commit an incomplete or out-of-range Clover prefix")
         pool.recurrent_states[:, destination].copy_(self.recurrent[:, count - 1])
         pool.conv_states[:, destination].copy_(self.conv[:, count - 1])
@@ -112,7 +117,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
     return mixer.out_proj.forward(normalized.reshape(total, -1))
 
 
-def attention_preview(mixer, hidden, ctx):
+def attention_preview(mixer, hidden, ctx, *, preview=True):
     batch = ctx.batch
     req = batch.reqs[0]
     q, k, v, gate = mixer._project(hidden)
@@ -120,21 +125,30 @@ def attention_preview(mixer, hidden, ctx):
     kh, dim = mixer.num_kv, mixer.head_dim
     keys = ctx.kv_cache.k_cache(mixer.layer_id).view(-1, kh, dim)
     values = ctx.kv_cache.v_cache(mixer.layer_id).view(-1, kh, dim)
+    if not preview:
+        from freetoken.kernel.triton.clover_store import store_verify_kv
+
+        store_verify_kv(keys, values, batch.out_loc, k, v, batch.clover_valid)
     metadata = batch.clover_attention
     indices = metadata.get("indices")
     if indices is None:
         indices = ctx.page_table[req.table_idx, :prefix]
     output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
         indices, metadata["prefix_lens"], width, dim ** -.5,
-        k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim), block_ends=metadata["block_ends"])
+        k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim),
+        block_ends=metadata["block_ends"] if preview else None)
     return mixer._combine(output, gate)
 
 
 def moe_preview(mixer, hidden, ctx):
     router = mixer.gate.forward(hidden)
-    if ctx.batch.clover_coreset_top_p < 1.:
+    preview = getattr(ctx.batch, "clover_preview", False)
+    if preview and ctx.batch.clover_coreset_top_p < 1.:
         router = clover_block_coreset_triton(router, hidden.shape[0], mixer.experts.top_k,
                                             ctx.batch.clover_coreset_top_p)
+    if not preview and getattr(ctx.batch, "clover_valid", None) is not None:
+        # Padding reuses an existing route, so it cannot churn unrelated experts.
+        router = torch.where(ctx.batch.clover_valid[:, None], router, router[:1])
     # The routed kernel can overwrite its input, so shared projections go first.
     shared = mixer.shared_expert.forward(hidden) * torch.sigmoid(mixer.shared_expert_gate.forward(hidden))
     return mixer.experts.forward(hidden_states=hidden, router_logits=router) + shared
@@ -152,12 +166,14 @@ def block_forward(model, ctx, *, preview):
             hidden, residual = layer.input_layernorm.forward_add_residual(hidden, residual)
         if layer._is_linear:
             hidden = gdn_forward(layer.linear_attn, hidden, ctx, preview=preview)
-        elif preview:
-            hidden = attention_preview(layer.self_attn, hidden, ctx)
+        elif preview or getattr(batch, "clover_valid", None) is not None:
+            hidden = attention_preview(layer.self_attn, hidden, ctx, preview=preview)
         else:
             hidden = layer.self_attn.forward(hidden)
         hidden, residual = layer.post_attention_layernorm.forward_add_residual(hidden, residual)
-        hidden = moe_preview(layer.mlp, hidden, ctx) if preview else layer.mlp.forward(hidden)
+        hidden = (moe_preview(layer.mlp, hidden, ctx)
+                  if preview or getattr(batch, "clover_valid", None) is not None
+                  else layer.mlp.forward(hidden))
     hidden, _ = model.model.norm.forward_add_residual(hidden, residual)
     return model.lm_head.forward(hidden)
 

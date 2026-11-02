@@ -10,7 +10,6 @@ import torch
 
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch
-from .acceptance import clover_correct_drafts
 from .generation import (
     CloverPenaltyState,
     PENALTY_DEFAULTS,
@@ -18,7 +17,7 @@ from .generation import (
     resolve_low_confidence,
     load_generation_settings,
 )
-from .preview import CloverTransactions, make_preview_batch
+from .preview import CloverTransactions
 
 
 class CloverRuntime:
@@ -89,7 +88,8 @@ class CloverRuntime:
             self._blocks().clear_verify()
             self.transactions = None
             self.transactions = CloverTransactions(self.engine.linear_state_pool, capacity)
-        return self._blocks().run(req, tokens, preview=False, transaction=self.transactions)
+        return self._blocks().run(req, tokens, preview=False,
+            transaction=self.transactions, width=capacity)
 
     def after_native(self, batch, native_state):
         pass
@@ -111,9 +111,11 @@ class CloverRuntime:
             raise ValueError("Invalid request-level Clover mode, width or threshold")
         if mode == "selfspec" and width == 32:
             raise ValueError("Clover selfspec currently supports W=8/16")
+        if mode != "causal" and width > getattr(config, "clover_max_width", 32):
+            raise ValueError("Requested Clover width exceeds the reserved maximum")
         return mode, width, threshold
 
-    def state(self, req):
+    def state(self, req, pending=None):
         state = self.states.get(req)
         history = req.input_ids[req.prompt_len :]
         if state is None or state.length > history.numel():
@@ -125,22 +127,23 @@ class CloverRuntime:
             )
             self.states[req] = state
         if state.length < history.numel():
+            delta = history.numel() - state.length
             state.commit(
-                history[state.length :].to(device=self.engine.device, dtype=torch.int64)
+                pending.long() if pending is not None and delta == pending.numel()
+                else history[state.length :].to(device=self.engine.device, dtype=torch.int64)
             )
         return state
 
     def process_logits(self, batch, logits):
-        scores = logits.float().clone()
+        from freetoken.kernel.triton.clover_verify import penalize_logits
+
+        scores = torch.empty_like(logits, dtype=torch.float32)
         for row, req in enumerate(batch.reqs):
-            mode, _, _ = self.settings(req)
-            state = self.state(req)
-            scores[row, self.mask_id] = -float("inf")
-            state.apply(
-                scores[row : row + 1],
-                torch.full((1,), self.mask_id, device=scores.device),
-                self.mask_id,
-            )
+            self.settings(req)
+            pending = batch.input_ids[row:row + 1] if batch.is_decode else None
+            state = self.state(req, pending)
+            penalize_logits(logits[row:row + 1], state, self.mask_id,
+                            output=scores[row:row + 1])
         return scores
 
     def eligible(self, batch):
@@ -213,6 +216,7 @@ class CloverRuntime:
         return batch
 
     def _penalize_verify(self, scores, inputs, state):
+        """Torch diagnostic oracle; serving uses fused verification."""
         scores = scores.float().clone()
         scores[:, self.mask_id] = -float("inf")
         hypothetical = copy.copy(state)
@@ -316,26 +320,14 @@ class CloverRuntime:
         inputs = torch.cat((batch.input_ids[:1], candidates))
         manager.allocate_paged([req], reserve_tokens=width - 1)
         scores = self._verify(req, inputs, width)
-        scores = self._penalize_verify(scores, inputs, state)
-        counts = clover_correct_drafts(
-            scores.unsqueeze(0),
-            inputs.unsqueeze(0),
-            accept_ratio=self.engine.config.clover_accept_ratio,
-            accept_delta=self.engine.config.clover_accept_delta,
-            accept_rule=self.engine.config.clover_accept_rule,
-        )
-        accepted = int(counts.item())
-        chosen = scores.argmax(-1)
-        delivered = (
-            torch.cat(
-                (
-                    inputs[1 : accepted + 1],
-                    chosen[accepted : accepted + 1].to(torch.int32),
-                )
-            )
-            .cpu()
-            .tolist()
-        )
+        from freetoken.kernel.triton.clover_verify import verify_and_deliver
+
+        packet = verify_and_deliver(scores, inputs, state, self.mask_id,
+            rule=self.engine.config.clover_accept_rule,
+            ratio=self.engine.config.clover_accept_ratio,
+            delta=self.engine.config.clover_accept_delta).cpu().tolist()
+        accepted = packet[0]
+        delivered = packet[1:accepted + 2]
         limit = clip(req, delivered)
         delivered = delivered[: limit.count]
         committed = len(delivered)
@@ -345,11 +337,12 @@ class CloverRuntime:
             committed,
             req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx,
         )
-        tokens = torch.tensor(delivered, device=self.engine.device, dtype=torch.int32)
+        bundle = torch.tensor(delivered, dtype=torch.int32)
+        tokens = bundle.to(self.engine.device)
+        state.commit(tokens.long())
         req.cached_len = position + committed
         req.device_len = old_device + committed
         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
-        bundle = tokens.cpu()
         event = torch.cuda.Event()
         event.record(self.engine.stream)
         batch.mtp_token_ids = bundle
@@ -408,7 +401,8 @@ class CloverRuntime:
         delivered = block[: req.remain_len].cpu().tolist()
         limit = clip(req, delivered)
         delivered = delivered[: limit.count]
-        tokens = torch.tensor(delivered, device=self.engine.device, dtype=torch.int32)
+        bundle = torch.tensor(delivered, dtype=torch.int32)
+        tokens = bundle.to(self.engine.device)
         if old_device + len(tokens) > req.mtp_reserved_len + manager.available_size:
             raise RuntimeError(
                 "Insufficient KV pages to commit the resolved Clover block"
@@ -438,7 +432,7 @@ class CloverRuntime:
         req.cached_len = req.device_len - 1
         graphs.save_ahead(req, self.transactions, len(tokens))
         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
-        bundle = tokens.cpu()
+        state.commit(tokens.long())
         event = torch.cuda.Event()
         event.record(self.engine.stream)
         batch.mtp_token_ids = bundle
