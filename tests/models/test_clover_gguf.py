@@ -55,6 +55,7 @@ def shim(monkeypatch):
             name=f"blk.{layer}.ffn_{role}_exps.weight",
             shape=(4, 256, 256),
             ggml_type=12 if role == "down" else 23,
+            row_bytes=144 if role == "down" else 136,
         )
         for layer in range(4)
         for role in ("gate", "up", "down")
@@ -91,7 +92,7 @@ def test_incomplete_or_incompatible_experts_fail_before_allocation(shim, damage)
     elif damage == "duplicate":
         tensors.append(tensors[0])
     elif damage == "type":
-        tensors[0].ggml_type = 2
+        tensors[0].ggml_type = 99
     elif damage == "shape":
         tensors[0].shape = (4, 128, 256)
     else:
@@ -113,6 +114,57 @@ def test_cyclic_head_order_is_inverted_with_asymmetric_groups(axis):
         original, exported = original.T, exported.T
     restored = adapter.restore_v_heads(exported, axis, nk, nk * repeat, dim)
     torch.testing.assert_close(restored, original, rtol=0, atol=0)
+
+
+def test_expert_types_are_read_per_layer_and_role(shim):
+    import gguf
+
+    value, tensors = shim
+    expected = [(8, 8), (12, 14), (2, 2), (14, 8)]
+    for tensor in tensors:
+        layer = int(tensor.name.split(".")[1])
+        kind = expected[layer][int("down" in tensor.name)]
+        block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(kind)]
+        tensor.ggml_type = kind
+        tensor.row_bytes = 256 // block * size
+    config = adapter.parse_gguf_config(value)
+    assert config.expert_source["types"] == expected
+    assert config.expert_source["row_bytes"][1] == (144, 210)
+    from freetoken.moe.expert_banks import bank_bytes_estimate
+    # A unified slot pool reserves the largest packed row of each role.
+    assert bank_bytes_estimate(config) == 4 * 4 * (512 + 256) * 272
+
+
+def test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping(tmp_path, monkeypatch):
+    import gguf
+    import numpy as np
+
+    path = tmp_path / "mixed.gguf"
+    writer = gguf.GGUFWriter(str(path), "clover_moe")
+    originals = {}
+    for layer, kinds in enumerate(((8, 8), (12, 14))):
+        for role in ("gate", "up", "down"):
+            kind = kinds[int(role == "down")]
+            block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(kind)]
+            raw = (np.arange(2 * 256 * (256 // block * size), dtype=np.uint32) % 251).astype(np.uint8).reshape(2, 256, -1)
+            originals[layer, role] = raw.copy()
+            writer.add_tensor(f"blk.{layer}.ffn_{role}_exps.weight", raw,
+                              raw_dtype=gguf.GGMLQuantizationType(kind))
+    writer.write_header_to_file()
+    writer.write_kv_data_to_file()
+    writer.write_tensors_to_file()
+    writer.close()
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    config = SimpleNamespace(num_layers=2, num_experts=2, hidden_size=256, moe_intermediate_size=256)
+    banks = adapter.load_packed_expert_sources(str(path), config)
+    # The file can disappear after load: serving owns only independent host bytes.
+    path.unlink()
+    for (layer, role), raw in originals.items():
+        bank = banks["down" if role == "down" else "gate_up"][layer]
+        rb = raw.shape[-1]
+        offset = 256 * rb if role == "up" else 0
+        actual = bank.as_strided(raw.shape, (bank.stride(0), rb, 1), offset)
+        np.testing.assert_array_equal(actual.numpy(), raw)
 
 
 def test_raw_alog_is_restored_without_exponentiation():

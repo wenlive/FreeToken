@@ -297,6 +297,11 @@ def bank_bytes_estimate(model_config, method=None) -> int | None:
         )
         return layers * method.cfg.num_experts * per_expert
     expert_quant = getattr(model_config, "expert_quant", "none")
+    if expert_quant == "clover_gguf" and model_config.expert_source is not None:
+        rows = model_config.expert_source["row_bytes"]
+        per_slot = (2 * model_config.moe_intermediate_size * max(r[0] for r in rows)
+                    + model_config.hidden_size * max(r[1] for r in rows))
+        return model_config.num_moe_layers * model_config.num_experts * per_slot
     fmt = expert_quant if expert_quant != "none" else (
         getattr(model_config, "moe_weight_format", None) or "bf16"
     )

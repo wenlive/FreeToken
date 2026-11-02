@@ -46,7 +46,7 @@ class ReferenceFunctional:
         kind = getattr(weight, "_clover_ggml_type", None)
         if kind is None:
             return functional.linear(value, weight, bias)
-        if kind not in (12, 23):
+        if kind not in (2, 8, 12, 14, 23):
             raise ValueError(f"Unsupported GGUF reference expert type {kind}")
         output = functional.linear(q8_1_activations(value), weight.float(), bias)
         return output.to(value.dtype)

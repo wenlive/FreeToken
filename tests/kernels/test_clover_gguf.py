@@ -78,6 +78,8 @@ def packed_fixture(kind, experts=3, rows=64, width=256):
     raw[..., :2] = np.array([0.0125], dtype=np.float16).view(np.uint8)
     if kind == 12:
         raw[..., 2:4] = np.array([0.009], dtype=np.float16).view(np.uint8)
+    if kind == 14:
+        raw[..., -2:] = np.array([0.0125], dtype=np.float16).view(np.uint8)
     flat = raw.reshape(experts, rows, -1)
     dense = gguf.dequantize(flat, gguf.GGMLQuantizationType(kind))
     return torch.from_numpy(flat.copy()), torch.from_numpy(dense.copy())
@@ -109,7 +111,7 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
     assert storage.cpu_bytes <= storage.cpu_limit and storage.bytes == 0
 
 
-@pytest.mark.parametrize("kind", [12, 23])
+@pytest.mark.parametrize("kind", [2, 8, 12, 14, 23])
 @pytest.mark.parametrize("device", ["cpu", "cuda"])
 def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
     if device == "cuda" and not torch.cuda.is_available():
@@ -205,11 +207,13 @@ def test_native_grouped_gguf_dot_with_nonzero_slots_matches_independent_referenc
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
 @pytest.mark.parametrize("width", [1, 8, 16, 32])
-def test_mixed_swiglu_routing_matches_independent_q8_reference(reference, width):
+@pytest.mark.parametrize("kinds", [(23, 12), (8, 8), (12, 14)])
+def test_mixed_swiglu_routing_matches_independent_q8_reference(reference, width, kinds):
     from freetoken.moe.fused_gguf import fused_experts_gguf
 
-    gate_up, dense_up = packed_fixture(23, rows=1024, width=2048)
-    down, dense_down = packed_fixture(12, rows=2048, width=512)
+    gate_kind, down_kind = kinds
+    gate_up, dense_up = packed_fixture(gate_kind, rows=1024, width=2048)
+    down, dense_down = packed_fixture(down_kind, rows=2048, width=512)
     gate_up, down, dense_up, dense_down = [
         tensor.cuda() for tensor in (gate_up, down, dense_up, dense_down)
     ]
@@ -220,7 +224,7 @@ def test_mixed_swiglu_routing_matches_independent_q8_reference(reference, width)
     ids = torch.tensor([[2, 0]] * width, dtype=torch.int32, device="cuda")
     weights = torch.tensor([[0.1234567, 0.8765433]] * width, device="cuda")
     actual = fused_experts_gguf(
-        value, gate_up, down, weights, ids, "silu", gate_up_type=23, down_type=12
+        value, gate_up, down, weights, ids, "silu", gate_up_type=gate_kind, down_type=down_kind
     )
     contributions = []
     for slot, expert in enumerate((2, 0)):
@@ -237,3 +241,66 @@ def test_mixed_swiglu_routing_matches_independent_q8_reference(reference, width)
     error = (actual.float() - expected.float()).norm() / expected.float().norm()
     assert torch.isfinite(actual).all()
     assert error < 0.01, float(error)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("kind", [2, 8, 12, 14])
+@pytest.mark.parametrize("width", [8, 16, 32])
+def test_mmq_matches_independent_dense_q8_dot(reference, kind, width):
+    from freetoken.kernel.gguf import ggml_moe_a8, ggml_moe_get_block_size
+    from freetoken.kernel.triton.clover_align import align_clover_routes
+
+    packed, dense = packed_fixture(kind, rows=64, width=512)
+    value = torch.randn(width, 512, device="cuda", dtype=torch.float32)
+    ids = torch.tensor([[2, 0, 2]] * width, device="cuda", dtype=torch.int32)
+    order, experts, total = align_clover_routes(ids, ggml_moe_get_block_size(kind), 3)
+    actual = ggml_moe_a8(value, packed.cuda(), order, experts, total, kind, 64, 3, width)
+    if kind == 2:
+        # MMVQ and MMQ use the same independent Q8_1 original-sum correction;
+        # the separately qualified vector path is an additional shape oracle.
+        from freetoken.kernel.gguf import ggml_moe_a8_vec
+        expected = ggml_moe_a8_vec(value, packed.cuda(), ids, 3, kind, 64, width)
+    else:
+        dense = dense.cuda()
+        activation = reference.q8_1_activations(value)
+        expected = torch.stack([torch.nn.functional.linear(activation, dense[e]) for e in (2, 0, 2)], 1).reshape(-1, 64)
+    relative = (actual - expected).norm() / expected.norm()
+    assert relative < 0.001, float(relative)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+def test_short_route_grouping_replays_with_different_high_cache_slots():
+    from freetoken.kernel.triton.clover_align import align_clover_routes
+
+    ids = torch.tensor([[2999, 17, 2999], [2100, 17, 17]], device="cuda", dtype=torch.int32)
+    align_clover_routes(ids, 4, 3000)
+    graph = torch.cuda.CUDAGraph()
+    with torch.cuda.graph(graph):
+        order, experts, total = align_clover_routes(ids, 4, 3000)
+    for routes in ([[2999, 17, 2999], [2100, 17, 17]], [[2, 2, 2], [2999, 2, 2999]]):
+        ids.copy_(torch.tensor(routes, device="cuda", dtype=torch.int32))
+        graph.replay()
+        n = int(total.cpu())
+        sorted_ids = order[:n].cpu().tolist()
+        owners = experts[:n // 4].cpu().tolist()
+        assert sorted(i for i in sorted_ids if i < ids.numel()) == list(range(ids.numel()))
+        flattened = [e for row in routes for e in row]
+        for block, owner in enumerate(owners):
+            assert all(flattened[i] == owner for i in sorted_ids[block * 4:(block + 1) * 4] if i < ids.numel())
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("kind", [2, 8, 12, 14])
+def test_mmvq_honors_padded_expert_slot_stride(kind):
+    from freetoken.kernel.gguf import ggml_moe_a8_vec
+
+    packed, _ = packed_fixture(kind, rows=64, width=512)
+    packed = packed.cuda()
+    padded = torch.zeros(3, packed[0].numel() + 128, device="cuda", dtype=torch.uint8)
+    padded[:, :packed[0].numel()].copy_(packed.reshape(3, -1))
+    view = padded.as_strided(packed.shape, (padded.stride(0), packed.stride(1), 1))
+    value = torch.randn(1, 512, device="cuda")
+    ids = torch.tensor([[2, 0]], device="cuda", dtype=torch.int32)
+    expected = ggml_moe_a8_vec(value, packed, ids, 2, kind, 64, 1)
+    actual = ggml_moe_a8_vec(value, view, ids, 2, kind, 64, 1)
+    torch.testing.assert_close(actual, expected, rtol=0, atol=0)

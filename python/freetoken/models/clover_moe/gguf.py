@@ -1,4 +1,4 @@
-"""Clover GGUF adapter with native mixed IQ4_XS/Q4_K expert banks.
+"""Clover GGUF adapter with native packed dense projections and expert banks.
 
 Layout reference: ggml-org/llama.cpp@4838ffb0c8ade92f34d9157deea38d92758ab824,
 conversion/clover.py and conversion/qwen.py (MIT). This adapter reverses the
@@ -13,13 +13,13 @@ import torch
 
 from freetoken.models.gguf.reader import iter_gguf_tensors
 from freetoken.models.qwen3_5_moe.config import parse_config as parse_qwen
-from freetoken.models.qwen3_5_moe.weight import _DenseReader, _is_gemma_norm
-from freetoken.models.register import get_model_spec
+from freetoken.models.qwen3_5_moe.weight import _is_gemma_norm
 
-from .model import CloverMoeModelLM as CloverMoeModelLM
+from .model import CloverMoeModelLM as BaseCloverModel
 
 EXPERT_FORMAT = "clover_gguf"
-GATE_UP_TYPE, DOWN_TYPE = 23, 12  # IQ4_XS, Q4_K
+GATE_UP_TYPE, DOWN_TYPE = 23, 12  # Legacy file contract; execution reads descriptors.
+SUPPORTED_EXPERT_TYPES = {2, 8, 12, 14, 23}
 _EXPERT = re.compile(r"^blk\.(\d+)\.ffn_(gate|up|down)_exps\.weight$")
 _SCALARS = {
     "ssm_a": "A_log",
@@ -68,6 +68,7 @@ def _validate_experts(path, config):
         for role in ("gate", "up", "down")
     }
     seen = set()
+    descriptors = {}
     for tensor in iter_gguf_tensors(path):
         match = _EXPERT.fullmatch(tensor.name)
         if not match:
@@ -80,18 +81,21 @@ def _validate_experts(path, config):
             )
         h, i, e = config.hidden_size, config.moe_intermediate_size, config.num_experts
         shape = (e, h, i) if role == "down" else (e, i, h)
-        kind = DOWN_TYPE if role == "down" else GATE_UP_TYPE
-        if tensor.shape != shape or tensor.ggml_type != kind:
+        if tensor.shape != shape or tensor.ggml_type not in SUPPORTED_EXPERT_TYPES:
             raise ValueError(
-                f"{tensor.name}: expected shape {shape}, GGML type {kind}; "
-                f"got {tensor.shape}, type {tensor.ggml_type}. This adapter serves "
-                "IQ4_XS gate/up and Q4_K down without requantizing."
+                f"{tensor.name}: expected shape {shape}, supported packed GGML type; "
+                f"got {tensor.shape}, type {tensor.ggml_type}"
             )
         seen.add(key)
+        descriptors[key] = (tensor.ggml_type, tensor.row_bytes)
     if seen != expected:
         raise ValueError(
             f"Missing Clover GGUF expert tensors: {sorted(expected - seen)[:8]}"
         )
+    for layer in range(config.num_layers):
+        if descriptors[layer, "gate"] != descriptors[layer, "up"]:
+            raise ValueError(f"Layer {layer} gate/up expert types differ")
+    return descriptors
 
 
 def parse_gguf_config(shim):
@@ -139,8 +143,37 @@ def parse_gguf_config(shim):
     config = replace(
         parse_qwen(hf), expert_quant=EXPERT_FORMAT, moe_weight_format=EXPERT_FORMAT
     )
-    _validate_experts(shim.model_path, config)
-    return config
+    experts = _validate_experts(shim.model_path, config)
+    from .packed import CloverDenseGroups
+
+    groups = CloverDenseGroups()
+    dense = {}
+    for tensor in iter_gguf_tensors(shim.model_path):
+        if tensor.ggml_type not in (2, 8, 12, 14) or _EXPERT.fullmatch(tensor.name):
+            continue
+        match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
+        if match is None or match[2] not in _LAYER:
+            continue
+        module = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}".removesuffix(".weight")
+        target, _, _ = groups.target(module)
+        rows, cols = tensor.shape
+        previous = dense.get(target)
+        if previous is not None:
+            if previous[1:] != (cols, tensor.ggml_type, tensor.row_bytes):
+                raise ValueError(f"Incompatible packed projection group {target}")
+            rows += previous[0]
+        dense[target] = (rows, cols, tensor.ggml_type, tensor.row_bytes)
+    return replace(config, expert_source=dict(dense=dense,
+        types=[(experts[l, "gate"][0], experts[l, "down"][0]) for l in range(layers)],
+        row_bytes=[(experts[l, "gate"][1], experts[l, "down"][1]) for l in range(layers)]))
+
+
+class CloverMoeModelLM(BaseCloverModel):
+    def __init__(self, config):
+        super().__init__(config)
+        from .packed import install_packed_linears
+
+        install_packed_linears(self, config)
 
 
 def restore_v_heads(value, axis, nk, nv, head_dim):
@@ -218,18 +251,60 @@ def iter_gguf_weights(
     from freetoken.utils import cached_load_hf_config
 
     config = parse_gguf_config(cached_load_hf_config(model_path))
-    reader = _DenseReader(None, get_model_spec("CloverMoeModelLM"))
-    for name, value in iter_hf_gguf_weights(model_path, config):
-        merged = reader.add(name, value)
-        if merged is None:
-            yield name, value.to(device)
+    from .packed import CloverDenseGroups
+    import gguf
+    import numpy as np
+
+    reader, pending = CloverDenseGroups(), {}
+    globals_ = {"token_embd.weight": "model.embed_tokens.weight", "output.weight": "lm_head.weight",
+                "output_norm.weight": "model.norm.weight"}
+    for tensor in iter_gguf_tensors(model_path):
+        if _EXPERT.fullmatch(tensor.name):
+            continue
+        name = globals_.get(tensor.name)
+        if name is None:
+            match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
+            if match is None or match[2] not in _LAYER:
+                raise ValueError(f"Unmapped Clover tensor {tensor.name}")
+            name = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}"
+        target, index, count = reader.target(name.removesuffix(".weight"))
+        if target in config.expert_source["dense"]:
+            value = tensor.packed().clone()
+            group = config.linear_attention_group()
+            nk, nv, dv = group.num_key_heads, group.num_value_heads, group.value_head_dim
+            if name.endswith(".linear_attn.in_proj_qkv.weight"):
+                boundary = 2 * nk * group.key_head_dim
+                value = torch.cat((value[:boundary], restore_v_heads(value[boundary:], 0, nk, nv, dv)))
+            elif name.endswith(".linear_attn.in_proj_z.weight"):
+                value = restore_v_heads(value, 0, nk, nv, dv)
+            elif name.endswith((".linear_attn.in_proj_a.weight", ".linear_attn.in_proj_b.weight")):
+                value = restore_v_heads(value, 0, nk, nv, 1)
+            elif name.endswith(".linear_attn.out_proj.weight"):
+                block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(tensor.ggml_type)]
+                if dv % block:
+                    raise ValueError("Packed GDN output permutation crosses quantization blocks")
+                value = restore_v_heads(value, 1, nk, nv, dv // block * size)
+            parts = pending.setdefault(target, {})
+            parts[index] = value
+            if len(parts) == count:
+                yield target + ".weight", torch.cat([parts[i] for i in range(count)]).to(device)
+                del pending[target]
         else:
-            for target, tensor in merged:
-                yield target, tensor.to(device)
-    if reader.missing():
-        raise ValueError(
-            f"Incomplete Clover GGUF projection groups: {reader.missing()}"
-        )
+            values = gguf.dequantize(tensor._raw, gguf.GGMLQuantizationType(tensor.ggml_type))
+            value = _restore_dense(name, torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape), config)
+            # BF16 b/a must follow the split projection used by the packed model.
+            if target.endswith(".in_proj_ba"):
+                parts = pending.setdefault(target, {})
+                parts[index] = value
+                if len(parts) == count:
+                    yield target + ".weight", torch.cat([parts[i] for i in range(count)]).to(device)
+                    del pending[target]
+            else:
+                yield name, value.to(device)
+    if pending:
+        raise ValueError(f"Incomplete Clover projections: {list(pending)}")
+    from freetoken.models.gguf.reader import _reader
+    _reader.cache_clear()
 
 
 def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=False):
@@ -243,14 +318,16 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
         raise NotImplementedError(
             "Clover GGUF requires real packed weights; dummy banks are not defined"
         )
-    _validate_experts(model_path, config)
+    descriptors = _validate_experts(model_path, config)
     e, h, i = config.num_experts, config.hidden_size, config.moe_intermediate_size
     if h % 256 or i % 256:
         raise ValueError("Mixed Clover GGUF expert widths must be multiples of 256")
+    gate_bytes = max(v[1] for (l, role), v in descriptors.items() if role == "gate")
+    down_bytes = max(v[1] for (l, role), v in descriptors.items() if role == "down")
     hb = alloc_layer_banks(
         {
-            "gate_up": ((e, 2 * i, h // 256 * 136), torch.uint8),
-            "down": ((e, h, i // 256 * 144), torch.uint8),
+            "gate_up": ((e, 2 * i, gate_bytes), torch.uint8),
+            "down": ((e, h, down_bytes), torch.uint8),
         },
         config.num_layers,
     )
@@ -260,17 +337,39 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
 
     def fill(sink):
         tracker = LayerCompletionTracker(3, hb, sink) if sink is not None else None
+        import gguf
+        # Only the tensor directory is consulted; readinto never faults payload
+        # into a persistent file mapping alongside the 32 GiB pinned banks.
+        directory = gguf.GGUFReader(model_path)
+        by_name = {t.name: t for t in directory.tensors}
         for tensor in iter_gguf_tensors(model_path):
             match = _EXPERT.fullmatch(tensor.name)
             if match is None:
                 continue
             layer, role = int(match[1]), match[2]
-            if role == "down":
-                destination = banks["down"][layer]
-            else:
-                begin = 0 if role == "gate" else i
-                destination = banks["gate_up"][layer][:, begin : begin + i]
-            destination.copy_(tensor.packed().reshape(destination.shape))
+            bank = banks["down" if role == "down" else "gate_up"][layer]
+            rb = descriptors[layer, role][1]
+            rows = h if role == "down" else i
+            offset = i * rb if role == "up" else 0
+            destination = bank.as_strided((e, rows * rb), (bank.stride(0), 1), offset)
+            file_tensor = by_name[tensor.name]
+            with open(model_path, "rb", buffering=0) as stream:
+                stream.seek(file_tensor.data_offset)
+                if destination.is_contiguous():
+                    view = memoryview(destination.numpy()).cast("B")
+                    while view:
+                        n = stream.readinto(view)
+                        if not n:
+                            raise ValueError(f"Truncated Clover expert {tensor.name}")
+                        view = view[n:]
+                else:
+                    for expert in destination:
+                        view = memoryview(expert.numpy()).cast("B")
+                        while view:
+                            n = stream.readinto(view)
+                            if not n:
+                                raise ValueError(f"Truncated Clover expert {tensor.name}")
+                            view = view[n:]
             if tracker is not None:
                 tracker.note(layer)
 
@@ -281,4 +380,6 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
             fill(pins)
     else:
         fill(None)
+    from freetoken.models.gguf.reader import _reader
+    _reader.cache_clear()
     return banks

@@ -2,6 +2,9 @@
 // https://github.com/vllm-project/vllm/blob/4492e3a55428e161ca8db381edc28263e5da4c8d/csrc/quantization/gguf/moe_vec.cuh
 // copied and adapted from
 // https://github.com/ggerganov/llama.cpp/blob/b2899/ggml-cuda/mmvq.cu
+// Source: vllm-project/vllm@4492e3a55428e161ca8db381edc28263e5da4c8d,
+// csrc/quantization/gguf/moe_vec.cuh (Apache-2.0; derived llama.cpp MIT).
+// Local change: optional packed expert byte stride for mixed Clover layers.
 template <typename scalar_t, int qk, int qi, typename block_q_t, int vdr, vec_dot_q_cuda_t vec_dot_q_cuda>
 static __global__ void moe_vec_q(
     const void* __restrict__ vx,
@@ -11,7 +14,8 @@ static __global__ void moe_vec_q(
     const int topk,
     const int ncols,
     const int nrows,
-    const int token_stride) {
+    const int token_stride,
+    const int64_t expert_stride = 0) {
   const auto row = blockIdx.x * blockDim.y + threadIdx.y;
 
   const auto token = blockIdx.z / topk;
@@ -27,7 +31,8 @@ static __global__ void moe_vec_q(
   // partial sum for each thread
   float tmp = 0.0f;
 
-  const block_q_t* x = ((const block_q_t*)vx) + expert * nrows * blocks_per_row;
+  const int64_t stride = expert_stride ? expert_stride : int64_t(nrows) * blocks_per_row * sizeof(block_q_t);
+  const block_q_t* x = (const block_q_t*)((const char*)vx + expert * stride);
   const block_q8_1* y = (const block_q8_1*)(((const int*)vy) + token * token_stride);
 
   for (auto i = threadIdx.x / (qi / vdr); i < blocks_per_row; i += blocks_per_warp) {
@@ -62,12 +67,13 @@ static void moe_vec_q4_0_q8_1_cuda(
     const int ncols,
     const int nrows,
     const int token_stride,
-    cudaStream_t stream) {
+    cudaStream_t stream,
+    const int64_t expert_stride = 0) {
   const int block_num_y = (nrows + GGML_CUDA_MMV_Y - 1) / GGML_CUDA_MMV_Y;
   const dim3 block_nums(block_num_y, 1, tokens * top_k);
   const dim3 block_dims(WARP_SIZE, GGML_CUDA_MMV_Y, 1);
   moe_vec_q<scalar_t, QK4_0, QI4_0, block_q4_0, VDR_Q4_0_Q8_1_MMVQ, vec_dot_q4_0_q8_1>
-      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride);
+      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride, expert_stride);
 }
 
 template <typename scalar_t>
@@ -138,12 +144,13 @@ static void moe_vec_q8_0_q8_1_cuda(
     const int ncols,
     const int nrows,
     const int token_stride,
-    cudaStream_t stream) {
+    cudaStream_t stream,
+    const int64_t expert_stride = 0) {
   const int block_num_y = (nrows + GGML_CUDA_MMV_Y - 1) / GGML_CUDA_MMV_Y;
   const dim3 block_nums(block_num_y, 1, tokens * top_k);
   const dim3 block_dims(WARP_SIZE, GGML_CUDA_MMV_Y, 1);
   moe_vec_q<scalar_t, QK8_0, QI8_0, block_q8_0, VDR_Q8_0_Q8_1_MMVQ, vec_dot_q8_0_q8_1>
-      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride);
+      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride, expert_stride);
 }
 
 template <typename scalar_t>
@@ -195,12 +202,13 @@ static void moe_vec_q4_K_q8_1_cuda(
     const int ncols,
     const int nrows,
     const int token_stride,
-    cudaStream_t stream) {
+    cudaStream_t stream,
+    const int64_t expert_stride = 0) {
   const int block_num_y = (nrows + GGML_CUDA_MMV_Y - 1) / GGML_CUDA_MMV_Y;
   const dim3 block_nums(block_num_y, 1, tokens * top_k);
   const dim3 block_dims(WARP_SIZE, GGML_CUDA_MMV_Y, 1);
   moe_vec_q<scalar_t, QK_K, QI4_K, block_q4_K, VDR_Q4_K_Q8_1_MMVQ, vec_dot_q4_K_q8_1>
-      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride);
+      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride, expert_stride);
 }
 
 template <typename scalar_t>
@@ -233,12 +241,13 @@ static void moe_vec_q6_K_q8_1_cuda(
     const int ncols,
     const int nrows,
     const int token_stride,
-    cudaStream_t stream) {
+    cudaStream_t stream,
+    const int64_t expert_stride = 0) {
   const int block_num_y = (nrows + GGML_CUDA_MMV_Y - 1) / GGML_CUDA_MMV_Y;
   const dim3 block_nums(block_num_y, 1, tokens * top_k);
   const dim3 block_dims(WARP_SIZE, GGML_CUDA_MMV_Y, 1);
   moe_vec_q<scalar_t, QK_K, QI6_K, block_q6_K, VDR_Q6_K_Q8_1_MMVQ, vec_dot_q6_K_q8_1>
-      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride);
+      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride, expert_stride);
 }
 
 template <typename scalar_t>

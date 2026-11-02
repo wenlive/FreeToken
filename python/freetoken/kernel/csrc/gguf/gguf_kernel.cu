@@ -574,7 +574,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 3:
         moe_vec_q4_1_q8_1_cuda<scalar_t>(
@@ -626,7 +626,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 10:
         moe_vec_q2_K_q8_1_cuda<scalar_t>(
@@ -665,7 +665,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 13:
         moe_vec_q5_K_q8_1_cuda<scalar_t>(
@@ -691,7 +691,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 16:
         moe_vec_iq2_xxs_q8_1_cuda<scalar_t>(
