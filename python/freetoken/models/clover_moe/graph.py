@@ -115,31 +115,40 @@ class CloverBlockGraphs:
             meta["indices"], meta["prefix_lens"], meta["kv_indptr"], meta["block_ends"],
             len(batch.input_ids), self.engine.max_seq_len, self.engine.page_table.stride(0), 256)
 
-    def run(self, req, tokens, *, preview, coreset=.9, transaction=None):
-        rows = len(tokens)
-        key = (preview, rows, coreset if preview else 1.)
+    def update_metadata(self, req, batch):
+        if (getattr(batch, "_clover_owner", None) is req
+                and batch._clover_prefix == req.cached_len):
+            return
         self.packet_host[0] = req.cached_len
         self.packet_host[1] = req.table_idx
         self.packet.copy_(self.packet_host, non_blocking=True)
+        self.stage(batch)
+        batch._clover_owner = req
+        batch._clover_prefix = req.cached_len
+        batch._clover_metadata_updates = getattr(batch, "_clover_metadata_updates", 0) + 1
+
+    def run(self, req, tokens, *, preview, coreset=.9, transaction=None):
+        rows = len(tokens)
+        key = (preview, rows, coreset if preview else 1.)
         if not preview:
             transaction.begin(rows)
         if key not in self.entries:
             batch = self._batch(req, rows, preview, coreset, transaction)
             batch.input_ids.copy_(tokens)
-            self.stage(batch)
+            self.update_metadata(req, batch)
             with self.engine.ctx.forward_batch(batch):
                 for _ in range(2):
                     self.engine.model.forward()
             torch.cuda.synchronize(self.engine.device)
             graph = torch.cuda.CUDAGraph()
             with torch.cuda.graph(graph, pool=self.pool, stream=self.engine.stream):
-                self.stage(batch)
                 with self.engine.ctx.forward_batch(batch):
                     output = self.engine.model.forward()
             if self.pool is None:
                 self.pool = graph.pool()
             self.entries[key] = (batch, graph, output)
         batch, graph, output = self.entries[key]
+        self.update_metadata(req, batch)
         batch.input_ids.copy_(tokens)
         if not preview:
             transaction.written.update(range(transaction.recurrent.shape[0]))
