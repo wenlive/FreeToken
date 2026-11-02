@@ -25,3 +25,31 @@ def test_denoise_budget_excludes_discarded_slots_and_keeps_attainment_unclamped(
     assert case['medians']['native_compute_efficiency'] == pytest.approx(14/16)
     assert case['medians']['generation_envelope_tokens_per_second'] == native_tokens*1000/16
     assert case['medians']['hf_conditioned_attainment'] == pytest.approx(native_tokens*14/(16*8))
+
+
+def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+    import copy
+    import runpy
+
+    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/summarize_clover_abab.py'))['summarize']
+    turns = []
+    for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
+        rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
+                     token_ids=[1,2],end_to_end_tokens_per_second=value) for value in values]
+        rows.append(dict(rows[0],warmup=True,end_to_end_tokens_per_second=1000.))
+        turns.append(dict(state='complete',settings=dict(repeats=2,warmups=1),
+                          prompts={'fixture':[7]},runs=rows,startup_seconds=1.))
+    case = summarize(turns)['cases'][0]
+    metric = case['metrics']['end_to_end_tokens_per_second']
+    assert metric['process_medians'] == [11.,22.,21.,32.]
+    assert metric['before_median'] == 16. and metric['after_median'] == 27.
+    assert metric['after_over_before_pairs'] == [2.,32./21.]
+    assert case['all_measured_output_ids_equal']
+    changed = copy.deepcopy(turns)
+    changed[3]['prompts']['fixture'] = [8]
+    with pytest.raises(ValueError,match='input tokens'):
+        summarize(changed)
+    changed = copy.deepcopy(turns)
+    changed[0]['runs'].pop(0)
+    with pytest.raises(ValueError,match='repetitions'):
+        summarize(changed)
