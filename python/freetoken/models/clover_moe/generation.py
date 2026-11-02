@@ -195,6 +195,19 @@ def resolve_low_confidence(preview, state, *, width, mask_id, threshold, device)
     block = torch.full((width,), mask_id, device=device, dtype=torch.int32)
     pending = torch.ones(width, device=device, dtype=torch.bool)
     steps = []
+    if block.is_cuda and not state.gen.do_sample:
+        from freetoken.kernel.triton.clover_pick import pick_with_confidence, resolve_step
+
+        result = torch.empty(2, device=device, dtype=torch.int32)
+        for _ in range(width):
+            logits = preview(block)
+            prediction, confidence = pick_with_confidence(logits, state, block, mask_id)
+            resolve_step(block, pending, prediction, confidence, threshold, result)
+            count, remaining = result.cpu().tolist()
+            steps.append(count)
+            if remaining == 0:
+                return block, steps
+        raise RuntimeError("LowConfidence failed to resolve its full block")
     for _ in range(width):
         logits = preview(block).float().clone()
         logits[:, mask_id] = -float("inf")

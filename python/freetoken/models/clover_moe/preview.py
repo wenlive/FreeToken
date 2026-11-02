@@ -63,6 +63,7 @@ def _project(mixer, hidden):
 
 def gdn_forward(mixer, hidden, ctx, *, preview):
     batch, pool = ctx.batch, ctx.linear_state_pool
+    source = getattr(batch, "clover_clean", pool)
     if len(batch.reqs) != 1:
         raise ValueError("Clover block forwards currently require one request")
     raw, z, b, a = _project(mixer, hidden)
@@ -71,23 +72,21 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
     li = pool.local_index(mixer.layer_id)
     if preview:
         valid = batch.clover_valid
-        mixed = clover_local_memory_conv(raw, clean_conv_states=pool.conv_states[li], cache_indices=indices,
+        mixed = clover_local_memory_conv(raw, clean_conv_states=source.conv_states[li], cache_indices=indices,
             conv_weights=mixer._conv_weight(), bias=None, activation="silu", block_size=total,
             active_valid_mask=valid, conv_mode="independent_symmetric", conv_right_weight=mixer.conv_right_weight)
     else:
         transaction = batch.clover_transactions
         if transaction.width != total:
             raise ValueError("Clover verify input does not match the active transaction")
-        slot = batch.reqs[0].linear_slot_idx
-        if slot is None:
-            slot = batch.reqs[0].table_idx
-        clean = pool.conv_states[li, slot:slot + 1]
+        clean = source.conv_states[li].index_select(0, indices.long())
         # Save raw-input windows before a causal-convolution implementation is
         # allowed to overwrite its input. Scratch history never aliases live.
         joined = torch.cat((clean[0].T, raw), dim=0)
         transaction.conv[li, :total].copy_(joined.unfold(0, mixer.conv_kernel_size - 1, 1)[1:total + 1])
         mixed = causal_conv1d_varlen(raw.T.contiguous().clone(), mixer._conv_weight(), clean.clone(),
-            batch.fla_metadata.cu_seqlens, transaction.zero, transaction.initial).T.contiguous()
+            batch.fla_metadata.cu_seqlens, transaction.zero, transaction.initial,
+            max_seq_len=total).T.contiguous()
     qf, kf, vf = torch.split(mixed, [mixer.key_dim, mixer.key_dim, mixer.value_dim], dim=-1)
     q = qf.reshape(1, total, mixer.num_k_heads, mixer.head_k_dim).to(dtype)
     k = kf.reshape(1, total, mixer.num_k_heads, mixer.head_k_dim).to(dtype)
@@ -95,7 +94,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
     if preview:
         g, _ = mixer._gate_params(a, b)
         output = clover_local_memory_triton(q, k, v, g.reshape(1, total, mixer.num_v_heads),
-            clean_ssm_states=pool.recurrent_states[li], cache_indices=indices, active_valid_mask=valid,
+            clean_ssm_states=source.recurrent_states[li], cache_indices=indices, active_valid_mask=valid,
             scale=mixer.head_k_dim ** -.5, softmax_logit_scale=mixer.bd_softmax_logit_scale,
             softmax_history_bias=mixer.bd_softmax_history_bias, softmax_history_c=mixer.bd_softmax_history_c)
     else:
@@ -103,7 +102,7 @@ def gdn_forward(mixer, hidden, ctx, *, preview):
 
         output = fused_sigmoid_gating_delta_rule_update(A_log=mixer.A_log, a=a, dt_bias=mixer.dt_bias,
             softplus_beta=1., softplus_threshold=20., q=q, k=k, v=v, b=b,
-            initial_state_source=pool.recurrent_states[li], initial_state_indices=indices,
+            initial_state_source=source.recurrent_states[li], initial_state_indices=indices,
             scale=mixer.head_k_dim ** -.5, use_qk_l2norm_in_kernel=True,
             cu_seqlens=batch.fla_metadata.cu_seqlens, disable_state_update=True,
             intermediate_states_buffer=transaction.recurrent[li].unsqueeze(0),
@@ -122,8 +121,11 @@ def attention_preview(mixer, hidden, ctx):
     keys = ctx.kv_cache.k_cache(mixer.layer_id).view(-1, kh, dim)
     values = ctx.kv_cache.v_cache(mixer.layer_id).view(-1, kh, dim)
     metadata = batch.clover_attention
+    indices = metadata.get("indices")
+    if indices is None:
+        indices = ctx.page_table[req.table_idx, :prefix]
     output = extend_paged_attention(q, keys, values, metadata["q_indptr"], metadata["kv_indptr"],
-        ctx.page_table[req.table_idx, :prefix], metadata["prefix_lens"], width, dim ** -.5,
+        indices, metadata["prefix_lens"], width, dim ** -.5,
         k_extend=k.reshape(width, kh, dim), v_extend=v.reshape(width, kh, dim), block_ends=metadata["block_ends"])
     return mixer._combine(output, gate)
 

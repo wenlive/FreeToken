@@ -48,21 +48,47 @@ class CloverRuntime:
         self.rounds = deque(maxlen=4096)
 
     def prepare_graphs(self):
-        # Preview/verify start eager; native causal retains the existing graph.
-        # Rebuild invalidates every view of the old recurrent-state pool.
+        from .graph import CloverBlockGraphs
+
         self.transactions = None
         self.states.clear()
+        self.block_graphs = CloverBlockGraphs(self.engine)
 
     def close_graphs(self):
+        if getattr(self, "block_graphs", None) is not None:
+            self.block_graphs.close()
+            self.block_graphs = None
         self.transactions = None
         self.states.clear()
 
     def before_native(self, batch):
-        if batch.is_prefill:
+        if not batch.is_prefill or self.transactions is None or self.transactions.capacity != 32:
+            return None
+        sparse_limit = self.engine.model.model.layers.op_list[0].mlp.sparse_prefill_limit
+        if len(batch.input_ids) > sparse_limit:
             # A previous W32 window owns ~2 GiB. Release it before a new prompt's
             # full-layer prefill workspace, then allocate lazily at verification.
+            self.block_graphs.clear_verify()
             self.transactions = None
         return None
+
+    def _blocks(self):
+        if getattr(self, "block_graphs", None) is None:
+            from .graph import CloverBlockGraphs
+
+            self.block_graphs = CloverBlockGraphs(self.engine)
+        return self.block_graphs
+
+    def _preview(self, req, tokens):
+        return self._blocks().run(req, tokens, preview=True,
+            coreset=self.engine.config.clover_coreset_top_p)
+
+    def _verify(self, req, tokens, capacity):
+        if self.transactions is None or self.transactions.capacity < capacity:
+            self._blocks().clear_verify()
+            self.transactions = None
+            self.transactions = CloverTransactions(self.engine.linear_state_pool, capacity)
+        return self._blocks().run(req, tokens, preview=False, transaction=self.transactions)
 
     def after_native(self, batch, native_state):
         pass
@@ -281,22 +307,14 @@ class CloverRuntime:
             (width,), self.mask_id, device=self.engine.device, dtype=torch.int32
         )
         preview_tokens[:1].copy_(batch.input_ids[:1])
-        preview = make_preview_batch(
-            self.engine,
-            req,
-            preview_tokens,
-            coreset_top_p=self.engine.config.clover_coreset_top_p,
-        )
-        with self.engine.ctx.forward_batch(preview):
-            draft_scores = self.engine.model.forward().float()
-        draft_scores[:, self.mask_id] = -float("inf")
-        state.apply(draft_scores[1:], preview_tokens[1:], self.mask_id)
-        candidates = draft_scores[1:].argmax(-1).to(torch.int32)
+        self._blocks().prepare_clean(req)
+        draft_scores = self._preview(req, preview_tokens)
+        from freetoken.kernel.triton.clover_pick import pick_with_confidence
+
+        candidates, _ = pick_with_confidence(draft_scores[1:], state, preview_tokens[1:], self.mask_id)
         inputs = torch.cat((batch.input_ids[:1], candidates))
         manager.allocate_paged([req], reserve_tokens=width - 1)
-        verify = self._verify_batch(req, inputs)
-        with self.engine.ctx.forward_batch(verify):
-            scores = self.engine.model.forward()
+        scores = self._verify(req, inputs, width)
         scores = self._penalize_verify(scores, inputs, state)
         counts = clover_correct_drafts(
             scores.unsqueeze(0),
@@ -367,23 +385,16 @@ class CloverRuntime:
         self._require_block_backend(manager)
         started = time.perf_counter()
         old_device = req.device_len
-        # Scheduler invariant: every active request retains one pending token.
-        # At subsequent block boundaries flush that token first. This deliberately
-        # costs an extra one-row causal forward per block, measured in benchmarks,
-        # while avoiding changes to generic scheduler/cache lifetime semantics.
-        self._advance_without_sampling(batch)
+        graphs = self._blocks()
+        ahead = graphs.prepare_clean(req, allow_ahead=True)
+        if not ahead:
+            self._advance_without_sampling(batch)
+            graphs.prepare_clean(req)
         req.cached_len = old_device
         state = self.state(req)
 
         def preview(tokens):
-            temporary = make_preview_batch(
-                self.engine,
-                req,
-                tokens,
-                coreset_top_p=self.engine.config.clover_coreset_top_p,
-            )
-            with self.engine.ctx.forward_batch(temporary):
-                return self.engine.model.forward()
+            return self._preview(req, tokens)
 
         block, steps = resolve_low_confidence(
             preview,
@@ -402,12 +413,8 @@ class CloverRuntime:
                 "Insufficient KV pages to commit the resolved Clover block"
             )
         manager.allocate_paged([req], reserve_tokens=len(tokens))
+        self._verify(req, tokens, width)
         if len(tokens) > 1:
-            verify = self._verify_batch(
-                req, tokens[:-1], capacity=32 if width == 32 else 16
-            )
-            with self.engine.ctx.forward_batch(verify):
-                self.engine.model.forward()
             self._snapshot_boundary(
                 req,
                 old_device,
@@ -424,8 +431,11 @@ class CloverRuntime:
                 if req.linear_slot_idx is not None
                 else req.table_idx,
             )
+        else:
+            graphs.restore_clean(req)
         req.device_len = old_device + len(tokens)
         req.cached_len = req.device_len - 1
+        graphs.save_ahead(req, self.transactions, len(tokens))
         token_pool[req.table_idx, old_device : req.device_len].copy_(tokens)
         bundle = tokens.cpu()
         event = torch.cuda.Event()

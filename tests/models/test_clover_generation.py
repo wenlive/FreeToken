@@ -243,3 +243,26 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
         expected = reference.apply(logits.clone(), block, 151669)
         actual = native.apply(logits.clone(), block, 151669)
         torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("width", [8, 16, 32])
+def test_fused_pick_matches_torch_penalties_and_confidence(width):
+    from types import SimpleNamespace
+    from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
+    from freetoken.kernel.triton.clover_pick import pick_with_confidence
+
+    vocab, mask = 248320, 151669
+    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False,
+        "presence_penalty": .9, "frequency_penalty": .15, "repetition_penalty": 1.05,
+        "dllm_length_penalty": 3., "dllm_length_penalty_start": 0, "dllm_length_penalty_window": 100,
+        "dllm_think_end_bias": 2., "dllm_think_end_start": 0, "dllm_think_end_window": 100,
+        "dllm_think_end_token_id": 123})
+    state = CloverPenaltyState(gen, vocab, "cuda", [248046, 248044])
+    state.commit(torch.tensor([9, 9, 111, 221], device="cuda"))
+    block = torch.full((width,), mask, device="cuda", dtype=torch.int32)
+    logits = torch.randn(width, vocab, device="cuda", dtype=torch.bfloat16)
+    expected = logits.float().clone()
+    expected[:, mask] = -float("inf")
+    state.apply(expected, block, mask)
+    picks, confidence = pick_with_confidence(logits, state, block, mask)
+    assert torch.equal(picks.long(), expected.argmax(-1))
+    torch.testing.assert_close(confidence, expected.softmax(-1).max(-1).values, rtol=2e-5, atol=1e-7)
