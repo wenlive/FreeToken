@@ -52,6 +52,18 @@ class ReferenceFunctional:
         return output.to(value.dtype)
 
 
+class ReferenceQ8Linear(torch.nn.Module):
+    """Independent Q8_0 weights and Q8_1 activation arithmetic for dense operators."""
+    def __init__(self, module):
+        super().__init__()
+        self.weight = module.weight
+        self.bias = module.bias
+        self.in_features, self.out_features = module.in_features, module.out_features
+
+    def forward(self, value):
+        return functional.linear(q8_1_activations(value), self.weight, self.bias).to(value.dtype)
+
+
 class GGUFExpertStorage:
     def __init__(
         self,
@@ -149,7 +161,8 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
     expected = dict(model.named_parameters())
     config = parse_gguf_config(cached_load_hf_config(str(checkpoint)))
     loaded = set()
-    for name, value in iter_hf_gguf_weights(str(checkpoint), config):
+    q8_dense = []
+    for name, value in iter_hf_gguf_weights(str(checkpoint), config, preserve_q8=True):
         if (
             name not in expected
             or name in loaded
@@ -163,10 +176,15 @@ def load_gguf_official(source, checkpoint, *, device="cuda", cache_bytes=6 << 30
             torch.nn.Parameter(value.to(device), requires_grad=False),
         )
         loaded.add(name)
+        if value.dtype == torch.float32 and isinstance(model.get_submodule(parent), torch.nn.Linear):
+            q8_dense.append(parent)
     if loaded != set(expected) or any(p.is_meta for p in model.parameters()):
         raise ValueError("Incomplete GGUF reference dense weights")
-    # nn.Linear dense operators stay unchanged. Only the expert F.linear sites
-    # in the official Python module see the independent Q8_1 dot reference.
+    for path in q8_dense:
+        parent, leaf = path.rsplit(".", 1)
+        setattr(model.get_submodule(parent), leaf, ReferenceQ8Linear(model.get_submodule(path)))
+    # The model's HF control flow is unchanged. Quantized dense/expert arithmetic
+    # is a mathematical oracle, independent of serving GGML CUDA kernels.
     reference = ReferenceFunctional()
     original_fp32_linear = model_code.linear_fp32_output
 

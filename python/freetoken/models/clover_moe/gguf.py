@@ -186,7 +186,7 @@ def restore_v_heads(value, axis, nk, nv, head_dim):
     return value.reshape(split).transpose(axis, axis + 1).reshape(shape).contiguous()
 
 
-def _restore_dense(name, value, config):
+def _restore_dense(name, value, config, *, dtype=torch.bfloat16):
     group = config.linear_attention_group()
     nk, nv, dk, dv = (
         group.num_key_heads,
@@ -214,10 +214,10 @@ def _restore_dense(name, value, config):
         value = value.float() - 1.0
     if name.endswith(".shared_expert_gate.weight"):
         value = value.reshape(1, config.hidden_size)
-    return value.to(torch.bfloat16)
+    return value.to(dtype)
 
 
-def iter_hf_gguf_weights(model_path, config):
+def iter_hf_gguf_weights(model_path, config, *, preserve_q8=False):
     """Dense tensors in original Clover key/head order for independent HF oracles."""
     import gguf
     import numpy as np
@@ -240,7 +240,9 @@ def iter_hf_gguf_weights(model_path, config):
         raw = tensor._raw
         values = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
         value = torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape)
-        yield name, _restore_dense(name, value, config)
+        packed_linear = preserve_q8 and tensor.ggml_type == 8 and not name.endswith("embed_tokens.weight")
+        dtype = torch.float32 if packed_linear else torch.bfloat16
+        yield name, _restore_dense(name, value, config, dtype=dtype)
 
 
 def iter_gguf_weights(

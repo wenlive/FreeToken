@@ -261,6 +261,7 @@ def main():
                     row["token_ids"]
                     for row in native["runs"]
                     if row["prompt"] == name and row["mode"] == "causal"
+                    and not row.get("warmup", False)
                 ),
             )
             for name, value in native["prompts"].items()
