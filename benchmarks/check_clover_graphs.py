@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import statistics
+import time
 
 import torch
 
@@ -24,10 +25,11 @@ def main():
     parser.add_argument("--model", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--cache-slots", type=int, default=4096)
+    parser.add_argument("--memory-ratio", type=float, default=.85)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
-        expert_load="serial", max_running_req=1, memory_ratio=.85, num_token_override=4096,
+        expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True)
     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
     runtime = engine.mtp_runtime
@@ -113,6 +115,22 @@ def main():
                     raise AssertionError("Private verify graph changed live recurrent state")
                 result["verifies"].append(dict(prefix=req.cached_len, width=width,
                     logits_bitwise_equal=True, state_hashes=state_hashes, live_state_unchanged=True))
+                if hasattr(runtime.transactions, 'valid_width'):
+                    keys_before = set(runtime._blocks().entries)
+                    tails = []
+                    for valid in range(1, width + 1):
+                        begin = time.perf_counter()
+                        tail = runtime._verify(req, tokens[:valid], width).float().cpu()
+                        assert set(runtime._blocks().entries) == keys_before
+                        assert runtime.transactions.valid_width == valid
+                        torch.testing.assert_close(tail, reference[:valid], rtol=0, atol=0)
+                        hashes = (digest(runtime.transactions.recurrent[:, valid - 1]),
+                                  digest(runtime.transactions.conv[:, valid - 1]))
+                        assert hashes == state_hashes[valid - 1]
+                        tails.append(dict(valid_rows=valid, new_capture=False,
+                            logits_bitwise_equal=True, state_bitwise_equal=True,
+                            audit_wall_seconds=time.perf_counter()-begin))
+                    result.setdefault('tails', []).append(dict(prefix=req.cached_len, width=width, cases=tails))
                 eager = None
                 save()
         return output

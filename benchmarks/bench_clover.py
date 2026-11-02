@@ -51,6 +51,9 @@ def main():
     parser.add_argument("--context-size", type=int, default=4096)
     parser.add_argument("--accept-rule", choices=["exact", "threshold"], default="exact")
     parser.add_argument("--reuse-prefix", action="store_true", help="Diagnostic only; default benchmark recomputes the complete prompt")
+    parser.add_argument("--runtime-breakdown", action="store_true",
+        help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+    parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
     parser.add_argument("--no-penalties", action="store_true")
     parser.add_argument("--require-exact", action="store_true")
     parser.add_argument("--capture-first-logits", action="store_true")
@@ -119,6 +122,7 @@ def main():
 
         qwen_weight._DenseReader = Bf16BenchmarkReader
     started = time.perf_counter()
+    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
     llm = LLM(
         args.model,
         moe_strategy="offload",
@@ -133,7 +137,35 @@ def main():
         moe_collect_stats=True,
         clover_disable_penalties=args.no_penalties,
         clover_accept_rule=args.accept_rule,
+        **runtime_options,
     )
+    runtime_trace = []
+    block_index = [-1]
+    if args.runtime_breakdown:
+        from freetoken.models.clover_moe.preview import CloverTransactions
+        from freetoken.models.clover_moe.graph import CloverBlockGraphs
+
+        def instrument(owner, name, phase, *, count_round=False):
+            original = getattr(owner, name)
+            def observed(*positional, **keywords):
+                if count_round:
+                    block_index[0] += 1
+                start = torch.cuda.Event(enable_timing=True)
+                end = torch.cuda.Event(enable_timing=True)
+                start.record(llm.engine.stream)
+                output = original(*positional, **keywords)
+                end.record(llm.engine.stream)
+                runtime_trace.append((phase, start, end, block_index[0]))
+                return output
+            setattr(owner, name, observed)
+
+        runtime = llm.engine.mtp_runtime
+        for name, phase in (("_preview", "preview"), ("_verify", "verify"),
+                            ("_advance_without_sampling", "advance")):
+            instrument(runtime, name, phase)
+        instrument(CloverTransactions, "commit", "state_commit")
+        instrument(CloverBlockGraphs, "save_ahead", "save_ahead")
+        instrument(runtime, "_denoise", "round", count_round=True)
     if not args.reuse_prefix:
         match = llm.cache_manager.match_req
         llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
@@ -213,6 +245,8 @@ def main():
             for mode, width in modes:
                 rows = []
                 for repeat in range(args.warmups + args.repeats):
+                    runtime_trace.clear()
+                    block_index[0] = -1
                     arrivals.clear()
                     captured.clear()
                     cache.reset_stats()
@@ -293,6 +327,9 @@ def main():
                         allocated=torch.cuda.memory_allocated(),
                         reserved=torch.cuda.memory_reserved(),
                     )
+                    if args.runtime_breakdown:
+                        row["runtime_breakdown"] = [dict(phase=phase, block_index=index, cuda_ms=start.elapsed_time(end))
+                            for phase, start, end, index in runtime_trace]
                     if mode == "causal":
                         causal_ids = answer["token_ids"]
                     elif mode == "selfspec" and causal_ids is not None:
