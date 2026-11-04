@@ -1,3 +1,9 @@
+> **Branch status — 2026-11-04:** `feat/clover-nvfp4` is no longer maintained.
+> Use [`feat/clover-gguf-q8`](https://github.com/wenlive/FreeToken/tree/feat/clover-gguf-q8)
+> with the official Clover Q8_0 GGUF for ongoing Clover work. This branch and its
+> existing results are retained as historical records; pending NVFP4 work is not
+> presented as completed. See [Clover branch status](docs/clover/README.md).
+
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/FlashML-org/FreeToken/main/assets/freetoken-logo-dark.svg">

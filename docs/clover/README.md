@@ -1,5 +1,13 @@
 # Clover development records
 
+**Archived branch, 2026-11-04:** `feat/clover-nvfp4` is no longer maintained, at the
+owner's request. All subsequent Clover fixes, optimization and acceptance work use
+[`feat/clover-gguf-q8`](https://github.com/wenlive/FreeToken/tree/feat/clover-gguf-q8)
+and the official Q8_0 GGUF. No further NVFP4 ports or validation campaigns are planned.
+Existing source, results and known numerical differences remain historical evidence;
+unfinished NVFP4 gates are retired, not marked as passed. The reports below retain the
+state and source revisions at which they were written.
+
 - [Current repair qualification and outstanding gates](qualification-20261104.md)
 - [Performance index and metric definitions](clover-performance.md)
 - [R0 runtime report](clover-runtime-performance.md)
@@ -26,8 +34,8 @@ Both archives have an `inventory.json` mapping paths relative to their own direc
 byte length and SHA256. The relocation verified every listed digest in both archives.
 Do not rewrite historical manifests or patches to make them look like current runs.
 
-The 2026-11-04 implementation campaign is active. Its source-bound local runs are under
+The 2026-11-04 implementation campaign continues only on the GGUF Q8 branch. Its source-bound local runs are under
 `C:/workspace/runs/T-20261104-clover-improve/`; the task log is
-`C:/workspace/tasks/T-20261104-clover-improve/README.md`. Completed runs are archived above;
-new snapshots are appended as qualification proceeds. Large binary operands remain in
+`C:/workspace/tasks/T-20261104-clover-improve/README.md`. This branch retains the completed
+snapshots above; new snapshots are maintained on the Q8 branch. Large binary operands remain in
 the local run store, with their paths and hashes retained in the archive inventory.
