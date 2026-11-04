@@ -84,7 +84,8 @@ def test_full_bf16_preview_block_matches_official(block_pair,monkeypatch,width):
     native,official,cfg,config,layer=block_pair
     from freetoken.kvcache.mha_pool import MHAKVCache
     from freetoken.kvcache.linear_state_pool import LinearStatePool
-    from freetoken.models.clover_moe.preview import make_preview_batch,gdn_forward,attention_preview,moe_preview
+    from freetoken.models.clover_moe.preview import gdn_forward,attention_preview,moe_preview
+    from benchmarks.clover.oracles import make_preview_batch
     import freetoken.core as core
     device=torch.device('cuda');prefix=55
     pool=LinearStatePool(config.linear_attention_group(),2,torch.bfloat16,device,tp_size=1)

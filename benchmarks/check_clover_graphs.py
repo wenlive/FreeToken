@@ -11,7 +11,7 @@ import torch
 
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
-from freetoken.models.clover_moe.preview import make_preview_batch
+from clover.oracles import make_preview_batch, make_verify_batch
 from check_clover_preview import persistent_hashes
 
 
@@ -93,7 +93,7 @@ def main():
                 if runtime.transactions is not None and runtime.transactions.capacity < width:
                     runtime._blocks().clear_verify()
                     runtime.transactions = None
-                eager = runtime._verify_batch(req, tokens, capacity=width)
+                eager = make_verify_batch(runtime, req, tokens, capacity=width)
                 with engine.ctx.forward_batch(eager):
                     reference = engine.model.forward().float().cpu()
                 state_hashes = [(digest(runtime.transactions.recurrent[:, row]),

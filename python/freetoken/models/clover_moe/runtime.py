@@ -1,6 +1,5 @@
 """Single-model Clover generation, using the scheduler's verified-token bundles."""
 
-import copy
 from collections import deque
 from dataclasses import replace
 import json
@@ -11,8 +10,6 @@ import weakref
 
 import torch
 
-from freetoken.attention.linear import build_fla_metadata
-from freetoken.core import Batch
 from .generation import (
     CloverPenaltyState,
     PENALTY_DEFAULTS,
@@ -214,58 +211,6 @@ class CloverRuntime:
             and req.cached_len + width <= self.engine.max_seq_len
         )
 
-    def _verify_batch(self, request, tokens, *, capacity=16):
-        req = copy.copy(request)
-        req.device_len = req.cached_len + tokens.numel()
-        req.mamba_ping_pong = None
-        batch = Batch([req], "verify")
-        batch.padded_reqs = [req]
-        batch.input_ids = tokens
-        batch.positions = torch.arange(
-            req.cached_len, req.device_len, device=self.engine.device, dtype=torch.int32
-        )
-        batch.out_loc = self.engine.page_table[
-            req.table_idx, req.cached_len : req.device_len
-        ]
-        batch.linear_table_idx = torch.tensor(
-            [req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx],
-            device=self.engine.device,
-            dtype=torch.int32,
-        )
-        batch.fla_metadata = build_fla_metadata(
-            batch, self.engine.device, max_verify_rows=len(tokens)
-        )
-        self.engine.attn_backend.prepare_metadata(batch)
-        if getattr(self.engine.config,'clover_split_kv',False):
-            metadata = batch.attn_metadata
-            batch.clover_valid = torch.ones(len(tokens),device=self.engine.device,dtype=torch.bool)
-            batch.clover_kv_splits = 8
-            batch.clover_attention = dict(q_indptr=metadata.cu_seqlens_q_gpu,
-                kv_indptr=metadata.indptr,indices=metadata.indices,
-                prefix_lens=metadata.prefix_lens,block_ends=None)
-        if self.transactions is None or self.transactions.capacity < capacity:
-            # Free the old window before allocating a larger one on a 16GB GPU.
-            self.transactions = None
-            self.transactions = CloverTransactions(
-                self.engine.linear_state_pool, capacity
-            )
-        self.transactions.begin(len(tokens))
-        batch.clover_transactions = self.transactions
-        return batch
-
-    def _penalize_verify(self, scores, inputs, state):
-        """Torch diagnostic oracle; serving uses fused verification."""
-        scores = scores.float().clone()
-        scores[:, self.mask_id] = -float("inf")
-        hypothetical = copy.copy(state)
-        hypothetical.counts = None if state.counts is None else state.counts.clone()
-        for row in range(len(inputs)):
-            hypothetical.apply(
-                scores[row : row + 1], inputs[row : row + 1], self.mask_id
-            )
-            if row + 1 < len(inputs):
-                hypothetical.commit(inputs[row + 1 : row + 2].long())
-        return scores
 
     def _snapshot_boundary(
         self,
