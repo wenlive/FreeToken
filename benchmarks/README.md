@@ -30,7 +30,7 @@ python benchmarks/bench_offload_cache_copy.py
 For host RAM vs PCIe bandwidth and the offload/hybrid backend pick, use `ft bench bw`
 instead — it writes the JSON profile the engine reads.
 
-Clover branch measurements are indexed in [the performance record](../docs/clover-performance.md).
+Clover branch measurements are indexed in [the performance record](../docs/clover/clover-performance.md).
 `bench_clover.py` records visible outputs, TTFT, arrival-based decode and expert
 payload. Use `--runtime-breakdown` only for a separate event-instrumented run;
 `--phase-cache-stats` adds GPU counter snapshots and is also diagnostic.
