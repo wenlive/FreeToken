@@ -128,7 +128,9 @@ def main():
 
         qwen_weight._DenseReader = Bf16BenchmarkReader
     started = time.perf_counter()
-    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
+    runtime_options = dict(clover_max_width=(
+        max((width for mode, width in modes if mode != "causal"), default=0)
+        if args.clover_max_width is None else args.clover_max_width))
     llm = LLM(
         args.model,
         moe_strategy="offload",

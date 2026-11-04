@@ -364,6 +364,8 @@ class Engine:
         set_rope_device(self.device)
         with torch.device("meta"), torch_dtype(config.dtype):
             self.model = create_model(config.model_config)
+        if config.model_config.model_type == "clover_moe":
+            self.model.configure_runtime(config)
         self._load_weights(config)
         self._host_tables_bytes = 0
         if config.gguf_embedding_host:

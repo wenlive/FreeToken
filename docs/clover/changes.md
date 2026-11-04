@@ -17,3 +17,13 @@ contains `error` and, when supplied by the scheduler, `error_code`; other items 
 
 Implementation/qualification evidence is tracked in
 `C:/workspace/tasks/T-20261104-clover-improve/README.md` until the phase evidence is archived.
+
+## Capacity and sparse prefill
+
+`clover_max_width=None` resolves to 0 for a causal engine, or `clover_width` for a
+block engine. Explicit 0/8/16/32 remain supported. A causal engine serving request-level
+block modes must declare their maximum width in advance. Exceeding it is an admission error.
+
+`clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`; the default
+remains 128 rows, and 0 disables union admission. The threshold has not been tuned.
+The Q8-only bank-descriptor and IQ4_XS changes are not part of this NVFP4 port.

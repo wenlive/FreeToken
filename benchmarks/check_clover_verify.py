@@ -30,6 +30,7 @@ def main():
         max_seq_len_override=4096,
         max_extend_tokens=4096,
         cuda_graph_bs=[1],
+        clover_max_width=16,
     )
     engine = llm.engine
     original = engine.model.forward

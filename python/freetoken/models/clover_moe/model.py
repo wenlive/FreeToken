@@ -26,6 +26,10 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
 
 
 class CloverMoeModelLM(Qwen3_5ForCausalLM):
+    def configure_runtime(self, config):
+        for layer in self.model.layers.op_list:
+            layer.mlp.sparse_prefill_limit = config.clover_sparse_prefill_limit
+
     def place_input_embedding(self):
         """Optional exact-byte mapped-host table; output weights remain resident."""
         from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes

@@ -116,7 +116,8 @@ class EngineConfig:
     mtp_draft_policy: str = "full"
     clover_mode: str = "causal"
     clover_width: int = 8
-    clover_max_width: int = 32
+    clover_max_width: int | None = None
+    clover_sparse_prefill_limit: int = 128
     clover_split_kv: bool = False
     clover_threshold: float = .95
     clover_accept_rule: str = "exact"
@@ -126,6 +127,10 @@ class EngineConfig:
     clover_disable_penalties: bool = False
 
     def __post_init__(self):
+        if self.clover_max_width is None:
+            object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
+        if self.clover_sparse_prefill_limit < 0:
+            raise ValueError("Clover sparse prefill limit must be nonnegative")
         if self.clover_mode not in ("causal", "selfspec", "denoise"):
             raise ValueError("Clover mode must be causal, selfspec or denoise")
         if self.clover_mode == "selfspec" and self.clover_width == 32:

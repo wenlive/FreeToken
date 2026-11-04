@@ -24,7 +24,7 @@ def main():
     llm = LLM(a.model, moe_strategy='offload', moe_cache_size=a.cache_slots,
         expert_load='serial', max_running_req=1, memory_ratio=.95,
         num_token_override=max(prefixes)+128, max_seq_len_override=max(prefixes)+128,
-        max_extend_tokens=4096, cuda_graph_bs=[1])
+        max_extend_tokens=4096, cuda_graph_bs=[1], clover_max_width=32)
     engine, runtime = llm.engine, llm.engine.mtp_runtime
     match = llm.cache_manager.match_req
     llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
