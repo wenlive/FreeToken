@@ -77,3 +77,14 @@ allocators. It restores their contents and frees them without inserting a synthe
 Verify graphs share one transaction allocation sized for the largest declared width.
 `runtime.graph_warmup` reports capture times and allocated/reserved memory deltas.
 Cold-request latency and state-integrity qualification are pending; this is opt-in.
+
+## Diagnostic references
+
+Eager preview/verify batch builders, tensor acceptance, the eager LowConfidence controller,
+sampling reference and HF-oriented GGUF reader now live in `benchmarks/clover/oracles.py`.
+Production generation uses its existing CUDA greedy controller and fused penalty/verify
+kernels. The unused acceptance helper, verify penalty oracle and legacy GGUF type constants
+were removed. Historical source copies inside evidence archives remain unchanged.
+
+The inactive `--indexed-clover-penalty` benchmark switch was removed: serving already uses
+the fused penalty kernel, so this switch no longer selected a serving implementation.

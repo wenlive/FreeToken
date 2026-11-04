@@ -314,7 +314,7 @@ def test_gguf_sampling_metadata_overrides_published_clover_defaults():
     assert generation["dllm_length_penalty"] == 10.0
     assert generation["dllm_think_end_token_id"] == 0
     assert generation["eos_token_id"] == [2, 3]
-    from freetoken.models.clover_moe.generation import predict_with_confidence
+    from benchmarks.clover.oracles import predict_with_confidence
 
     logits = torch.tensor([[0.0, 2.0, 0.0, -1.0, 0.0]])
     prediction, confidence = predict_with_confidence(

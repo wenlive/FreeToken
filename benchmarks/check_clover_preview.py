@@ -9,7 +9,7 @@ import torch
 
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
-from freetoken.models.clover_moe.preview import make_preview_batch
+from clover.oracles import make_preview_batch
 
 
 def persistent_hashes(engine):

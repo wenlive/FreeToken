@@ -3,8 +3,41 @@ from types import SimpleNamespace
 import pytest
 import torch
 
-from freetoken.models.clover_moe.acceptance import clover_correct_drafts
+from benchmarks.clover.oracles import clover_correct_drafts
 from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
+
+
+@pytest.mark.parametrize("device,do_sample", [("cpu", False), ("cuda", True)])
+def test_serving_low_confidence_rejects_unqualified_execution(device, do_sample):
+    from freetoken.models.clover_moe.generation import resolve_low_confidence
+
+    state = SimpleNamespace(gen=SimpleNamespace(do_sample=do_sample))
+    with pytest.raises(ValueError, match="CUDA and greedy"):
+        resolve_low_confidence(lambda block: pytest.fail("unexpected preview"), state,
+            width=8, mask_id=16, threshold=.95, device=device)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("width", [8, 16, 32])
+def test_gpu_low_confidence_matches_eager_reference_without_committing(width):
+    from benchmarks.clover.oracles import resolve_low_confidence_reference
+    from freetoken.models.clover_moe.generation import resolve_low_confidence
+
+    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "presence_penalty": .9,
+        "repetition_penalty": 1.05, "frequency_penalty": .2})
+    state = CloverPenaltyState(gen, 17, "cuda", [15])
+    state.commit(torch.tensor([4, 4], device="cuda"))
+    counts = state.counts.clone()
+    logits = torch.zeros((width, 17), dtype=torch.bfloat16, device="cuda")
+    for row in range(width):
+        logits[row, (row + 3) % 16] = 6.0 if row % 3 == 0 else 2.0
+    arguments = dict(width=width, mask_id=16, threshold=.95, device="cuda")
+    block, steps = resolve_low_confidence(lambda block: logits, state, **arguments)
+    reference, reference_steps = resolve_low_confidence_reference(lambda block: logits, state, **arguments)
+    torch.testing.assert_close(block, reference, rtol=0, atol=0)
+    assert steps == reference_steps and sum(steps) == width
+    torch.testing.assert_close(state.counts, counts, rtol=0, atol=0)
+    assert state.length == 2
 
 
 def test_response_penalties_order_and_row_biases():
@@ -100,7 +133,7 @@ def test_verify_capacity_defaults_remain_four_and_can_be_explicitly_extended():
 
 
 def test_lowconfidence_strict_threshold_fallback_and_frozen_positions():
-    from freetoken.models.clover_moe.generation import resolve_low_confidence
+    from benchmarks.clover.oracles import resolve_low_confidence_reference as resolve_low_confidence
 
     state = CloverPenaltyState(
         SimpleNamespace(**PENALTY_DEFAULTS, do_sample=False), 4, "cpu", [0]

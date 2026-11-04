@@ -124,11 +124,11 @@ def test_full_bf16_preview_block_matches_official(block_pair, monkeypatch, width
     from freetoken.kvcache.mha_pool import MHAKVCache
     from freetoken.kvcache.linear_state_pool import LinearStatePool
     from freetoken.models.clover_moe.preview import (
-        make_preview_batch,
         gdn_forward,
         attention_preview,
         moe_preview,
     )
+    from benchmarks.clover.oracles import make_preview_batch
     import freetoken.core as core
 
     device = torch.device("cuda")

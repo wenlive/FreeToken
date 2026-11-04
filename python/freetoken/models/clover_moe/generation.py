@@ -27,9 +27,6 @@ from pathlib import Path
 import torch
 
 
-_DENSE_REPETITION = True  # benchmark-only opt-out; keep W32's smaller workspace
-
-
 PENALTY_DEFAULTS = {
     "presence_penalty": 0.0,
     "frequency_penalty": 0.0,
@@ -160,8 +157,7 @@ class CloverPenaltyState:
             logits.sub_(seen * gen.presence_penalty)
         if gen.repetition_penalty != 1:
             if (
-                _DENSE_REPETITION
-                and logits.is_cuda
+                logits.is_cuda
                 and logits.dtype == torch.float32
                 and logits.shape[0] <= 16
             ):
@@ -207,60 +203,26 @@ class CloverPenaltyState:
         return logits
 
 
-def predict_with_confidence(logits, gen):
-    """Sample with configured filters; confidence always uses T=1 logits."""
-    if gen.do_sample:
-        scaled = logits / gen.temperature
-        if gen.top_k and 0 < gen.top_k < scaled.shape[-1]:
-            cutoff = scaled.topk(gen.top_k, -1).values[:, -1:]
-            scaled = scaled.masked_fill(scaled < cutoff, -float("inf"))
-        if gen.top_p is not None and gen.top_p < 1:
-            sorted_logits, order = scaled.sort(-1, descending=True)
-            probs = sorted_logits.softmax(-1)
-            remove = (probs.cumsum(-1) - probs) > gen.top_p
-            sorted_logits = sorted_logits.masked_fill(remove, -float("inf"))
-            scaled = torch.empty_like(scaled).scatter(-1, order, sorted_logits)
-        prediction = torch.multinomial(scaled.softmax(-1), 1).squeeze(-1)
-    else:
-        prediction = logits.argmax(-1)
-    confidence = logits.softmax(-1).gather(-1, prediction[:, None]).squeeze(-1)
-    return prediction, confidence
-
-
 def resolve_low_confidence(preview, state, *, width, mask_id, threshold, device):
     """Official full-width loop, including the final partial returned block.
 
     `preview` must be read-only. Only the caller may commit the resolved prefix.
     Confidence and selection remain on device; the small step trace is evidence.
     """
+    if torch.device(device).type != "cuda" or state.gen.do_sample:
+        raise ValueError("Clover serving LowConfidence requires CUDA and greedy generation")
     block = torch.full((width,), mask_id, device=device, dtype=torch.int32)
     pending = torch.ones(width, device=device, dtype=torch.bool)
     steps = []
-    if block.is_cuda and not state.gen.do_sample:
-        from freetoken.kernel.triton.clover_pick import pick_with_confidence, resolve_step
+    from freetoken.kernel.triton.clover_pick import pick_with_confidence, resolve_step
 
-        result = torch.empty(2, device=device, dtype=torch.int32)
-        for _ in range(width):
-            logits = preview(block)
-            prediction, confidence = pick_with_confidence(logits, state, block, mask_id)
-            resolve_step(block, pending, prediction, confidence, threshold, result)
-            count, remaining = result.cpu().tolist()
-            steps.append(count)
-            if remaining == 0:
-                return block, steps
-        raise RuntimeError("LowConfidence failed to resolve its full block")
+    result = torch.empty(2, device=device, dtype=torch.int32)
     for _ in range(width):
-        logits = preview(block).float().clone()
-        logits[:, mask_id] = -float("inf")
-        state.apply(logits, block, mask_id)
-        prediction, confidence = predict_with_confidence(logits, state.gen)
-        confidence = confidence.masked_fill(~pending, -float("inf"))
-        transfer = (confidence > threshold) & pending
-        if not bool(transfer.any()):
-            transfer[confidence.argmax()] = True
-        block[transfer] = prediction[transfer].to(block.dtype)
-        pending[transfer] = False
-        steps.append(int(transfer.sum().item()))
-        if not bool(pending.any()):
+        logits = preview(block)
+        prediction, confidence = pick_with_confidence(logits, state, block, mask_id)
+        resolve_step(block, pending, prediction, confidence, threshold, result)
+        count, remaining = result.cpu().tolist()
+        steps.append(count)
+        if remaining == 0:
             return block, steps
     raise RuntimeError("LowConfidence failed to resolve its full block")

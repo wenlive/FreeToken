@@ -63,11 +63,6 @@ def main():
     parser.add_argument("--capture-first-logits", action="store_true")
     parser.add_argument("--capture-logits-steps", type=int, default=0)
     parser.add_argument(
-        "--indexed-clover-penalty",
-        action="store_true",
-        help="A/B diagnostic: use the original boolean-indexed repetition penalty",
-    )
-    parser.add_argument(
         "--bf16-dense-baseline",
         action="store_true",
         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
@@ -76,10 +71,6 @@ def main():
     if args.phase_cache_stats and not args.runtime_breakdown:
         parser.error('--phase-cache-stats requires --runtime-breakdown')
     args.output.mkdir(parents=True, exist_ok=False)
-    if args.indexed_clover_penalty:
-        from freetoken.models.clover_moe import generation
-
-        generation._DENSE_REPETITION = False
     modes = parse_modes(args.modes)
     selected = args.prompts.split(",")
     if any(name not in PROMPTS for name in selected):
@@ -204,7 +195,6 @@ def main():
             repeats=args.repeats,
             penalties="disabled" if args.no_penalties else "checkpoint defaults",
             bf16_dense_baseline=args.bf16_dense_baseline,
-            indexed_clover_penalty=args.indexed_clover_penalty,
         ),
         prompts={},
         runs=[],

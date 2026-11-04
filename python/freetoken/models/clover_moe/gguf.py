@@ -18,7 +18,6 @@ from freetoken.models.qwen3_5_moe.weight import _is_gemma_norm
 from .model import CloverMoeModelLM as BaseCloverModel
 
 EXPERT_FORMAT = "clover_gguf"
-GATE_UP_TYPE, DOWN_TYPE = 23, 12  # Legacy file contract; execution reads descriptors.
 SUPPORTED_EXPERT_TYPES = {2, 8, 12, 14, 23}
 _EXPERT = re.compile(r"^blk\.(\d+)\.ffn_(gate|up|down)_exps\.weight$")
 _SCALARS = {
@@ -215,34 +214,6 @@ def _restore_dense(name, value, config, *, dtype=torch.bfloat16):
     if name.endswith(".shared_expert_gate.weight"):
         value = value.reshape(1, config.hidden_size)
     return value.to(dtype)
-
-
-def iter_hf_gguf_weights(model_path, config, *, preserve_q8=False):
-    """Dense tensors in original Clover key/head order for independent HF oracles."""
-    import gguf
-    import numpy as np
-
-    global_names = {
-        "token_embd.weight": "model.embed_tokens.weight",
-        "output.weight": "lm_head.weight",
-        "output_norm.weight": "model.norm.weight",
-    }
-    for tensor in iter_gguf_tensors(model_path):
-        if _EXPERT.fullmatch(tensor.name):
-            continue
-        name = global_names.get(tensor.name)
-        if name is None:
-            match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
-            if match is None or match[2] not in _LAYER:
-                raise ValueError(f"Unmapped Clover GGUF tensor {tensor.name}")
-            name = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}"
-        # The CPU reader is independent of the CUDA inference dequant kernels.
-        raw = tensor._raw
-        values = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
-        value = torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape)
-        packed_linear = preserve_q8 and tensor.ggml_type == 8 and not name.endswith("embed_tokens.weight")
-        dtype = torch.float32 if packed_linear else torch.bfloat16
-        yield name, _restore_dense(name, value, config, dtype=dtype)
 
 
 def iter_gguf_weights(

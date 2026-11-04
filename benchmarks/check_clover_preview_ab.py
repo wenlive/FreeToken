@@ -79,7 +79,7 @@ def main():
 
     from freetoken.core import SamplingParams, get_global_ctx
     from freetoken.llm import LLM
-    from freetoken.models.clover_moe.preview import make_preview_batch
+    from clover.oracles import make_preview_batch
     from freetoken.models.clover_moe.packed import CloverPackedLinear
     from freetoken.layers.activation import silu_and_mul
     from freetoken.kernel import moe_sum_reduce_triton

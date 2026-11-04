@@ -4,12 +4,9 @@ Preview semantics: DiffuSpace/Clover-35B-A3B-Preview@4b0402b65e523d0183a14c43195
 modeling_clover_moe.py. Numerical preview kernels retain their SGLang source
 notices. Verify reuses FreeToken's existing FLA intermediate-state support.
 """
-import copy
 
 import torch
 
-from freetoken.attention.linear import FLAMetadata
-from freetoken.core import Batch
 
 from freetoken.kernel.causal_conv1d import causal_conv1d_varlen
 from freetoken.kernel.triton.attention import extend_paged_attention
@@ -183,34 +180,3 @@ def block_forward(model, ctx, *, preview):
                   else layer.mlp.forward(hidden))
     hidden, _ = model.model.norm.forward_add_residual(hidden, residual)
     return model.lm_head.forward(hidden)
-
-
-def make_preview_batch(engine, request, tokens, *, coreset_top_p=.9):
-    """Build private metadata; no page allocation or live request mutation."""
-    width = len(tokens)
-    if width not in (8, 16, 32) or not 0 < coreset_top_p <= 1:
-        raise ValueError("Clover preview needs width 8/16/32 and coreset top-p in (0,1]")
-    prefix = request.cached_len
-    if prefix + width > engine.max_seq_len:
-        raise ValueError("Clover preview block exceeds the engine's context capacity")
-    req = copy.copy(request)
-    req.device_len = prefix + width
-    req.mamba_ping_pong = None
-    batch = Batch([req], "preview")
-    batch.padded_reqs = [req]
-    batch.input_ids = torch.as_tensor(tokens, device=engine.device, dtype=torch.int32)
-    batch.positions = torch.arange(prefix, prefix + width, device=engine.device, dtype=torch.int32)
-    batch.out_loc = None
-    slot = req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx
-    batch.linear_table_idx = torch.tensor([slot], device=engine.device, dtype=torch.int32)
-    batch.fla_metadata = FLAMetadata(torch.tensor([0,width], device=engine.device, dtype=torch.int32),
-        batch.linear_table_idx, torch.ones(1, device=engine.device, dtype=torch.bool))
-    batch.clover_preview = True
-    batch.clover_kv_splits = 8 if getattr(getattr(engine,'config',None),'clover_split_kv',False) else 1
-    batch.clover_valid = torch.ones(width, device=engine.device, dtype=torch.bool)
-    batch.clover_coreset_top_p = coreset_top_p
-    batch.clover_attention = dict(q_indptr=torch.tensor([0,width], device=engine.device, dtype=torch.int32),
-        kv_indptr=torch.tensor([0,prefix+width], device=engine.device, dtype=torch.int32),
-        prefix_lens=torch.tensor([prefix], device=engine.device, dtype=torch.int32),
-        block_ends=torch.full((width,), prefix+width, device=engine.device, dtype=torch.int32))
-    return batch
