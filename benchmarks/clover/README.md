@@ -51,3 +51,26 @@ The retired long-prompt wrapper and CPU-only experiment are preserved byte for b
 commands. Current long-prompt measurements use the matrix entry above.
 
 Results and historical provenance are indexed in [docs/clover](../../docs/clover/README.md).
+
+`clover_llama_preview.cpp` also accepts `--clover-cases INPUT --clover-output DIRECTORY`
+for fixed-history distribution diagnostics against the stock llama.cpp library. This
+mode exports logits instead of running the draft-self timing loop. Create the output
+directory first; existing output files are rejected. The whitespace-separated input is:
+
+```text
+number_of_cases
+prefix_length causal_steps number_of_preview_blocks
+prefix_token_ids...
+forced_causal_token_ids...
+preview_width
+preview_token_ids...
+```
+
+Repeat width/tokens for each preview, and the case fields for each case. Causal steps
+must be at least two; preview widths are 8, 16 or 32. Partial blocks may contain fixed
+tokens in arbitrary positions. Each preview restores the same prefilled state. A final
+causal replay must reproduce the saved logits byte for byte, or the program fails.
+Files `case-N-causal.f32` and `case-N-preview-B.f32` contain row-major vocabulary logits
+(little-endian float32 on the supported x86 hosts); the JSON stdout record supplies the
+vocabulary size and restoration result. This does not implement a LowConfidence loop
+and must not be reported as llama denoising throughput.
