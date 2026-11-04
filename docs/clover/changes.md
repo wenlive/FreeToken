@@ -96,3 +96,18 @@ W16 after the causal-default reservation change. The old long-prompt wrapper is 
 into `bench --long-prompts-json`; both it and the old CPU experiment are archived unchanged.
 See the package README for selectors and current commands. Historical evidence retains
 the source paths and commands that actually produced it.
+
+## Automatic input embedding placement
+
+`gguf_embedding_host=None` selects mapped host input embeddings only for untied Clover
+GGUF models. All other model formats and tied embeddings retain their device placement.
+Explicit `False` disables mapping; explicit `True` retains the existing opt-in behavior
+and model-specific validation. The output projection remains resident on the GPU.
+
+On this campaign's RTX 5070 Ti, the official Q8 table releases 1,017,118,720 device bytes.
+Same-boot ABAB added 304 expert slots: causal W0 2928 -> 3232, shared W32 2292 -> 2596.
+Five prompts across six modes retained identical output IDs. Causal W0 decode improved
+2.45-5.06%; across the shared W32 matrix end-to-end gains ranged from 3.33% to 30.56%.
+These are workload-specific measured ranges, not a universal speed claim. Instrumented
+forward traces and the full default-policy hardware gate are tracked separately in the
+active campaign; config tests alone do not qualify this default change.

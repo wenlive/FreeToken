@@ -37,7 +37,8 @@ python -m benchmarks.clover bench --model /path/to/Clover-Q8_0.gguf --output NEW
 ```
 
 The matrix declares the largest selected block width for capacity planning; an explicit
-`--clover-max-width` overrides it. `--embedding-host` evaluates the mapped embedding table.
+`--clover-max-width` overrides it. Embedding placement follows engine defaults;
+`--embedding-host` and `--no-embedding-host` explicitly select mapped host or device storage.
 `--long-prompts-json FILE --prompts NAME` uses saved `prompts.NAME.user_text`; the result
 records actual input IDs. Prefix reuse is disabled by default. CUDA event and cache
 counter instrumentation (`--runtime-breakdown`, `--phase-cache-stats`) belongs in a
