@@ -1,0 +1,26 @@
+[1m[2026-11-04|14:26:19|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|14:26:27|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|14:26:27|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|14:26:27|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|14:26:34|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=3056 num_pages=4617 (prefill_overlap=True)
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m Allocating 4608 tokens for KV cache, K + V = 0.09 GiB
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 0.54 GiB
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 1.81 GiB
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|14:26:55|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 1.81 GiB
+ninja: no work to do.
+[1m[2026-11-04|14:26:56|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 1.75 GiB
+[1m[2026-11-04|14:26:57|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.556 s
+[1m[2026-11-04|14:27:05|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 4.69
+{"prompt": "FinalShort", "mode": "selfspec", "width": 8, "warmup": true, "output_tokens": 249, "wall_seconds": 4.569634199986467, "ttft_seconds": 0.5614289999939501, "tokens_per_round": 6.384615384615385, "matches_causal": null}
+[1m[2026-11-04|14:27:10|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 8.41
+[1m[2026-11-04|14:27:10|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 44, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 21.37, #queue-req: 0
+{"prompt": "FinalShort", "mode": "selfspec", "width": 8, "warmup": false, "output_tokens": 249, "wall_seconds": 2.921293899999, "ttft_seconds": 0.2462643000180833, "tokens_per_round": 6.384615384615385, "matches_causal": null}
+[1m[2026-11-04|14:27:15|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.89, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 820.91
+[1m[2026-11-04|14:27:15|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 4112, token usage: 0.89, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 50.23, #queue-req: 0
+[1m[2026-11-04|14:27:18|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 0, #token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, gen throughput (token/s): 80.96, #queue-req: 0
+{"prompt": "Final4K", "mode": "selfspec", "width": 8, "warmup": true, "output_tokens": 256, "wall_seconds": 5.428516000014497, "ttft_seconds": 2.2960753999941517, "tokens_per_round": 6.325, "matches_causal": null}
+[1m[2026-11-04|14:27:20|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.89, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 762.77
+[1m[2026-11-04|14:27:23|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 4343, token usage: 0.94, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 45.93, #queue-req: 0
+{"prompt": "Final4K", "mode": "selfspec", "width": 8, "warmup": false, "output_tokens": 256, "wall_seconds": 5.452885999984574, "ttft_seconds": 2.2341420999728143, "tokens_per_round": 6.097560975609756, "matches_causal": null}

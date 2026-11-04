@@ -47,8 +47,14 @@ traces and the latest default-policy gate remain pending.
 C5 reuses the validated expert directory and reads tokenizer architecture from already
 available metadata. It preserves direct expert reads and releases the mapping after load.
 Both new checks failed before the change; afterward 22 focused tests passed and one
-skipped. Startup ABAB and complete loaded-tensor hash comparisons are pending. This
-targets model initialization, not steady decode throughput.
+skipped. Startup ABAB now confirms all 693 model tensors and expert source banks have
+identical hashes. Reader constructions fell from four to three. The first A/B pair,
+including first-use compilation, took 139.89/141.60 seconds; the repeated pair with
+compiled caches took 51.40/45.12 seconds. Preserve both pairs: the latter is a 6.27-second
+reduction, while the former is not a startup gain. The early profiler did not capture
+resolved settings; its original command and script are retained rather than inventing
+that field. This targets model initialization, not steady decode throughput.
+[Startup and byte-identity results](evidence/20261104/20261104T061946Z-c5-startup-summary/data/results.json).
 
 ## Numerical and exploratory status
 
@@ -59,8 +65,18 @@ exceed 1.2 times this single measured perturbation. This supports amplification 
 contributor; it does not prove every difference harmless. Natural-context and FP32-linear
 controls remain pending. [Initial B3 summary](evidence/20261104/20261104T044037Z-b3-summary/results.json).
 
-B1/B2 native perturbations, HF progress/state comparisons and B0 fixed-history native/HF/
-llama distributions are not yet closed. No acceptance threshold was changed to pass them.
+B1's 15-case Q8 progress run and four native arithmetic variants are complete. Comparing
+HF with a symmetric radius around the unperturbed native run, 13/15 full-generation
+progress values and 12/15 first-block values fall within 1.2 times the observed native
+perturbation radius. These are observations, not a newly approved tolerance: histories
+can diverge after the first block, and the measured perturbations do not bound all error.
+Python W16 and JSON W32 exceed that radius for full generation; Python W16 and JSON
+W16/W32 exceed it for the first block. For JSON W32, native progress is 2.46-2.67 tokens
+per preview across the variants, versus HF 4.00. This difference remains unexplained.
+[Progress/noise results](evidence/20261104/20261104T061945Z-b1-noise-progress-summary/data/results.json).
+
+B1 prefill-state localization, B2 NVFP4 and B0 fixed-history native/HF/llama distributions
+are not yet closed. No acceptance threshold was changed to pass them.
 Strict selfspec performs greedy acceptance at each position; it does not guarantee the
 same IDs as independent single-row causal execution.
 
@@ -76,10 +92,33 @@ official Q8_0 model and not a Q8 speed improvement. Its focused CUDA checks pass
 Gemma4 Q4_0 real-model regression remains unrun because that checkpoint is unavailable
 locally. This missing gate is recorded separately from Clover Q8 acceptance.
 
-## Final commit performance snapshot
+## Committed Q8 performance snapshot
 
-Pending. After self-review and acceptance, measure the actual final source revision with
-short and 4096-token inputs, one warmup and one measured request per input/mode. Report
-causal, selfspec W8/W16 and denoise W16/W32 decode tokens/s, visible output length and
-expert slots. Reserve only the declared width for each mode. Earlier ABAB improvements
-must not be substituted for this commit-specific measurement or multiplied together.
+At the user's request this snapshot was brought forward ahead of the remaining numerical
+campaign. Measured clean commit: `8767adac144e77eda8c8142f90556e6c86d7f586`, whose serving
+code is `5df3410`. Subsequent report/evidence commits do not change that measured source.
+The latest 112-tail audit also passed before these measurements. The remaining combined
+gate and numerical diagnostics continue; this table does not assert they have finished.
+
+RTX 5070 Ti 16 GB, official Q8_0, one request at a time, greedy generation with checkpoint
+penalties, host embedding, auto cache .9 and state reserved only for each declared mode.
+The identical Python interval-merging task is used alone (36 input tokens) and after
+natural documentation context (4096 input tokens total). Capacity is 4608, output cap256;
+each input/mode has one warmup and one measured request, with prompt-cache reuse disabled.
+
+| Mode | Short decode tok/s | Short output tokens | 4K decode tok/s | 4K output tokens | Expert slots |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Causal | 90.86 | 249 | 86.87 | 256 | 3229 |
+| Selfspec W8 | 92.72 | 249 | 79.23 | 256 | 3056 |
+| Selfspec W16 | 89.86 | 249 | 86.44 | 256 | 2901 |
+| Denoise W16 | 58.71 | 221 | 51.29 | 256 | 2901 |
+| Denoise W32 | 48.53 | 195 | 36.02 | 256 | 2593 |
+
+Decode counts visible tokens after the first visible burst and excludes terminal EOS;
+startup and first-burst wait are excluded. The first burst contains one token for causal/
+selfspec, and 16/32 for these denoise runs. Raw arrivals, TTFT and end-to-end throughput
+are retained. This is one task and one formal sample per cell, not a multi-task average
+or an ABAB speedup claim. Selfspec W8 matches causal IDs in both inputs; selfspec W16
+matches on the short input but differs on 4K. Denoise outputs differ from causal.
+[Results and provenance](evidence/20261104/20261104T063126Z-final-decode-summary/data/results.json),
+[Chinese table](evidence/20261104/20261104T063126Z-final-decode-summary/data/table.md).

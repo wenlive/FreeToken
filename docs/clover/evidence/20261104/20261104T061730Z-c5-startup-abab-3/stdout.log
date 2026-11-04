@@ -1,0 +1,13 @@
+[1m[2026-11-04|14:17:34|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|14:17:41|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|14:17:41|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|14:17:41|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|14:17:47|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|14:18:16|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=3232 num_pages=4190 (prefill_overlap=True)
+[1m[2026-11-04|14:18:16|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-04|14:18:16|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 1.24 GiB
+[1m[2026-11-04|14:18:16|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|14:18:16|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 1.24 GiB
+ninja: no work to do.
+[1m[2026-11-04|14:18:17|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 1.43 GiB
+[1m[2026-11-04|14:18:18|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.665 s

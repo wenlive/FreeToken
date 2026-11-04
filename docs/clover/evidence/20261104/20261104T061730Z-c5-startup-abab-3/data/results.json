@@ -1,0 +1,59 @@
+{
+  "state": "complete",
+  "startup_seconds": 51.39582010000595,
+  "calls": [
+    {
+      "operation": "GGUFReader",
+      "seconds": 7.193343899998581
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.006593800004338846
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.01146910001989454
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.003570500004570931
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.011244299996178597
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.003290499997092411
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.006922400003531948
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 7.383339599997271
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 7.386678599985316
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 6.917984100000467
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 6.6317459999991115
+    }
+  ],
+  "scope": "Nested timings overlap; do not sum them as disjoint costs. No payload scan inferred.",
+  "settings": {
+    "model": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "cache_slots": 3232,
+    "memory_ratio": 0.9,
+    "context": 4096,
+    "clover_max_width": 0,
+    "mapped_host_table_bytes": 1017118720
+  }
+}

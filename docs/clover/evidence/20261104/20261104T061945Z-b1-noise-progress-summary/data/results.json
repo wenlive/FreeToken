@@ -1,0 +1,4317 @@
+{
+  "state": "complete",
+  "cases": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 5.333333333333333,
+          "first_block_tokens_per_preview": 4.0,
+          "preview_calls": 6,
+          "block_steps": [
+            [
+              7,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 6.4,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 5,
+          "block_steps": [
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 5.333333333333333,
+          "first_block_tokens_per_preview": 4.0,
+          "preview_calls": 6,
+          "block_steps": [
+            [
+              7,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 6.4,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 5,
+          "block_steps": [
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 5.333333333333333,
+          "first_block_tokens_per_preview": 4.0,
+          "preview_calls": 6,
+          "block_steps": [
+            [
+              5,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            5.333333333333333,
+            6.4
+          ],
+          "native_noise_radius": 1.0666666666666673,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            4.0,
+            8.0
+          ],
+          "native_noise_radius": 4.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": true
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              12,
+              4
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              12,
+              4
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              12,
+              4
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              12,
+              4
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              9,
+              7
+            ],
+            [
+              16
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            10.666666666666666,
+            10.666666666666666
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            8.0,
+            8.0
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": true
+    },
+    {
+      "prompt": "Count",
+      "width": 32,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 10.666666666666666,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              11,
+              20,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 16.0,
+          "first_block_tokens_per_preview": 16.0,
+          "preview_calls": 2,
+          "block_steps": [
+            [
+              12,
+              20
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 10.666666666666666,
+          "first_block_tokens_per_preview": 10.666666666666666,
+          "preview_calls": 3,
+          "block_steps": [
+            [
+              12,
+              18,
+              2
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 16.0,
+          "first_block_tokens_per_preview": 16.0,
+          "preview_calls": 2,
+          "block_steps": [
+            [
+              12,
+              20
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 8.0,
+          "first_block_tokens_per_preview": 8.0,
+          "preview_calls": 4,
+          "block_steps": [
+            [
+              6,
+              23,
+              2,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            10.666666666666666,
+            16.0
+          ],
+          "native_noise_radius": 5.333333333333334,
+          "hf_absolute_difference": 2.666666666666666,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.25
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            10.666666666666666,
+            16.0
+          ],
+          "native_noise_radius": 5.333333333333334,
+          "hf_absolute_difference": 2.666666666666666,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.25
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": true
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.3333333333333333,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 36,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              2,
+              3,
+              1
+            ],
+            [
+              6,
+              2
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.263157894736842,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 38,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              1,
+              3
+            ],
+            [
+              6,
+              2
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.0666666666666667,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 45,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.170731707317073,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 41,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              4,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.2972972972972974,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 37,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              1,
+              3
+            ],
+            [
+              5,
+              3
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.0666666666666667,
+            1.3333333333333333
+          ],
+          "native_noise_radius": 0.2666666666666666,
+          "hf_absolute_difference": 0.03603603603603589,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.027027027027026973
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.0,
+            1.0
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.411764705882353,
+          "first_block_tokens_per_preview": 1.2307692307692308,
+          "preview_calls": 34,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              4
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              4,
+              1,
+              4,
+              6,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.1428571428571428,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 42,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              3,
+              1,
+              2,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.3333333333333333,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 36,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              4,
+              1,
+              2,
+              2,
+              6,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.2549019607843137,
+          "first_block_tokens_per_preview": 1.0,
+          "preview_calls": 51,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              9,
+              1,
+              1,
+              5
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.263157894736842,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 38,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              3,
+              2,
+              1,
+              5
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.1428571428571428,
+            1.411764705882353
+          ],
+          "native_noise_radius": 0.26890756302521024,
+          "hf_absolute_difference": 0.148606811145511,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.10526315789473695
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.0,
+            1.2307692307692308
+          ],
+          "native_noise_radius": 0.23076923076923084,
+          "hf_absolute_difference": 0.08791208791208804,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.07142857142857151
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Sky",
+      "width": 32,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.9393939393939394,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 33,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              26,
+              2,
+              4
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.8823529411764706,
+          "first_block_tokens_per_preview": 1.103448275862069,
+          "preview_calls": 34,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              4,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              19,
+              1,
+              4,
+              5,
+              3
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.8823529411764706,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 34,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              24,
+              2,
+              2,
+              4
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.8823529411764706,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 34,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              26,
+              3,
+              3
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.9393939393939394,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 33,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2
+            ],
+            [
+              26,
+              4,
+              2
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.8823529411764706,
+            1.9393939393939394
+          ],
+          "native_noise_radius": 0.057040998217468886,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.032258064516129,
+            1.103448275862069
+          ],
+          "native_noise_radius": 0.0367816091954023,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": true,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.4615384615384617,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 26,
+          "block_steps": [
+            [
+              6,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              4,
+              1,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              8
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              3,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              3,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 2.3703703703703702,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 27,
+          "block_steps": [
+            [
+              6,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              8
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              3,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 2.3703703703703702,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 27,
+          "block_steps": [
+            [
+              6,
+              1,
+              1
+            ],
+            [
+              1,
+              3,
+              1,
+              3
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              3,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              3,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.2857142857142856,
+            2.4615384615384617
+          ],
+          "native_noise_radius": 0.1758241758241761,
+          "hf_absolute_difference": 0.09116809116809144,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.03703703703703709
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            2.6666666666666665,
+            2.6666666666666665
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": true
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.3703703703703702,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 27,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              10,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1,
+              7,
+              1
+            ],
+            [
+              2,
+              1,
+              2,
+              3,
+              5,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 2.6666666666666665,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 24,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              11
+            ],
+            [
+              2,
+              1,
+              3,
+              1,
+              1,
+              1,
+              6,
+              1
+            ],
+            [
+              4,
+              1,
+              3,
+              6,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.4615384615384617,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 26,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              11
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              7,
+              1
+            ],
+            [
+              2,
+              1,
+              3,
+              6,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 2.4615384615384617,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 26,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              11
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              6,
+              1
+            ],
+            [
+              4,
+              1,
+              3,
+              5,
+              2,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.9393939393939394,
+          "first_block_tokens_per_preview": 1.7777777777777777,
+          "preview_calls": 33,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1
+            ],
+            [
+              5,
+              10,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              5
+            ],
+            [
+              1,
+              2,
+              1,
+              4,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.3703703703703702,
+            2.6666666666666665
+          ],
+          "native_noise_radius": 0.2962962962962963,
+          "hf_absolute_difference": 0.4309764309764308,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": false,
+          "hf_relative_difference": -0.18181818181818177
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            2.0,
+            2.0
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.22222222222222232,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": false,
+          "hf_relative_difference": -0.11111111111111116
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": true,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Python",
+      "width": 32,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              4,
+              1,
+              8,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              10,
+              1,
+              3,
+              7,
+              4,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              4,
+              1,
+              8,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              10,
+              1,
+              3,
+              7,
+              4,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.3703703703703702,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 27,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              4,
+              1,
+              8,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              10,
+              1,
+              4,
+              9,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              4,
+              1,
+              8,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              11,
+              1,
+              1,
+              2,
+              7,
+              4,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              6,
+              1,
+              1,
+              1,
+              1,
+              5,
+              1,
+              7,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              9,
+              1,
+              1,
+              3,
+              10,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.2857142857142856,
+            2.3703703703703702
+          ],
+          "native_noise_radius": 0.08465608465608465,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            2.0,
+            2.0
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": true,
+        "both": false
+      },
+      "hf_output_equal": true
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 1.3333333333333333,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              5
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 3.5555555555555554,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 18,
+          "block_steps": [
+            [
+              1,
+              6,
+              1
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              8
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 1.3333333333333333,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              5
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 1.3333333333333333,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              1,
+              1,
+              2,
+              1,
+              1,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              5
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 3.5555555555555554,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "preview_calls": 18,
+          "block_steps": [
+            [
+              1,
+              4,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              8
+            ],
+            [
+              5,
+              2,
+              1
+            ],
+            [
+              1,
+              1,
+              4,
+              1,
+              1
+            ],
+            [
+              8
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.2857142857142856,
+            3.5555555555555554
+          ],
+          "native_noise_radius": 1.2698412698412698,
+          "hf_absolute_difference": 1.2698412698412698,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.5555555555555556
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.3333333333333333,
+            2.6666666666666665
+          ],
+          "native_noise_radius": 1.3333333333333333,
+          "hf_absolute_difference": 1.3333333333333333,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 1.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.3703703703703702,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "preview_calls": 27,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              6,
+              4
+            ],
+            [
+              9,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              6,
+              7
+            ],
+            [
+              8,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 2.206896551724138,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 29,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2,
+              1,
+              7
+            ],
+            [
+              9,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              4,
+              7,
+              2
+            ],
+            [
+              8,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.2857142857142856,
+          "first_block_tokens_per_preview": 2.0,
+          "preview_calls": 28,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              2,
+              1,
+              7
+            ],
+            [
+              9,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              6,
+              7
+            ],
+            [
+              8,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 3.5555555555555554,
+          "first_block_tokens_per_preview": 4.0,
+          "preview_calls": 18,
+          "block_steps": [
+            [
+              1,
+              6,
+              8,
+              1
+            ],
+            [
+              1,
+              6,
+              1,
+              6,
+              2
+            ],
+            [
+              15,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              9,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 3.764705882352941,
+          "first_block_tokens_per_preview": 5.333333333333333,
+          "preview_calls": 17,
+          "block_steps": [
+            [
+              1,
+              8,
+              7
+            ],
+            [
+              1,
+              6,
+              1,
+              6,
+              2
+            ],
+            [
+              15,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              9,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.206896551724138,
+            3.5555555555555554
+          ],
+          "native_noise_radius": 1.1851851851851851,
+          "hf_absolute_difference": 1.3943355119825709,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.5882352941176472
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            2.0,
+            4.0
+          ],
+          "native_noise_radius": 1.7142857142857144,
+          "hf_absolute_difference": 3.0476190476190474,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": false,
+          "hf_relative_difference": 1.3333333333333335
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": true,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "JSON",
+      "width": 32,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 2.4615384615384617,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "preview_calls": 26,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              6,
+              3,
+              9,
+              1,
+              2,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              5,
+              11,
+              5,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 2.6666666666666665,
+          "first_block_tokens_per_preview": 2.4615384615384617,
+          "preview_calls": 24,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              6,
+              4,
+              9,
+              2,
+              1,
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              4,
+              7,
+              10,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 2.56,
+          "first_block_tokens_per_preview": 2.4615384615384617,
+          "preview_calls": 25,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              6,
+              4,
+              9,
+              2,
+              1,
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              4,
+              7,
+              10,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 2.4615384615384617,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "preview_calls": 26,
+          "block_steps": [
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              6,
+              3,
+              9,
+              1,
+              2,
+              1,
+              1,
+              1,
+              2
+            ],
+            [
+              2,
+              1,
+              5,
+              11,
+              5,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 4.0,
+          "first_block_tokens_per_preview": 5.333333333333333,
+          "preview_calls": 16,
+          "block_steps": [
+            [
+              1,
+              8,
+              7,
+              1,
+              11,
+              4
+            ],
+            [
+              15,
+              1,
+              1,
+              1,
+              1,
+              1,
+              9,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            2.4615384615384617,
+            2.6666666666666665
+          ],
+          "native_noise_radius": 0.20512820512820484,
+          "hf_absolute_difference": 1.5384615384615383,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": false,
+          "hf_relative_difference": 0.625
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            2.2857142857142856,
+            2.4615384615384617
+          ],
+          "native_noise_radius": 0.1758241758241761,
+          "hf_absolute_difference": 3.0476190476190474,
+          "hf_within_observed_range": false,
+          "hf_within_1_2_noise_radius": false,
+          "hf_relative_difference": 1.3333333333333335
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": true,
+        "both": true
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.0491803278688525,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 61,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.1428571428571428,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.0158730158730158,
+            1.0491803278688525
+          ],
+          "native_noise_radius": 0.0333073119958367,
+          "hf_absolute_difference": 0.01692226335272351,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.016129032258064613
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.1428571428571428,
+            1.1428571428571428
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.0158730158730158,
+            1.032258064516129
+          ],
+          "native_noise_radius": 0.016385048643113187,
+          "hf_absolute_difference": 0.016385048643113187,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.015873015873015928
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.0666666666666667,
+            1.0666666666666667
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    },
+    {
+      "prompt": "Chinese",
+      "width": 32,
+      "progress": {
+        "none": {
+          "tokens_per_preview": 1.0491803278688525,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 61,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "prefill": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "preview": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "both": {
+          "tokens_per_preview": 1.032258064516129,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 62,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        },
+        "hf": {
+          "tokens_per_preview": 1.0158730158730158,
+          "first_block_tokens_per_preview": 1.032258064516129,
+          "preview_calls": 63,
+          "block_steps": [
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "native_range": [
+            1.0158730158730158,
+            1.0491803278688525
+          ],
+          "native_noise_radius": 0.0333073119958367,
+          "hf_absolute_difference": 0.0333073119958367,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": -0.031746031746031855
+        },
+        "first_block_tokens_per_preview": {
+          "native_range": [
+            1.032258064516129,
+            1.032258064516129
+          ],
+          "native_noise_radius": 0.0,
+          "hf_absolute_difference": 0.0,
+          "hf_within_observed_range": true,
+          "hf_within_1_2_noise_radius": true,
+          "hf_relative_difference": 0.0
+        }
+      },
+      "output_equal_to_baseline": {
+        "none": true,
+        "prefill": false,
+        "preview": false,
+        "both": false
+      },
+      "hf_output_equal": false
+    }
+  ],
+  "inputs": [
+    {
+      "label": "b1-native-noise-none",
+      "result": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054326Z-b1-native-noise-none\\data\\results.json",
+      "sha256": "b7df9eb51bca638fbc93a6f916ddd877c25a7e91a318d8f454368ab3aa8bb3f1",
+      "manifest": {
+        "started_at": "20261104T054326Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+          "--noise-phase",
+          "none",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:8,denoise:16,denoise:32",
+          "--tokens",
+          "64",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054326Z-b1-native-noise-none\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-oracles",
+        "commit": "cb1c41938d2744e5d37163e7f895dc7221c29430",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-oracles/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-oracles",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+            "artifact": "external-scripts\\1-bench_denoise_noise.py",
+            "sha256": "c02d1e9a50572550feefc88b4d7df76ddf935a6e1cbfb0bb19e0962b3d9465e5"
+          }
+        ],
+        "pid": 8524,
+        "exit_code": 0,
+        "elapsed_seconds": 85.98399999999674
+      }
+    },
+    {
+      "label": "b1-native-noise-prefill",
+      "result": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054453Z-b1-native-noise-prefill\\data\\results.json",
+      "sha256": "aedc850ddcb567a9cbfb6cea23d8e24b693ad15b7fba754919b1d182db4340a7",
+      "manifest": {
+        "started_at": "20261104T054453Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+          "--noise-phase",
+          "prefill",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:8,denoise:16,denoise:32",
+          "--tokens",
+          "64",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054453Z-b1-native-noise-prefill\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-oracles",
+        "commit": "cb1c41938d2744e5d37163e7f895dc7221c29430",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-oracles/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-oracles",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+            "artifact": "external-scripts\\1-bench_denoise_noise.py",
+            "sha256": "c02d1e9a50572550feefc88b4d7df76ddf935a6e1cbfb0bb19e0962b3d9465e5"
+          }
+        ],
+        "pid": 8816,
+        "exit_code": 0,
+        "elapsed_seconds": 85.68700000000536
+      }
+    },
+    {
+      "label": "b1-native-noise-preview",
+      "result": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054619Z-b1-native-noise-preview\\data\\results.json",
+      "sha256": "4c159bc8522e50cad1b683768eb6ba4b2663ec30d598071ba559d52c37b813df",
+      "manifest": {
+        "started_at": "20261104T054619Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+          "--noise-phase",
+          "preview",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:8,denoise:16,denoise:32",
+          "--tokens",
+          "64",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054619Z-b1-native-noise-preview\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-oracles",
+        "commit": "cb1c41938d2744e5d37163e7f895dc7221c29430",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-oracles/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-oracles",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+            "artifact": "external-scripts\\1-bench_denoise_noise.py",
+            "sha256": "c02d1e9a50572550feefc88b4d7df76ddf935a6e1cbfb0bb19e0962b3d9465e5"
+          }
+        ],
+        "pid": 15060,
+        "exit_code": 0,
+        "elapsed_seconds": 86.18799999999464
+      }
+    },
+    {
+      "label": "b1-native-noise-both",
+      "result": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054745Z-b1-native-noise-both\\data\\results.json",
+      "sha256": "c8f4923b9ddfc50d03a4cce321ef4fd5b4efe7db3847cbc9cf7a9f3be19ffbfd",
+      "manifest": {
+        "started_at": "20261104T054745Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+          "--noise-phase",
+          "both",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:8,denoise:16,denoise:32",
+          "--tokens",
+          "64",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054745Z-b1-native-noise-both\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-oracles",
+        "commit": "cb1c41938d2744e5d37163e7f895dc7221c29430",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-oracles/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-oracles",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_denoise_noise.py",
+            "artifact": "external-scripts\\1-bench_denoise_noise.py",
+            "sha256": "c02d1e9a50572550feefc88b4d7df76ddf935a6e1cbfb0bb19e0962b3d9465e5"
+          }
+        ],
+        "pid": 3688,
+        "exit_code": 0,
+        "elapsed_seconds": 85.32799999997951
+      }
+    },
+    {
+      "label": "b1-hf-q8-progress",
+      "result": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054911Z-b1-hf-q8-progress\\data\\results.json",
+      "sha256": "11cf5b3ec25e9ac9dc090fab28e0bc4112e2b1af51daa66957fe9df02afb0866",
+      "manifest": {
+        "started_at": "20261104T054911Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/check_clover_hf_denoise.py",
+          "--source",
+          "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "--checkpoint",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--native-results",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054326Z-b1-native-noise-none\\data\\results.json",
+          "--tokens",
+          "64",
+          "--prompts",
+          "Count,Sky,Python,JSON,Chinese",
+          "--precision",
+          "gguf",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054911Z-b1-hf-q8-progress\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-oracles",
+        "commit": "cb1c41938d2744e5d37163e7f895dc7221c29430",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-oracles",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-oracles/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-oracles",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          }
+        ],
+        "pid": 15096,
+        "exit_code": 0,
+        "elapsed_seconds": 1356.1089999999967
+      }
+    }
+  ],
+  "scope": "Four native arithmetic variants and unchanged HF LowConfidence. Full-generation histories can diverge; report first-block progress separately. Native noise envelopes are observations from these perturbations, not proofs of correctness or a revised tolerance."
+}
