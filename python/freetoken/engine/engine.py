@@ -368,7 +368,7 @@ class Engine:
             self.model.configure_runtime(config)
         self._load_weights(config)
         self._host_tables_bytes = 0
-        if config.gguf_embedding_host:
+        if config.host_embedding_enabled:
             if not hasattr(self.model, 'place_input_embedding'):
                 raise ValueError('This model does not support mapped GGUF input embeddings')
             self._host_tables_bytes = int(self.model.place_input_embedding() or 0)

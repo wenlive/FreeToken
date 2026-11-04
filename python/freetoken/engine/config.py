@@ -52,7 +52,7 @@ class EngineConfig:
     # Online owner exchange is opt-in; zero retains the frozen initial residency.
     moe_q2_adapt_every: int = 0
     moe_q2_adapt_decay: float = 1.0
-    gguf_embedding_host: bool = False
+    gguf_embedding_host: bool | None = None
     moe_q2_prefill_workspace: bool = False
     fixed_q2_rebuild_reserve_mib: int = 512
     moe_cache_rate: float | None = None
@@ -199,6 +199,14 @@ class EngineConfig:
         logger.warning("EngineConfig.moe_backend is deprecated; use moe_strategy")
         object.__setattr__(self, "moe_strategy", self.moe_backend)
         object.__setattr__(self, "moe_backend", None)
+
+    @cached_property
+    def host_embedding_enabled(self) -> bool:
+        if self.gguf_embedding_host is not None:
+            return self.gguf_embedding_host
+        model = self.model_config
+        return (model.model_type == "clover_moe" and model.expert_quant == "clover_gguf"
+                and not model.tie_word_embeddings)
 
     @cached_property
     def hf_config(self):

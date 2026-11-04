@@ -59,3 +59,10 @@ references now live in `benchmarks/clover/oracles.py`. Serving retains the CUDA
 greedy controller and fused penalty/verify path. Unused diagnostic methods and the
 inactive indexed-penalty switch were removed. The Q8-only weight reader is not
 included in this NVFP4 port. Historical evidence source copies are unchanged.
+
+## Automatic input embedding placement
+
+The shared configuration now accepts `gguf_embedding_host=None` for automatic placement.
+Only untied Clover GGUF models enable host mapping automatically; Clover NVFP4 keeps
+device embeddings. Explicit `False` and `True` retain their existing meanings. Focused
+configuration and scheduler tests passed; the complete port hardware gate remains pending.

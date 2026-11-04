@@ -37,7 +37,7 @@ def main():
         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
     parser.add_argument("--cache-auto", action="store_true")
-    parser.add_argument("--embedding-host", action="store_true")
+    parser.add_argument("--embedding-host", action=argparse.BooleanOptionalAction, default=None)
     parser.add_argument("--phase-cache-stats", action="store_true",
         help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
     parser.add_argument("--no-penalties", action="store_true")
@@ -164,7 +164,7 @@ def main():
         settings=dict(
             cache_slots=llm.engine.moe_offload_cache.cache_size,
             cache_auto=args.cache_auto,
-            embedding_host=args.embedding_host,
+            embedding_host=llm.engine.config.host_embedding_enabled,
             mapped_host_table_bytes=llm.engine._host_tables_bytes,
             memory_ratio=args.memory_ratio,
             context=args.context_size,

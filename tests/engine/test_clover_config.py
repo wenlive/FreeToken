@@ -54,3 +54,29 @@ def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
     model = SimpleNamespace(model=SimpleNamespace(layers=SimpleNamespace(op_list=layers)))
     CloverMoeModelLM.configure_runtime(model, config)
     assert all(layer.mlp.sparse_prefill_limit == limit for layer in layers)
+
+
+@pytest.mark.parametrize("model_type,quant,tied,expected", [
+    ("clover_moe", "clover_gguf", False, True),
+    ("clover_moe", "clover_gguf", True, False),
+    ("clover_moe", "nvfp4", False, False),
+    ("clover_moe", None, False, False),
+    ("qwen3_5_moe", "nvfp4", False, False),
+    ("qwen4_exp", "gguf_strata", False, False),
+    ("gemma4", "gguf_q4_0", True, False),
+])
+def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+    from types import SimpleNamespace
+
+    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+    config.__dict__["model_config"] = SimpleNamespace(
+        model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+    assert config.host_embedding_enabled is expected
+
+
+@pytest.mark.parametrize("enabled", [False, True])
+def test_explicit_embedding_placement_needs_no_automatic_model_probe(enabled):
+    config = EngineConfig("nonexistent", DistributedInfo(0, 1), torch.bfloat16,
+        gguf_embedding_host=enabled)
+    assert config.host_embedding_enabled is enabled
+    assert "hf_config" not in config.__dict__
