@@ -11,7 +11,7 @@ import pytest
 
 @pytest.fixture
 def arrival_metrics():
-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
+    script = Path(__file__).parents[1] / "clover_metrics.py"
     return runpy.run_path(str(script))["arrival_metrics"]
 
 
@@ -53,7 +53,7 @@ def test_mismatched_arrival_counts_are_rejected(arrival_metrics, count, arrivals
 
 
 def test_saved_report_timing_correction_preserves_source():
-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
+    script = Path(__file__).parents[1] / "clover_metrics.py"
     correct = runpy.run_path(str(script))["corrected_timing_report"]
     report = dict(
         runs=[
@@ -187,7 +187,7 @@ def test_cap_extension_reuses_only_eos_cases(tmp_path, monkeypatch, change_tempe
             str(old),
         ],
     )
-    script = Path(__file__).parents[2] / "benchmarks/clover/eval_clover_quality.py"
+    script = Path(__file__).parents[1] / "eval_clover_quality.py"
     if change_temperature:
         with pytest.raises(ValueError, match="different protocol"):
             runpy.run_path(str(script), run_name="__main__")

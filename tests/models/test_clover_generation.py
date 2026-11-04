@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 import torch
 
-from benchmarks.clover.oracles import clover_correct_drafts
+from tests.clover_reference.oracles import clover_correct_drafts
 from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
 
 
@@ -20,7 +20,7 @@ def test_serving_low_confidence_rejects_unqualified_execution(device, do_sample)
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
 @pytest.mark.parametrize("width", [8, 16, 32])
 def test_gpu_low_confidence_matches_eager_reference_without_committing(width):
-    from benchmarks.clover.oracles import resolve_low_confidence_reference
+    from tests.clover_reference.oracles import resolve_low_confidence_reference
     from freetoken.models.clover_moe.generation import resolve_low_confidence
 
     gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False, "presence_penalty": .9,
@@ -133,7 +133,7 @@ def test_verify_capacity_defaults_remain_four_and_can_be_explicitly_extended():
 
 
 def test_lowconfidence_strict_threshold_fallback_and_frozen_positions():
-    from benchmarks.clover.oracles import resolve_low_confidence_reference as resolve_low_confidence
+    from tests.clover_reference.oracles import resolve_low_confidence_reference as resolve_low_confidence
 
     state = CloverPenaltyState(
         SimpleNamespace(**PENALTY_DEFAULTS, do_sample=False), 4, "cpu", [0]
@@ -237,7 +237,7 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
     if not location:
         pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
     harness = runpy.run_path(
-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
+        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
     )
     sampling = harness["official_modules"](Path(location))[2]
     gen = SimpleNamespace(

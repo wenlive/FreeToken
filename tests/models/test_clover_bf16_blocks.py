@@ -23,7 +23,7 @@ def block_pair(request):
         pytest.skip("set CLOVER_HF_SOURCE to the local BF16 revision")
     source = Path(location)
     harness = runpy.run_path(
-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
+        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
     )
     official, configuration, _ = harness["official_modules"](source)
     cfg = configuration.CloverMoeConfig(
@@ -128,7 +128,7 @@ def test_full_bf16_preview_block_matches_official(block_pair, monkeypatch, width
         attention_preview,
         moe_preview,
     )
-    from benchmarks.clover.oracles import make_preview_batch
+    from tests.clover_reference.oracles import make_preview_batch
     import freetoken.core as core
 
     device = torch.device("cuda")

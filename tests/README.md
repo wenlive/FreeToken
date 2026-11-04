@@ -83,6 +83,12 @@ FREETOKEN_REBUILD_TEST_MODEL=<small model dir> uv run pytest tests/e2e/test_cach
 
 ## What earns a place here
 
+Clover's independent arithmetic and HF/GGUF references live in `clover_reference/`.
+Core Clover tests need only `python/` and `tests/`, plus the normal project dependencies
+and any explicitly configured local weights. Benchmark metric and evaluation-tool tests
+live in `benchmarks/clover/tests/` and run separately with
+`python -m pytest benchmarks/clover/tests`.
+
 A test must be able to fail on a plausible regression of production code.
 
 Weigh that against how the bug would be found otherwise. Application-facing

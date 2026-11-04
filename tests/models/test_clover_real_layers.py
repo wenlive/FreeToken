@@ -19,7 +19,7 @@ def gdn_pair(request):
     if not location:
         pytest.skip("set CLOVER_HF_SOURCE to the fixed local checkpoint")
     source = Path(location)
-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
+    harness = runpy.run_path(str(Path(__file__).parents[2] / "tests/clover_reference/hf.py"))
     official, configuration, _ = harness["official_modules"](source)
     config = configuration.CloverMoeConfig(**json.loads((source / "config.json").read_text(encoding="utf-8")))
     from freetoken.distributed import set_tp_info, try_get_tp_info

@@ -1,7 +1,8 @@
 # Clover measurements
 
 Run from the repository root with `PYTHONPATH=python:.` and a local checkpoint.
-The package keeps measurement and independent reference code outside serving.
+The package keeps measurement code outside serving. Independent arithmetic references
+live in `tests/clover_reference/`, so the core tests also work without benchmarks.
 
 ```bash
 python -m benchmarks.clover --help
@@ -27,8 +28,9 @@ worker remains a separate isolated `python -I` subprocess with a timeout.
 `harness.py` owns the fixed prompts, native engine defaults and JSON result writing.
 `clover_metrics.py` handles visible token arrivals, excluding terminal EOS and the first
 burst from decode throughput. `summarize_clover_abab.py` preserves process drift and both
-chronological before/after ratios. Arithmetic references live in `oracles.py` and the
-HF/GGUF reference modules; they are not performance backends.
+chronological before/after ratios. `oracles.py` and the HF/GGUF reference modules are
+compatibility aliases to `tests/clover_reference/`; they are not performance backends.
+Run tool-specific checks with `python -m pytest benchmarks/clover/tests`.
 
 Example Q8 causal measurement:
 
