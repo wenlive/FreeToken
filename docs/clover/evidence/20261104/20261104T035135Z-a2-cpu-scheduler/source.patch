@@ -1,0 +1,155 @@
+diff --git a/python/freetoken/engine/speculative.py b/python/freetoken/engine/speculative.py
+index 6fca029..8f9fcb6 100644
+--- a/python/freetoken/engine/speculative.py
++++ b/python/freetoken/engine/speculative.py
+@@ -10,6 +10,7 @@ class DeliveryLimit(NamedTuple):
+ 
+ class SpeculativeRuntime(Protocol):
+     def eligible(self, batch): ...
++    def requires_drain(self, batch): ...
+     def forward(self, batch, manager, token_pool, eos_ids, clip, anchor_id): ...
+     def before_native(self, batch): ...
+     def after_native(self, batch, native_state): ...
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index 88f43fa..f63d8e7 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -125,17 +125,33 @@ class CloverRuntime:
+         return replace(msg, sampling_params=replace(msg.sampling_params,
+             clover_mode=mode, clover_width=width, clover_threshold=threshold))
+ 
++    def requires_drain(self, batch):
++        # Block requests also need their causal prefill/tail history before the next window.
++        return any(self.settings(req)[0] != "causal" for req in batch.reqs)
++
++    def _new_state(self, req):
++        state = CloverPenaltyState(self.generation,
++            self.engine.config.model_config.vocab_size, self.engine.device, self.stop_ids)
++        self.states[req] = state
++        return state
++
++    def _causal_state(self, req, pending):
++        state = self.states.get(req)
++        if state is None:
++            state = self._new_state(req)
++        # forward_batch has completed the input, while its sampled output is still pending.
++        consumed = max(0, req.cached_len - req.prompt_len)
++        if consumed != state.length:
++            if pending is None or pending.numel() != 1 or consumed != state.length + 1:
++                raise RuntimeError("Clover causal penalty cursor does not match the consumed input")
++            state.commit(pending.long())
++        return state
++
+     def state(self, req, pending=None):
+         state = self.states.get(req)
+         history = req.input_ids[req.prompt_len :]
+         if state is None or state.length > history.numel():
+-            state = CloverPenaltyState(
+-                self.generation,
+-                self.engine.config.model_config.vocab_size,
+-                self.engine.device,
+-                self.stop_ids,
+-            )
+-            self.states[req] = state
++            state = self._new_state(req)
+         if state.length < history.numel():
+             delta = history.numel() - state.length
+             state.commit(
+@@ -149,9 +165,9 @@ class CloverRuntime:
+ 
+         scores = torch.empty_like(logits, dtype=torch.float32)
+         for row, req in enumerate(batch.reqs):
+-            self.settings(req)
++            mode, _, _ = self.settings(req)
+             pending = batch.input_ids[row:row + 1] if batch.is_decode else None
+-            state = self.state(req, pending)
++            state = self._causal_state(req, pending) if mode == "causal" else self.state(req, pending)
+             penalize_logits(logits[row:row + 1], state, self.mask_id,
+                             output=scores[row:row + 1])
+         return scores
+diff --git a/python/freetoken/models/qwen4_exp/mtp_runtime.py b/python/freetoken/models/qwen4_exp/mtp_runtime.py
+index e76d8bf..aba505b 100644
+--- a/python/freetoken/models/qwen4_exp/mtp_runtime.py
++++ b/python/freetoken/models/qwen4_exp/mtp_runtime.py
+@@ -70,6 +70,9 @@ class MtpRuntime:
+         return (req.sampling_params.is_greedy and not req.mm_items and req.extend_len == 1
+                 and 0 < req.cached_len < self.draft.max_context and req.remain_len > 0)
+ 
++    def requires_drain(self, batch):
++        return True
++
+     def prepare_graphs(self):
+         if len(self.pool.reserved_slot_ids) != 4:
+             raise ValueError('MTP needs four exclusively reserved transaction slots')
+diff --git a/python/freetoken/scheduler/scheduler.py b/python/freetoken/scheduler/scheduler.py
+index 866c8e2..196e987 100644
+--- a/python/freetoken/scheduler/scheduler.py
++++ b/python/freetoken/scheduler/scheduler.py
+@@ -226,9 +226,10 @@ class Scheduler(SchedulerIOMixin):
+         for msg in self.receive_msg(blocking=blocking):
+             self._process_one_msg(msg)
+ 
+-        if self.engine.mtp_runtime is not None and last_data is not None:
+-            # A variable-size verified bundle must reach CPU history before the
+-            # next window is prepared; native no-MTP keeps its overlap schedule.
++        runtime = self.engine.mtp_runtime
++        if (runtime is not None and last_data is not None
++                and getattr(runtime, "requires_drain", lambda batch: True)(last_data[0].batch)):
++            # Block runtimes need complete host history before preparing another window.
+             self.stream.wait_stream(self.engine.stream)
+             self._process_last_data(last_data)
+             self._flush_abort_acks()
+diff --git a/tests/scheduler/test_clover_prefill_bundle.py b/tests/scheduler/test_clover_prefill_bundle.py
+index bd1ec3c..3e81459 100644
+--- a/tests/scheduler/test_clover_prefill_bundle.py
++++ b/tests/scheduler/test_clover_prefill_bundle.py
+@@ -155,3 +155,49 @@ def test_offline_generation_reports_rejection_and_finishes_valid_requests():
+     assert result[0]["error_code"] == "invalid_request"
+     assert result[0]["token_ids"] == []
+     assert result[1] == {"text": "[9]", "token_ids": [9]}
++
++
++@pytest.mark.parametrize("mode,expected", [
++    ("causal", ["schedule", "drain"]), ("selfspec", ["drain", "schedule"]),
++    ("denoise", ["drain", "schedule"]),
++])
++def test_overlap_drains_only_block_requests_before_scheduling(mode, expected):
++    scheduler, _, _ = admission_scheduler()
++    scheduler._pending_rebuild = None
++    scheduler.decode_manager = SimpleNamespace(runnable=False)
++    scheduler.prefill_manager.runnable = False
++    scheduler.receive_msg = lambda **kwargs: []
++    scheduler.engine.stream = object()
++    scheduler.stream = SimpleNamespace(wait_stream=lambda stream: None)
++    scheduler._flush_abort_acks = lambda: None
++    events = []
++    scheduler._process_last_data = lambda data: events.append("drain") if data is not None else None
++    scheduler._schedule_next_batch = lambda: events.append("schedule")
++    batch = Batch([SimpleNamespace(sampling_params=SamplingParams(clover_mode=mode))], "prefill")
++    scheduler.overlap_loop((SimpleNamespace(batch=batch), None))
++    assert events == expected
++
++
++def test_first_selfspec_window_sees_pending_causal_token_in_stop_history():
++    scheduler, _, _ = admission_scheduler()
++    scheduler._pending_rebuild = None
++    scheduler.prefill_manager.runnable = False
++    scheduler.decode_manager = SimpleNamespace(runnable=False)
++    scheduler.receive_msg = lambda **kwargs: []
++    scheduler.engine.stream = object()
++    scheduler.stream = SimpleNamespace(wait_stream=lambda stream: None)
++    scheduler._flush_abort_acks = lambda: None
++    scheduler.eos_token_ids = set()
++    scheduler.tokenizer = SimpleNamespace(decode=lambda ids: ''.join(chr(i) for i in ids))
++    req = Req(torch.tensor([88], dtype=torch.int32), 0, 0, 10, 1,
++        SamplingParams(clover_mode="selfspec", stop_strs=["AB"]), None)
++    previous = (SimpleNamespace(batch=Batch([req], "prefill")), None)
++    scheduler._process_last_data = lambda data: req.append_host(torch.tensor([65])) if data else None
++    limits = []
++
++    def schedule():
++        limits.append(scheduler._mtp_delivery_limit(req, [66, 67]))
++
++    scheduler._schedule_next_batch = schedule
++    scheduler.overlap_loop(previous)
++    assert limits == [(1, True)]

@@ -1,0 +1,125 @@
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 8a72974..7c03407 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -64,3 +64,16 @@ The scheduler can overlap requests whose resolved mode is causal. Selfspec and d
+ requests retain their drain barrier even during causal prefill or tail fallback, so stop
+ strings and first-block delivery see complete history. Flash-Next MTP retains its barrier.
+ GPU/P1 overlap-on/off and throughput qualification are tracked separately from unit tests.
++
++## Optional block graph warmup
++
++`clover_graph_warmup_widths=[8,16,32]` captures preview and verify graphs before serving,
++using the configured coreset top-p. Only list widths covered by `clover_max_width`.
++The default is empty, so causal deployments pay no block capture cost. Warmup also runs
++after an idle cache rebuild invalidates the graphs.
++
++Warmup temporarily owns a request table, GDN slot and KV pages through the regular
++allocators. It restores their contents and frees them without inserting a synthetic prefix.
++Verify graphs share one transaction allocation sized for the largest declared width.
++`runtime.graph_warmup` reports capture times and allocated/reserved memory deltas.
++Cold-request latency and state-integrity qualification are pending; this is opt-in.
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index 80676d9..8a2b2aa 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -118,6 +118,7 @@ class EngineConfig:
+     clover_width: int = 8
+     clover_max_width: int | None = None
+     clover_sparse_prefill_limit: int = 128
++    clover_graph_warmup_widths: List[int] = field(default_factory=list)
+     clover_split_kv: bool = False
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+@@ -131,6 +132,11 @@ class EngineConfig:
+             object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
+         if self.clover_sparse_prefill_limit < 0:
+             raise ValueError("Clover sparse prefill limit must be nonnegative")
++        if self.clover_graph_warmup_widths:
++            if (self.max_running_req != 1 or any(width not in (8, 16, 32)
++                    or width > self.clover_max_width for width in self.clover_graph_warmup_widths)):
++                raise ValueError("Clover graph warmup requires reserved widths and max_running_req=1")
++            object.__setattr__(self, "clover_graph_warmup_widths", sorted(set(self.clover_graph_warmup_widths)))
+         if self.clover_mode not in ("causal", "selfspec", "denoise"):
+             raise ValueError("Clover mode must be causal, selfspec or denoise")
+         if self.clover_mode == "selfspec" and self.clover_width == 32:
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index f63d8e7..b11b497 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -62,6 +62,12 @@ class CloverRuntime:
+         self.transactions = None
+         self.states.clear()
+ 
++    def warmup_graphs(self, manager, tables):
++        if self.engine.config.clover_graph_warmup_widths:
++            from .warmup import warmup_block_graphs
++
++            self.graph_warmup = warmup_block_graphs(self, manager, tables)
++
+     def before_native(self, batch):
+         # Startup/rebuild reserve the window separately from graph/prefill headroom.
+         return None
+diff --git a/python/freetoken/scheduler/scheduler.py b/python/freetoken/scheduler/scheduler.py
+index 196e987..1657648 100644
+--- a/python/freetoken/scheduler/scheduler.py
++++ b/python/freetoken/scheduler/scheduler.py
+@@ -149,6 +149,7 @@ class Scheduler(SchedulerIOMixin):
+             log=logger.info_rank0,
+             decode_log_interval=config.decode_log_interval,
+         )
++        self._warmup_runtime_graphs()
+ 
+         # Initialize the I/O mixin
+         super().__init__(config, self.engine.tp_cpu_group)
+@@ -158,6 +159,15 @@ class Scheduler(SchedulerIOMixin):
+         logger.info_rank0("Scheduler is idle, waiting for new reqs...")
+         self.cache_manager.check_integrity()
+ 
++    @torch.inference_mode()
++    def _warmup_runtime_graphs(self) -> None:
++        warmup = getattr(getattr(self.engine, "mtp_runtime", None), "warmup_graphs", None)
++        if warmup is not None:
++            with self.engine_stream_ctx:
++                self.engine.stream.wait_stream(self.stream)
++                warmup(self.cache_manager, self.table_manager)
++            self.stream.wait_stream(self.engine.stream)
++
+     @torch.inference_mode()
+     def rebuild_cache(
+         self,
+@@ -203,6 +213,7 @@ class Scheduler(SchedulerIOMixin):
+             min(self.config.max_extend_tokens, _chunk_cap)
+             if _chunk_cap else self.config.max_extend_tokens
+         )
++        self._warmup_runtime_graphs()
+         if self.config.tp_info.size > 1:
+             self.sync_all_ranks()
+ 
+diff --git a/tests/engine/test_clover_config.py b/tests/engine/test_clover_config.py
+index 4ef9350..9d4a2e7 100644
+--- a/tests/engine/test_clover_config.py
++++ b/tests/engine/test_clover_config.py
+@@ -27,6 +27,22 @@ def test_sparse_prefill_limit_rejects_negative_values():
+         EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16, clover_sparse_prefill_limit=-1)
+ 
+ 
++@pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
++    ([8], 0, 1), ([8], 32, 2)])
++def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
++    with pytest.raises(ValueError, match="warmup"):
++        EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
++            max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
++
++
++def test_graph_warmup_is_opt_in_and_normalizes_declared_widths():
++    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
++    assert config.clover_graph_warmup_widths == []
++    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
++        max_running_req=1, clover_max_width=32, clover_graph_warmup_widths=[32, 8, 16, 8])
++    assert config.clover_graph_warmup_widths == [8, 16, 32]
++
++
+ @pytest.mark.parametrize("limit", [0, 128, 512])
+ def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
+     from types import SimpleNamespace

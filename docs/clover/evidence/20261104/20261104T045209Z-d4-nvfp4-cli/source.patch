@@ -1,0 +1,577 @@
+diff --git a/benchmarks/README.md b/benchmarks/README.md
+index 2f85f7c..0a7134a 100644
+--- a/benchmarks/README.md
++++ b/benchmarks/README.md
+@@ -3,22 +3,6 @@
+ Run from the repo root with `PYTHONPATH=python:.`, pinned to one GPU
+ (`CUDA_VISIBLE_DEVICES=0`). Each script's `--help` / docstring has the details.
+ 
+-**Clover qualification** — `bench_clover.py` measures the five fixed prompts with
+-causal, selfspec and LowConfidence decoding, TTFT, stream arrivals and expert
+-payloads. `bench_clover_cpu.py` compares actual-bank CPU W4A16 with cold GPU fetch.
+-The `check_clover_hf_*.py` scripts use the pinned official arithmetic with bounded
+-on-demand expert storage; they are correctness oracles, not serving benchmarks.
+-`check_clover_quantization.py` compares NVFP4/FP8 on BF16-generated causal histories.
+-`eval_clover_quality.py` grades fixed GSM8K/HumanEval subsets; fetch only the
+-datasets with `fetch_clover_eval_data.py`. All model paths must already exist.
+-See [the Clover guide](../docs/clover-nvfp4.md) for settings, measurements and limits.
+-
+-`check_qwen4_mtp.py` runs the existing local Flash-Next GGUF/MTP bundle with MTP
+-OFF or ON. `--code-root` selects and verifies the imported checkout, allowing a
+-matched frozen-main/feature regression. It hashes protected model metadata and
+-requires actual draft rounds with four reserved slots; each mode needs a separate
+-process. This is a compatibility check, with the qualified per-mode resources.
+-
+ **`bench_decode_moe.py`** — bs=1 decode tok/s of a served MoE model. Spawns `ft serve`
+ per backend and times token arrivals over streamed `/v1/chat/completions`, so numbers
+ include the full serving path. AIME-25 prompt, checkpoint-recommended sampling.
+@@ -46,14 +30,7 @@ python benchmarks/bench_offload_cache_copy.py
+ For host RAM vs PCIe bandwidth and the offload/hybrid backend pick, use `ft bench bw`
+ instead — it writes the JSON profile the engine reads.
+ 
+-Clover branch measurements are indexed in [the performance record](../docs/clover/clover-performance.md).
+-`bench_clover.py` records visible outputs, TTFT, arrival-based decode and expert
+-payload. Use `--runtime-breakdown` only for a separate event-instrumented run;
+-`--phase-cache-stats` adds GPU counter snapshots and is also diagnostic.
+-`--cache-auto --memory-ratio .9 --clover-max-width 32` includes the private block
+-window in capacity planning; `--embedding-host` tests the optional mapped table.
+-`bench_clover_context.py` measures exact 1K/4K/16K/32K prefixes;
+-`bench_clover_split_kv.py` compares two read-only preview graphs on identical state.
+-`analyze_clover_budget.py` combines measured costs with recorded HF progress,
+-and `summarize_clover_abab.py` retains both chronological ratios and process drift
+-for four before/after/before/after result files. Their `--help` gives the arguments.
++Clover tools are grouped under [clover/](clover/README.md). Start with
++`python -m benchmarks.clover --help`; the six entries cover the mode matrix,
++long contexts, previews, cost analysis, HF comparisons and quality evaluation.
++Measurements and evidence are indexed in [docs/clover](../docs/clover/README.md).
+diff --git a/benchmarks/analyze_clover_budget.py b/benchmarks/clover/analyze_clover_budget.py
+similarity index 100%
+rename from benchmarks/analyze_clover_budget.py
+rename to benchmarks/clover/analyze_clover_budget.py
+diff --git a/benchmarks/bench_clover.py b/benchmarks/clover/bench_clover.py
+similarity index 92%
+rename from benchmarks/bench_clover.py
+rename to benchmarks/clover/bench_clover.py
+index 847a98b..7ed536a 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/clover/bench_clover.py
+@@ -12,29 +12,9 @@ import torch
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+ from freetoken.message import DetokenizeMsg
+-from clover_metrics import arrival_metrics
+-
+-PROMPTS = {
+-    "Count": "Count from 1 to 10.",
+-    "Sky": "Explain why the sky is blue in two sentences.",
+-    "Python": "Write a Python function that merges overlapping integer intervals. Include type hints and three assert-based examples. Output only Python code.",
+-    "JSON": 'Return only a JSON object describing three books. Use the keys "books", "title", "author", "year", and "tags". Each book must have exactly two tags.',
+-    "Chinese": "请用中文解释城市为什么会形成热岛效应，并给出三项缓解措施。分成两个自然段，约二百字。",
+-}
+-
+-
+-def parse_modes(value):
+-    result = []
+-    for item in value.split(","):
+-        mode, _, width = item.partition(":")
+-        if mode not in ("causal", "selfspec", "denoise"):
+-            raise ValueError(f"Unknown mode {mode}")
+-        result.append((mode, int(width) if width else 8))
+-    return result
+-
+-
+-def expert_bytes(cache):
+-    return sum(tensor[0].numel() * tensor.element_size() for _, tensor in cache.banks)
++from benchmarks.clover.harness import (
++    PROMPTS, arrival_metrics, expert_bytes, load_engine, parse_modes, save_results,
++)
+ 
+ 
+ def main():
+@@ -43,6 +23,8 @@ def main():
+     parser.add_argument("--output", type=Path, required=True)
+     parser.add_argument("--modes", default="causal,selfspec:8,selfspec:16")
+     parser.add_argument("--prompts", default=",".join(PROMPTS))
++    parser.add_argument("--long-prompts-json", type=Path,
++        help='Saved {"prompts": {name: {"user_text": ...}}}; select names with --prompts')
+     parser.add_argument("--tokens", type=int, default=256)
+     parser.add_argument("--warmups", type=int, default=2)
+     parser.add_argument("--repeats", type=int, default=5)
+@@ -68,6 +50,9 @@ def main():
+         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
+     )
+     args = parser.parse_args()
++    if args.long_prompts_json:
++        rows = json.loads(args.long_prompts_json.read_text(encoding="utf-8"))["prompts"]
++        PROMPTS.update({name: row["user_text"] for name, row in rows.items()})
+     if args.phase_cache_stats and not args.runtime_breakdown:
+         parser.error('--phase-cache-stats requires --runtime-breakdown')
+     args.output.mkdir(parents=True, exist_ok=False)
+@@ -122,20 +107,15 @@ def main():
+     runtime_options = dict(clover_max_width=(
+         max((width for mode, width in modes if mode != "causal"), default=0)
+         if args.clover_max_width is None else args.clover_max_width))
+-    llm = LLM(
++    llm = load_engine(
+         args.model,
+-        moe_strategy="offload",
+-        moe_cache_size=0 if args.cache_auto else args.cache_slots,
++        factory=LLM,
++        context=args.context_size,
++        cache_slots=0 if args.cache_auto else args.cache_slots,
+         moe_cache_auto=args.cache_auto,
+         kv_reserve_tokens=args.context_size,
+         gguf_embedding_host=args.embedding_host,
+-        expert_load="serial",
+-        max_running_req=1,
+         memory_ratio=args.memory_ratio,
+-        num_token_override=args.context_size,
+-        max_seq_len_override=args.context_size,
+-        max_extend_tokens=args.context_size,
+-        cuda_graph_bs=[1],
+         moe_collect_stats=True,
+         clover_disable_penalties=args.no_penalties,
+         clover_accept_rule=args.accept_rule,
+@@ -227,9 +207,7 @@ def main():
+     result["expert_payload_bytes"] = per_expert
+ 
+     def save():
+-        (args.output / "results.json").write_text(
+-            json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
+-        )
++        save_results(args.output, result)
+ 
+     save()
+     mismatch = False
+diff --git a/benchmarks/bench_clover_context.py b/benchmarks/clover/bench_clover_context.py
+similarity index 90%
+rename from benchmarks/bench_clover_context.py
+rename to benchmarks/clover/bench_clover_context.py
+index 164ca9c..0951a9c 100644
+--- a/benchmarks/bench_clover_context.py
++++ b/benchmarks/clover/bench_clover_context.py
+@@ -9,6 +9,7 @@ import time
+ import torch
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
++from benchmarks.clover.harness import load_engine, save_results
+ 
+ 
+ @torch.inference_mode()
+@@ -21,10 +22,9 @@ def main():
+     a = p.parse_args()
+     a.output.mkdir(parents=True, exist_ok=False)
+     prefixes = [int(x) for x in a.prefixes.split(',')]
+-    llm = LLM(a.model, moe_strategy='offload', moe_cache_size=a.cache_slots,
+-        expert_load='serial', max_running_req=1, memory_ratio=.95,
+-        num_token_override=max(prefixes)+128, max_seq_len_override=max(prefixes)+128,
+-        max_extend_tokens=4096, cuda_graph_bs=[1], clover_max_width=32)
++    llm = load_engine(a.model, factory=LLM, cache_slots=a.cache_slots,
++        memory_ratio=.95, context=max(prefixes)+128,
++        max_extend_tokens=4096, clover_max_width=32)
+     engine, runtime = llm.engine, llm.engine.mtp_runtime
+     match = llm.cache_manager.match_req
+     llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
+@@ -35,7 +35,7 @@ def main():
+     original = engine.forward_batch
+ 
+     def save():
+-        (a.output/'results.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
++        save_results(a.output, result)
+ 
+     def audited(batch, sampling):
+         output = original(batch, sampling)
+diff --git a/benchmarks/bench_clover_gpu_resources.py b/benchmarks/clover/bench_clover_gpu_resources.py
+similarity index 97%
+rename from benchmarks/bench_clover_gpu_resources.py
+rename to benchmarks/clover/bench_clover_gpu_resources.py
+index f4aea82..952321e 100644
+--- a/benchmarks/bench_clover_gpu_resources.py
++++ b/benchmarks/clover/bench_clover_gpu_resources.py
+@@ -18,7 +18,6 @@ p.add_argument('--resource-frontend', choices=['native', 'stock'], required=True
+ args, rest = p.parse_known_args()
+ sys.argv = [sys.argv[0], *rest]
+ output = Path(rest[rest.index('--output') + 1])
+-sys.path.insert(0, str(Path(__file__).resolve().parent))
+ nvml = c.WinDLL('C:/Windows/System32/nvml.dll')
+ assert nvml.nvmlInit_v2() == 0
+ handle = c.c_void_p()
+@@ -40,7 +39,7 @@ thread = threading.Thread(target=observe, daemon=True)
+ thread.start()
+ time.sleep(1)
+ if args.resource_frontend == 'native':
+-    import bench_clover as bench
++    from benchmarks.clover import bench_clover as bench
+     original = bench.LLM
+     def instrumented(*a, **kw):
+         llm = original(*a, **kw)
+@@ -54,7 +53,7 @@ if args.resource_frontend == 'native':
+         return llm
+     bench.LLM = instrumented
+ else:
+-    import bench_clover_llama as bench
++    from benchmarks.clover import bench_clover_llama as bench
+     original = bench.urllib.request.urlopen
+     class ObservedResponse:
+         def __init__(self, response, start):
+diff --git a/benchmarks/bench_clover_preview.py b/benchmarks/clover/bench_clover_preview.py
+similarity index 88%
+rename from benchmarks/bench_clover_preview.py
+rename to benchmarks/clover/bench_clover_preview.py
+index 8866f24..8caa141 100644
+--- a/benchmarks/bench_clover_preview.py
++++ b/benchmarks/clover/bench_clover_preview.py
+@@ -7,8 +7,8 @@ import statistics
+ import torch
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from bench_clover import PROMPTS
+-from check_clover_preview import persistent_hashes
++from benchmarks.clover.harness import PROMPTS, load_engine, save_results
++from benchmarks.clover.check_clover_preview import persistent_hashes
+ 
+ 
+ @torch.inference_mode()
+@@ -19,9 +19,8 @@ def main():
+     p.add_argument('--output', type=Path, required=True)
+     args = p.parse_args()
+     args.output.mkdir(parents=True, exist_ok=False)
+-    llm = LLM(args.model, moe_strategy='offload', moe_cache_size=args.cache_slots,
+-        expert_load='serial', max_running_req=1, memory_ratio=.85, num_token_override=4096,
+-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1],
++    llm = load_engine(args.model, factory=LLM, cache_slots=args.cache_slots,
++        memory_ratio=.85, context=4096, clover_max_width=16,
+         moe_collect_stats=True, clover_disable_penalties=True)
+     engine = llm.engine
+     runtime = engine.mtp_runtime
+@@ -30,7 +29,7 @@ def main():
+         warmups=2, repeats=5, cases=[], causal_ms={})
+     current = None
+     def save():
+-        (args.output / 'results.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
++        save_results(args.output, result)
+ 
+     def audited(batch, sampling):
+         begin, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+diff --git a/benchmarks/bench_clover_split_kv.py b/benchmarks/clover/bench_clover_split_kv.py
+similarity index 90%
+rename from benchmarks/bench_clover_split_kv.py
+rename to benchmarks/clover/bench_clover_split_kv.py
+index f63efa0..68f3e10 100644
+--- a/benchmarks/bench_clover_split_kv.py
++++ b/benchmarks/clover/bench_clover_split_kv.py
+@@ -8,8 +8,9 @@ import statistics
+ import torch
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from clover.oracles import make_preview_batch
+-from check_clover_preview import persistent_hashes
++from benchmarks.clover.oracles import make_preview_batch
++from benchmarks.clover.check_clover_preview import persistent_hashes
++from benchmarks.clover.harness import load_engine, save_results
+ 
+ 
+ @torch.inference_mode()
+@@ -21,15 +22,14 @@ def main():
+     a=p.parse_args()
+     a.output.mkdir(parents=True,exist_ok=False)
+     prefixes=list(map(int,a.prefixes.split(',')))
+-    llm=LLM(a.model,moe_strategy='offload',moe_cache_size=2304,expert_load='serial',
+-        max_running_req=1,memory_ratio=.95,clover_max_width=0,
+-        num_token_override=max(prefixes)+128,max_seq_len_override=max(prefixes)+128,
+-        max_extend_tokens=4096,cuda_graph_bs=[1])
++    llm=load_engine(a.model,factory=LLM,cache_slots=2304,
++        memory_ratio=.95,clover_max_width=0,context=max(prefixes)+128,
++        max_extend_tokens=4096)
+     engine=llm.engine
+     result=dict(state='running',scope='Same model/prefix/mask/KV/GDN state, two independent graphs, '
+         'ABAB with two warmups plus five CUDA-event measurements per turn; no metadata/input staging in timed replay',cases=[])
+     def save():
+-        (a.output/'results.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
++        save_results(a.output,result)
+     forward=engine.forward_batch
+     current=None
+     def audited(batch,sampling):
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/clover/check_clover_graphs.py
+similarity index 98%
+rename from benchmarks/check_clover_graphs.py
+rename to benchmarks/clover/check_clover_graphs.py
+index 062c30c..b4aa728 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/clover/check_clover_graphs.py
+@@ -11,8 +11,8 @@ import torch
+ 
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from clover.oracles import make_preview_batch, make_verify_batch
+-from check_clover_preview import persistent_hashes
++from benchmarks.clover.oracles import make_preview_batch, make_verify_batch
++from benchmarks.clover.check_clover_preview import persistent_hashes
+ 
+ 
+ def digest(tensor):
+diff --git a/benchmarks/check_clover_hf_denoise.py b/benchmarks/clover/check_clover_hf_denoise.py
+similarity index 98%
+rename from benchmarks/check_clover_hf_denoise.py
+rename to benchmarks/clover/check_clover_hf_denoise.py
+index 9352b33..7ab128f 100644
+--- a/benchmarks/check_clover_hf_denoise.py
++++ b/benchmarks/clover/check_clover_hf_denoise.py
+@@ -9,7 +9,7 @@ import time
+ import torch
+ from transformers import GenerationConfig
+ 
+-from clover_hf_reference import load_official, official_modules
++from benchmarks.clover.clover_hf_reference import load_official, official_modules
+ 
+ 
+ @torch.inference_mode()
+diff --git a/benchmarks/check_clover_hf_preview.py b/benchmarks/clover/check_clover_hf_preview.py
+similarity index 97%
+rename from benchmarks/check_clover_hf_preview.py
+rename to benchmarks/clover/check_clover_hf_preview.py
+index 0ad35fd..0417b51 100644
+--- a/benchmarks/check_clover_hf_preview.py
++++ b/benchmarks/clover/check_clover_hf_preview.py
+@@ -5,7 +5,7 @@ from pathlib import Path
+ 
+ import torch
+ 
+-from clover_hf_reference import load_official
++from benchmarks.clover.clover_hf_reference import load_official
+ 
+ 
+ @torch.inference_mode()
+diff --git a/benchmarks/check_clover_hf_selfspec.py b/benchmarks/clover/check_clover_hf_selfspec.py
+similarity index 98%
+rename from benchmarks/check_clover_hf_selfspec.py
+rename to benchmarks/clover/check_clover_hf_selfspec.py
+index b4b3994..6c8e96c 100644
+--- a/benchmarks/check_clover_hf_selfspec.py
++++ b/benchmarks/clover/check_clover_hf_selfspec.py
+@@ -14,7 +14,7 @@ from types import SimpleNamespace
+ import time
+ 
+ import torch
+-from clover_hf_reference import load_official, official_modules
++from benchmarks.clover.clover_hf_reference import load_official, official_modules
+ 
+ 
+ @torch.inference_mode()
+diff --git a/benchmarks/check_clover_lifecycle.py b/benchmarks/clover/check_clover_lifecycle.py
+similarity index 100%
+rename from benchmarks/check_clover_lifecycle.py
+rename to benchmarks/clover/check_clover_lifecycle.py
+diff --git a/benchmarks/check_clover_preview.py b/benchmarks/clover/check_clover_preview.py
+similarity index 98%
+rename from benchmarks/check_clover_preview.py
+rename to benchmarks/clover/check_clover_preview.py
+index 4905861..b973e16 100644
+--- a/benchmarks/check_clover_preview.py
++++ b/benchmarks/clover/check_clover_preview.py
+@@ -8,7 +8,7 @@ import torch
+ 
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from clover.oracles import make_preview_batch
++from benchmarks.clover.oracles import make_preview_batch
+ 
+ 
+ def persistent_hashes(engine):
+diff --git a/benchmarks/check_clover_prompt_outputs.py b/benchmarks/clover/check_clover_prompt_outputs.py
+similarity index 98%
+rename from benchmarks/check_clover_prompt_outputs.py
+rename to benchmarks/clover/check_clover_prompt_outputs.py
+index 8834a52..df6f489 100644
+--- a/benchmarks/check_clover_prompt_outputs.py
++++ b/benchmarks/clover/check_clover_prompt_outputs.py
+@@ -7,7 +7,7 @@ import json
+ from pathlib import Path
+ import re
+ 
+-from eval_clover_quality import code_completion, grade_code
++from benchmarks.clover.eval_clover_quality import code_completion, grade_code
+ 
+ 
+ def main():
+diff --git a/benchmarks/check_clover_quantization.py b/benchmarks/clover/check_clover_quantization.py
+similarity index 98%
+rename from benchmarks/check_clover_quantization.py
+rename to benchmarks/clover/check_clover_quantization.py
+index 117d94b..74a2133 100644
+--- a/benchmarks/check_clover_quantization.py
++++ b/benchmarks/clover/check_clover_quantization.py
+@@ -15,7 +15,7 @@ from types import SimpleNamespace
+ 
+ import torch
+ 
+-from clover_hf_reference import load_official, official_modules
++from benchmarks.clover.clover_hf_reference import load_official, official_modules
+ 
+ 
+ def sha256(path):
+diff --git a/benchmarks/check_clover_verify.py b/benchmarks/clover/check_clover_verify.py
+similarity index 100%
+rename from benchmarks/check_clover_verify.py
+rename to benchmarks/clover/check_clover_verify.py
+diff --git a/benchmarks/clover_eval_worker.py b/benchmarks/clover/clover_eval_worker.py
+similarity index 100%
+rename from benchmarks/clover_eval_worker.py
+rename to benchmarks/clover/clover_eval_worker.py
+diff --git a/benchmarks/clover_hf_reference.py b/benchmarks/clover/clover_hf_reference.py
+similarity index 100%
+rename from benchmarks/clover_hf_reference.py
+rename to benchmarks/clover/clover_hf_reference.py
+diff --git a/benchmarks/clover_metrics.py b/benchmarks/clover/clover_metrics.py
+similarity index 100%
+rename from benchmarks/clover_metrics.py
+rename to benchmarks/clover/clover_metrics.py
+diff --git a/benchmarks/eval_clover_quality.py b/benchmarks/clover/eval_clover_quality.py
+similarity index 99%
+rename from benchmarks/eval_clover_quality.py
+rename to benchmarks/clover/eval_clover_quality.py
+index b7d4c9e..2803c8b 100644
+--- a/benchmarks/eval_clover_quality.py
++++ b/benchmarks/clover/eval_clover_quality.py
+@@ -133,7 +133,7 @@ def main():
+             )[0]
+     else:
+         from transformers import AutoTokenizer
+-        from clover_hf_reference import load_official, official_modules
++        from benchmarks.clover.clover_hf_reference import load_official, official_modules
+ 
+         model, _ = load_official(args.source, args.checkpoint, precision=args.precision)
+         tokenizer = AutoTokenizer.from_pretrained(
+diff --git a/benchmarks/fetch_clover_eval_data.py b/benchmarks/clover/fetch_clover_eval_data.py
+similarity index 100%
+rename from benchmarks/fetch_clover_eval_data.py
+rename to benchmarks/clover/fetch_clover_eval_data.py
+diff --git a/benchmarks/summarize_clover_abab.py b/benchmarks/clover/summarize_clover_abab.py
+similarity index 100%
+rename from benchmarks/summarize_clover_abab.py
+rename to benchmarks/clover/summarize_clover_abab.py
+diff --git a/docs/clover/README.md b/docs/clover/README.md
+index 9c32302..6246a57 100644
+--- a/docs/clover/README.md
++++ b/docs/clover/README.md
+@@ -4,6 +4,7 @@
+ - [R0 runtime report](clover-runtime-performance.md)
+ - [R1 review and experiments](clover-runtime-review.md)
+ - [Current repair behavior and configuration](changes.md)
++- [Benchmark commands and independent references](../../benchmarks/clover/README.md)
+ - [R0 evidence](evidence/clover-runtime/README.md)
+ - [R1 evidence](evidence/clover-runtime-review/README.md)
+ 
+diff --git a/benchmarks/bench_clover_cpu.py b/docs/clover/evidence/legacy-tools/bench_clover_cpu.py
+similarity index 100%
+rename from benchmarks/bench_clover_cpu.py
+rename to docs/clover/evidence/legacy-tools/bench_clover_cpu.py
+diff --git a/benchmarks/bench_clover_long.py b/docs/clover/evidence/legacy-tools/bench_clover_long.py
+similarity index 100%
+rename from benchmarks/bench_clover_long.py
+rename to docs/clover/evidence/legacy-tools/bench_clover_long.py
+diff --git a/tests/kernels/test_clover_preview.py b/tests/kernels/test_clover_preview.py
+index 639d272..323ad5f 100644
+--- a/tests/kernels/test_clover_preview.py
++++ b/tests/kernels/test_clover_preview.py
+@@ -13,7 +13,7 @@ def official():
+     source = os.environ.get("CLOVER_HF_SOURCE")
+     if not source:
+         pytest.skip("set CLOVER_HF_SOURCE to the existing fixed official HF source")
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
+     return harness["official_modules"](Path(source))[0]
+ 
+ 
+diff --git a/tests/models/test_clover_bf16_blocks.py b/tests/models/test_clover_bf16_blocks.py
+index b464c48..af731da 100644
+--- a/tests/models/test_clover_bf16_blocks.py
++++ b/tests/models/test_clover_bf16_blocks.py
+@@ -17,7 +17,7 @@ def block_pair(request):
+     location=os.environ.get('CLOVER_HF_SOURCE')
+     if not location: pytest.skip('set CLOVER_HF_SOURCE to the local BF16 revision')
+     source=Path(location)
+-    harness=runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover_hf_reference.py'))
++    harness=runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/clover_hf_reference.py'))
+     official,configuration,_=harness['official_modules'](source)
+     cfg=configuration.CloverMoeConfig(**json.loads((source/'config.json').read_text()))
+     from freetoken.distributed import set_tp_info,try_get_tp_info
+diff --git a/tests/models/test_clover_budget.py b/tests/models/test_clover_budget.py
+index c59835c..0ae2ecc 100644
+--- a/tests/models/test_clover_budget.py
++++ b/tests/models/test_clover_budget.py
+@@ -7,7 +7,7 @@ import pytest
+ 
+ @pytest.mark.parametrize('native_tokens', [8, 12])
+ def test_denoise_budget_excludes_discarded_slots_and_keeps_attainment_unclamped(native_tokens):
+-    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/analyze_clover_budget.py'))['analyze']
++    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/analyze_clover_budget.py'))['analyze']
+     trace = ([dict(phase='preview',cuda_ms=2.)]*4 +
+              [dict(phase='verify',cuda_ms=2.)]*2 +
+              [dict(phase='state_commit',cuda_ms=.5)]*2 +
+@@ -31,7 +31,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+     import copy
+     import runpy
+ 
+-    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/summarize_clover_abab.py'))['summarize']
++    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/summarize_clover_abab.py'))['summarize']
+     turns = []
+     for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
+         rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
+diff --git a/tests/models/test_clover_eval.py b/tests/models/test_clover_eval.py
+index e38e92e..332ae00 100644
+--- a/tests/models/test_clover_eval.py
++++ b/tests/models/test_clover_eval.py
+@@ -11,7 +11,7 @@ import pytest
+ 
+ @pytest.fixture
+ def arrival_metrics():
+-    script = Path(__file__).parents[2] / "benchmarks/clover_metrics.py"
++    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
+     return runpy.run_path(str(script))["arrival_metrics"]
+ 
+ 
+@@ -53,7 +53,7 @@ def test_mismatched_arrival_counts_are_rejected(arrival_metrics, count, arrivals
+ 
+ 
+ def test_saved_report_timing_correction_preserves_source():
+-    script = Path(__file__).parents[2] / "benchmarks/clover_metrics.py"
++    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
+     correct = runpy.run_path(str(script))["corrected_timing_report"]
+     report = dict(
+         runs=[
+@@ -187,7 +187,7 @@ def test_cap_extension_reuses_only_eos_cases(tmp_path, monkeypatch, change_tempe
+             str(old),
+         ],
+     )
+-    script = Path(__file__).parents[2] / "benchmarks/eval_clover_quality.py"
++    script = Path(__file__).parents[2] / "benchmarks/clover/eval_clover_quality.py"
+     if change_temperature:
+         with pytest.raises(ValueError, match="different protocol"):
+             runpy.run_path(str(script), run_name="__main__")
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index 30b3603..c5240de 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -237,7 +237,7 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
+     harness = runpy.run_path(
+-        str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py")
++        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
+     )
+     sampling = harness["official_modules"](Path(location))[2]
+     gen = SimpleNamespace(
+diff --git a/tests/models/test_clover_real_layers.py b/tests/models/test_clover_real_layers.py
+index 0a75654..ee55350 100644
+--- a/tests/models/test_clover_real_layers.py
++++ b/tests/models/test_clover_real_layers.py
+@@ -19,7 +19,7 @@ def gdn_pair(request):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the fixed local checkpoint")
+     source = Path(location)
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
+     official, configuration, _ = harness["official_modules"](source)
+     config = configuration.CloverMoeConfig(**json.loads((source / "config.json").read_text(encoding="utf-8")))
+     from freetoken.distributed import set_tp_info, try_get_tp_info

@@ -1,5 +1,6 @@
 # Clover development records
 
+- [Current repair qualification and outstanding gates](qualification-20261104.md)
 - [Performance index and metric definitions](clover-performance.md)
 - [R0 runtime report](clover-runtime-performance.md)
 - [R1 review and experiments](clover-runtime-review.md)
@@ -7,6 +8,7 @@
 - [Benchmark commands and independent references](../../benchmarks/clover/README.md)
 - [R0 evidence](evidence/clover-runtime/README.md)
 - [R1 evidence](evidence/clover-runtime-review/README.md)
+- [2026-11-04 repair evidence](evidence/20261104/README.md)
 
 New Clover reports and evidence belong under this directory. Benchmark code is kept
 separately from serving code. The existing R0/R1 archives were relocated byte for byte;
@@ -26,5 +28,6 @@ Do not rewrite historical manifests or patches to make them look like current ru
 
 The 2026-11-04 implementation campaign is active. Its source-bound local runs are under
 `C:/workspace/runs/T-20261104-clover-improve/`; the task log is
-`C:/workspace/tasks/T-20261104-clover-improve/README.md`. New evidence will be collected
-here once its corresponding qualification is complete.
+`C:/workspace/tasks/T-20261104-clover-improve/README.md`. Completed runs are archived above;
+new snapshots are appended as qualification proceeds. Large binary operands remain in
+the local run store, with their paths and hashes retained in the archive inventory.

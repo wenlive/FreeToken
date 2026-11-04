@@ -1,0 +1,1231 @@
+{
+  "state": "complete",
+  "settings": {
+    "cache_slots": 2928,
+    "cache_auto": false,
+    "embedding_host": false,
+    "mapped_host_table_bytes": 0,
+    "memory_ratio": 0.9,
+    "context": 4096,
+    "accept_rule": "exact",
+    "prefix_cache_reuse": false,
+    "token_budget": 256,
+    "warmups": 2,
+    "repeats": 5,
+    "penalties": "checkpoint defaults",
+    "bf16_dense_baseline": false,
+    "indexed_clover_penalty": false
+  },
+  "aggregation": "Two independent processes per side; pooled median of 10 measured requests. Both chronological A/B process ratios and each five-sample range are retained. Warmups excluded. Ratios are after/before for every metric, including latency.",
+  "startup_seconds_per_turn": [
+    52.756315799982985,
+    51.801613800023915,
+    51.558118399989326,
+    51.54638580000028
+  ],
+  "cases": [
+    {
+      "prompt": "Count",
+      "mode": "causal",
+      "width": 8,
+      "output_signatures_per_turn": [
+        [
+          "c142d7e88c60e38c9e02bc65a3b402817c8c31e7504bf2d555df4c7d8c64e20b"
+        ],
+        [
+          "c142d7e88c60e38c9e02bc65a3b402817c8c31e7504bf2d555df4c7d8c64e20b"
+        ],
+        [
+          "c142d7e88c60e38c9e02bc65a3b402817c8c31e7504bf2d555df4c7d8c64e20b"
+        ],
+        [
+          "c142d7e88c60e38c9e02bc65a3b402817c8c31e7504bf2d555df4c7d8c64e20b"
+        ]
+      ],
+      "all_measured_output_ids_equal": true,
+      "metrics": {
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            62.14159832914226,
+            61.80409872272778,
+            64.09671596223505,
+            62.25124144840385
+          ],
+          "before_median": 63.02963433343111,
+          "after_median": 62.15900126283366,
+          "after_over_before_pairs": [
+            0.9945688618334716,
+            0.9712079708589356
+          ],
+          "measured_min_max_per_turn": [
+            [
+              59.18106426816163,
+              63.12378131896732
+            ],
+            [
+              58.51867008760341,
+              62.66661486049257
+            ],
+            [
+              62.935487347894906,
+              64.18795602914659
+            ],
+            [
+              59.54531199789265,
+              62.66636614676981
+            ]
+          ]
+        },
+        "decode_tokens_per_second": {
+          "process_medians": [
+            94.76966233815988,
+            96.33376927286841,
+            96.7612023621662,
+            96.38176218125632
+          ],
+          "before_median": 96.33910373867775,
+          "after_median": 96.35776572706237,
+          "after_over_before_pairs": [
+            1.0165042999639213,
+            0.9960785917118963
+          ],
+          "measured_min_max_per_turn": [
+            [
+              92.8581217570855,
+              97.03523884444992
+            ],
+            [
+              95.22711831787942,
+              96.67320821771355
+            ],
+            [
+              96.23993878162985,
+              97.06648351885994
+            ],
+            [
+              93.79009324438682,
+              97.25075469757392
+            ]
+          ]
+        },
+        "ttft_seconds": {
+          "process_medians": [
+            0.16217239998513833,
+            0.1569321000133641,
+            0.1540429000160657,
+            0.15504380001220852
+          ],
+          "before_median": 0.15819670000928454,
+          "after_median": 0.15531975000340026,
+          "after_over_before_pairs": [
+            0.9676868568742002,
+            1.0064975405944607
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.15392320000682957,
+              0.18426520001958124
+            ],
+            [
+              0.15078389999689534,
+              0.18041359999915585
+            ],
+            [
+              0.15400229999795556,
+              0.16168049999396317
+            ],
+            [
+              0.15085189999081194,
+              0.1665954999916721
+            ]
+          ]
+        },
+        "expert_cache_hit_rate": {
+          "process_medians": [
+            0.7657072368421053,
+            0.7673076923076922,
+            0.7657072368421053,
+            0.7673076923076922
+          ],
+          "before_median": 0.7657072368421053,
+          "after_median": 0.7673076923076922,
+          "after_over_before_pairs": [
+            1.0020901663045363,
+            1.0020901663045363
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.7653782894736842,
+              0.7657072368421053
+            ],
+            [
+              0.767147435897436,
+              0.7674679487179488
+            ],
+            [
+              0.7653782894736842,
+              0.7657072368421053
+            ],
+            [
+              0.767147435897436,
+              0.7674679487179488
+            ]
+          ]
+        },
+        "decode_expert_copy_payload_bytes": {
+          "process_medians": [
+            9522315264,
+            9706143744,
+            9522315264,
+            9706143744
+          ],
+          "before_median": 9522315264.0,
+          "after_median": 9706143744.0,
+          "after_over_before_pairs": [
+            1.0193050193050193,
+            1.0193050193050193
+          ],
+          "measured_min_max_per_turn": [
+            [
+              9522315264,
+              9535684608
+            ],
+            [
+              9699459072,
+              9712828416
+            ],
+            [
+              9522315264,
+              9535684608
+            ],
+            [
+              9699459072,
+              9712828416
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "prompt": "Sky",
+      "mode": "causal",
+      "width": 8,
+      "output_signatures_per_turn": [
+        [
+          "c0cbfeb83a68b78a48650f8a8418a14bc295454323a28c28195089db82c9dd4b"
+        ],
+        [
+          "c0cbfeb83a68b78a48650f8a8418a14bc295454323a28c28195089db82c9dd4b"
+        ],
+        [
+          "c0cbfeb83a68b78a48650f8a8418a14bc295454323a28c28195089db82c9dd4b"
+        ],
+        [
+          "c0cbfeb83a68b78a48650f8a8418a14bc295454323a28c28195089db82c9dd4b"
+        ]
+      ],
+      "all_measured_output_ids_equal": true,
+      "metrics": {
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            64.38091391886108,
+            63.16053791305964,
+            64.09189213914671,
+            63.55215632434442
+          ],
+          "before_median": 64.2364030290039,
+          "after_median": 63.168888361730694,
+          "after_over_before_pairs": [
+            0.9810444442068735,
+            0.9915787192921299
+          ],
+          "measured_min_max_per_turn": [
+            [
+              63.04340338367217,
+              64.90147323194415
+            ],
+            [
+              62.594770009220206,
+              63.662718025460265
+            ],
+            [
+              60.19174741694299,
+              64.79506899934466
+            ],
+            [
+              62.164246734988595,
+              63.86257024194856
+            ]
+          ]
+        },
+        "decode_tokens_per_second": {
+          "process_medians": [
+            91.23652636123764,
+            91.40987157802715,
+            91.82997863328099,
+            91.9392915654279
+          ],
+          "before_median": 91.25529452895255,
+          "after_median": 91.70408655075143,
+          "after_over_before_pairs": [
+            1.001899954148881,
+            1.0011903839440435
+          ],
+          "measured_min_max_per_turn": [
+            [
+              88.64195210634293,
+              92.20873106315388
+            ],
+            [
+              90.26350173076177,
+              92.19206926909342
+            ],
+            [
+              88.04068536332751,
+              92.10704773294111
+            ],
+            [
+              89.94603462402137,
+              92.44344194430185
+            ]
+          ]
+        },
+        "ttft_seconds": {
+          "process_medians": [
+            0.18407570000272244,
+            0.17736689999583177,
+            0.1897330000065267,
+            0.17807200000970624
+          ],
+          "before_median": 0.1848304500017548,
+          "after_median": 0.17758404999040067,
+          "after_over_before_pairs": [
+            0.9635541247063494,
+            0.9385399482619294
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.18131810001796111,
+              0.18557699999655597
+            ],
+            [
+              0.17624820000492036,
+              0.1833516999904532
+            ],
+            [
+              0.1830525000113994,
+              0.21185390002210625
+            ],
+            [
+              0.17589119999320246,
+              0.18432580001535825
+            ]
+          ]
+        },
+        "expert_cache_hit_rate": {
+          "process_medians": [
+            0.748172674454926,
+            0.7473510136583573,
+            0.748172674454926,
+            0.7473510136583573
+          ],
+          "before_median": 0.748172674454926,
+          "after_median": 0.7473510136583573,
+          "after_over_before_pairs": [
+            0.9989017765221548,
+            0.9989017765221548
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.748172674454926,
+              0.7482976197913414
+            ],
+            [
+              0.7472897654192442,
+              0.7474122618974705
+            ],
+            [
+              0.748172674454926,
+              0.7482976197913414
+            ],
+            [
+              0.7472897654192442,
+              0.7474122618974705
+            ]
+          ]
+        },
+        "decode_expert_copy_payload_bytes": {
+          "process_medians": [
+            13472956416,
+            13787136000,
+            13472956416,
+            13787136000
+          ],
+          "before_median": 13472956416.0,
+          "after_median": 13787136000.0,
+          "after_over_before_pairs": [
+            1.0233192756139915,
+            1.0233192756139915
+          ],
+          "measured_min_max_per_turn": [
+            [
+              13466271744,
+              13472956416
+            ],
+            [
+              13783793664,
+              13790478336
+            ],
+            [
+              13466271744,
+              13472956416
+            ],
+            [
+              13783793664,
+              13790478336
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 8,
+      "output_signatures_per_turn": [
+        [
+          "2148de394249d3cbf4f540084f877471a19cea5e88cd50dd91a478ae7f465f31"
+        ],
+        [
+          "2148de394249d3cbf4f540084f877471a19cea5e88cd50dd91a478ae7f465f31"
+        ],
+        [
+          "2148de394249d3cbf4f540084f877471a19cea5e88cd50dd91a478ae7f465f31"
+        ],
+        [
+          "2148de394249d3cbf4f540084f877471a19cea5e88cd50dd91a478ae7f465f31"
+        ]
+      ],
+      "all_measured_output_ids_equal": true,
+      "metrics": {
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            77.84733668263944,
+            78.65537840850494,
+            78.60039527473698,
+            78.01091833297349
+          ],
+          "before_median": 78.12197018881909,
+          "after_median": 78.20110008103211,
+          "after_over_before_pairs": [
+            1.010379824927854,
+            0.9925003310771777
+          ],
+          "measured_min_max_per_turn": [
+            [
+              75.96849534595873,
+              79.188816478063
+            ],
+            [
+              77.76246714257262,
+              79.00583624704588
+            ],
+            [
+              76.14150332681263,
+              79.00471572532702
+            ],
+            [
+              77.06672291456226,
+              78.88010275139655
+            ]
+          ]
+        },
+        "decode_tokens_per_second": {
+          "process_medians": [
+            84.8546465570985,
+            86.40742858584665,
+            85.73309662284633,
+            85.46199461999507
+          ],
+          "before_median": 85.1455972951706,
+          "after_median": 85.91482096542796,
+          "after_over_before_pairs": [
+            1.0182993164399463,
+            0.9968378372701981
+          ],
+          "measured_min_max_per_turn": [
+            [
+              83.12989971966653,
+              86.373046371344
+            ],
+            [
+              85.8202787023392,
+              86.59677468891313
+            ],
+            [
+              83.36163315160401,
+              86.0731462789953
+            ],
+            [
+              84.98195178669435,
+              86.68510496152031
+            ]
+          ]
+        },
+        "ttft_seconds": {
+          "process_medians": [
+            0.25347270001657307,
+            0.2517257000145037,
+            0.25460929999826476,
+            0.2567898000124842
+          ],
+          "before_median": 0.2540410000074189,
+          "after_median": 0.25463765001040883,
+          "after_over_before_pairs": [
+            0.9931077390111236,
+            1.0085641019956235
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.24583040000288747,
+              0.27443180000409484
+            ],
+            [
+              0.2433030999964103,
+              0.2745924000046216
+            ],
+            [
+              0.2453420000092592,
+              0.27524540000013076
+            ],
+            [
+              0.2470418000011705,
+              0.2744376999908127
+            ]
+          ]
+        },
+        "expert_cache_hit_rate": {
+          "process_medians": [
+            0.7840537158259531,
+            0.7831799002685078,
+            0.7840537158259531,
+            0.7831799002685078
+          ],
+          "before_median": 0.7840537158259531,
+          "after_median": 0.7831799002685078,
+          "after_over_before_pairs": [
+            0.998885515698979,
+            0.998885515698979
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.7840416827108202,
+              0.7840537158259531
+            ],
+            [
+              0.7831559263521288,
+              0.7831799002685078
+            ],
+            [
+              0.7840416827108202,
+              0.7840537158259531
+            ],
+            [
+              0.7831559263521288,
+              0.7831799002685078
+            ]
+          ]
+        },
+        "decode_expert_copy_payload_bytes": {
+          "process_medians": [
+            59981561856,
+            60456173568,
+            59981561856,
+            60456173568
+          ],
+          "before_median": 59981561856.0,
+          "after_median": 60456173568.0,
+          "after_over_before_pairs": [
+            1.0079126267691965,
+            1.0079126267691965
+          ],
+          "measured_min_max_per_turn": [
+            [
+              59981561856,
+              59984904192
+            ],
+            [
+              60456173568,
+              60462858240
+            ],
+            [
+              59981561856,
+              59984904192
+            ],
+            [
+              60456173568,
+              60462858240
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "prompt": "JSON",
+      "mode": "causal",
+      "width": 8,
+      "output_signatures_per_turn": [
+        [
+          "f553918938e6bdc2b96c55322b733d7ba41376cd9b814d36458a04a78bd4d563"
+        ],
+        [
+          "f553918938e6bdc2b96c55322b733d7ba41376cd9b814d36458a04a78bd4d563"
+        ],
+        [
+          "f553918938e6bdc2b96c55322b733d7ba41376cd9b814d36458a04a78bd4d563"
+        ],
+        [
+          "f553918938e6bdc2b96c55322b733d7ba41376cd9b814d36458a04a78bd4d563"
+        ]
+      ],
+      "all_measured_output_ids_equal": true,
+      "metrics": {
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            69.90134319451589,
+            69.60674214206442,
+            69.14094784151256,
+            68.92332312225804
+          ],
+          "before_median": 69.15157653899306,
+          "after_median": 69.21914009396684,
+          "after_over_before_pairs": [
+            0.9957854736548957,
+            0.99685244813604
+          ],
+          "measured_min_max_per_turn": [
+            [
+              68.8184323282649,
+              70.59160360520997
+            ],
+            [
+              68.8624113813291,
+              69.82227632510025
+            ],
+            [
+              68.62087755142275,
+              69.37765500624101
+            ],
+            [
+              67.64622064888286,
+              69.60765483413796
+            ]
+          ]
+        },
+        "decode_tokens_per_second": {
+          "process_medians": [
+            92.34037662215839,
+            92.91803852877459,
+            90.54179142992169,
+            91.80904539443395
+          ],
+          "before_median": 91.10183994994833,
+          "after_median": 92.8080504737774,
+          "after_over_before_pairs": [
+            1.0062557889381358,
+            1.0139963429538845
+          ],
+          "measured_min_max_per_turn": [
+            [
+              89.9557047511194,
+              92.89982993907427
+            ],
+            [
+              91.84286269724439,
+              93.10966566147381
+            ],
+            [
+              90.05064342265106,
+              91.18511361062
+            ],
+            [
+              91.48024069673632,
+              92.90026653710886
+            ]
+          ]
+        },
+        "ttft_seconds": {
+          "process_medians": [
+            0.2899030999979004,
+            0.2874156000034418,
+            0.28721280000172555,
+            0.2872953000187408
+          ],
+          "before_median": 0.288557949999813,
+          "after_median": 0.2873554500110913,
+          "after_over_before_pairs": [
+            0.9914195467572556,
+            1.0002872435247132
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.28375509998295456,
+              0.3130732999998145
+            ],
+            [
+              0.28569010001956485,
+              0.2936111000017263
+            ],
+            [
+              0.2846432999940589,
+              0.30483139998978004
+            ],
+            [
+              0.2851063999987673,
+              0.3188246999925468
+            ]
+          ]
+        },
+        "expert_cache_hit_rate": {
+          "process_medians": [
+            0.7604120443740094,
+            0.7576717916535927,
+            0.7604120443740094,
+            0.7576717916535927
+          ],
+          "before_median": 0.7604120443740094,
+          "after_median": 0.7576717916535927,
+          "after_over_before_pairs": [
+            0.9963963580788984,
+            0.9963963580788984
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.7603486529318542,
+              0.7604120443740094
+            ],
+            [
+              0.757609036711641,
+              0.7577031691245686
+            ],
+            [
+              0.7603486529318542,
+              0.7604120443740094
+            ],
+            [
+              0.757609036711641,
+              0.7577031691245686
+            ]
+          ]
+        },
+        "decode_expert_copy_payload_bytes": {
+          "process_medians": [
+            25264717824,
+            25812860928,
+            25264717824,
+            25812860928
+          ],
+          "before_median": 25264717824.0,
+          "after_median": 25812860928.0,
+          "after_over_before_pairs": [
+            1.0216959915332715,
+            1.0216959915332715
+          ],
+          "measured_min_max_per_turn": [
+            [
+              25264717824,
+              25271402496
+            ],
+            [
+              25809518592,
+              25819545600
+            ],
+            [
+              25264717824,
+              25271402496
+            ],
+            [
+              25809518592,
+              25819545600
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "causal",
+      "width": 8,
+      "output_signatures_per_turn": [
+        [
+          "00c603c0fff8a6c3f5bf7fda913045fea1a5f153d7620f5cd5dbbeb6979d891b"
+        ],
+        [
+          "00c603c0fff8a6c3f5bf7fda913045fea1a5f153d7620f5cd5dbbeb6979d891b"
+        ],
+        [
+          "00c603c0fff8a6c3f5bf7fda913045fea1a5f153d7620f5cd5dbbeb6979d891b"
+        ],
+        [
+          "00c603c0fff8a6c3f5bf7fda913045fea1a5f153d7620f5cd5dbbeb6979d891b"
+        ]
+      ],
+      "all_measured_output_ids_equal": true,
+      "metrics": {
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            86.68831932387562,
+            87.47042137492126,
+            85.71850940817355,
+            85.70376241576953
+          ],
+          "before_median": 86.58659756875119,
+          "after_median": 86.0231430189418,
+          "after_over_before_pairs": [
+            1.0090220003934283,
+            0.9998279602327919
+          ],
+          "measured_min_max_per_turn": [
+            [
+              83.8954442712442,
+              88.79126055325908
+            ],
+            [
+              85.02697306528874,
+              88.12133759298324
+            ],
+            [
+              83.97707150599278,
+              87.84416732814638
+            ],
+            [
+              84.3596106366707,
+              87.57651100337209
+            ]
+          ]
+        },
+        "decode_tokens_per_second": {
+          "process_medians": [
+            105.28301466710796,
+            106.63484659517903,
+            102.45476537246837,
+            105.65192388571376
+          ],
+          "before_median": 103.94141524385722,
+          "after_median": 106.38185474453843,
+          "after_over_before_pairs": [
+            1.0128399811911293,
+            1.0312055618069331
+          ],
+          "measured_min_max_per_turn": [
+            [
+              102.2312174418084,
+              107.06586010322674
+            ],
+            [
+              105.7354767528463,
+              107.64523121006344
+            ],
+            [
+              101.82103984558312,
+              105.67454859015649
+            ],
+            [
+              104.61033299423337,
+              107.56965913473043
+            ]
+          ]
+        },
+        "ttft_seconds": {
+          "process_medians": [
+            0.23854259998188354,
+            0.23324820000561886,
+            0.2340212999843061,
+            0.26034450001316145
+          ],
+          "before_median": 0.23632749998068903,
+          "after_median": 0.24976465001236647,
+          "after_over_before_pairs": [
+            0.9778052223096974,
+            1.112482069070724
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.23053820000495762,
+              0.2603055000072345
+            ],
+            [
+              0.23085030002403073,
+              0.2609664000046905
+            ],
+            [
+              0.23117750001256354,
+              0.2618586999888066
+            ],
+            [
+              0.23864870000397786,
+              0.2619471999933012
+            ]
+          ]
+        },
+        "expert_cache_hit_rate": {
+          "process_medians": [
+            0.8608340569336557,
+            0.8580745847988633,
+            0.8608340569336557,
+            0.8580745847988633
+          ],
+          "before_median": 0.8608340569336557,
+          "after_median": 0.8580745847988633,
+          "after_over_before_pairs": [
+            0.996794420350164,
+            0.996794420350164
+          ],
+          "measured_min_max_per_turn": [
+            [
+              0.8608105888150948,
+              0.8608340569336557
+            ],
+            [
+              0.858027998416063,
+              0.8580978779902635
+            ],
+            [
+              0.8608105888150948,
+              0.8608340569336557
+            ],
+            [
+              0.858027998416063,
+              0.8580978779902635
+            ]
+          ]
+        },
+        "decode_expert_copy_payload_bytes": {
+          "process_medians": [
+            19820052480,
+            20364853248,
+            19820052480,
+            20364853248
+          ],
+          "before_median": 19820052480.0,
+          "after_median": 20364853248.0,
+          "after_over_before_pairs": [
+            1.027487352445194,
+            1.027487352445194
+          ],
+          "measured_min_max_per_turn": [
+            [
+              19820052480,
+              19823394816
+            ],
+            [
+              20361510912,
+              20371537920
+            ],
+            [
+              19820052480,
+              19823394816
+            ],
+            [
+              20361510912,
+              20371537920
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "label": "a2-quiet-abab-1-a",
+      "run": "20261104T053557Z-a2-quiet-abab-1-a",
+      "sha256": "79eef62b8e5d74cdba929a779b9c304a2db9c1df1c4deeca4d782d517bd5b85e",
+      "manifest": {
+        "started_at": "20261104T053557Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-slots",
+          "2928",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "2",
+          "--repeats",
+          "5",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T053557Z-a2-quiet-abab-1-a\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-phase1",
+        "commit": "98a8dfa32beb087b8a77b349ed2665069fc1b65b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-phase1/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-phase1",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          }
+        ],
+        "pid": 14656,
+        "exit_code": 0,
+        "elapsed_seconds": 112.9210000000021
+      }
+    },
+    {
+      "label": "a2-quiet-abab-2-b",
+      "run": "20261104T053750Z-a2-quiet-abab-2-b",
+      "sha256": "6148ed956a727175ea88c5518d3b97f51785dad5948bd04b952b5e873cd89b90",
+      "manifest": {
+        "started_at": "20261104T053750Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-slots",
+          "2928",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "2",
+          "--repeats",
+          "5",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T053750Z-a2-quiet-abab-2-b\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-a2",
+        "commit": "6ba44526219860e5007b61e4848b0bb94253ad9b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a2/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a2",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-a2/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-a2",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          }
+        ],
+        "pid": 13580,
+        "exit_code": 0,
+        "elapsed_seconds": 111.85899999999674
+      }
+    },
+    {
+      "label": "a2-quiet-abab-3-a",
+      "run": "20261104T053942Z-a2-quiet-abab-3-a",
+      "sha256": "9c16887a169429ee0b1bd17f7e866f5693e39ddd92f573b78d31e4a199dfbd0e",
+      "manifest": {
+        "started_at": "20261104T053942Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-slots",
+          "2928",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "2",
+          "--repeats",
+          "5",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T053942Z-a2-quiet-abab-3-a\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-phase1",
+        "commit": "98a8dfa32beb087b8a77b349ed2665069fc1b65b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-phase1/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-phase1",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          }
+        ],
+        "pid": 11172,
+        "exit_code": 0,
+        "elapsed_seconds": 111.67199999999139
+      }
+    },
+    {
+      "label": "a2-quiet-abab-4-b",
+      "run": "20261104T054134Z-a2-quiet-abab-4-b",
+      "sha256": "8c8194bdf652630076b0f3311e563848bc3ab433b0511e5dfab15b281552b317",
+      "manifest": {
+        "started_at": "20261104T054134Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-slots",
+          "2928",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "2",
+          "--repeats",
+          "5",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054134Z-a2-quiet-abab-4-b\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-a2",
+        "commit": "6ba44526219860e5007b61e4848b0bb94253ad9b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a2/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a2",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-a2/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-a2",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          }
+        ],
+        "pid": 10076,
+        "exit_code": 0,
+        "elapsed_seconds": 111.82800000000861
+      }
+    }
+  ],
+  "varied_settings": {},
+  "original_settings": [
+    {
+      "cache_slots": 2928,
+      "cache_auto": false,
+      "embedding_host": false,
+      "mapped_host_table_bytes": 0,
+      "memory_ratio": 0.9,
+      "context": 4096,
+      "accept_rule": "exact",
+      "prefix_cache_reuse": false,
+      "token_budget": 256,
+      "warmups": 2,
+      "repeats": 5,
+      "penalties": "checkpoint defaults",
+      "bf16_dense_baseline": false,
+      "indexed_clover_penalty": false
+    },
+    {
+      "cache_slots": 2928,
+      "cache_auto": false,
+      "embedding_host": false,
+      "mapped_host_table_bytes": 0,
+      "memory_ratio": 0.9,
+      "context": 4096,
+      "accept_rule": "exact",
+      "prefix_cache_reuse": false,
+      "token_budget": 256,
+      "warmups": 2,
+      "repeats": 5,
+      "penalties": "checkpoint defaults",
+      "bf16_dense_baseline": false,
+      "indexed_clover_penalty": false
+    },
+    {
+      "cache_slots": 2928,
+      "cache_auto": false,
+      "embedding_host": false,
+      "mapped_host_table_bytes": 0,
+      "memory_ratio": 0.9,
+      "context": 4096,
+      "accept_rule": "exact",
+      "prefix_cache_reuse": false,
+      "token_budget": 256,
+      "warmups": 2,
+      "repeats": 5,
+      "penalties": "checkpoint defaults",
+      "bf16_dense_baseline": false,
+      "indexed_clover_penalty": false
+    },
+    {
+      "cache_slots": 2928,
+      "cache_auto": false,
+      "embedding_host": false,
+      "mapped_host_table_bytes": 0,
+      "memory_ratio": 0.9,
+      "context": 4096,
+      "accept_rule": "exact",
+      "prefix_cache_reuse": false,
+      "token_budget": 256,
+      "warmups": 2,
+      "repeats": 5,
+      "penalties": "checkpoint defaults",
+      "bf16_dense_baseline": false,
+      "indexed_clover_penalty": false
+    }
+  ]
+}

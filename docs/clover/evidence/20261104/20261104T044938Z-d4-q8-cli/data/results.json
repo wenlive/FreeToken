@@ -1,0 +1,243 @@
+{
+  "state": "passed",
+  "commands": [
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: __main__.py [-h]\n                   {bench,context,preview,costs,hf-check,llama-compare,quality}\n                   ...\n\nClover measurement and reference tools; run from the repository root.\n\npositional arguments:\n  {bench,context,preview,costs,hf-check,llama-compare,quality}\n  arguments\n\noptions:\n  -h, --help            show this help message and exit\n\nOptional tool selectors after the command:\n  bench: resources\n  preview: split-kv, audit, graphs, lifecycle, verify, ab, outputs\n  costs: abab\n  hf-check: denoise, selfspec, quantization\n  quality: fetch-data\nOmit the selector to run the default tool. Each tool accepts --help.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "bench",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover bench [-h] --model MODEL --output OUTPUT\n                                         [--modes MODES] [--prompts PROMPTS]\n                                         [--long-prompts-json LONG_PROMPTS_JSON]\n                                         [--tokens TOKENS] [--warmups WARMUPS]\n                                         [--repeats REPEATS]\n                                         [--cache-slots CACHE_SLOTS]\n                                         [--memory-ratio MEMORY_RATIO]\n                                         [--context-size CONTEXT_SIZE]\n                                         [--accept-rule {exact,threshold}]\n                                         [--reuse-prefix]\n                                         [--runtime-breakdown]\n                                         [--clover-max-width {0,8,16,32}]\n                                         [--cache-auto] [--embedding-host]\n                                         [--phase-cache-stats]\n                                         [--no-penalties] [--require-exact]\n                                         [--capture-first-logits]\n                                         [--capture-logits-steps CAPTURE_LOGITS_STEPS]\n                                         [--bf16-dense-baseline]\n\nRecorded offline Clover mode comparison with fixed prompts and token arrivals.\n\noptions:\n  -h, --help            show this help message and exit\n  --model MODEL\n  --output OUTPUT\n  --modes MODES\n  --prompts PROMPTS\n  --long-prompts-json LONG_PROMPTS_JSON\n                        Saved {\"prompts\": {name: {\"user_text\": ...}}}; select\n                        names with --prompts\n  --tokens TOKENS\n  --warmups WARMUPS\n  --repeats REPEATS\n  --cache-slots CACHE_SLOTS\n  --memory-ratio MEMORY_RATIO\n  --context-size CONTEXT_SIZE\n  --accept-rule {exact,threshold}\n  --reuse-prefix        Diagnostic only; default benchmark recomputes the\n                        complete prompt\n  --runtime-breakdown   Separate instrumented run: CUDA event envelopes for\n                        preview, verify, state and prompt/pending advance\n  --clover-max-width {0,8,16,32}\n  --cache-auto\n  --embedding-host\n  --phase-cache-stats   With --runtime-breakdown, snapshot GPU miss counters\n                        at phase boundaries\n  --no-penalties\n  --require-exact\n  --capture-first-logits\n  --capture-logits-steps CAPTURE_LOGITS_STEPS\n  --bf16-dense-baseline\n                        Benchmark-only Qwen override: dequantize stored dense\n                        linears to BF16 while keeping NVFP4 experts\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "context",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover context [-h] --model MODEL\n                                           [--cache-slots CACHE_SLOTS]\n                                           [--prefixes PREFIXES] --output\n                                           OUTPUT\n\nWarm preview/verify latency at exact long prefixes, with capture excluded.\n\noptions:\n  -h, --help            show this help message and exit\n  --model MODEL\n  --cache-slots CACHE_SLOTS\n  --prefixes PREFIXES\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --model MODEL --cache-slots\n                                           CACHE_SLOTS --output OUTPUT\n\nCompare width-W native previews on the exact stock first-anchor inputs.\n\noptions:\n  -h, --help            show this help message and exit\n  --model MODEL\n  --cache-slots CACHE_SLOTS\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "graphs",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --model MODEL --output OUTPUT\n                                           [--cache-slots CACHE_SLOTS]\n                                           [--memory-ratio MEMORY_RATIO]\n                                           [--split-kv]\n\nAudit real Clover graph replay, read-only state, changing prefixes and CUDA\ntiming.\n\noptions:\n  -h, --help            show this help message and exit\n  --model MODEL\n  --output OUTPUT\n  --cache-slots CACHE_SLOTS\n  --memory-ratio MEMORY_RATIO\n  --split-kv\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "lifecycle",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --model MODEL --output OUTPUT\n\nReuse a W32 engine for a long fresh prefill, then another block request.\n\noptions:\n  -h, --help       show this help message and exit\n  --model MODEL\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "verify",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --model MODEL --output OUTPUT\n\nAudit full-model batched verify against sequential native causal execution.\n\noptions:\n  -h, --help       show this help message and exit\n  --model MODEL\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "split-kv",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --model MODEL --output OUTPUT\n                                           [--prefixes PREFIXES]\n\nPaired ABAB whole-model preview graph replays at fixed long prefixes.\n\noptions:\n  -h, --help           show this help message and exit\n  --model MODEL\n  --output OUTPUT\n  --prefixes PREFIXES\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "outputs",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --results RESULTS --output\n                                           OUTPUT [--tokenizer TOKENIZER]\n\nCheck concrete code/JSON outputs separately from throughput and logit parity.\n\noptions:\n  -h, --help            show this help message and exit\n  --results RESULTS\n  --output OUTPUT\n  --tokenizer TOKENIZER\n                        Local tokenizer for HF case files containing token ids\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "costs",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover costs [-h] --native NATIVE --hf HF --output\n                                         OUTPUT\n\nConditional denoise throughput budgets from HF progress and native measured\ncosts. This is a fixed-hardware, fixed-prefix-distribution compute budget, not\na universal algorithmic upper bound. Native progress and controller efficiency\nare reported separately; exceeding the HF-conditioned estimate is possible\nwhen progress differs.\n\noptions:\n  -h, --help       show this help message and exit\n  --native NATIVE\n  --hf HF\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "costs",
+        "abab",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover costs [-h] --turns TURNS TURNS TURNS TURNS\n                                         --output OUTPUT\n\nSummarize four chronological B/A/B/A processes without hiding process drift.\n\noptions:\n  -h, --help            show this help message and exit\n  --turns TURNS TURNS TURNS TURNS\n                        Chronological before/after/before/after results.json\n                        paths\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "hf-check",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover hf-check [-h] --source SOURCE --checkpoint\n                                            CHECKPOINT --native-results\n                                            NATIVE_RESULTS --output OUTPUT\n                                            [--precision {nvfp4,bf16,fp8,gguf}]\n\nCompare native read-only previews to the fixed official same-weight HF model.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --checkpoint CHECKPOINT\n  --native-results NATIVE_RESULTS\n  --output OUTPUT\n  --precision {nvfp4,bf16,fp8,gguf}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "hf-check",
+        "denoise",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover hf-check [-h] --source SOURCE --checkpoint\n                                            CHECKPOINT --native-results\n                                            NATIVE_RESULTS --output OUTPUT\n                                            [--tokens TOKENS]\n                                            [--prompts PROMPTS]\n                                            [--widths WIDTHS]\n                                            [--precision {nvfp4,bf16,fp8,gguf}]\n\nUnmodified official LowConfidence generate with bounded quantized experts.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --checkpoint CHECKPOINT\n  --native-results NATIVE_RESULTS\n  --output OUTPUT\n  --tokens TOKENS\n  --prompts PROMPTS\n  --widths WIDTHS\n  --precision {nvfp4,bf16,fp8,gguf}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "hf-check",
+        "selfspec",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover hf-check [-h] --source SOURCE --checkpoint\n                                            CHECKPOINT --native-results\n                                            NATIVE_RESULTS --output OUTPUT\n                                            [--tokens TOKENS]\n                                            [--prompts PROMPTS]\n                                            [--precision {nvfp4,bf16,fp8,gguf}]\n\nSame-weight official forwards with independent exact-prefix acceptance.\nReference commits accepted inputs by causal replay because HF exposes only\nfinal GDN states. The FreeToken implementation instead retains transactional\nsnapshots. Replay here is an oracle implementation detail, never a serving\nbenchmark.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --checkpoint CHECKPOINT\n  --native-results NATIVE_RESULTS\n  --output OUTPUT\n  --tokens TOKENS\n  --prompts PROMPTS\n  --precision {nvfp4,bf16,fp8,gguf}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "hf-check",
+        "quantization",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover hf-check [-h] --source SOURCE --checkpoint\n                                            CHECKPOINT --prompts-json\n                                            PROMPTS_JSON --output OUTPUT\n                                            [--reference REFERENCE]\n                                            --precision {bf16,nvfp4,fp8}\n                                            [--steps STEPS]\n\nCompare routed-weight recipes on an identical BF16-generated causal history.\nRun BF16 first, then pass its output directory as --reference for NVFP4/FP8.\nThe bounded storage adapter calls the pinned official HF forward unchanged.\nBoth raw distributions and checkpoint-penalized decisions are reported; these\nare distinct from the all-mask, first-block preview stress experiment.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --checkpoint CHECKPOINT\n  --prompts-json PROMPTS_JSON\n  --output OUTPUT\n  --reference REFERENCE\n  --precision {bf16,nvfp4,fp8}\n  --steps STEPS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "quality",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover quality [-h] --source SOURCE --checkpoint\n                                           CHECKPOINT --data DATA --output\n                                           OUTPUT --backend {native,hf}\n                                           [--precision {nvfp4,bf16,fp8,gguf}]\n                                           [--tokens TOKENS] [--limit LIMIT]\n                                           [--cache-slots CACHE_SLOTS]\n                                           [--datasets DATASETS] [--resume]\n                                           [--extend-from EXTEND_FROM]\n\nFixed first-50 GSM8K and HumanEval, identical greedy causal protocols. HF\nprecision choices change routed weights only; arithmetic is official Clover.\nResults are exploratory subset scores, not a full benchmark quality claim.\n\noptions:\n  -h, --help            show this help message and exit\n  --source SOURCE\n  --checkpoint CHECKPOINT\n  --data DATA\n  --output OUTPUT\n  --backend {native,hf}\n  --precision {nvfp4,bf16,fp8,gguf}\n  --tokens TOKENS\n  --limit LIMIT\n  --cache-slots CACHE_SLOTS\n  --datasets DATASETS\n  --resume              Validate protocol and skip recorded cases\n  --extend-from EXTEND_FROM\n                        Larger token cap: reuse EOS-terminated cases, rerun\n                        only capped cases\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "quality",
+        "fetch-data",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover quality [-h] --output OUTPUT\n\nFetch only fixed-revision OpenAI evaluation datasets, never model files.\n\noptions:\n  -h, --help       show this help message and exit\n  --output OUTPUT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "llama-compare",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover llama-compare [-h] --executable EXECUTABLE\n                                                 --model MODEL --prompts-json\n                                                 PROMPTS_JSON --output OUTPUT\n                                                 [--frontend {server,cli}]\n                                                 [--modes MODES]\n                                                 [--prompts PROMPTS]\n                                                 [--tokens TOKENS]\n                                                 [--warmups WARMUPS]\n                                                 [--repeats REPEATS]\n                                                 [--cache-mib CACHE_MIB]\n                                                 [--context-size CONTEXT_SIZE]\n                                                 [--batch-size BATCH_SIZE]\n                                                 [--ubatch-size UBATCH_SIZE]\n                                                 [--load-mode {mmap,none}]\n\nMeasure an unmodified official Clover llama.cpp build with exact prompt ids.\nServer trials retain the expert cache but disable prompt/KV reuse. CLI trials\nstart a fresh model process: their cache state is deliberately labelled cold.\nRaw streams/logs and the built-in EOS-inclusive counters are always preserved.\n\noptions:\n  -h, --help            show this help message and exit\n  --executable EXECUTABLE\n  --model MODEL\n  --prompts-json PROMPTS_JSON\n  --output OUTPUT\n  --frontend {server,cli}\n  --modes MODES\n  --prompts PROMPTS\n  --tokens TOKENS\n  --warmups WARMUPS\n  --repeats REPEATS\n  --cache-mib CACHE_MIB\n  --context-size CONTEXT_SIZE\n  --batch-size BATCH_SIZE\n  --ubatch-size UBATCH_SIZE\n  --load-mode {mmap,none}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+        "-m",
+        "benchmarks.clover",
+        "preview",
+        "ab",
+        "--help"
+      ],
+      "code": 0,
+      "stdout": "usage: python -m benchmarks.clover preview [-h] --stage {native,reference}\n                                           --model MODEL --source SOURCE\n                                           [--native-output NATIVE_OUTPUT]\n                                           --output OUTPUT\n\nPaired preview arithmetic diagnostics; fixed weights, inputs and clean prefix.\nNo reference arithmetic in this file is a serving backend or a timing\nbenchmark. Dense/MoE oracle weights remain exactly dequantized FP32, avoiding\nBF16 weight rounding.\n\noptions:\n  -h, --help            show this help message and exit\n  --stage {native,reference}\n  --model MODEL\n  --source SOURCE\n  --native-output NATIVE_OUTPUT\n  --output OUTPUT\n",
+      "stderr": ""
+    }
+  ]
+}

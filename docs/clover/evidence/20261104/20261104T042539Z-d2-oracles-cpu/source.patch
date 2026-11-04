@@ -1,0 +1,330 @@
+diff --git a/benchmarks/bench_clover_split_kv.py b/benchmarks/bench_clover_split_kv.py
+index 96f3564..f63efa0 100644
+--- a/benchmarks/bench_clover_split_kv.py
++++ b/benchmarks/bench_clover_split_kv.py
+@@ -8,7 +8,7 @@ import statistics
+ import torch
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from freetoken.models.clover_moe.preview import make_preview_batch
++from clover.oracles import make_preview_batch
+ from check_clover_preview import persistent_hashes
+ 
+ 
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index d94cd95..062c30c 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -11,7 +11,7 @@ import torch
+ 
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from freetoken.models.clover_moe.preview import make_preview_batch
++from clover.oracles import make_preview_batch, make_verify_batch
+ from check_clover_preview import persistent_hashes
+ 
+ 
+@@ -93,7 +93,7 @@ def main():
+                 if runtime.transactions is not None and runtime.transactions.capacity < width:
+                     runtime._blocks().clear_verify()
+                     runtime.transactions = None
+-                eager = runtime._verify_batch(req, tokens, capacity=width)
++                eager = make_verify_batch(runtime, req, tokens, capacity=width)
+                 with engine.ctx.forward_batch(eager):
+                     reference = engine.model.forward().float().cpu()
+                 state_hashes = [(digest(runtime.transactions.recurrent[:, row]),
+diff --git a/benchmarks/check_clover_preview.py b/benchmarks/check_clover_preview.py
+index 6c33040..56e2f80 100644
+--- a/benchmarks/check_clover_preview.py
++++ b/benchmarks/check_clover_preview.py
+@@ -9,7 +9,7 @@ import torch
+ 
+ from freetoken.core import SamplingParams
+ from freetoken.llm import LLM
+-from freetoken.models.clover_moe.preview import make_preview_batch
++from clover.oracles import make_preview_batch
+ 
+ 
+ def persistent_hashes(engine):
+diff --git a/benchmarks/check_clover_preview_ab.py b/benchmarks/check_clover_preview_ab.py
+index 573bfce..037bbe2 100644
+--- a/benchmarks/check_clover_preview_ab.py
++++ b/benchmarks/check_clover_preview_ab.py
+@@ -79,7 +79,7 @@ def main():
+ 
+     from freetoken.core import SamplingParams, get_global_ctx
+     from freetoken.llm import LLM
+-    from freetoken.models.clover_moe.preview import make_preview_batch
++    from clover.oracles import make_preview_batch
+     from freetoken.models.clover_moe.packed import CloverPackedLinear
+     from freetoken.layers.activation import silu_and_mul
+     from freetoken.kernel import moe_sum_reduce_triton
+diff --git a/benchmarks/clover_gguf_reference.py b/benchmarks/clover_gguf_reference.py
+index 17b2a52..0ab99dc 100644
+--- a/benchmarks/clover_gguf_reference.py
++++ b/benchmarks/clover_gguf_reference.py
+@@ -18,7 +18,8 @@ import torch.nn.functional as functional
+ 
+ from clover_gguf_decode import decode_expert
+ from clover_hf_reference import official_modules
+-from freetoken.models.clover_moe.gguf import iter_hf_gguf_weights, parse_gguf_config
++from freetoken.models.clover_moe.gguf import parse_gguf_config
++from clover.oracles import iter_hf_gguf_weights
+ from freetoken.models.gguf.reader import iter_gguf_tensors
+ from freetoken.utils import cached_load_hf_config
+ 
+diff --git a/python/freetoken/models/clover_moe/acceptance.py b/python/freetoken/models/clover_moe/acceptance.py
+deleted file mode 100644
+index 592f90d..0000000
+--- a/python/freetoken/models/clover_moe/acceptance.py
++++ /dev/null
+@@ -1,41 +0,0 @@
+-# Source: WilliamZR/sglang@2243dc6edb416073b60be0765904cabae9eb61cf
+-# Path: python/sglang/srt/speculative/clover_utils.py
+-# Local changes: provenance header only.
+-# SPDX-License-Identifier: Apache-2.0
+-"""Tensor-only acceptance for Clover's linear candidate chain."""
+-
+-import torch
+-
+-
+-def clover_correct_drafts(
+-    logits, candidates, accept_ratio=0.9, accept_delta=0.6, accept_rule="threshold"
+-):
+-    """Return counts excluding bonus; logits[j] verifies candidates[j + 1].
+-
+-    Exact matches the verify argmax; threshold uses raw target probabilities.
+-    Both are independent of temperature/top-k/top-p used for the boundary token.
+-    """
+-    if accept_rule == "exact":
+-        matches = candidates[:, 1:] == logits[:, :-1].argmax(dim=-1)
+-        return matches.to(torch.int32).cumprod(dim=-1).sum(-1).to(torch.int32)
+-    if accept_rule != "threshold":
+-        raise ValueError(f"Unknown Clover accept rule: {accept_rule}")
+-    probabilities = torch.softmax(logits[:, :-1].float(), dim=-1)
+-    proposal_probs = probabilities.gather(-1, candidates[:, 1:, None]).squeeze(-1)
+-    entropy = -(probabilities * probabilities.clamp_min(1e-12).log()).sum(-1)
+-    thresholds = torch.minimum(
+-        torch.full_like(entropy, accept_ratio), accept_delta * torch.exp(-entropy)
+-    )
+-    # A zero threshold must still reject candidates a hard penalty blocked.
+-    matches = (proposal_probs >= thresholds) & (proposal_probs > 0)
+-    return matches.to(torch.int32).cumprod(dim=-1).sum(-1).to(torch.int32)
+-
+-
+-def clover_accept_tokens(candidates, num_correct_drafts, bonus_tokens):
+-    """Padded output rows: correct drafts followed by the newly sampled bonus."""
+-    width = candidates.shape[1]
+-    offsets = torch.arange(width, device=candidates.device)[None, :]
+-    shifted = torch.cat((candidates[:, 1:], bonus_tokens[:, None]), dim=1)
+-    return torch.where(
+-        offsets < num_correct_drafts[:, None], shifted, bonus_tokens[:, None]
+-    )
+diff --git a/python/freetoken/models/clover_moe/gguf.py b/python/freetoken/models/clover_moe/gguf.py
+index a957e40..9bf4ca2 100644
+--- a/python/freetoken/models/clover_moe/gguf.py
++++ b/python/freetoken/models/clover_moe/gguf.py
+@@ -18,7 +18,6 @@ from freetoken.models.qwen3_5_moe.weight import _is_gemma_norm
+ from .model import CloverMoeModelLM as BaseCloverModel
+ 
+ EXPERT_FORMAT = "clover_gguf"
+-GATE_UP_TYPE, DOWN_TYPE = 23, 12  # Legacy file contract; execution reads descriptors.
+ SUPPORTED_EXPERT_TYPES = {2, 8, 12, 14, 23}
+ _EXPERT = re.compile(r"^blk\.(\d+)\.ffn_(gate|up|down)_exps\.weight$")
+ _SCALARS = {
+@@ -217,34 +216,6 @@ def _restore_dense(name, value, config, *, dtype=torch.bfloat16):
+     return value.to(dtype)
+ 
+ 
+-def iter_hf_gguf_weights(model_path, config, *, preserve_q8=False):
+-    """Dense tensors in original Clover key/head order for independent HF oracles."""
+-    import gguf
+-    import numpy as np
+-
+-    global_names = {
+-        "token_embd.weight": "model.embed_tokens.weight",
+-        "output.weight": "lm_head.weight",
+-        "output_norm.weight": "model.norm.weight",
+-    }
+-    for tensor in iter_gguf_tensors(model_path):
+-        if _EXPERT.fullmatch(tensor.name):
+-            continue
+-        name = global_names.get(tensor.name)
+-        if name is None:
+-            match = re.fullmatch(r"blk\.(\d+)\.(.+)", tensor.name)
+-            if match is None or match[2] not in _LAYER:
+-                raise ValueError(f"Unmapped Clover GGUF tensor {tensor.name}")
+-            name = f"model.layers.{int(match[1])}.{_LAYER[match[2]]}"
+-        # The CPU reader is independent of the CUDA inference dequant kernels.
+-        raw = tensor._raw
+-        values = gguf.dequantize(raw, gguf.GGMLQuantizationType(tensor.ggml_type))
+-        value = torch.from_numpy(np.array(values, copy=True)).reshape(tensor.shape)
+-        packed_linear = preserve_q8 and tensor.ggml_type == 8 and not name.endswith("embed_tokens.weight")
+-        dtype = torch.float32 if packed_linear else torch.bfloat16
+-        yield name, _restore_dense(name, value, config, dtype=dtype)
+-
+-
+ def iter_gguf_weights(
+     model_path, device, *, include_moe_experts, include_non_moe, include_vision=True
+ ):
+diff --git a/python/freetoken/models/clover_moe/preview.py b/python/freetoken/models/clover_moe/preview.py
+index d24095f..98d80e3 100644
+--- a/python/freetoken/models/clover_moe/preview.py
++++ b/python/freetoken/models/clover_moe/preview.py
+@@ -4,12 +4,9 @@ Preview semantics: DiffuSpace/Clover-35B-A3B-Preview@4b0402b65e523d0183a14c43195
+ modeling_clover_moe.py. Numerical preview kernels retain their SGLang source
+ notices. Verify reuses FreeToken's existing FLA intermediate-state support.
+ """
+-import copy
+ 
+ import torch
+ 
+-from freetoken.attention.linear import FLAMetadata
+-from freetoken.core import Batch
+ 
+ from freetoken.kernel.causal_conv1d import causal_conv1d_varlen
+ from freetoken.kernel.triton.attention import extend_paged_attention
+@@ -183,34 +180,3 @@ def block_forward(model, ctx, *, preview):
+                   else layer.mlp.forward(hidden))
+     hidden, _ = model.model.norm.forward_add_residual(hidden, residual)
+     return model.lm_head.forward(hidden)
+-
+-
+-def make_preview_batch(engine, request, tokens, *, coreset_top_p=.9):
+-    """Build private metadata; no page allocation or live request mutation."""
+-    width = len(tokens)
+-    if width not in (8, 16, 32) or not 0 < coreset_top_p <= 1:
+-        raise ValueError("Clover preview needs width 8/16/32 and coreset top-p in (0,1]")
+-    prefix = request.cached_len
+-    if prefix + width > engine.max_seq_len:
+-        raise ValueError("Clover preview block exceeds the engine's context capacity")
+-    req = copy.copy(request)
+-    req.device_len = prefix + width
+-    req.mamba_ping_pong = None
+-    batch = Batch([req], "preview")
+-    batch.padded_reqs = [req]
+-    batch.input_ids = torch.as_tensor(tokens, device=engine.device, dtype=torch.int32)
+-    batch.positions = torch.arange(prefix, prefix + width, device=engine.device, dtype=torch.int32)
+-    batch.out_loc = None
+-    slot = req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx
+-    batch.linear_table_idx = torch.tensor([slot], device=engine.device, dtype=torch.int32)
+-    batch.fla_metadata = FLAMetadata(torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+-        batch.linear_table_idx, torch.ones(1, device=engine.device, dtype=torch.bool))
+-    batch.clover_preview = True
+-    batch.clover_kv_splits = 8 if getattr(getattr(engine,'config',None),'clover_split_kv',False) else 1
+-    batch.clover_valid = torch.ones(width, device=engine.device, dtype=torch.bool)
+-    batch.clover_coreset_top_p = coreset_top_p
+-    batch.clover_attention = dict(q_indptr=torch.tensor([0,width], device=engine.device, dtype=torch.int32),
+-        kv_indptr=torch.tensor([0,prefix+width], device=engine.device, dtype=torch.int32),
+-        prefix_lens=torch.tensor([prefix], device=engine.device, dtype=torch.int32),
+-        block_ends=torch.full((width,), prefix+width, device=engine.device, dtype=torch.int32))
+-    return batch
+diff --git a/python/freetoken/models/clover_moe/runtime.py b/python/freetoken/models/clover_moe/runtime.py
+index b11b497..748fd2a 100644
+--- a/python/freetoken/models/clover_moe/runtime.py
++++ b/python/freetoken/models/clover_moe/runtime.py
+@@ -1,6 +1,5 @@
+ """Single-model Clover generation, using the scheduler's verified-token bundles."""
+ 
+-import copy
+ from collections import deque
+ from dataclasses import replace
+ import time
+@@ -9,8 +8,6 @@ import weakref
+ 
+ import torch
+ 
+-from freetoken.attention.linear import build_fla_metadata
+-from freetoken.core import Batch
+ from .generation import (
+     CloverPenaltyState,
+     PENALTY_DEFAULTS,
+@@ -215,58 +212,6 @@ class CloverRuntime:
+             and req.cached_len + width <= self.engine.max_seq_len
+         )
+ 
+-    def _verify_batch(self, request, tokens, *, capacity=16):
+-        req = copy.copy(request)
+-        req.device_len = req.cached_len + tokens.numel()
+-        req.mamba_ping_pong = None
+-        batch = Batch([req], "verify")
+-        batch.padded_reqs = [req]
+-        batch.input_ids = tokens
+-        batch.positions = torch.arange(
+-            req.cached_len, req.device_len, device=self.engine.device, dtype=torch.int32
+-        )
+-        batch.out_loc = self.engine.page_table[
+-            req.table_idx, req.cached_len : req.device_len
+-        ]
+-        batch.linear_table_idx = torch.tensor(
+-            [req.linear_slot_idx if req.linear_slot_idx is not None else req.table_idx],
+-            device=self.engine.device,
+-            dtype=torch.int32,
+-        )
+-        batch.fla_metadata = build_fla_metadata(
+-            batch, self.engine.device, max_verify_rows=len(tokens)
+-        )
+-        self.engine.attn_backend.prepare_metadata(batch)
+-        if getattr(self.engine.config,'clover_split_kv',False):
+-            metadata = batch.attn_metadata
+-            batch.clover_valid = torch.ones(len(tokens),device=self.engine.device,dtype=torch.bool)
+-            batch.clover_kv_splits = 8
+-            batch.clover_attention = dict(q_indptr=metadata.cu_seqlens_q_gpu,
+-                kv_indptr=metadata.indptr,indices=metadata.indices,
+-                prefix_lens=metadata.prefix_lens,block_ends=None)
+-        if self.transactions is None or self.transactions.capacity < capacity:
+-            # Free the old window before allocating a larger one on a 16GB GPU.
+-            self.transactions = None
+-            self.transactions = CloverTransactions(
+-                self.engine.linear_state_pool, capacity
+-            )
+-        self.transactions.begin(len(tokens))
+-        batch.clover_transactions = self.transactions
+-        return batch
+-
+-    def _penalize_verify(self, scores, inputs, state):
+-        """Torch diagnostic oracle; serving uses fused verification."""
+-        scores = scores.float().clone()
+-        scores[:, self.mask_id] = -float("inf")
+-        hypothetical = copy.copy(state)
+-        hypothetical.counts = None if state.counts is None else state.counts.clone()
+-        for row in range(len(inputs)):
+-            hypothetical.apply(
+-                scores[row : row + 1], inputs[row : row + 1], self.mask_id
+-            )
+-            if row + 1 < len(inputs):
+-                hypothetical.commit(inputs[row + 1 : row + 2].long())
+-        return scores
+ 
+     def _snapshot_boundary(
+         self,
+diff --git a/tests/models/test_clover_bf16_blocks.py b/tests/models/test_clover_bf16_blocks.py
+index b0ee358..85f074a 100644
+--- a/tests/models/test_clover_bf16_blocks.py
++++ b/tests/models/test_clover_bf16_blocks.py
+@@ -124,11 +124,11 @@ def test_full_bf16_preview_block_matches_official(block_pair, monkeypatch, width
+     from freetoken.kvcache.mha_pool import MHAKVCache
+     from freetoken.kvcache.linear_state_pool import LinearStatePool
+     from freetoken.models.clover_moe.preview import (
+-        make_preview_batch,
+         gdn_forward,
+         attention_preview,
+         moe_preview,
+     )
++    from benchmarks.clover.oracles import make_preview_batch
+     import freetoken.core as core
+ 
+     device = torch.device("cuda")
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index af30439..6865c7d 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -3,7 +3,7 @@ from types import SimpleNamespace
+ import pytest
+ import torch
+ 
+-from freetoken.models.clover_moe.acceptance import clover_correct_drafts
++from benchmarks.clover.oracles import clover_correct_drafts
+ from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
+ 
+ 

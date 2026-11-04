@@ -1,0 +1,36 @@
+{
+  "started_at": "20261104T033201Z",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "tests/engine/test_clover_config.py",
+    "tests/models/test_clover_gguf.py",
+    "-k",
+    "block_reserve or omitted_maximum or sparse_prefill or bank_estimate_requires",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T033201Z-config-before\\data"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "f689167fb09582b4219088a9b28d00ce101f4c87",
+  "dirty": " M tests/models/test_clover_gguf.py\n?? tests/engine/test_clover_config.py\n",
+  "patch_sha256": "1240db0516ae39b43b8f26773b93e1edca265b73f5700f29385de35202633ef5",
+  "state": "failed",
+  "environment": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8/kernel-cache",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8/torch-extensions",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8",
+    "CLOVER_GGUF_CHECKPOINT": null,
+    "CLOVER_HF_SOURCE": null,
+    "FREETOKEN_QWEN4EXP_MODEL": null,
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "pid": 240,
+  "exit_code": 1,
+  "elapsed_seconds": 3.7969999999913853
+}

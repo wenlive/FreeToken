@@ -1,0 +1,285 @@
+diff --git a/benchmarks/clover/README.md b/benchmarks/clover/README.md
+index f2bd12d..ae1c619 100644
+--- a/benchmarks/clover/README.md
++++ b/benchmarks/clover/README.md
+@@ -37,7 +37,8 @@ python -m benchmarks.clover bench --model /path/to/Clover-Q8_0.gguf --output NEW
+ ```
+ 
+ The matrix declares the largest selected block width for capacity planning; an explicit
+-`--clover-max-width` overrides it. `--embedding-host` evaluates the mapped embedding table.
++`--clover-max-width` overrides it. Embedding placement follows engine defaults;
++`--embedding-host` and `--no-embedding-host` explicitly select mapped host or device storage.
+ `--long-prompts-json FILE --prompts NAME` uses saved `prompts.NAME.user_text`; the result
+ records actual input IDs. Prefix reuse is disabled by default. CUDA event and cache
+ counter instrumentation (`--runtime-breakdown`, `--phase-cache-stats`) belongs in a
+diff --git a/benchmarks/clover/bench_clover.py b/benchmarks/clover/bench_clover.py
+index 7ed536a..a776b80 100644
+--- a/benchmarks/clover/bench_clover.py
++++ b/benchmarks/clover/bench_clover.py
+@@ -37,7 +37,7 @@ def main():
+         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
+     parser.add_argument("--cache-auto", action="store_true")
+-    parser.add_argument("--embedding-host", action="store_true")
++    parser.add_argument("--embedding-host", action=argparse.BooleanOptionalAction, default=None)
+     parser.add_argument("--phase-cache-stats", action="store_true",
+         help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
+     parser.add_argument("--no-penalties", action="store_true")
+@@ -164,7 +164,7 @@ def main():
+         settings=dict(
+             cache_slots=llm.engine.moe_offload_cache.cache_size,
+             cache_auto=args.cache_auto,
+-            embedding_host=args.embedding_host,
++            embedding_host=llm.engine.config.host_embedding_enabled,
+             mapped_host_table_bytes=llm.engine._host_tables_bytes,
+             memory_ratio=args.memory_ratio,
+             context=args.context_size,
+diff --git a/benchmarks/clover/clover_llama_preview.cpp b/benchmarks/clover/clover_llama_preview.cpp
+index aa0c13b..6769613 100644
+--- a/benchmarks/clover/clover_llama_preview.cpp
++++ b/benchmarks/clover/clover_llama_preview.cpp
+@@ -10,22 +10,145 @@
+ #include "ggml.h"
+ 
+ #include <algorithm>
++#include <cstring>
++#include <filesystem>
++#include <fstream>
+ #include <cstdio>
+ #include <stdexcept>
++#include <string>
++#include <vector>
++
++// The stock non-causal decode accepts arbitrary block tokens, including fixed rows.
++// Keep this numerical path separate from the unchanged draft-self timing loop below.
++static void dump_cases(llama_context * ctx, const std::string & input_path, const std::string & output_path) {
++    std::ifstream input(input_path);
++    input.exceptions(std::ios::badbit | std::ios::failbit);
++    const int vocab = llama_vocab_n_tokens(llama_model_get_vocab(llama_get_model(ctx)));
++    const size_t row_bytes = size_t(vocab) * sizeof(float);
++    auto read_tokens = [&](int count) {
++        if (count < 1 || count > int(llama_n_ctx_seq(ctx))) throw std::runtime_error("invalid input length");
++        llama_tokens tokens(count);
++        for (auto & token : tokens) {
++            input >> token;
++            if (token < 0 || token >= vocab) throw std::runtime_error("invalid token id");
++        }
++        return tokens;
++    };
++    auto output_file = [&](const std::string & name) {
++        if (std::filesystem::exists(std::filesystem::path(output_path) / name))
++            throw std::runtime_error("diagnostic output already exists");
++        std::ofstream file(std::filesystem::path(output_path) / name, std::ios::binary);
++        file.exceptions(std::ios::badbit | std::ios::failbit);
++        return file;
++    };
++    auto write_row = [&](std::ofstream & file, int row) {
++        const auto * logits = llama_get_logits_ith(ctx, row);
++        if (!logits) throw std::runtime_error("missing output logits");
++        file.write(reinterpret_cast<const char *>(logits), row_bytes);
++    };
++    int cases;
++    input >> cases;
++    if (cases < 1) throw std::runtime_error("no diagnostic cases");
++    for (int c = 0; c < cases; ++c) {
++        int prefix_len, steps, blocks;
++        input >> prefix_len >> steps >> blocks;
++        if (steps < 2 || blocks < 1 || prefix_len + steps + 32 >= int(llama_n_ctx_seq(ctx)))
++            throw std::runtime_error("invalid diagnostic dimensions");
++        const auto prefix_ids = read_tokens(prefix_len);
++        const auto forced = read_tokens(steps);
++        std::vector<llama_tokens> block_ids;
++        for (int b = 0; b < blocks; ++b) {
++            int width;
++            input >> width;
++            if (width != 8 && width != 16 && width != 32) throw std::runtime_error("invalid block width");
++            block_ids.push_back(read_tokens(width));
++        }
++        llama_memory_clear(llama_get_memory(ctx), true);
++        common_batch batch(ctx);
++        for (int i = 0; i < prefix_len; ++i) batch.add(prefix_ids[i], i, 0, i + 1 == prefix_len);
++        if (llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get()))
++            throw std::runtime_error("diagnostic prefill failed");
++        common_prompt_checkpoint clean;
++        clean.update_tgt(ctx, 0, LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY);
++        auto restore = [&]() {
++            if (!clean.load_tgt(ctx, 0, LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY) ||
++                    !llama_memory_seq_rm(llama_get_memory(ctx), 0, prefix_len, -1))
++                throw std::runtime_error("diagnostic state restoration failed");
++        };
++        auto causal = output_file("case-" + std::to_string(c) + "-causal.f32");
++        std::vector<float> second_row;
++        for (int step = 0; step < steps; ++step) {
++            write_row(causal, -1);
++            if (step == 1) {
++                const auto * logits = llama_get_logits_ith(ctx, -1);
++                second_row.assign(logits, logits + vocab);
++            }
++            if (step + 1 < steps) {
++                batch.clear();
++                batch.add(forced[step], prefix_len + step, 0, true);
++                if (llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get()))
++                    throw std::runtime_error("diagnostic causal step failed");
++            }
++        }
++        restore();
++        for (int b = 0; b < blocks; ++b) {
++            const auto & tokens = block_ids[b];
++            batch.clear();
++            for (int i = 0; i < int(tokens.size()); ++i) batch.add(tokens[i], prefix_len + i, 0, true);
++            llama_set_causal_attn(ctx, false);
++            const int code = llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get());
++            llama_set_causal_attn(ctx, true);
++            if (code) throw std::runtime_error("diagnostic preview failed");
++            auto file = output_file("case-" + std::to_string(c) + "-preview-" + std::to_string(b) + ".f32");
++            for (int row = 0; row < int(tokens.size()); ++row) write_row(file, row);
++            restore();
++        }
++        batch.clear();
++        batch.add(forced[0], prefix_len, 0, true);
++        if (llama_process(ctx, LLAMA_PROCESS_TYPE_DECODE, batch.get()))
++            throw std::runtime_error("diagnostic restoration probe failed");
++        const bool equal = std::memcmp(second_row.data(), llama_get_logits_ith(ctx, -1), row_bytes) == 0;
++        std::printf("{\"type\":\"clover_diagnostic\",\"case\":%d,\"vocab\":%d,\"steps\":%d,\"blocks\":%d,\"restored_causal_equal\":%s}\n",
++            c, vocab, steps, blocks, equal ? "true" : "false");
++        std::fflush(stdout);
++        if (!equal) throw std::runtime_error("preview changed restored causal logits");
++    }
++}
+ 
+ int main(int argc, char ** argv) {
++    std::string cases_path, output_path;
++    std::vector<char *> arguments{argv[0]};
++    for (int i = 1; i < argc; ++i) {
++        const std::string arg = argv[i];
++        if (arg == "--clover-cases" || arg == "--clover-output") {
++            if (++i == argc) throw std::runtime_error("missing diagnostic argument value");
++            (arg == "--clover-cases" ? cases_path : output_path) = argv[i];
++        } else {
++            arguments.push_back(argv[i]);
++        }
++    }
++    if (cases_path.empty() != output_path.empty()) throw std::runtime_error("diagnostics require both input and output paths");
++    arguments.push_back(nullptr);
+     common_params params;
+     common_init();
+-    if (!common_params_parse(argc, argv, params, LLAMA_EXAMPLE_SPECULATIVE)) return 1;
++    if (!common_params_parse(int(arguments.size()) - 1, arguments.data(), params, LLAMA_EXAMPLE_SPECULATIVE)) return 1;
+     const auto limits = common_speculative_get_output_limits(
+         params.n_batch, params.n_parallel, common_speculative_n_max(&params.speculative));
+     params.n_outputs_max = limits.total;
+     params.n_outputs_max_per_seq = limits.per_seq;
++    if (!cases_path.empty()) {
++        params.n_outputs_max = std::max(params.n_outputs_max, 32);
++        params.n_outputs_max_per_seq = std::max(params.n_outputs_max_per_seq, 32);
++    }
+     llama_backend_init();
+     llama_numa_init(params.numa);
+     auto initialized = common_init_from_params(params);
+     auto * ctx = initialized->context();
+     if (!ctx) throw std::runtime_error("stock context initialization failed");
++    if (!cases_path.empty()) {
++        dump_cases(ctx, cases_path, output_path);
++        return 0;
++    }
+     params.speculative.draft.ctx_tgt = ctx;
+     common_speculative_ptr spec(common_speculative_init(params.speculative, 1));
+     if (!spec) throw std::runtime_error("stock speculator initialization failed");
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index b9806be..31687e1 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -96,3 +96,18 @@ W16 after the causal-default reservation change. The old long-prompt wrapper is
+ into `bench --long-prompts-json`; both it and the old CPU experiment are archived unchanged.
+ See the package README for selectors and current commands. Historical evidence retains
+ the source paths and commands that actually produced it.
++
++## Automatic input embedding placement
++
++`gguf_embedding_host=None` selects mapped host input embeddings only for untied Clover
++GGUF models. All other model formats and tied embeddings retain their device placement.
++Explicit `False` disables mapping; explicit `True` retains the existing opt-in behavior
++and model-specific validation. The output projection remains resident on the GPU.
++
++On this campaign's RTX 5070 Ti, the official Q8 table releases 1,017,118,720 device bytes.
++Same-boot ABAB added 304 expert slots: causal W0 2928 -> 3232, shared W32 2292 -> 2596.
++Five prompts across six modes retained identical output IDs. Causal W0 decode improved
++2.45-5.06%; across the shared W32 matrix end-to-end gains ranged from 3.33% to 30.56%.
++These are workload-specific measured ranges, not a universal speed claim. Instrumented
++forward traces and the full default-policy hardware gate are tracked separately in the
++active campaign; config tests alone do not qualify this default change.
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index 8a2b2aa..d9929e7 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -52,7 +52,7 @@ class EngineConfig:
+     # Online owner exchange is opt-in; zero retains the frozen initial residency.
+     moe_q2_adapt_every: int = 0
+     moe_q2_adapt_decay: float = 1.0
+-    gguf_embedding_host: bool = False
++    gguf_embedding_host: bool | None = None
+     moe_q2_prefill_workspace: bool = False
+     fixed_q2_rebuild_reserve_mib: int = 512
+     moe_cache_rate: float | None = None
+@@ -200,6 +200,14 @@ class EngineConfig:
+         object.__setattr__(self, "moe_strategy", self.moe_backend)
+         object.__setattr__(self, "moe_backend", None)
+ 
++    @cached_property
++    def host_embedding_enabled(self) -> bool:
++        if self.gguf_embedding_host is not None:
++            return self.gguf_embedding_host
++        model = self.model_config
++        return (model.model_type == "clover_moe" and model.expert_quant == "clover_gguf"
++                and not model.tie_word_embeddings)
++
+     @cached_property
+     def hf_config(self):
+         return cached_load_hf_config(self.model_path, self.hf_overrides)
+diff --git a/python/freetoken/engine/engine.py b/python/freetoken/engine/engine.py
+index 67ac5a1..9d2bf47 100644
+--- a/python/freetoken/engine/engine.py
++++ b/python/freetoken/engine/engine.py
+@@ -368,7 +368,7 @@ class Engine:
+             self.model.configure_runtime(config)
+         self._load_weights(config)
+         self._host_tables_bytes = 0
+-        if config.gguf_embedding_host:
++        if config.host_embedding_enabled:
+             if not hasattr(self.model, 'place_input_embedding'):
+                 raise ValueError('This model does not support mapped GGUF input embeddings')
+             self._host_tables_bytes = int(self.model.place_input_embedding() or 0)
+diff --git a/tests/engine/test_clover_config.py b/tests/engine/test_clover_config.py
+index 9d4a2e7..a701846 100644
+--- a/tests/engine/test_clover_config.py
++++ b/tests/engine/test_clover_config.py
+@@ -54,3 +54,29 @@ def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
+     model = SimpleNamespace(model=SimpleNamespace(layers=SimpleNamespace(op_list=layers)))
+     CloverMoeModelLM.configure_runtime(model, config)
+     assert all(layer.mlp.sparse_prefill_limit == limit for layer in layers)
++
++
++@pytest.mark.parametrize("model_type,quant,tied,expected", [
++    ("clover_moe", "clover_gguf", False, True),
++    ("clover_moe", "clover_gguf", True, False),
++    ("clover_moe", "nvfp4", False, False),
++    ("clover_moe", None, False, False),
++    ("qwen3_5_moe", "nvfp4", False, False),
++    ("qwen4_exp", "gguf_strata", False, False),
++    ("gemma4", "gguf_q4_0", True, False),
++])
++def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
++    from types import SimpleNamespace
++
++    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
++    config.__dict__["model_config"] = SimpleNamespace(
++        model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
++    assert config.host_embedding_enabled is expected
++
++
++@pytest.mark.parametrize("enabled", [False, True])
++def test_explicit_embedding_placement_needs_no_automatic_model_probe(enabled):
++    config = EngineConfig("nonexistent", DistributedInfo(0, 1), torch.bfloat16,
++        gguf_embedding_host=enabled)
++    assert config.host_embedding_enabled is enabled
++    assert "hf_config" not in config.__dict__

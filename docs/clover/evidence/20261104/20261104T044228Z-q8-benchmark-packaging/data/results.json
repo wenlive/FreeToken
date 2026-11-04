@@ -1,0 +1,150 @@
+{
+  "state": "moved",
+  "files": [
+    {
+      "old": "benchmarks\\analyze_clover_budget.py",
+      "new": "benchmarks\\clover\\analyze_clover_budget.py",
+      "sha256": "07604441cf0233daf3731e0b3aa8771c09369dc83819e6e8581168d3b9d481a3"
+    },
+    {
+      "old": "benchmarks\\bench_clover.py",
+      "new": "benchmarks\\clover\\bench_clover.py",
+      "sha256": "e129edcd9caefb96b9375fa83ed30bc1e777a9768e603c99ccc7add6b83c43ea"
+    },
+    {
+      "old": "benchmarks\\bench_clover_context.py",
+      "new": "benchmarks\\clover\\bench_clover_context.py",
+      "sha256": "eba0f7d3bdadbe2e9eca6406388eeabdfe21df9b66afb739272631afe35177da"
+    },
+    {
+      "old": "benchmarks\\bench_clover_cpu.py",
+      "new": "docs\\clover\\evidence\\legacy-tools\\bench_clover_cpu.py",
+      "sha256": "0806680604d2996864e0d8c758f09e0c5031eaff47ec12e3a35e8f1483018325"
+    },
+    {
+      "old": "benchmarks\\bench_clover_gpu_resources.py",
+      "new": "benchmarks\\clover\\bench_clover_gpu_resources.py",
+      "sha256": "adb372cf3242a895b0862730fe54f661be8e506db1050b5f61286d23af91af90"
+    },
+    {
+      "old": "benchmarks\\bench_clover_llama.py",
+      "new": "benchmarks\\clover\\bench_clover_llama.py",
+      "sha256": "1d7884f8149572ec415dfc0e78e0933573cd54deec7bab62a3d8d03253b86b8d"
+    },
+    {
+      "old": "benchmarks\\bench_clover_long.py",
+      "new": "docs\\clover\\evidence\\legacy-tools\\bench_clover_long.py",
+      "sha256": "c4b159469e98091df932e0471314f5c426395a8bca04965bc3641c4f6f98007d"
+    },
+    {
+      "old": "benchmarks\\bench_clover_preview.py",
+      "new": "benchmarks\\clover\\bench_clover_preview.py",
+      "sha256": "bcea0e4008d5ef4835f878468cdb7baa95546e21fe126a7520ad3d274b592ae3"
+    },
+    {
+      "old": "benchmarks\\bench_clover_split_kv.py",
+      "new": "benchmarks\\clover\\bench_clover_split_kv.py",
+      "sha256": "075bd4790b9106c9a256d7143e41ae5588196b6d3f2ec0129fe2d83a77b70293"
+    },
+    {
+      "old": "benchmarks\\check_clover_graphs.py",
+      "new": "benchmarks\\clover\\check_clover_graphs.py",
+      "sha256": "405956a98896bb2df9e364df069dc00cc99d574e376f0aa20c0e4af727ffab7a"
+    },
+    {
+      "old": "benchmarks\\check_clover_hf_denoise.py",
+      "new": "benchmarks\\clover\\check_clover_hf_denoise.py",
+      "sha256": "20517c1b4a63decfa2f52889f3a6504e41730f0351906ccfdee2a5357dee98eb"
+    },
+    {
+      "old": "benchmarks\\check_clover_hf_preview.py",
+      "new": "benchmarks\\clover\\check_clover_hf_preview.py",
+      "sha256": "752c9341034cc32432f96da0b69a863f1b66eec678a10826ba4ea26f9ec86ca3"
+    },
+    {
+      "old": "benchmarks\\check_clover_hf_selfspec.py",
+      "new": "benchmarks\\clover\\check_clover_hf_selfspec.py",
+      "sha256": "678ffddfc0f45278f6df61f693d5303edc77cbfd2b8d87ccec230ab546e2cd18"
+    },
+    {
+      "old": "benchmarks\\check_clover_lifecycle.py",
+      "new": "benchmarks\\clover\\check_clover_lifecycle.py",
+      "sha256": "5efb3585015376b11738f1d486b45ebb87cb3e4b37ff518a79bd8809ffc32d44"
+    },
+    {
+      "old": "benchmarks\\check_clover_preview.py",
+      "new": "benchmarks\\clover\\check_clover_preview.py",
+      "sha256": "582fe0e8f51f6501618444aa5f19767480a76bfb3ab5cf16c1b1d9d93115223b"
+    },
+    {
+      "old": "benchmarks\\check_clover_preview_ab.py",
+      "new": "benchmarks\\clover\\check_clover_preview_ab.py",
+      "sha256": "17a7983c865259eb8dcf7fdd22eb08d457d06b2bc79bf71eff2ba1d0f75fad1b"
+    },
+    {
+      "old": "benchmarks\\check_clover_prompt_outputs.py",
+      "new": "benchmarks\\clover\\check_clover_prompt_outputs.py",
+      "sha256": "11ac02c96a94e1a2067ee845743b2c6d58fc7ac03b389ea8bc8fef2450cf7705"
+    },
+    {
+      "old": "benchmarks\\check_clover_quantization.py",
+      "new": "benchmarks\\clover\\check_clover_quantization.py",
+      "sha256": "2be26e4656b1f27d5b7d78b6b240e2fdd7950afef1876b687bf38d93634de16a"
+    },
+    {
+      "old": "benchmarks\\check_clover_verify.py",
+      "new": "benchmarks\\clover\\check_clover_verify.py",
+      "sha256": "70eabf453b70e6bbe2af34289b7fc4334bf448cb90d7f88c700cd5e044efc764"
+    },
+    {
+      "old": "benchmarks\\clover_eval_worker.py",
+      "new": "benchmarks\\clover\\clover_eval_worker.py",
+      "sha256": "e481d0ecf8226840e174515fede98acdf5cfd16f4b73fe7735a52121b7dfa546"
+    },
+    {
+      "old": "benchmarks\\clover_gguf_decode.py",
+      "new": "benchmarks\\clover\\clover_gguf_decode.py",
+      "sha256": "d6823604b369db1cfea4bba832b8a3bf05662af02ab72f7d45bad51950cfab5e"
+    },
+    {
+      "old": "benchmarks\\clover_gguf_reference.py",
+      "new": "benchmarks\\clover\\clover_gguf_reference.py",
+      "sha256": "ed418a1928be0467087ca866ba7b08fa143a3d2f90dc9bbfcf6c077d12d2c1ae"
+    },
+    {
+      "old": "benchmarks\\clover_hf_reference.py",
+      "new": "benchmarks\\clover\\clover_hf_reference.py",
+      "sha256": "3ed9d32b65fedf47e170b59de32039082c10596753aa6360f8bb88c9a5cb26bc"
+    },
+    {
+      "old": "benchmarks\\clover_llama_preview.cpp",
+      "new": "benchmarks\\clover\\clover_llama_preview.cpp",
+      "sha256": "a11c8d1d3601d906dc0678b79007e675df324a31ee2af4f8b6a2b07879a887b8"
+    },
+    {
+      "old": "benchmarks\\clover_metrics.py",
+      "new": "benchmarks\\clover\\clover_metrics.py",
+      "sha256": "eb69ef1f2c2716a5ff03e7296de3a4f1fdec2d81c3ddd2445f685f07c9132854"
+    },
+    {
+      "old": "benchmarks\\eval_clover_quality.py",
+      "new": "benchmarks\\clover\\eval_clover_quality.py",
+      "sha256": "1a198f0dd986e856d857168b19124ba722b02c1fa4b3ddfced463728b0e53f16"
+    },
+    {
+      "old": "benchmarks\\fetch_clover_eval_data.py",
+      "new": "benchmarks\\clover\\fetch_clover_eval_data.py",
+      "sha256": "19124a087484988dc195dfd64febb5622f6763dd0444b6f13eae662efa0c0206"
+    },
+    {
+      "old": "benchmarks\\LICENSE.clover-gguf-reference",
+      "new": "benchmarks\\clover\\LICENSE.clover-gguf-reference",
+      "sha256": "43206d563c94d9544bca86f4c9adfd4bb7cae2e455b9bee7b636c5d314b6b257"
+    },
+    {
+      "old": "benchmarks\\summarize_clover_abab.py",
+      "new": "benchmarks\\clover\\summarize_clover_abab.py",
+      "sha256": "909eb0e168c4f816aec6b7176ea6dec57620c44bbc52db93ecf8bef90a0ad7ac"
+    }
+  ]
+}

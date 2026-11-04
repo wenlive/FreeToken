@@ -1,0 +1,50 @@
+{
+  "started_at": "20261104T050312Z",
+  "command": [
+    "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "benchmarks/bench_clover.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--cache-auto",
+    "--memory-ratio",
+    ".9",
+    "--modes",
+    "causal,selfspec:8,selfspec:16,denoise:8,denoise:16,denoise:32",
+    "--tokens",
+    "256",
+    "--warmups",
+    "1",
+    "--repeats",
+    "2",
+    "--output",
+    "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T050312Z-c2-six-abab-1-a\\data"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-a3",
+  "commit": "f79ae75f4dd965f225f28a9d25d0f83ea8d737d8",
+  "dirty": "",
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "state": "passed",
+  "environment": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a3/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-a3",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-a3/torch-extensions",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-a3",
+    "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "FREETOKEN_QWEN4EXP_MODEL": null,
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "CUDA_VISIBLE_DEVICES": null,
+    "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+  },
+  "external_scripts": [
+    {
+      "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+      "artifact": "external-scripts\\0-run.py",
+      "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+    }
+  ],
+  "pid": 14084,
+  "exit_code": 0,
+  "elapsed_seconds": 256.9059999999881
+}
