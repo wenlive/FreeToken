@@ -24,7 +24,7 @@ def admit_expert_union(cache, layer_id, indices):
 class CloverMoE(Qwen3_5MoE):
     def __init__(self, config, layer_id=None, *, prefix=""):
         super().__init__(config, layer_id, prefix=prefix)
-        self.sparse_prefill_limit = 128
+        self.sparse_prefill_limit = 256
 
     def forward(self, hidden_states):
         cache = getattr(self.experts, "offload_cache", None)

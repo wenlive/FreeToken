@@ -46,8 +46,11 @@ These are budget calculations; actual auto-cache capacity also depends on free m
 other reservations and alignment. Explicit W32 retains the previous reservation.
 
 `clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`. It defaults to
-128 rows; 0 disables union admission. The default threshold is unchanged pending TTFT
-measurements. Mixed GGUF bank estimates require actual `expert_source.row_bytes` instead
+256 rows; 0 disables union admission. Q8 ABAB at 2292/2928 slots found sparse admission
+faster for 129-256 rows and slower from 384 rows. Full output comparisons at six boundary
+lengths match between limits 128 and 256. See the [qualification report](qualification-20261104.md)
+for exact inputs, results and the new-source gate status.
+Mixed GGUF bank estimates require actual `expert_source.row_bytes` instead
 of guessing Q8 for missing descriptors.
 
 The shared encoder guard in EngineConfig is retained: frozen GGUF config shims have no

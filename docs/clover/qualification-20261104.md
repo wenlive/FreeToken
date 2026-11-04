@@ -22,7 +22,7 @@ source identities, failed attempts and result files.
 | A2 | Causal penalty counts advance from consumed device input, independent of lagging host history. Drain is determined by the fixed request mode; Flash MTP retains its previous behavior. P0/P1, overlap on/off, concurrent requests, chunked prefill, stop and prefix-reuse tests passed. [Output gate](evidence/20261104/20261104T043529Z-a2-output-comparison/results.json). |
 | A3 | Optional owned-resource graph warmup at startup and idle rebuild. Full state bytes and allocator capacities are restored. All 24 cold-process requests have identical IDs within mode. [Latency and integrity](evidence/20261104/20261104T045609Z-a3-latency-summary/data/results.json). |
 | A4 | Retain the encoder-attribute guard: the GGUF shim is frozen, so assigning even an absent/None encoder attribute would fail. Keep request-cache handling after the complete bundle, with ordinary multi-token prefill coverage. Other shared changes remain individually justified. |
-| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`, default 128; zero disables it. ABAB supports a candidate cutoff of 256; full-generation boundary acceptance is pending before changing the default. |
+| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`; zero disables it. The local candidate default is 256 after ABAB and full-output boundary checks. The new-source hardware gate is pending; the published serving default remains 128 until that gate passes and the candidate is pushed. |
 | D1-D4 | Historical archives moved without changing bytes. Eager oracles moved out of serving. Runtime gains the minimal `requires_drain` capability. Benchmark entry points share a harness under `benchmarks/clover/`. [Commands](../../benchmarks/clover/README.md). |
 | D5 | Clover GGUF bank sizing requires actual per-layer row-byte descriptors; the guessed `(8,8)` fallback was removed. |
 
@@ -209,14 +209,14 @@ All formal first-token IDs match. The tested slot capacities do not justify diff
 cutoffs. Each request emits only one token, so decode TPS is undefined; separate forward
 CUDA-event diagnostics are retained rather than mixed into the primary timing samples.
 
-This supports testing 256 as the default, but does not prove complete generation is
-equivalent. The current default remains 128 until the boundary-length output check and
-required final-source gates finish. [ABAB results](evidence/20261104/20261104T065730Z-a5-prefill-summary/data/results.json).
+This supported testing 256 as the default, but the one-token scan alone did not prove
+complete generation equivalent. The full-output check below preceded the local default
+change. [ABAB results](evidence/20261104/20261104T065730Z-a5-prefill-summary/data/results.json).
 
 The boundary output check is now complete: limits 128/256 at both capacities, six exact
 prefix lengths 128/129/192/256/257/384, two requests per configuration, checkpoint
 penalties and cold expert caches. All 48 outputs match within their length/capacity
 comparison, including repeat stability. Actual outputs are 3-64 tokens, with EOS
-respected; this is not 48 forced 64-token decodes. A default change and its new-source
-hardware gate are the next step.
+respected; this is not 48 forced 64-token decodes. The local default is now 256; its
+new-source hardware gate is pending, so the candidate is not yet pushed or qualified.
 [Boundary output check](evidence/20261104/20261104T075150Z-a5-boundary-summary/data/results.json).

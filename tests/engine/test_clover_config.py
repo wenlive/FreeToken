@@ -43,7 +43,7 @@ def test_graph_warmup_is_opt_in_and_normalizes_declared_widths():
     assert config.clover_graph_warmup_widths == [8, 16, 32]
 
 
-@pytest.mark.parametrize("limit", [0, 128, 512])
+@pytest.mark.parametrize("limit", [0, 128, 256, 512])
 def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
     from types import SimpleNamespace
     from freetoken.models.clover_moe.model import CloverMoeModelLM

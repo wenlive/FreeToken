@@ -117,7 +117,7 @@ class EngineConfig:
     clover_mode: str = "causal"
     clover_width: int = 8
     clover_max_width: int | None = None
-    clover_sparse_prefill_limit: int = 128
+    clover_sparse_prefill_limit: int = 256
     clover_graph_warmup_widths: List[int] = field(default_factory=list)
     clover_split_kv: bool = False
     clover_threshold: float = .95
