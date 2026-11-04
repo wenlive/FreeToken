@@ -32,7 +32,7 @@ def main():
     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
         expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True,
-        clover_split_kv=args.split_kv)
+        clover_split_kv=args.split_kv, clover_max_width=32)
     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
     runtime = engine.mtp_runtime
     original = engine.forward_batch

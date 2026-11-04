@@ -11,6 +11,15 @@ from freetoken.models.clover_moe import gguf as adapter
 from freetoken.models.gguf.config import GgufConfigShim
 
 
+def test_bank_estimate_requires_mixed_gguf_descriptors():
+    from freetoken.moe.expert_banks import bank_bytes_estimate
+
+    config = SimpleNamespace(expert_quant="clover_gguf", expert_source=None,
+        num_moe_layers=40, num_experts=256, hidden_size=2048, moe_intermediate_size=512)
+    with pytest.raises(ValueError, match="expert_source"):
+        bank_bytes_estimate(config)
+
+
 def test_aot_claims_gguf_architecture_and_both_actual_expert_rows():
     from freetoken.kernel.aot_models import SUPPORTED_MODELS, expert_bank_row_bytes
 

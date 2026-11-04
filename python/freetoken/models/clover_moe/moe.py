@@ -1,6 +1,4 @@
-"""Clover-only short-prompt expert-union admission, with an A/B switch."""
-
-import os
+"""Clover-only short-prompt expert-union admission."""
 
 import torch
 
@@ -26,9 +24,7 @@ def admit_expert_union(cache, layer_id, indices):
 class CloverMoE(Qwen3_5MoE):
     def __init__(self, config, layer_id=None, *, prefix=""):
         super().__init__(config, layer_id, prefix=prefix)
-        self.sparse_prefill_limit = (
-            128 if os.environ.get("FREETOKEN_CLOVER_SPARSE_PREFILL", "1") == "1" else 0
-        )
+        self.sparse_prefill_limit = 128
 
     def forward(self, hidden_states):
         cache = getattr(self.experts, "offload_cache", None)

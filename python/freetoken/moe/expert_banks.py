@@ -297,7 +297,9 @@ def bank_bytes_estimate(model_config, method=None) -> int | None:
         )
         return layers * method.cfg.num_experts * per_expert
     expert_quant = getattr(model_config, "expert_quant", "none")
-    if expert_quant == "clover_gguf" and model_config.expert_source is not None:
+    if expert_quant == "clover_gguf":
+        if not getattr(model_config, "expert_source", None):
+            raise ValueError("Clover GGUF bank sizing requires expert_source row_bytes descriptors")
         rows = model_config.expert_source["row_bytes"]
         per_slot = (2 * model_config.moe_intermediate_size * max(r[0] for r in rows)
                     + model_config.hidden_size * max(r[1] for r in rows))
