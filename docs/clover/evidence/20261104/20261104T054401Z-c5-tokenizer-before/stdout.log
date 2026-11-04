@@ -1,0 +1,62 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001E6B1ADFBC0>
+
+    def test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries(monkeypatch):
+        from tokenizers import Tokenizer
+        from tokenizers.models import BPE
+        from freetoken.models.gguf import tokenizer as module
+    
+        tokens = [
+            "a",
+            "<|endoftext|>",
+            "</think>",
+            "<tool_call>",
+            "<|im_end|>",
+            "<|mask|>",
+            "<|im_start|>",
+        ]
+        metadata = {
+            "general.architecture": "clover_moe",
+            "tokenizer.ggml.tokens": tokens,
+            "tokenizer.ggml.token_type": [1, 3, 4, 4, 3, 3, 3],
+            "tokenizer.ggml.bos_token_id": 1,
+            "tokenizer.ggml.padding_token_id": 1,
+            "tokenizer.ggml.eos_token_id": 4,
+            "tokenizer.ggml.mask_token_id": 5,
+            "tokenizer.ggml.normalizer.nfc": True,
+        }
+        monkeypatch.setattr(module, "load_gguf_metadata", lambda _: metadata)
+        architecture_reads = []
+    
+        def read_architecture(path):
+            architecture_reads.append(path)
+            return "clover_moe"
+    
+        monkeypatch.setattr(module, "gguf_architecture", read_architecture)
+        import transformers.integrations.ggml as converter
+    
+        def convert(arch, data):
+            assert arch == "qwen2"
+            return Tokenizer(BPE({token: i for i, token in enumerate(tokens)}, [])), {}
+    
+        monkeypatch.setattr(converter, "convert_gguf_tokenizer", convert)
+        tokenizer = module.load_gguf_tokenizer("synthetic.gguf")
+        assert len(tokenizer) == len(tokens)
+        assert tokenizer.encode(
+            "</think><tool_call><|mask|>", add_special_tokens=False
+        ) == [2, 3, 5]
+        assert (
+            tokenizer.decode([2, 3, 5], skip_special_tokens=True) == "</think> <tool_call>"
+        )
+        assert module.gguf_eos_token_ids("synthetic.gguf", tokenizer) == {1, 4}
+>       assert not architecture_reads, "Tokenizer metadata already contains the architecture"
+E       AssertionError: Tokenizer metadata already contains the architecture
+E       assert not ['synthetic.gguf', 'synthetic.gguf']
+
+tests\models\test_clover_gguf.py:312: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/models/test_clover_gguf.py::test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries
+1 failed, 20 deselected in 3.76s

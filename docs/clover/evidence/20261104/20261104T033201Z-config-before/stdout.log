@@ -1,0 +1,181 @@
+FFFF..FFF                                                                [100%]
+================================== FAILURES ===================================
+____ test_block_reserve_defaults_to_effective_engine_mode[causal-8-None-0] ____
+
+mode = 'causal', width = 8, maximum = None, expected = 0
+
+    @pytest.mark.parametrize("mode,width,maximum,expected", [
+        ("causal", 8, None, 0), ("selfspec", 8, None, 8),
+        ("selfspec", 16, None, 16), ("denoise", 32, None, 32),
+        ("causal", 8, 32, 32), ("causal", 8, 0, 0),
+    ])
+    def test_block_reserve_defaults_to_effective_engine_mode(mode, width, maximum, expected):
+>       config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+            max_running_req=1, clover_mode=mode, clover_width=width, clover_max_width=maximum)
+
+tests\engine\test_clover_config.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:64: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = EngineConfig(model_path='unused', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf_overrides={}, max_...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False)
+
+    def __post_init__(self):
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+>           raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+E           ValueError: Clover maximum width must be 0, 8, 16 or 32
+
+python\freetoken\engine\config.py:138: ValueError
+___ test_block_reserve_defaults_to_effective_engine_mode[selfspec-8-None-8] ___
+
+mode = 'selfspec', width = 8, maximum = None, expected = 8
+
+    @pytest.mark.parametrize("mode,width,maximum,expected", [
+        ("causal", 8, None, 0), ("selfspec", 8, None, 8),
+        ("selfspec", 16, None, 16), ("denoise", 32, None, 32),
+        ("causal", 8, 32, 32), ("causal", 8, 0, 0),
+    ])
+    def test_block_reserve_defaults_to_effective_engine_mode(mode, width, maximum, expected):
+>       config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+            max_running_req=1, clover_mode=mode, clover_width=width, clover_max_width=maximum)
+
+tests\engine\test_clover_config.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:64: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = EngineConfig(model_path='unused', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf_overrides={}, max_...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False)
+
+    def __post_init__(self):
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+>           raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+E           ValueError: Clover maximum width must be 0, 8, 16 or 32
+
+python\freetoken\engine\config.py:138: ValueError
+__ test_block_reserve_defaults_to_effective_engine_mode[selfspec-16-None-16] __
+
+mode = 'selfspec', width = 16, maximum = None, expected = 16
+
+    @pytest.mark.parametrize("mode,width,maximum,expected", [
+        ("causal", 8, None, 0), ("selfspec", 8, None, 8),
+        ("selfspec", 16, None, 16), ("denoise", 32, None, 32),
+        ("causal", 8, 32, 32), ("causal", 8, 0, 0),
+    ])
+    def test_block_reserve_defaults_to_effective_engine_mode(mode, width, maximum, expected):
+>       config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+            max_running_req=1, clover_mode=mode, clover_width=width, clover_max_width=maximum)
+
+tests\engine\test_clover_config.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:64: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = EngineConfig(model_path='unused', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf_overrides={}, max_...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False)
+
+    def __post_init__(self):
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+>           raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+E           ValueError: Clover maximum width must be 0, 8, 16 or 32
+
+python\freetoken\engine\config.py:138: ValueError
+__ test_block_reserve_defaults_to_effective_engine_mode[denoise-32-None-32] ___
+
+mode = 'denoise', width = 32, maximum = None, expected = 32
+
+    @pytest.mark.parametrize("mode,width,maximum,expected", [
+        ("causal", 8, None, 0), ("selfspec", 8, None, 8),
+        ("selfspec", 16, None, 16), ("denoise", 32, None, 32),
+        ("causal", 8, 32, 32), ("causal", 8, 0, 0),
+    ])
+    def test_block_reserve_defaults_to_effective_engine_mode(mode, width, maximum, expected):
+>       config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+            max_running_req=1, clover_mode=mode, clover_width=width, clover_max_width=maximum)
+
+tests\engine\test_clover_config.py:15: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:64: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = EngineConfig(model_path='unused', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf_overrides={}, max_...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False)
+
+    def __post_init__(self):
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+>           raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+E           ValueError: Clover maximum width must be 0, 8, 16 or 32
+
+python\freetoken\engine\config.py:138: ValueError
+____________ test_causal_omitted_maximum_reserves_no_transactions _____________
+
+    def test_causal_omitted_maximum_reserves_no_transactions():
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+>       assert config.clover_max_width == 0
+E       AssertionError: assert 32 == 0
+E        +  where 32 = EngineConfig(model_path='unused', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf_overrides={}, max_...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False).clover_max_width
+
+tests\engine\test_clover_config.py:22: AssertionError
+______________ test_sparse_prefill_limit_rejects_negative_values ______________
+
+    def test_sparse_prefill_limit_rejects_negative_values():
+        with pytest.raises(ValueError, match="sparse prefill"):
+>           EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16, clover_sparse_prefill_limit=-1)
+E           TypeError: EngineConfig.__init__() got an unexpected keyword argument 'clover_sparse_prefill_limit'
+
+tests\engine\test_clover_config.py:27: TypeError
+_____________ test_bank_estimate_requires_mixed_gguf_descriptors ______________
+
+    def test_bank_estimate_requires_mixed_gguf_descriptors():
+        from types import SimpleNamespace
+        from freetoken.moe.expert_banks import bank_bytes_estimate
+    
+        config = SimpleNamespace(expert_quant="clover_gguf", expert_source=None,
+            num_moe_layers=40, num_experts=256, hidden_size=2048, moe_intermediate_size=512)
+>       with pytest.raises(ValueError, match="expert_source"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\models\test_clover_gguf.py:16: Failed
+=========================== short test summary info ===========================
+FAILED tests/engine/test_clover_config.py::test_block_reserve_defaults_to_effective_engine_mode[causal-8-None-0]
+FAILED tests/engine/test_clover_config.py::test_block_reserve_defaults_to_effective_engine_mode[selfspec-8-None-8]
+FAILED tests/engine/test_clover_config.py::test_block_reserve_defaults_to_effective_engine_mode[selfspec-16-None-16]
+FAILED tests/engine/test_clover_config.py::test_block_reserve_defaults_to_effective_engine_mode[denoise-32-None-32]
+FAILED tests/engine/test_clover_config.py::test_causal_omitted_maximum_reserves_no_transactions
+FAILED tests/engine/test_clover_config.py::test_sparse_prefill_limit_rejects_negative_values
+FAILED tests/models/test_clover_gguf.py::test_bank_estimate_requires_mixed_gguf_descriptors
+7 failed, 2 passed, 20 deselected in 2.94s

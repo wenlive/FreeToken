@@ -15,8 +15,11 @@ From the repository root:
 
 ```powershell
 python docs/clover/evidence/20261104/tools/verify_inventory.py
+python docs/clover/evidence/20261104/tools/verify_inventory.py --tracked
 python docs/clover/evidence/20261104/tools/verify_inventory.py --verify-external
 ```
 
-The second command also requires this campaign's local run store. New snapshots append
+`--tracked` also checks that Git retains exactly those bytes, including normally ignored
+logs. `--verify-external` requires this campaign's local run store. Early unwrapped runs
+are identified explicitly; their source identity is not invented. New snapshots append
 run files and update the inventory; existing run bytes must remain identical.

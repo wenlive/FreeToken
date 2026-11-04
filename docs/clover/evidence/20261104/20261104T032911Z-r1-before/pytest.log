@@ -1,0 +1,31 @@
+....F                                                                    [100%]
+================================== FAILURES ===================================
+_______________ test_mmvq_honors_padded_expert_slot_stride[23] ________________
+
+kind = 23
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+    @pytest.mark.parametrize("kind", [2, 8, 12, 14, 23])
+    def test_mmvq_honors_padded_expert_slot_stride(kind):
+        from freetoken.kernel.gguf import ggml_moe_a8_vec
+    
+        packed, _ = packed_fixture(kind, rows=64, width=512)
+        packed = packed.cuda()
+        padded = torch.zeros(3, packed[0].numel() + 128, device="cuda", dtype=torch.uint8)
+        padded[:, :packed[0].numel()].copy_(packed.reshape(3, -1))
+        view = padded.as_strided(packed.shape, (padded.stride(0), packed.stride(1), 1))
+        value = torch.randn(1, 512, device="cuda")
+        ids = torch.tensor([[2, 0]], device="cuda", dtype=torch.int32)
+        expected = ggml_moe_a8_vec(value, packed, ids, 2, kind, 64, 1)
+        actual = ggml_moe_a8_vec(value, view, ids, 2, kind, 64, 1)
+>       torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+E       AssertionError: Tensor-likes are not equal!
+E       
+E       Mismatched elements: 64 / 128 (50.0%)
+E       Greatest absolute difference: nan at index (0, 16)
+E       Greatest relative difference: nan at index (0, 16)
+
+tests\kernels\test_clover_gguf.py:306: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/kernels/test_clover_gguf.py::test_mmvq_honors_padded_expert_slot_stride[23]
+1 failed, 4 passed, 79 deselected in 3.37s

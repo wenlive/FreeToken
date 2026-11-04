@@ -1,0 +1,44 @@
+[1m[2026-11-04|11:51:01|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|11:51:08|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|11:51:08|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|11:51:09|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|11:51:14|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|11:51:44|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-04|11:51:44|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 1.98 GiB
+[1m[2026-11-04|11:51:44|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 2.41 GiB
+[1m[2026-11-04|11:51:44|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|11:51:44|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 2.41 GiB
+ninja: no work to do.
+[1m[2026-11-04|11:51:45|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 2.59 GiB
+[1m[2026-11-04|11:51:46|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.577 s
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPHCD~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPHCD~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP_NJ~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP_NJ~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPEF7~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPEF7~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPLPV~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPLPV~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP2JJ~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP2JJ~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP0C_~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP0C_~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPZQ5~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPZQ5~1\__triton_launcher.cp312-win_amd64.exp
+{"width": 8, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+{"width": 16, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+{"width": 32, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+[1m[2026-11-04|11:52:32|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 0.55
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPH4A~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPH4A~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP57O~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP57O~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPQV0~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPQV0~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPBO6~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPBO6~1\__triton_launcher.cp312-win_amd64.exp
+{"width": 8, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+{"width": 16, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+{"width": 32, "live_vs_static": 0.0, "static_vs_graph": 0.0, "live_vs_graph": 0.0}
+[1m[2026-11-04|11:52:54|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 179, #cached-token: 0, token usage: 0.05, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 7.94
+[1m[2026-11-04|11:52:54|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 211, token usage: 0.05, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 0.66, #queue-req: 0

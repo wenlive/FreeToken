@@ -1,0 +1,353 @@
+........................................................................ [ 38%]
+...............FFF..F......................ss........................... [ 77%]
+...........................................                              [100%]
+================================== FAILURES ===================================
+_______________ test_adjust_config_resolves_num_tokens_generic ________________
+
+    def test_adjust_config_resolves_num_tokens_generic():
+        # Generic model keeps its page_size (1 here): tokens map 1:1 onto pages.
+        from types import SimpleNamespace
+    
+        from freetoken.engine.engine import _adjust_config
+    
+        model_config = SimpleNamespace(
+            single_stream_only=False, is_moe=False, expert_quant="none",
+            has_swa_attention=False, has_linear_attention=False,
+        )
+    
+        class Cfg:
+            moe_cache_auto = False
+            moe_cache_size = 0
+            moe_cache_rate = None
+            moe_strategy = "auto"
+            max_running_req = 4
+            cuda_graph_max_bs = 2
+            cuda_graph_bs = [1, 2]
+            max_seq_len = 1024
+            page_size = 1
+            attention_backend = "fi"
+            num_page_override = None
+            num_token_override = 5000
+    
+            @property
+            def model_config(self):
+                return model_config
+    
+        cfg = Cfg()
+>       _adjust_config(cfg)
+
+tests\engine\test_cache_budget.py:229: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\engine\engine.py:1732: in _adjust_config
+    _validate_attention_backend_choice(config, override, required_attn_types)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = <engine.test_cache_budget.test_adjust_config_resolves_num_tokens_generic.<locals>.Cfg object at 0x00000219348D7080>
+override = <function _adjust_config.<locals>.override at 0x0000021934AB36A0>
+required = frozenset({<AttnType.FULL: 'full'>})
+
+    def _validate_attention_backend_choice(config, override, required: frozenset[AttnType]) -> None:
+        """Config-time type x backend capability check for the resolved (or explicit)
+        backend string: every comma part must serve every required type and have its
+        packages/arch available. Replaces the per-model gates; in particular this is
+        where a DSV4 or MLA checkpoint rejects a generic backend before weights load,
+        and where a generic model rejects dsa/dsv4_sparse."""
+        from freetoken.attention import validate_attn_backend
+    
+        # Name membership first (ArgumentTypeError listing the supported names): the CLI already
+        # ran this, but the programmatic EngineConfig path reaches here unvalidated and would
+        # otherwise die on a bare KeyError from the info lookup below.
+        validate_attn_backend(config.attention_backend, allow_auto=False)
+    
+        model_config = config.model_config
+        backend_parts = [p.strip() for p in config.attention_backend.split(",")]
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            missing = required - info.supported_types
+            if missing:
+                valid = [
+                    name
+                    for name in (
+                        "fa", "fi", "trtllm", "triton", "dsa", "dsv4_sparse", "m3_sparse",
+                        "qsa_sparse",
+                    )
+                    if required <= attention_backend_info(name).supported_types
+                ]
+                missing_names = "/".join(sorted(t.value for t in missing))
+                raise ValueError(
+                    f"{getattr(model_config, 'model_type', 'model')} uses {missing_names} "
+                    f"attention, which backend {part!r} does not support; valid backends: "
+                    f"{', '.join(valid)} (or auto), got {config.attention_backend!r}."
+                )
+            if AttnType.SWA in required and not info.consumes_attn_spec:
+                # SWA models drive window/sinks/sm_scale through the per-call AttentionSpec;
+                # a backend that drops it would attend with the wrong window silently.
+                raise ValueError(
+                    f"backend {part!r} does not consume the per-call AttentionSpec that "
+                    f"SWA models require, got {config.attention_backend!r}."
+                )
+    
+        # An explicitly-selected backend may require a package that isn't installed. Auto
+        # never resolves to one of these when its package is missing, so this only fires for
+        # explicit --attention-backend choices.
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            if info.requires_flashinfer and not _flashinfer_available():
+>               raise RuntimeError(
+                    f"Attention backend {config.attention_backend!r} requires flashinfer, which is "
+                    "not installed. Install it with `pip install 'freetoken[fi]'` (or "
+                    "'freetoken[accel]'), or use --attention-backend triton."
+                )
+E               RuntimeError: Attention backend 'fi' requires flashinfer, which is not installed. Install it with `pip install 'freetoken[fi]'` (or 'freetoken[accel]'), or use --attention-backend triton.
+
+python\freetoken\engine\engine.py:211: RuntimeError
+___________________ test_mha_kv_cost_simple_full_attention ____________________
+
+    def test_mha_kv_cost_simple_full_attention():
+        import torch
+    
+        from freetoken.kvcache.mha_pool import MHAKVCache
+        from freetoken.models.config import KVCacheGroupSpec
+        from freetoken.utils import div_even
+    
+        class StubModelConfig:
+            has_swa_attention = False
+    
+            def kv_cache_group_specs(self):
+                return [KVCacheGroupSpec(
+                    name="full", layer_ids=tuple(range(3)),
+                    num_kv_heads=8, head_dim=64, sliding_window=None,
+                )]
+    
+            def linear_attention_group(self):
+                return None
+    
+        class StubConfig:
+            dtype = torch.bfloat16
+            page_size = 16
+            max_running_req = 4
+            swa_full_tokens_ratio = 0.2
+            swa_num_pages_override = None
+            model_config = StubModelConfig()
+    
+            class tp_info:
+                size = 1
+    
+>       cache_per_page, fixed, _, _ = MHAKVCache.kv_cost(StubConfig())
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\engine\test_cache_budget.py:263: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\kvcache\mha_pool.py:89: in kv_cost
+    per_token = sum(
+python\freetoken\kvcache\mha_pool.py:90: in <genexpr>
+    spec_kv_bytes_per_token(spec, config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+spec = KVCacheGroupSpec(name='full', layer_ids=(0, 1, 2), num_kv_heads=8, head_dim=64, sliding_window=None, mla=False, index_head_dim=0, num_index_layers=0, index_ratio=1, attn_type=<AttnType.FULL: 'full'>)
+config = <engine.test_cache_budget.test_mha_kv_cost_simple_full_attention.<locals>.StubConfig object at 0x00000219348D6180>
+
+    def spec_kv_bytes_per_token(spec, config) -> int:
+        """One paged-KV group's bytes per token: (1|2 slabs) x head_dim x local kv heads x dtype
+        x layers, plus the bf16 DSA index-key slab when the spec carries indexer dims. Pure
+        per-spec arithmetic -- pool families compose it over THEIR OWN groups; no family
+        branching here. (2 bytes/elem == the torch.bfloat16 dsa_pool.DSAKVCache._alloc
+        hardcodes; keep the two in lockstep if the slab dtype ever changes.)
+    
+        ``index_ratio`` > 1 (QSA) stores one index key per token group, not per token; that slab's
+        ring and scratch rows are fixed-size and priced in QSAKVCache.kv_cost instead."""
+        per_token = (
+            (1 if spec.mla else 2)  # MLA latent groups store one slab (V aliases K)
+            * spec.head_dim
+            * div_even(spec.num_kv_heads, config.tp_info.size, allow_replicate=True)
+            * config.dtype.itemsize
+            * spec.num_layers
+        )
+>       index_bytes = 4 if getattr(config.model_config.quant, "dialect", None) == "gguf_strata" else 2
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'StubModelConfig' object has no attribute 'quant'
+
+python\freetoken\kvcache\base.py:35: AttributeError
+_____________ test_engine_resolve_auto_moe_cache_size_maps_kwargs _____________
+
+    def test_engine_resolve_auto_moe_cache_size_maps_kwargs():
+        import torch
+    
+        from freetoken.engine.engine import Engine
+        from freetoken.models.config import KVCacheGroupSpec
+    
+        class StubModelConfig:
+            has_swa_attention = False
+            num_experts = 4
+            num_moe_layers = 2  # total_experts = 8
+    
+            def kv_cache_group_specs(self):
+                return [KVCacheGroupSpec(
+                    name="full", layer_ids=(0, 1, 2), num_kv_heads=8, head_dim=64, sliding_window=None,
+                )]
+    
+            def linear_attention_group(self):
+                return None
+    
+        class StubConfig:
+            dtype = torch.float16
+            page_size = 16
+            max_running_req = 4
+            hybrid_swa_cache_mode = "auto"
+            memory_ratio = 0.9
+            moe_prefill_overlap = True
+            kv_reserve_tokens = 0
+            swa_full_tokens_ratio = 0.2
+            swa_num_pages_override = None
+            model_config = StubModelConfig()
+    
+            class tp_info:
+                size = 1
+    
+        class StubBanks:
+            # 2 layers (num_moe_layers above) x 4 experts each -- per-layer host bank contract.
+            sources = {
+                "gate_up": [torch.zeros(4, 32, 8, dtype=torch.float16)] * 2,  # row = 32*8*2 = 512
+                "down": [torch.zeros(4, 8, 16, dtype=torch.float16)] * 2,     # row = 8*16*2 = 256
+            }
+    
+        from freetoken.kvcache.mha_pool import MHAKVCache
+    
+        engine = Engine.__new__(Engine)  # bypass __init__/GPU
+        engine._baseline_free = 10_000_000
+        engine._weights_bytes = 1_000_000
+        engine._pool_cls = MHAKVCache  # __init__ skipped -> install the generic pool family
+    
+>       size, pages, overlap = engine._resolve_auto_moe_cache_size(StubConfig(), StubBanks())
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\engine\test_cache_budget.py:317: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\engine\engine.py:657: in _resolve_auto_moe_cache_size
+    cache_per_page, fixed_cache_size, page_tokens, min_reserve = self._pool_cls.kv_cost(config)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+python\freetoken\kvcache\mha_pool.py:89: in kv_cost
+    per_token = sum(
+python\freetoken\kvcache\mha_pool.py:90: in <genexpr>
+    spec_kv_bytes_per_token(spec, config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+spec = KVCacheGroupSpec(name='full', layer_ids=(0, 1, 2), num_kv_heads=8, head_dim=64, sliding_window=None, mla=False, index_head_dim=0, num_index_layers=0, index_ratio=1, attn_type=<AttnType.FULL: 'full'>)
+config = <engine.test_cache_budget.test_engine_resolve_auto_moe_cache_size_maps_kwargs.<locals>.StubConfig object at 0x00000219348D54C0>
+
+    def spec_kv_bytes_per_token(spec, config) -> int:
+        """One paged-KV group's bytes per token: (1|2 slabs) x head_dim x local kv heads x dtype
+        x layers, plus the bf16 DSA index-key slab when the spec carries indexer dims. Pure
+        per-spec arithmetic -- pool families compose it over THEIR OWN groups; no family
+        branching here. (2 bytes/elem == the torch.bfloat16 dsa_pool.DSAKVCache._alloc
+        hardcodes; keep the two in lockstep if the slab dtype ever changes.)
+    
+        ``index_ratio`` > 1 (QSA) stores one index key per token group, not per token; that slab's
+        ring and scratch rows are fixed-size and priced in QSAKVCache.kv_cost instead."""
+        per_token = (
+            (1 if spec.mla else 2)  # MLA latent groups store one slab (V aliases K)
+            * spec.head_dim
+            * div_even(spec.num_kv_heads, config.tp_info.size, allow_replicate=True)
+            * config.dtype.itemsize
+            * spec.num_layers
+        )
+>       index_bytes = 4 if getattr(config.model_config.quant, "dialect", None) == "gguf_strata" else 2
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'StubModelConfig' object has no attribute 'quant'
+
+python\freetoken\kvcache\base.py:35: AttributeError
+_ test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000219348D6CF0>
+
+    def test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend(monkeypatch):
+        """Bare `ft serve <FTW MoE checkpoint>`: no --moe-backend, no --moe-cache-* flags at all.
+    
+        args.py's parse-time default only fires when the backend is *already*
+        offload-family at parse time -- but a bare invocation leaves moe_strategy="auto" at parse
+        time, and the "auto" -> offload/cpu/hybrid resolution only happens later, in _adjust_config,
+        once the model_config (and its expert_quant) is known. This proves the engine-level
+        resolution: a quantized-experts model auto-resolving to an offload-family backend also gets
+        moe_cache_auto=True, so _init_offload_moe_cache's _require_offload_cache_size guard is never
+        reached with moe_cache_size still 0.
+        """
+        import freetoken.engine.engine as engine_module
+        from freetoken.engine.engine import _adjust_config
+        from freetoken.moe import is_offload_moe_strategy
+    
+        # a unified-memory host (GB10) resolves auto to fused instead
+        monkeypatch.setattr(engine_module, "_is_unified_memory_gpu", lambda index=None: False)
+        config = _offload_engine_config()
+>       _adjust_config(config)
+
+tests\engine\test_cache_budget.py:410: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\engine\engine.py:1732: in _adjust_config
+    _validate_attention_backend_choice(config, override, required_attn_types)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = EngineConfig(model_path='/tmp/freetoken-test-model', tp_info=DistributedInfo(rank=0, size=1), dtype=torch.bfloat16, hf...le='exact', clover_accept_ratio=0.9, clover_accept_delta=0.6, clover_coreset_top_p=0.9, clover_disable_penalties=False)
+override = <function _adjust_config.<locals>.override at 0x0000021934B31E40>
+required = frozenset({<AttnType.FULL: 'full'>})
+
+    def _validate_attention_backend_choice(config, override, required: frozenset[AttnType]) -> None:
+        """Config-time type x backend capability check for the resolved (or explicit)
+        backend string: every comma part must serve every required type and have its
+        packages/arch available. Replaces the per-model gates; in particular this is
+        where a DSV4 or MLA checkpoint rejects a generic backend before weights load,
+        and where a generic model rejects dsa/dsv4_sparse."""
+        from freetoken.attention import validate_attn_backend
+    
+        # Name membership first (ArgumentTypeError listing the supported names): the CLI already
+        # ran this, but the programmatic EngineConfig path reaches here unvalidated and would
+        # otherwise die on a bare KeyError from the info lookup below.
+        validate_attn_backend(config.attention_backend, allow_auto=False)
+    
+        model_config = config.model_config
+        backend_parts = [p.strip() for p in config.attention_backend.split(",")]
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            missing = required - info.supported_types
+            if missing:
+                valid = [
+                    name
+                    for name in (
+                        "fa", "fi", "trtllm", "triton", "dsa", "dsv4_sparse", "m3_sparse",
+                        "qsa_sparse",
+                    )
+                    if required <= attention_backend_info(name).supported_types
+                ]
+                missing_names = "/".join(sorted(t.value for t in missing))
+                raise ValueError(
+                    f"{getattr(model_config, 'model_type', 'model')} uses {missing_names} "
+                    f"attention, which backend {part!r} does not support; valid backends: "
+                    f"{', '.join(valid)} (or auto), got {config.attention_backend!r}."
+                )
+            if AttnType.SWA in required and not info.consumes_attn_spec:
+                # SWA models drive window/sinks/sm_scale through the per-call AttentionSpec;
+                # a backend that drops it would attend with the wrong window silently.
+                raise ValueError(
+                    f"backend {part!r} does not consume the per-call AttentionSpec that "
+                    f"SWA models require, got {config.attention_backend!r}."
+                )
+    
+        # An explicitly-selected backend may require a package that isn't installed. Auto
+        # never resolves to one of these when its package is missing, so this only fires for
+        # explicit --attention-backend choices.
+        for part in backend_parts:
+            info = attention_backend_info(part)
+            if info.requires_flashinfer and not _flashinfer_available():
+>               raise RuntimeError(
+                    f"Attention backend {config.attention_backend!r} requires flashinfer, which is "
+                    "not installed. Install it with `pip install 'freetoken[fi]'` (or "
+                    "'freetoken[accel]'), or use --attention-backend triton."
+                )
+E               RuntimeError: Attention backend 'fi' requires flashinfer, which is not installed. Install it with `pip install 'freetoken[fi]'` (or 'freetoken[accel]'), or use --attention-backend triton.
+
+python\freetoken\engine\engine.py:211: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/engine/test_cache_budget.py::test_adjust_config_resolves_num_tokens_generic
+FAILED tests/engine/test_cache_budget.py::test_mha_kv_cost_simple_full_attention
+FAILED tests/engine/test_cache_budget.py::test_engine_resolve_auto_moe_cache_size_maps_kwargs
+FAILED tests/engine/test_cache_budget.py::test_adjust_config_defaults_moe_cache_auto_for_auto_resolved_offload_backend
+4 failed, 181 passed, 2 skipped in 3.69s

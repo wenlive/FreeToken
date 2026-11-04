@@ -1,0 +1,19 @@
+C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-a2\python\freetoken\engine\engine.py:1303: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[W1104 12:08:10.000000000 socket.cpp:764] [c10d] The client socket has failed to connect to [DESKTOP-0I0S4P8]:2333 (system error: 10049 - ‘⁄∆‰…œœ¬Œƒ÷–£¨∏√«Î«Ûµƒµÿ÷∑Œﬁ–ß°£).
+C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\_device.py:116: UserWarning: expandable_segments not supported on this platform (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\c10/cuda/CUDAAllocatorConfig.h:39.)
+  return func(*args, **kwargs)
+C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-a2\python\freetoken\models\gguf\reader.py:112: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  return torch.from_numpy(self._raw)
+Preparing for capturing CUDA graphs...:   0%|          | 0/2 [00:00<?, ?batch/s]Capturing graphs: bs = 2   | avail_mem = 1.46 GiB:   0%|          | 0/2 [00:00<?, ?batch/s][rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505] Error checking compiler version for cl
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505] Traceback (most recent call last):
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]   File "C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\cpp_extension.py", line 501, in get_compiler_abi_compatibility_and_version
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]     compiler_info = subprocess.check_output(compiler, stderr=subprocess.STDOUT)
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]   File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 466, in check_output
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]     return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]   File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505]     raise CalledProcessError(retcode, process.args,
+[rank0]:W1104 12:08:50.155000 14404 torch\utils\cpp_extension.py:505] subprocess.CalledProcessError: Command 'cl' returned non-zero exit status 2.
+Capturing graphs: bs = 2   | avail_mem = 1.46 GiB:  50%|‚ñà‚ñà‚ñà‚ñà‚ñà     | 1/2 [00:45<00:45, 45.25s/batch]Capturing graphs: bs = 1   | avail_mem = 1.45 GiB:  50%|‚ñà‚ñà‚ñà‚ñà‚ñà     | 1/2 [00:45<00:45, 45.25s/batch]Capturing graphs: bs = 1   | avail_mem = 1.45 GiB: 100%|‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà| 2/2 [00:47<00:00, 19.89s/batch]Capturing graphs: bs = 1   | avail_mem = 1.45 GiB: 100%|‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà‚ñà| 2/2 [00:47<00:00, 23.69s/batch]

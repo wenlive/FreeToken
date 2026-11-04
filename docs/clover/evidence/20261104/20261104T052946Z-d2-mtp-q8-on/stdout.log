@@ -1,0 +1,76 @@
+[1m[2026-11-04|13:29:49|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|13:29:50|core|rank=0][0m [33mWARNING [0m Page size is overridden to 64 for the qsa_sparse backend
+[1m[2026-11-04|13:29:50|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='qsa_sparse', cache_type='hybrid_radix', page_size=64
+[1m[2026-11-04|13:29:50|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|13:29:53|core|rank=0][0m [32mINFO    [0m Input embedding: 273152000 original compressed bytes in mapped host memory
+[1m[2026-11-04|13:29:54|core|rank=0][0m [32mINFO    [0m PLE disk backend: ReadFile pool x16, NO_BUFFERING, wait-sync
+[1m[2026-11-04|13:29:54|core|rank=0][0m [32mINFO    [0m MoE experts: q2_0 via triton
+[1m[2026-11-04|13:29:58|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 0: 439 compact host rows
+[1m[2026-11-04|13:29:58|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 1: 419 compact host rows
+[1m[2026-11-04|13:29:58|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 2: 426 compact host rows
+[1m[2026-11-04|13:29:59|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 3: 427 compact host rows
+[1m[2026-11-04|13:29:59|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 4: 419 compact host rows
+[1m[2026-11-04|13:30:00|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 5: 423 compact host rows
+[1m[2026-11-04|13:30:00|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 6: 408 compact host rows
+[1m[2026-11-04|13:30:00|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 7: 412 compact host rows
+[1m[2026-11-04|13:30:01|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 8: 420 compact host rows
+[1m[2026-11-04|13:30:01|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 9: 415 compact host rows
+[1m[2026-11-04|13:30:02|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 10: 429 compact host rows
+[1m[2026-11-04|13:30:02|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 11: 423 compact host rows
+[1m[2026-11-04|13:30:02|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 12: 415 compact host rows
+[1m[2026-11-04|13:30:03|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 13: 403 compact host rows
+[1m[2026-11-04|13:30:03|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 14: 426 compact host rows
+[1m[2026-11-04|13:30:04|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 15: 429 compact host rows
+[1m[2026-11-04|13:30:04|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 16: 419 compact host rows
+[1m[2026-11-04|13:30:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 17: 410 compact host rows
+[1m[2026-11-04|13:30:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 18: 408 compact host rows
+[1m[2026-11-04|13:30:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 19: 411 compact host rows
+[1m[2026-11-04|13:30:06|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 20: 422 compact host rows
+[1m[2026-11-04|13:30:06|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 21: 408 compact host rows
+[1m[2026-11-04|13:30:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 22: 414 compact host rows
+[1m[2026-11-04|13:30:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 23: 425 compact host rows
+[1m[2026-11-04|13:30:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 24: 418 compact host rows
+[1m[2026-11-04|13:30:08|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 25: 415 compact host rows
+[1m[2026-11-04|13:30:08|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 26: 416 compact host rows
+[1m[2026-11-04|13:30:08|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 27: 425 compact host rows
+[1m[2026-11-04|13:30:09|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 28: 433 compact host rows
+[1m[2026-11-04|13:30:09|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 29: 419 compact host rows
+[1m[2026-11-04|13:30:10|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 30: 427 compact host rows
+[1m[2026-11-04|13:30:10|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 31: 428 compact host rows
+[1m[2026-11-04|13:30:10|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 32: 429 compact host rows
+[1m[2026-11-04|13:30:11|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 33: 415 compact host rows
+[1m[2026-11-04|13:30:11|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 34: 414 compact host rows
+[1m[2026-11-04|13:30:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 35: 413 compact host rows
+[1m[2026-11-04|13:30:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 36: 421 compact host rows
+[1m[2026-11-04|13:30:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 37: 398 compact host rows
+[1m[2026-11-04|13:30:13|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 38: 416 compact host rows
+[1m[2026-11-04|13:30:13|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 39: 420 compact host rows
+[1m[2026-11-04|13:30:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 40: 427 compact host rows
+[1m[2026-11-04|13:30:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 41: 412 compact host rows
+[1m[2026-11-04|13:30:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 42: 408 compact host rows
+[1m[2026-11-04|13:30:15|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 43: 423 compact host rows
+[1m[2026-11-04|13:30:15|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 44: 417 compact host rows
+[1m[2026-11-04|13:30:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 45: 419 compact host rows
+[1m[2026-11-04|13:30:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 46: 422 compact host rows
+[1m[2026-11-04|13:30:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 47: 411 compact host rows
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m Multimodal disabled: --mm-disable
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m Allocating 8192 tokens for KV cache, K + V = 0.23 GiB
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m qsa_sparse block top-k: triton qsa_block_topk
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 1.11 GiB
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|13:30:17|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 1.11 GiB
+[1m[2026-11-04|13:30:18|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 1.10 GiB
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPXXZ~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPXXZ~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPHCU~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPHCU~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPIVD~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPIVD~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPN2L~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPN2L~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|13:30:31|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 7/9, mamba usage: 0.78, #running-req: 1, #queue-req: 0, input throughput (token/s): 18.39
+{"prompt": "Arithmetic", "tokens": 2, "mtp_rounds": 1, "max_draft": 3}
+[1m[2026-11-04|13:30:32|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 7/9, mamba usage: 0.78, #running-req: 1, #queue-req: 0, input throughput (token/s): 22.85
+{"prompt": "Count", "tokens": 29, "mtp_rounds": 8, "max_draft": 3}
+[1m[2026-11-04|13:30:33|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 177, #cached-token: 0, token usage: 0.02, #mamba-slot: 8/9, mamba usage: 0.89, #running-req: 1, #queue-req: 0, input throughput (token/s): 114.89
+{"prompt": "Context", "tokens": 1, "mtp_rounds": 1, "max_draft": 3}

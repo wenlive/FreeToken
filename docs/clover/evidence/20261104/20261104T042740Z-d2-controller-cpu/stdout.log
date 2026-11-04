@@ -1,0 +1,11 @@
+..sss........sssssssssss.ssssssssssssssss............................... [ 30%]
+s....................................................................... [ 60%]
+........................................................................ [ 90%]
+........................                                                 [100%]
+============================== warnings summary ===============================
+tests/scheduler/test_abort_inflight_prefill.py::test_context_clipping_does_not_shrink_another_request_with_shared_sampling
+  C:\workspace\wt\T-20261102-clover-q8\FreeToken\python\freetoken\kernel\fla\utils.py:224: UserWarning: Triton is not supported on current platform, roll back to CPU.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+209 passed, 31 skipped, 1 warning in 6.21s

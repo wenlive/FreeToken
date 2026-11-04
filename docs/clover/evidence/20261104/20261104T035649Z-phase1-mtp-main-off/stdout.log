@@ -1,0 +1,158 @@
+[1m[2026-11-04|11:56:52|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|11:56:53|core|rank=0][0m [33mWARNING [0m Page size is overridden to 64 for the qsa_sparse backend
+[1m[2026-11-04|11:56:53|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='qsa_sparse', cache_type='hybrid_radix', page_size=64
+[1m[2026-11-04|11:56:53|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+CUDA_U~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPDRV~1\cuda_utils.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPDRV~1\cuda_utils.cp312-win_amd64.exp
+[1m[2026-11-04|11:56:56|core|rank=0][0m [32mINFO    [0m Input embedding: 273152000 original compressed bytes in mapped host memory
+[1m[2026-11-04|11:56:56|core|rank=0][0m [32mINFO    [0m PLE disk backend: ReadFile pool x16, NO_BUFFERING, wait-sync
+[1m[2026-11-04|11:56:56|core|rank=0][0m [32mINFO    [0m MoE experts: q2_0 via triton
+[1m[2026-11-04|11:57:00|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 0: 412 compact host rows
+[1m[2026-11-04|11:57:00|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 1: 397 compact host rows
+[1m[2026-11-04|11:57:01|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 2: 401 compact host rows
+[1m[2026-11-04|11:57:01|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 3: 415 compact host rows
+[1m[2026-11-04|11:57:01|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 4: 404 compact host rows
+[1m[2026-11-04|11:57:02|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 5: 405 compact host rows
+[1m[2026-11-04|11:57:02|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 6: 382 compact host rows
+[1m[2026-11-04|11:57:03|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 7: 389 compact host rows
+[1m[2026-11-04|11:57:03|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 8: 400 compact host rows
+[1m[2026-11-04|11:57:03|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 9: 397 compact host rows
+[1m[2026-11-04|11:57:04|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 10: 402 compact host rows
+[1m[2026-11-04|11:57:04|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 11: 407 compact host rows
+[1m[2026-11-04|11:57:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 12: 387 compact host rows
+[1m[2026-11-04|11:57:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 13: 382 compact host rows
+[1m[2026-11-04|11:57:05|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 14: 414 compact host rows
+[1m[2026-11-04|11:57:06|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 15: 426 compact host rows
+[1m[2026-11-04|11:57:06|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 16: 401 compact host rows
+[1m[2026-11-04|11:57:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 17: 399 compact host rows
+[1m[2026-11-04|11:57:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 18: 394 compact host rows
+[1m[2026-11-04|11:57:07|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 19: 390 compact host rows
+[1m[2026-11-04|11:57:08|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 20: 403 compact host rows
+[1m[2026-11-04|11:57:08|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 21: 383 compact host rows
+[1m[2026-11-04|11:57:09|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 22: 396 compact host rows
+[1m[2026-11-04|11:57:09|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 23: 415 compact host rows
+[1m[2026-11-04|11:57:09|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 24: 402 compact host rows
+[1m[2026-11-04|11:57:10|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 25: 400 compact host rows
+[1m[2026-11-04|11:57:10|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 26: 408 compact host rows
+[1m[2026-11-04|11:57:11|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 27: 412 compact host rows
+[1m[2026-11-04|11:57:11|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 28: 417 compact host rows
+[1m[2026-11-04|11:57:11|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 29: 398 compact host rows
+[1m[2026-11-04|11:57:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 30: 418 compact host rows
+[1m[2026-11-04|11:57:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 31: 420 compact host rows
+[1m[2026-11-04|11:57:12|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 32: 414 compact host rows
+[1m[2026-11-04|11:57:13|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 33: 403 compact host rows
+[1m[2026-11-04|11:57:13|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 34: 393 compact host rows
+[1m[2026-11-04|11:57:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 35: 400 compact host rows
+[1m[2026-11-04|11:57:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 36: 403 compact host rows
+[1m[2026-11-04|11:57:14|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 37: 384 compact host rows
+[1m[2026-11-04|11:57:15|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 38: 386 compact host rows
+[1m[2026-11-04|11:57:15|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 39: 411 compact host rows
+[1m[2026-11-04|11:57:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 40: 421 compact host rows
+[1m[2026-11-04|11:57:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 41: 407 compact host rows
+[1m[2026-11-04|11:57:16|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 42: 396 compact host rows
+[1m[2026-11-04|11:57:17|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 43: 408 compact host rows
+[1m[2026-11-04|11:57:17|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 44: 406 compact host rows
+[1m[2026-11-04|11:57:18|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 45: 407 compact host rows
+[1m[2026-11-04|11:57:18|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 46: 413 compact host rows
+[1m[2026-11-04|11:57:18|core|rank=0][0m [32mINFO    [0m Protected Q2 layer 47: 400 compact host rows
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m Multimodal disabled: --mm-disable
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m Allocating 8192 tokens for KV cache, K + V = 0.20 GiB
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m qsa_sparse block top-k: triton qsa_block_topk
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 1.02 GiB
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|11:57:19|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 1.02 GiB
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPODR~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPODR~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPBD2~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPBD2~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPM76~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPM76~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPYS4~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPYS4~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPT23~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPT23~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP56Q~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP56Q~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPYQT~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPYQT~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPBII~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPBII~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPA1E~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPA1E~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPBL6~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPBL6~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPS4L~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPS4L~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPYY8~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPYY8~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPS19~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPS19~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP_JP~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP_JP~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPOOO~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPOOO~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPU5_~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPU5_~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPKBK~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPKBK~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPDF_~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPDF_~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP7ZH~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP7ZH~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP5R7~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP5R7~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPS4J~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPS4J~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP540~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP540~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP9B0~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP9B0~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP1RF~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP1RF~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPQ4U~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPQ4U~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPI8X~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPI8X~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPR8V~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPR8V~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPJCU~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPJCU~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPMR3~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPMR3~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|11:57:48|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 1.01 GiB
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP8S0~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP8S0~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPR8T~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPR8T~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP1OR~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP1OR~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP17Y~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP17Y~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP6L4~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP6L4~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP4JB~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP4JB~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPACI~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPACI~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPJDP~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPJDP~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP_RO~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP_RO~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPMU6~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPMU6~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|11:58:02|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/5, mamba usage: 0.60, #running-req: 1, #queue-req: 0, input throughput (token/s): 1.77
+{"prompt": "Arithmetic", "tokens": 2, "mtp_rounds": 0, "max_draft": 0}
+[1m[2026-11-04|11:58:04|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/5, mamba usage: 0.60, #running-req: 1, #queue-req: 0, input throughput (token/s): 13.80
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPH5N~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPH5N~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPNM1~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPNM1~1\__triton_launcher.cp312-win_amd64.exp
+{"prompt": "Count", "tokens": 29, "mtp_rounds": 0, "max_draft": 0}
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPR1K~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPR1K~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPX1_~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPX1_~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPVWR~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPVWR~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|11:58:12|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 177, #cached-token: 0, token usage: 0.02, #mamba-slot: 4/5, mamba usage: 0.80, #running-req: 1, #queue-req: 0, input throughput (token/s): 21.41
+{"prompt": "Context", "tokens": 1, "mtp_rounds": 0, "max_draft": 0}

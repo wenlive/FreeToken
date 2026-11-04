@@ -1,0 +1,56 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+___ test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping ___
+
+tmp_path = WindowsPath('C:/Users/PC/AppData/Local/Temp/pytest-of-PC/pytest-63/test_streaming_mixed_expert_lo0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001EAD58CC1A0>
+
+    def test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping(tmp_path, monkeypatch):
+        import gguf
+        import numpy as np
+    
+        path = tmp_path / "mixed.gguf"
+        writer = gguf.GGUFWriter(str(path), "clover_moe")
+        originals = {}
+        for layer, kinds in enumerate(((8, 8), (12, 14))):
+            for role in ("gate", "up", "down"):
+                kind = kinds[int(role == "down")]
+                block, size = gguf.GGML_QUANT_SIZES[gguf.GGMLQuantizationType(kind)]
+                raw = (np.arange(2 * 256 * (256 // block * size), dtype=np.uint32) % 251).astype(np.uint8).reshape(2, 256, -1)
+                originals[layer, role] = raw.copy()
+                writer.add_tensor(f"blk.{layer}.ffn_{role}_exps.weight", raw,
+                                  raw_dtype=gguf.GGMLQuantizationType(kind))
+        writer.write_header_to_file()
+        writer.write_kv_data_to_file()
+        writer.write_tensors_to_file()
+        writer.close()
+        monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+        reader_calls = []
+        original_reader = gguf.GGUFReader
+    
+        def counted_reader(*args, **kwargs):
+            reader_calls.append(args[0])
+            return original_reader(*args, **kwargs)
+    
+        monkeypatch.setattr(gguf, "GGUFReader", counted_reader)
+        config = SimpleNamespace(num_layers=2, num_experts=2, hidden_size=256, moe_intermediate_size=256)
+        banks = adapter.load_packed_expert_sources(str(path), config)
+        # The file can disappear after load: serving owns only independent host bytes.
+        path.unlink()
+        for (layer, role), raw in originals.items():
+            bank = banks["down" if role == "down" else "gate_up"][layer]
+            rb = raw.shape[-1]
+            offset = 256 * rb if role == "up" else 0
+            actual = bank.as_strided(raw.shape, (bank.stride(0), rb, 1), offset)
+            np.testing.assert_array_equal(actual.numpy(), raw)
+>       assert reader_calls == [str(path)], "Expert streaming must reuse the validated directory"
+E       AssertionError: Expert streaming must reuse the validated directory
+E       assert ['C:\\Users\\...\\mixed.gguf'] == ['C:\\Users\\...\\mixed.gguf']
+E         
+E         Left contains one more item: 'C:\\Users\\PC\\AppData\\Local\\Temp\\pytest-of-PC\\pytest-63\\test_streaming_mixed_expert_lo0\\mixed.gguf'
+E         Use -v to get more diff
+
+tests\models\test_clover_gguf.py:191: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/models/test_clover_gguf.py::test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping
+1 failed, 20 deselected in 3.53s

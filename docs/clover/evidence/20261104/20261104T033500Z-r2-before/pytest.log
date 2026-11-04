@@ -1,0 +1,303 @@
+.FFFFFFFFFF                                                              [100%]
+================================== FAILURES ===================================
+_ test_invalid_clover_request_is_rejected_before_admission[params0-59-config0-full preview block] _
+
+params = {'clover_mode': 'denoise'}, prompt = 59, config = {}
+error = 'full preview block'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n        0, 0,..., clover_mode='denoise', clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params1-49-config1-full preview block] _
+
+params = {'clover_mode': 'denoise', 'max_tokens': 10}, prompt = 49, config = {}
+error = 'full preview block'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n        0, 0,..., clover_mode='denoise', clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params2-8-config2-reserved maximum] _
+
+params = {'clover_mode': 'denoise', 'clover_width': 16}, prompt = 8
+config = {'clover_max_width': 8}, error = 'reserved maximum'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu...[], clover_mode='denoise', clover_width=16, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params3-8-config3-W=8/16] _
+
+params = {'clover_mode': 'selfspec', 'clover_width': 32}, prompt = 8
+config = {}, error = 'W=8/16'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu...], clover_mode='selfspec', clover_width=32, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params4-8-config4-greedy] _
+
+params = {'clover_mode': 'denoise', 'temperature': 1}, prompt = 8, config = {}
+error = 'greedy'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu..., clover_mode='denoise', clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params5-8-config5-max_running_req=1] _
+
+params = {'clover_mode': 'denoise'}, prompt = 8, config = {'max_running_req': 2}
+error = 'max_running_req=1'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu..., clover_mode='denoise', clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params6-8-config6-Invalid request-level] _
+
+params = {'clover_mode': 'wrong'}, prompt = 8, config = {}
+error = 'Invalid request-level'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       AssertionError: assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu...[], clover_mode='wrong', clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+_ test_invalid_clover_request_is_rejected_before_admission[params7-8-config7-Invalid request-level] _
+
+params = {'clover_width': 0}, prompt = 8, config = {}
+error = 'Invalid request-level'
+
+    @pytest.mark.parametrize("params,prompt,config,error", [
+        (dict(clover_mode="denoise"), 59, {}, "full preview block"),
+        (dict(clover_mode="denoise", max_tokens=10), 49, {}, "full preview block"),
+        (dict(clover_mode="denoise", clover_width=16), 8, dict(clover_max_width=8), "reserved maximum"),
+        (dict(clover_mode="selfspec", clover_width=32), 8, {}, "W=8/16"),
+        (dict(clover_mode="denoise", temperature=1), 8, {}, "greedy"),
+        (dict(clover_mode="denoise"), 8, dict(max_running_req=2), "max_running_req=1"),
+        (dict(clover_mode="wrong"), 8, {}, "Invalid request-level"),
+        (dict(clover_width=0), 8, {}, "Invalid request-level"),
+    ])
+    def test_invalid_clover_request_is_rejected_before_admission(params, prompt, config, error):
+        from freetoken.message import ErrorReplyMsg, UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(**config)
+        invalid = UserMsg(1, torch.zeros(prompt, dtype=torch.int32),
+            SamplingParams(**{**dict(max_tokens=1), **params}))
+        scheduler._process_one_msg(invalid)
+>       assert admitted == []
+E       assert [UserMsg(uid=...rope_delta=0)] == []
+E         
+E         Left contains one more item: UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0], dtype=torch.int32), sampling_params=SamplingParams(temperatu..._strs=[], clover_mode=None, clover_width=0, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0)
+E         Use -v to get more diff
+
+tests\scheduler\test_clover_prefill_bundle.py:91: AssertionError
+____ test_clover_admission_freezes_defaults_without_mutating_shared_params ____
+
+    def test_clover_admission_freezes_defaults_without_mutating_shared_params():
+        from freetoken.message import UserMsg
+    
+        scheduler, admitted, replies = admission_scheduler(clover_mode="denoise", clover_width=16)
+        params = SamplingParams(max_tokens=17)
+        scheduler._process_one_msg(UserMsg(1, torch.zeros(32, dtype=torch.int32), params))
+        assert not replies
+>       assert admitted[0].sampling_params.clover_mode == "denoise"
+E       AssertionError: assert None == 'denoise'
+E        +  where None = SamplingParams(temperature=0.0, top_k=-1, top_p=1.0, ignore_eos=False, max_tokens=17, stop_strs=[], clover_mode=None, clover_width=None, clover_threshold=None).clover_mode
+E        +    where SamplingParams(temperature=0.0, top_k=-1, top_p=1.0, ignore_eos=False, max_tokens=17, stop_strs=[], clover_mode=None, clover_width=None, clover_threshold=None) = UserMsg(uid=1, input_ids=tensor([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,\n        0, 0,...rs=[], clover_mode=None, clover_width=None, clover_threshold=None), mm_items=None, mrope_positions=None, mrope_delta=0).sampling_params
+
+tests\scheduler\test_clover_prefill_bundle.py:107: AssertionError
+____ test_offline_generation_reports_rejection_and_finishes_valid_requests ____
+
+    def test_offline_generation_reports_rejection_and_finishes_valid_requests():
+        from freetoken.llm.llm import LLM, RequestAllFinished, RequestStatus
+        from freetoken.message import DetokenizeMsg, ErrorReplyMsg
+    
+        llm = LLM.__new__(LLM)
+        llm.eos_token_ids = set()
+        llm.tokenizer = SimpleNamespace(decode=lambda ids: str(ids))
+    
+        def run():
+            llm.status_map = {i: RequestStatus(i, [7], []) for i in range(2)}
+            llm.offline_send_result([ErrorReplyMsg(0, "invalid Clover request", "invalid_request")])
+            llm.offline_send_result([DetokenizeMsg(1, 9, True)])
+            raise RequestAllFinished
+    
+        llm.run_forever = run
+>       result = llm.generate([[7], [7]], SamplingParams(max_tokens=1))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\scheduler\test_clover_prefill_bundle.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\llm\llm.py:120: in generate
+    self.run_forever()
+tests\scheduler\test_clover_prefill_bundle.py:122: in run
+    llm.offline_send_result([ErrorReplyMsg(0, "invalid Clover request", "invalid_request")])
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <freetoken.llm.llm.LLM object at 0x0000024265AF2900>
+reply = [ErrorReplyMsg(uid=0, error='invalid Clover request', code='invalid_request')]
+
+    def offline_send_result(self, reply: List[BaseTokenizerMsg]) -> None:
+        for msg in reply:
+            if isinstance(msg, PromptAdmittedMsg):
+                # PromptAdmittedMsg feeds the online server's global accounting. Offline
+                # generation already owns its inputs and has no FrontendManager stats sink.
+                continue
+>           assert isinstance(msg, DetokenizeMsg)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError
+
+python\freetoken\llm\llm.py:96: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params0-59-config0-full preview block]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params1-49-config1-full preview block]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params2-8-config2-reserved maximum]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params3-8-config3-W=8/16]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params4-8-config4-greedy]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params5-8-config5-max_running_req=1]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params6-8-config6-Invalid request-level]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_invalid_clover_request_is_rejected_before_admission[params7-8-config7-Invalid request-level]
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_clover_admission_freezes_defaults_without_mutating_shared_params
+FAILED tests/scheduler/test_clover_prefill_bundle.py::test_offline_generation_reports_rejection_and_finishes_valid_requests
+10 failed, 1 passed in 3.16s

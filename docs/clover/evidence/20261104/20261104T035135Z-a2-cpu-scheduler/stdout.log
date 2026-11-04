@@ -1,0 +1,70 @@
+..........F............................................................. [ 43%]
+........................................................................ [ 86%]
+......................                                                   [100%]
+================================== FAILURES ===================================
+____ test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag _____
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+    def test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag():
+        runtime = runtime_for_counts("cuda")
+        reqs = [Req(torch.tensor([4, 4], dtype=torch.int32), uid, 0, 12, uid,
+            SamplingParams(clover_mode="causal"), None) for uid in range(2)]
+        oracles = [CloverPenaltyState(runtime.generation, 17, "cpu", runtime.stop_ids) for _ in reqs]
+        logits = (torch.arange(34, dtype=torch.float32).reshape(2, 17) / 5 - 2).bfloat16().cuda()
+        for req in reqs:
+            req.complete_one()
+>       runtime.process_logits(Batch(reqs, "prefill"), logits)
+
+tests\models\test_clover_overlap.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\models\clover_moe\runtime.py:171: in process_logits
+    penalize_logits(logits[row:row + 1], state, self.mask_id,
+python\freetoken\kernel\triton\clover_verify.py:135: in penalize_logits
+    _penalize[(rows, triton.cdiv(vocab, 1024))](logits, output,
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\triton\runtime\jit.py:370: in <lambda>
+    return lambda *args, **kwargs: self.run(grid=grid, warmup=False, *args, **kwargs)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\triton\runtime\jit.py:707: in run
+    kernel_cache, kernel_key_cache, target, backend, binder = self.device_caches[device]
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\triton\runtime\jit.py:663: in create_binder
+    target = driver.active.get_current_target()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\triton\backends\nvidia\driver.py:765: in get_current_target
+    capability = self.get_device_capability(device)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\cuda\__init__.py:669: in get_device_capability
+    prop = get_device_properties(device)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+device = 0
+
+    def get_device_properties(device: Device = None) -> _CudaDeviceProperties:
+        r"""Get the properties of a device.
+    
+        Args:
+            device (torch.device or int or str, optional): device for which to return the
+                properties of the device.  It uses the current device, given by
+                :func:`~torch.cuda.current_device`, if :attr:`device` is ``None``
+                (default).
+    
+        Returns:
+            _CudaDeviceProperties: the properties of the device
+        """
+        _lazy_init()  # will define _get_device_properties
+        device = _get_device_index(device, optional=True)
+        if device < 0 or device >= device_count():
+>           raise AssertionError("Invalid device id")
+E           AssertionError: Invalid device id
+
+..\..\..\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\cuda\__init__.py:689: AssertionError
+============================== warnings summary ===============================
+tests/scheduler/test_abort_inflight_prefill.py::test_context_clipping_does_not_shrink_another_request_with_shared_sampling
+  C:\workspace\wt\T-20261102-clover-q8\FreeToken\python\freetoken\kernel\fla\utils.py:224: UserWarning: Triton is not supported on current platform, roll back to CPU.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/models/test_clover_overlap.py::test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag
+1 failed, 165 passed, 1 warning in 7.82s

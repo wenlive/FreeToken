@@ -1,0 +1,36 @@
+{
+  "16": {
+    "blocks": 17,
+    "first_union_range": [
+      480,
+      893
+    ],
+    "cumulative_union_range": [
+      893,
+      2873
+    ],
+    "blocks_with_first_eviction": 4,
+    "blocks_with_first_evicted_and_reused": 4,
+    "first_missing_and_reused": 32,
+    "active_expert_calls": 157410,
+    "missed_expert_calls": 23667,
+    "miss_fraction": 0.15035258242805413
+  },
+  "32": {
+    "blocks": 9,
+    "first_union_range": [
+      531,
+      863
+    ],
+    "cumulative_union_range": [
+      1691,
+      3444
+    ],
+    "blocks_with_first_eviction": 7,
+    "blocks_with_first_evicted_and_reused": 7,
+    "first_missing_and_reused": 160,
+    "active_expert_calls": 203618,
+    "missed_expert_calls": 22755,
+    "miss_fraction": 0.11175338133170938
+  }
+}

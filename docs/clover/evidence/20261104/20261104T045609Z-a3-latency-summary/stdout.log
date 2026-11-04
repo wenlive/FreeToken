@@ -1,0 +1,276 @@
+{
+  "state": "measured",
+  "full_compatibility": "pending separate gate",
+  "cases": [
+    {
+      "mode": "selfspec",
+      "all_output_ids_equal": true,
+      "turns": [
+        {
+          "variant": "a",
+          "run": "20261104T043952Z-a3-selfspec-abab-1-a",
+          "sha256": "18f1b01f32dc4d0c93e489e7d00f7be20bf3e028dbba454e10f54471f31e5d75",
+          "startup_seconds": 54.313144499988994,
+          "warmup": null,
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 11.793116499989992,
+            "ttft_seconds": 2.5867757000087295,
+            "decode_tokens_per_second": 3.1505413504618964,
+            "end_to_end_tokens_per_second": 2.5438568337746394
+          },
+          "warm_wall_seconds": [
+            0.5808284999802709,
+            0.5727393999986816
+          ],
+          "capture_during_request": true
+        },
+        {
+          "variant": "b",
+          "run": "20261104T044110Z-a3-selfspec-abab-2-b",
+          "sha256": "0d02af4c971bea78b673a0ff1a9ee7b1657c4e5eb0900100016f6ca3be888b3c",
+          "startup_seconds": 52.230402599991066,
+          "warmup": {
+            "widths": [
+              8,
+              16,
+              32
+            ],
+            "coreset_top_p": 0.9,
+            "seconds": 1.2446085999836214,
+            "captures": [
+              {
+                "width": 8,
+                "seconds": 0.5960491000150796
+              },
+              {
+                "width": 16,
+                "seconds": 0.2613355999928899
+              },
+              {
+                "width": 32,
+                "seconds": 0.3357147999922745
+              }
+            ],
+            "allocated_bytes_delta": 2182483456,
+            "reserved_bytes_delta": 2252341248
+          },
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 0.6085978999908548,
+            "ttft_seconds": 0.25122099998407066,
+            "decode_tokens_per_second": 81.29019309287787,
+            "end_to_end_tokens_per_second": 49.29363049141445
+          },
+          "warm_wall_seconds": [
+            0.5806568000116386,
+            0.5738669999991544
+          ],
+          "capture_during_request": false
+        },
+        {
+          "variant": "a",
+          "run": "20261104T044214Z-a3-selfspec-abab-3-a",
+          "sha256": "4cdd69c8d8e77f43adee4ec0f11a7d3a2dd21c510852f509916bfb95882b5405",
+          "startup_seconds": 52.13324220001232,
+          "warmup": null,
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 1.0254191999847535,
+            "ttft_seconds": 0.39397639999515377,
+            "decode_tokens_per_second": 46.01783111614472,
+            "end_to_end_tokens_per_second": 29.256327558959356
+          },
+          "warm_wall_seconds": [
+            0.5833362999837846,
+            0.5757848999928683
+          ],
+          "capture_during_request": true
+        },
+        {
+          "variant": "b",
+          "run": "20261104T044319Z-a3-selfspec-abab-4-b",
+          "sha256": "0e6fb7a64ed79f1f3d5b2117abf037471695eea9893087a66092991aa7f7e140",
+          "startup_seconds": 53.61666200001491,
+          "warmup": {
+            "widths": [
+              8,
+              16,
+              32
+            ],
+            "coreset_top_p": 0.9,
+            "seconds": 1.3467877000221051,
+            "captures": [
+              {
+                "width": 8,
+                "seconds": 0.7431081999966409
+              },
+              {
+                "width": 16,
+                "seconds": 0.25850870000431314
+              },
+              {
+                "width": 32,
+                "seconds": 0.2944366000010632
+              }
+            ],
+            "allocated_bytes_delta": 2182483456,
+            "reserved_bytes_delta": 2252341248
+          },
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 0.6015620999969542,
+            "ttft_seconds": 0.24827089998871088,
+            "decode_tokens_per_second": 82.22814454118843,
+            "end_to_end_tokens_per_second": 49.870163030802466
+          },
+          "warm_wall_seconds": [
+            0.5806605000107083,
+            0.574338100006571
+          ],
+          "capture_during_request": false
+        }
+      ],
+      "first_request_after_median_seconds": 0.6050799999939045,
+      "hot_request_after_median_seconds": 0.5774974500091048
+    },
+    {
+      "mode": "denoise",
+      "all_output_ids_equal": true,
+      "turns": [
+        {
+          "variant": "a",
+          "run": "20261104T044426Z-a3-denoise-abab-1-a",
+          "sha256": "c53d858249dbe0283a12ee0d5b6b6354b305881c39ed12826d8ae23cce7e355a",
+          "startup_seconds": 52.542414999974426,
+          "warmup": null,
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 1.4621116000053007,
+            "ttft_seconds": 1.4606691999942996,
+            "decode_tokens_per_second": null,
+            "end_to_end_tokens_per_second": 20.518269603969518
+          },
+          "warm_wall_seconds": [
+            0.6061503999808338,
+            0.5975349000073038
+          ],
+          "capture_during_request": true
+        },
+        {
+          "variant": "b",
+          "run": "20261104T044532Z-a3-denoise-abab-2-b",
+          "sha256": "364bcec4b94d49eacec93b22dd018938a74cf48a545bed125ba7a5a80545b065",
+          "startup_seconds": 53.297076000017114,
+          "warmup": {
+            "widths": [
+              8,
+              16,
+              32
+            ],
+            "coreset_top_p": 0.9,
+            "seconds": 1.1667031999968458,
+            "captures": [
+              {
+                "width": 8,
+                "seconds": 0.5669378000020515
+              },
+              {
+                "width": 16,
+                "seconds": 0.25671680000959896
+              },
+              {
+                "width": 32,
+                "seconds": 0.29298309999285266
+              }
+            ],
+            "allocated_bytes_delta": 2182483456,
+            "reserved_bytes_delta": 2252341248
+          },
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 0.6160260000033304,
+            "ttft_seconds": 0.6154342999798246,
+            "decode_tokens_per_second": null,
+            "end_to_end_tokens_per_second": 48.699243213497176
+          },
+          "warm_wall_seconds": [
+            0.6067208999884315,
+            0.600548099988373
+          ],
+          "capture_during_request": false
+        },
+        {
+          "variant": "a",
+          "run": "20261104T044638Z-a3-denoise-abab-3-a",
+          "sha256": "2bad1ca9ad88770412b30425acb232ff90c0c96705f1aee4bba74d6693178213",
+          "startup_seconds": 52.443744300020626,
+          "warmup": null,
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 1.3963239999720827,
+            "ttft_seconds": 1.395038199989358,
+            "decode_tokens_per_second": null,
+            "end_to_end_tokens_per_second": 21.484984860676892
+          },
+          "warm_wall_seconds": [
+            0.6074966000160202,
+            0.5997790999826975
+          ],
+          "capture_during_request": true
+        },
+        {
+          "variant": "b",
+          "run": "20261104T044744Z-a3-denoise-abab-4-b",
+          "sha256": "a18ba6e21f81aca3763035974cd0e6b9e4471e05334894431be4ed1a3ed349aa",
+          "startup_seconds": 53.41237810000894,
+          "warmup": {
+            "widths": [
+              8,
+              16,
+              32
+            ],
+            "coreset_top_p": 0.9,
+            "seconds": 1.1493950000149198,
+            "captures": [
+              {
+                "width": 8,
+                "seconds": 0.5477631999820005
+              },
+              {
+                "width": 16,
+                "seconds": 0.258457299991278
+              },
+              {
+                "width": 32,
+                "seconds": 0.29251790000125766
+              }
+            ],
+            "allocated_bytes_delta": 2182483456,
+            "reserved_bytes_delta": 2252341248
+          },
+          "cache_slots": 2292,
+          "first": {
+            "wall_seconds": 0.6185683999792673,
+            "ttft_seconds": 0.6179387999873143,
+            "decode_tokens_per_second": null,
+            "end_to_end_tokens_per_second": 48.4990827223077
+          },
+          "warm_wall_seconds": [
+            0.6016394000034779,
+            0.6010568000201602
+          ],
+          "capture_during_request": false
+        }
+      ],
+      "first_request_after_median_seconds": 0.6172971999912988,
+      "hot_request_after_median_seconds": 0.601348100011819
+    }
+  ],
+  "protocol": "One uninterrupted serial queue, ABAB processes per mode; three requests per process. Expert cache reset and prefix reuse disabled for each request. Startup and capture are separate from arrival timing. The initial selfspec A turn includes first-use compilation and is retained but not used as a capture-only speedup claim.",
+  "integrity": {
+    "run": "20261104T043638Z-a3-q8-integrity",
+    "startup_and_rebuild_identical": true,
+    "sha256": "37b921ea8432b7ac70ef3ff1407ffed76c6d25b4c34a1921d860655833274de3"
+  }
+}

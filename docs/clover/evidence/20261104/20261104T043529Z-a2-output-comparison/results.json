@@ -1,0 +1,218 @@
+{
+  "state": "passed",
+  "inputs": [
+    {
+      "label": "a2-p1-abab-1-a",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041135Z-a2-p1-abab-1-a\\data\\results.json",
+      "sha256": "6d08a929643ee9cb1f279a3706001278cc2dc933b7148f9bb4fa5a73990e79f3"
+    },
+    {
+      "label": "a2-p1-abab-2-b",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041258Z-a2-p1-abab-2-b\\data\\results.json",
+      "sha256": "aa9e829cf10a3f2589198747138c3056cfeba8d2f73d9728893ac4202906f6b8"
+    },
+    {
+      "label": "a2-p1-abab-3-a",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041429Z-a2-p1-abab-3-a\\data\\results.json",
+      "sha256": "2ee4d0df15140752c32cd4d20d0565ee2daa00df2ef3c9bb61b925a67925866b"
+    },
+    {
+      "label": "a2-p1-abab-4-b",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041551Z-a2-p1-abab-4-b\\data\\results.json",
+      "sha256": "fff9b2816fb08856aaf5307d02a81caa6bc7002599439f92dd8ce39a546612b0"
+    },
+    {
+      "label": "a2-p1-overlap-off",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041715Z-a2-p1-overlap-off\\data\\results.json",
+      "sha256": "bcc853c7ef9e1af66c291d997a735b2de3a94dc5b975c5224ad1e0d34259ab3e"
+    },
+    {
+      "label": "a2-p0-before",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T041839Z-a2-p0-before\\data\\results.json",
+      "sha256": "2901dd80b1225531e5fdbe7d3629d1bb949445c98d07c529f97a2f2f2b47ae90"
+    },
+    {
+      "label": "a2-p0-on",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T042002Z-a2-p0-on\\data\\results.json",
+      "sha256": "21ad6869b882343cb0fcfdb42d5a1f12f5bc77c53e1d1c7409a7e8733e99ab64"
+    },
+    {
+      "label": "a2-p0-off",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T042126Z-a2-p0-off\\data\\results.json",
+      "sha256": "5b2297a5cfb6abb88a7a6356cc9a28e4554e6c50f3646d2db38c598ccf08b184"
+    },
+    {
+      "label": "phase1-mtp-main-off",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T035649Z-phase1-mtp-main-off\\data\\results.json",
+      "sha256": "fd5f212b5da97a46b91ce31972ad7892c821b99bd797b02e6097457dce2d6069"
+    },
+    {
+      "label": "a2-mtp-q8-off",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T042843Z-a2-mtp-q8-off\\data\\results.json",
+      "sha256": "b02cbc78b86e7c4efda69e3661907b131b82d3d23c95ccca30bc7341027ca015"
+    },
+    {
+      "label": "phase1-mtp-main-on",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T035909Z-phase1-mtp-main-on\\data\\results.json",
+      "sha256": "1973531439e841f0449a308ef4fe7747e79b8add538602a14c6f917f3a1b2849"
+    },
+    {
+      "label": "a2-mtp-q8-on",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T043031Z-a2-mtp-q8-on\\data\\results.json",
+      "sha256": "500712649bad430cfd975a4843e9663f5536e872a9e4b212e0392fe25087df17"
+    },
+    {
+      "label": "phase1-qwen36-main",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T040043Z-phase1-qwen36-main\\data\\results.json",
+      "sha256": "fc0ad51c90db850cd32ca0b49c5729d55a087376a0b9fb9d0a69b145908b30a2"
+    },
+    {
+      "label": "a2-qwen36-q8",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T043125Z-a2-qwen36-q8\\data\\results.json",
+      "sha256": "dafb0b3509cc765c3cd1c60ff819429129dac9ebd191506c0d268125c467eea5"
+    },
+    {
+      "label": "a2-q8-112-tails",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T042517Z-a2-q8-112-tails\\data\\results.json",
+      "sha256": "40acb74f5c9acd251befc0549506c6d49e520afdb194d48bb6d4272cb9a49c5a"
+    },
+    {
+      "label": "a2-q8-lifecycle",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T042725Z-a2-q8-lifecycle\\data\\results.json",
+      "sha256": "7ed95fe786eaf9b9e7236c10cc2ce1d096ae2f9327707d65935565227ceeadbb"
+    },
+    {
+      "label": "a2-q8-regression",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T043225Z-a2-q8-regression\\data\\results.json",
+      "sha256": "b402803e0b38f449dd4ae326caa0ce2ff5856117d01e8e0588110f006f12276b"
+    }
+  ],
+  "checks": [
+    {
+      "scope": "p1",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 30,
+      "compared_outputs": 15
+    },
+    {
+      "scope": "p1",
+      "prompt": "Sky",
+      "equal": true,
+      "tokens": 41,
+      "compared_outputs": 15
+    },
+    {
+      "scope": "p1",
+      "prompt": "Python",
+      "equal": true,
+      "tokens": 249,
+      "compared_outputs": 15
+    },
+    {
+      "scope": "p1",
+      "prompt": "JSON",
+      "equal": true,
+      "tokens": 86,
+      "compared_outputs": 15
+    },
+    {
+      "scope": "p1",
+      "prompt": "Chinese",
+      "equal": true,
+      "tokens": 122,
+      "compared_outputs": 15
+    },
+    {
+      "scope": "p0",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 30,
+      "compared_outputs": 9
+    },
+    {
+      "scope": "p0",
+      "prompt": "Sky",
+      "equal": true,
+      "tokens": 41,
+      "compared_outputs": 9
+    },
+    {
+      "scope": "p0",
+      "prompt": "Python",
+      "equal": true,
+      "tokens": 237,
+      "compared_outputs": 9
+    },
+    {
+      "scope": "p0",
+      "prompt": "JSON",
+      "equal": true,
+      "tokens": 88,
+      "compared_outputs": 9
+    },
+    {
+      "scope": "p0",
+      "prompt": "Chinese",
+      "equal": true,
+      "tokens": 124,
+      "compared_outputs": 9
+    },
+    {
+      "scope": "mtp-off",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "scope": "mtp-off",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "scope": "mtp-off",
+      "prompt": "Context",
+      "equal": true,
+      "tokens": 1
+    },
+    {
+      "scope": "mtp-on",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "scope": "mtp-on",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "scope": "mtp-on",
+      "prompt": "Context",
+      "equal": true,
+      "tokens": 1
+    },
+    {
+      "scope": "qwen36",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "scope": "qwen36",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "scope": "qwen36",
+      "prompt": "JSON",
+      "equal": true,
+      "tokens": 19
+    }
+  ],
+  "pending": [],
+  "all_available_ids_equal": true
+}

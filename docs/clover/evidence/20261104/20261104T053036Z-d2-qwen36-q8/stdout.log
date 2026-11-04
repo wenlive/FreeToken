@@ -1,0 +1,33 @@
+[1m[2026-11-04|13:30:40|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|13:30:40|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|13:30:40|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|13:30:40|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|13:30:43|core|rank=0][0m [32mINFO    [0m MoE experts: nvfp4 via triton
+[1m[2026-11-04|13:30:43|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|13:31:10|core|rank=0][0m [32mINFO    [0m Multimodal disabled: --mm-disable
+[1m[2026-11-04|13:31:10|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-04|13:31:10|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 4.60 GiB
+[1m[2026-11-04|13:31:10|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|13:31:10|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 4.60 GiB
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP80S~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP80S~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPVJW~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPVJW~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPW3Q~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPW3Q~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPX8X~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPX8X~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|13:31:15|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 4.56 GiB
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP3BJ~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP3BJ~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMP5MX~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMP5MX~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|13:31:19|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 3.971 s
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPVH2~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPVH2~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPU81~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPU81~1\__triton_launcher.cp312-win_amd64.exp
+[1m[2026-11-04|13:31:23|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 4.99
+[1m[2026-11-04|13:31:24|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 33.84
+[1m[2026-11-04|13:31:25|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 26, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 29.59
+[1m[2026-11-04|13:31:25|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 34, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 6.85, #queue-req: 0

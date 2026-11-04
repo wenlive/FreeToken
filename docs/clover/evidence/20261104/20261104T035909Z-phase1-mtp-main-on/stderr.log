@@ -1,0 +1,6 @@
+C:\workspace\wt\T-20261030-clover-nvfp4\FreeToken-baseline\python\freetoken\engine\engine.py:1280: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[W1104 11:59:13.000000000 socket.cpp:764] [c10d] The client socket has failed to connect to [DESKTOP-0I0S4P8]:2333 (system error: 10049 - 在其上下文中，该请求的地址无效。).
+C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\_device.py:116: UserWarning: expandable_segments not supported on this platform (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\c10/cuda/CUDAAllocatorConfig.h:39.)
+  return func(*args, **kwargs)
+Preparing for capturing CUDA graphs...:   0%|          | 0/1 [00:00<?, ?batch/s]Capturing graphs: bs = 1   | avail_mem = 1.02 GiB:   0%|          | 0/1 [00:00<?, ?batch/s]Capturing graphs: bs = 1   | avail_mem = 1.02 GiB: 100%|鈻堚枅鈻堚枅鈻堚枅鈻堚枅鈻堚枅| 1/1 [00:01<00:00,  1.53s/batch]Capturing graphs: bs = 1   | avail_mem = 1.02 GiB: 100%|鈻堚枅鈻堚枅鈻堚枅鈻堚枅鈻堚枅| 1/1 [00:01<00:00,  1.53s/batch]
