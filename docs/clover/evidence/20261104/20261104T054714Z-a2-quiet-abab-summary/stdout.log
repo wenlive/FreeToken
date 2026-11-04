@@ -1,0 +1,70 @@
+{
+  "varied_settings": {},
+  "cases": [
+    {
+      "prompt": "Count",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": -1.3813075068653258,
+        "decode_tokens_per_second": 0.019371145942193024,
+        "ttft_seconds": -1.8185904040447287,
+        "expert_cache_hit_rate": 0.20901663045362895,
+        "decode_expert_copy_payload_bytes": 1.9305019305019266
+      }
+    },
+    {
+      "prompt": "Sky",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": -1.6618531190035646,
+        "decode_tokens_per_second": 0.49179833796546557,
+        "ttft_seconds": -3.9205661249460455,
+        "expert_cache_hit_rate": -0.10982234778451616,
+        "decode_expert_copy_payload_bytes": 2.3319275613991497
+      }
+    },
+    {
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 0.10129019022659946,
+        "decode_tokens_per_second": 0.9034215446169558,
+        "ttft_seconds": 0.23486366490941268,
+        "expert_cache_hit_rate": -0.11144843010210126,
+        "decode_expert_copy_payload_bytes": 0.7912626769196462
+      }
+    },
+    {
+      "prompt": "JSON",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 0.09770356419234183,
+        "decode_tokens_per_second": 1.8728606631506883,
+        "ttft_seconds": -0.41672738135354326,
+        "expert_cache_hit_rate": -0.360364192110163,
+        "decode_expert_copy_payload_bytes": 2.169599153327151
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": -0.650741068052707,
+        "decode_tokens_per_second": 2.3478990496287544,
+        "ttft_seconds": 5.6858173647905685,
+        "expert_cache_hit_rate": -0.3205579649836032,
+        "decode_expert_copy_payload_bytes": 2.7487352445193958
+      }
+    }
+  ]
+}

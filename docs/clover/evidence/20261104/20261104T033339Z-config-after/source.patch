@@ -1,0 +1,224 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index 71e2a41..1008156 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -128,7 +128,9 @@ def main():
+ 
+         qwen_weight._DenseReader = Bf16BenchmarkReader
+     started = time.perf_counter()
+-    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
++    runtime_options = dict(clover_max_width=(
++        max((width for mode, width in modes if mode != "causal"), default=0)
++        if args.clover_max_width is None else args.clover_max_width))
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+diff --git a/benchmarks/bench_clover_context.py b/benchmarks/bench_clover_context.py
+index 1962be7..164ca9c 100644
+--- a/benchmarks/bench_clover_context.py
++++ b/benchmarks/bench_clover_context.py
+@@ -24,7 +24,7 @@ def main():
+     llm = LLM(a.model, moe_strategy='offload', moe_cache_size=a.cache_slots,
+         expert_load='serial', max_running_req=1, memory_ratio=.95,
+         num_token_override=max(prefixes)+128, max_seq_len_override=max(prefixes)+128,
+-        max_extend_tokens=4096, cuda_graph_bs=[1])
++        max_extend_tokens=4096, cuda_graph_bs=[1], clover_max_width=32)
+     engine, runtime = llm.engine, llm.engine.mtp_runtime
+     match = llm.cache_manager.match_req
+     llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index 0683d40..d94cd95 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -32,7 +32,7 @@ def main():
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+         expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
+         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True,
+-        clover_split_kv=args.split_kv)
++        clover_split_kv=args.split_kv, clover_max_width=32)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+     original = engine.forward_batch
+diff --git a/benchmarks/check_clover_lifecycle.py b/benchmarks/check_clover_lifecycle.py
+index 2df7ecd..4b01357 100644
+--- a/benchmarks/check_clover_lifecycle.py
++++ b/benchmarks/check_clover_lifecycle.py
+@@ -27,6 +27,7 @@ def main():
+         max_seq_len_override=4096,
+         max_extend_tokens=4096,
+         cuda_graph_bs=[1],
++        clover_max_width=32,
+     )
+     from freetoken.engine.speculative import runtime_reserve_bytes
+ 
+diff --git a/benchmarks/check_clover_verify.py b/benchmarks/check_clover_verify.py
+index 507988f..70332f3 100644
+--- a/benchmarks/check_clover_verify.py
++++ b/benchmarks/check_clover_verify.py
+@@ -30,6 +30,7 @@ def main():
+         max_seq_len_override=4096,
+         max_extend_tokens=4096,
+         cuda_graph_bs=[1],
++        clover_max_width=16,
+     )
+     engine = llm.engine
+     original = engine.model.forward
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 4f2a32b..6563660 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -25,3 +25,31 @@ This repairs mixed-layer banks with slot padding; official homogeneous Q8 is una
+ IQ4_XS support guarantees the addressing behavior, not grouped MMQ performance: when
+ either projection of a layer uses type 23, that layer's two projections use MMVQ even
+ for multiple input rows. Other layers using supported types can still use MMQ.
++
++## Capacity and sparse prefill
++
++`clover_max_width=None` now resolves to 0 for a causal engine, or `clover_width` for a
++block engine. Explicit 0/8/16/32 remain supported. To serve block requests on an engine
++whose default mode is causal, declare their largest width at engine construction.
++Requests exceeding that declaration are rejected at admission.
++
++For the official Q8 checkpoint, the private clean state plus transaction reserve is:
++
++| Maximum width | Reserve bytes | Equivalent Q8 slots (3,342,336 bytes each) |
++|---|---:|---:|
++| 0 | 0 | 0 |
++| 8 | 579,502,085 | 173.38 |
++| 16 | 1,094,615,045 | 327.50 |
++| 32 | 2,124,840,965 | 635.74 |
++
++These are budget calculations; actual auto-cache capacity also depends on free memory,
++other reservations and alignment. Explicit W32 retains the previous reservation.
++
++`clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`. It defaults to
++128 rows; 0 disables union admission. The default threshold is unchanged pending TTFT
++measurements. Mixed GGUF bank estimates require actual `expert_source.row_bytes` instead
++of guessing Q8 for missing descriptors.
++
++The shared encoder guard in EngineConfig is retained: frozen GGUF config shims have no
++encoder fields, so assigning missing attributes to None fails. Present active encoder
++sections still follow the existing disabling rules; the frozen-shim regression covers this.
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index 83f2f17..80676d9 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -116,7 +116,8 @@ class EngineConfig:
+     mtp_draft_policy: str = "full"
+     clover_mode: str = "causal"
+     clover_width: int = 8
+-    clover_max_width: int = 32
++    clover_max_width: int | None = None
++    clover_sparse_prefill_limit: int = 128
+     clover_split_kv: bool = False
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+@@ -126,6 +127,10 @@ class EngineConfig:
+     clover_disable_penalties: bool = False
+ 
+     def __post_init__(self):
++        if self.clover_max_width is None:
++            object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
++        if self.clover_sparse_prefill_limit < 0:
++            raise ValueError("Clover sparse prefill limit must be nonnegative")
+         if self.clover_mode not in ("causal", "selfspec", "denoise"):
+             raise ValueError("Clover mode must be causal, selfspec or denoise")
+         if self.clover_mode == "selfspec" and self.clover_width == 32:
+diff --git a/python/freetoken/engine/engine.py b/python/freetoken/engine/engine.py
+index b980efc..67ac5a1 100644
+--- a/python/freetoken/engine/engine.py
++++ b/python/freetoken/engine/engine.py
+@@ -364,6 +364,8 @@ class Engine:
+         set_rope_device(self.device)
+         with torch.device("meta"), torch_dtype(config.dtype):
+             self.model = create_model(config.model_config)
++        if config.model_config.model_type == "clover_moe":
++            self.model.configure_runtime(config)
+         self._load_weights(config)
+         self._host_tables_bytes = 0
+         if config.gguf_embedding_host:
+diff --git a/python/freetoken/models/clover_moe/model.py b/python/freetoken/models/clover_moe/model.py
+index a3ff644..d4bcbdf 100644
+--- a/python/freetoken/models/clover_moe/model.py
++++ b/python/freetoken/models/clover_moe/model.py
+@@ -26,6 +26,10 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
+ 
+ 
+ class CloverMoeModelLM(Qwen3_5ForCausalLM):
++    def configure_runtime(self, config):
++        for layer in self.model.layers.op_list:
++            layer.mlp.sparse_prefill_limit = config.clover_sparse_prefill_limit
++
+     def place_input_embedding(self):
+         """Optional exact-byte mapped-host table; output weights remain resident."""
+         from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
+diff --git a/python/freetoken/models/clover_moe/moe.py b/python/freetoken/models/clover_moe/moe.py
+index 28a42df..d661eba 100644
+--- a/python/freetoken/models/clover_moe/moe.py
++++ b/python/freetoken/models/clover_moe/moe.py
+@@ -1,6 +1,4 @@
+-"""Clover-only short-prompt expert-union admission, with an A/B switch."""
+-
+-import os
++"""Clover-only short-prompt expert-union admission."""
+ 
+ import torch
+ 
+@@ -26,9 +24,7 @@ def admit_expert_union(cache, layer_id, indices):
+ class CloverMoE(Qwen3_5MoE):
+     def __init__(self, config, layer_id=None, *, prefix=""):
+         super().__init__(config, layer_id, prefix=prefix)
+-        self.sparse_prefill_limit = (
+-            128 if os.environ.get("FREETOKEN_CLOVER_SPARSE_PREFILL", "1") == "1" else 0
+-        )
++        self.sparse_prefill_limit = 128
+ 
+     def forward(self, hidden_states):
+         cache = getattr(self.experts, "offload_cache", None)
+diff --git a/python/freetoken/moe/expert_banks.py b/python/freetoken/moe/expert_banks.py
+index 3de551b..c221f96 100644
+--- a/python/freetoken/moe/expert_banks.py
++++ b/python/freetoken/moe/expert_banks.py
+@@ -297,7 +297,9 @@ def bank_bytes_estimate(model_config, method=None) -> int | None:
+         )
+         return layers * method.cfg.num_experts * per_expert
+     expert_quant = getattr(model_config, "expert_quant", "none")
+-    if expert_quant == "clover_gguf" and model_config.expert_source is not None:
++    if expert_quant == "clover_gguf":
++        if not getattr(model_config, "expert_source", None):
++            raise ValueError("Clover GGUF bank sizing requires expert_source row_bytes descriptors")
+         rows = model_config.expert_source["row_bytes"]
+         per_slot = (2 * model_config.moe_intermediate_size * max(r[0] for r in rows)
+                     + model_config.hidden_size * max(r[1] for r in rows))
+diff --git a/python/freetoken/moe/offload_cache.py b/python/freetoken/moe/offload_cache.py
+index d18ff3d..f54d2ad 100644
+--- a/python/freetoken/moe/offload_cache.py
++++ b/python/freetoken/moe/offload_cache.py
+@@ -93,7 +93,6 @@ _BANK_BYTES_PER_EXPERT = {
+         + (H // 128) * fp8_block_scale_pad(H // 128, I // 128)
+     ) * 2,
+     "q4_0": lambda H, I: 2 * I * (H // 32) * 18 + H * (I // 32) * 18,
+-    "clover_gguf": lambda h, i: sum(expert_bank_row_bytes("clover_gguf", h, i).values()),
+     "q2_0": lambda H, I: 3 * I * H // 64 * 18,
+     "nvfp4": lambda H, I: 2 * I * (H // 2 + H // 16 + 2) + H * (I // 2 + I // 16 + 2),
+     "mxfp4": lambda H, I: 2 * I * (H // 2 + H // 32 + 2) + H * (I // 2 + I // 32 + 2),
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index beba507..12ab49f 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -11,6 +11,15 @@ from freetoken.models.clover_moe import gguf as adapter
+ from freetoken.models.gguf.config import GgufConfigShim
+ 
+ 
++def test_bank_estimate_requires_mixed_gguf_descriptors():
++    from freetoken.moe.expert_banks import bank_bytes_estimate
++
++    config = SimpleNamespace(expert_quant="clover_gguf", expert_source=None,
++        num_moe_layers=40, num_experts=256, hidden_size=2048, moe_intermediate_size=512)
++    with pytest.raises(ValueError, match="expert_source"):
++        bank_bytes_estimate(config)
++
++
+ def test_aot_claims_gguf_architecture_and_both_actual_expert_rows():
+     from freetoken.kernel.aot_models import SUPPORTED_MODELS, expert_bank_row_bytes
+ 

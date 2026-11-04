@@ -1,0 +1,51 @@
+{
+  "state": "complete",
+  "startup_seconds": 51.29554429999553,
+  "calls": [
+    {
+      "operation": "GGUFReader",
+      "seconds": 7.215732199983904
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.006777800008421764
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.012050799996359274
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.0036174000124447048
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.011490900011267513
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 0.003323799988720566
+    },
+    {
+      "operation": "parse_gguf_config",
+      "seconds": 0.007007400010479614
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 7.496279599989066
+    },
+    {
+      "operation": "_validate_experts",
+      "seconds": 7.500142699980643
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 6.955293699982576
+    },
+    {
+      "operation": "GGUFReader",
+      "seconds": 6.631430499983253
+    }
+  ],
+  "scope": "Nested timings overlap; do not sum them as disjoint costs. No payload scan inferred."
+}

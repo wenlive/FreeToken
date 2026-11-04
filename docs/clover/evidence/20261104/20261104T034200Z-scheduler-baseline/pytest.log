@@ -1,0 +1,309 @@
+......FFF.....                                                           [100%]
+================================== FAILURES ===================================
+_______ test_scheduler_always_emits_terminal_abort_ack_for_unknown_uid ________
+
+    def test_scheduler_always_emits_terminal_abort_ack_for_unknown_uid():
+        scheduler = Scheduler.__new__(Scheduler)
+        scheduler.prefill_manager = SimpleNamespace(abort_req=lambda uid: None)
+        scheduler.decode_manager = SimpleNamespace(abort_req=lambda uid: None)
+        scheduler._pending_abort_acks = set()
+        sent = []
+        scheduler.send_result = sent.extend
+    
+>       Scheduler._process_one_msg(scheduler, AbortBackendMsg(uid=77))
+
+tests\scheduler\test_cost_accounting_core.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <freetoken.scheduler.scheduler.Scheduler object at 0x00000212F6AF37D0>
+msg = AbortBackendMsg(uid=77)
+
+    def _process_one_msg(self, msg: BaseBackendMsg) -> None:
+        if isinstance(msg, BatchBackendMsg):
+            for msg in msg.data:
+                self._process_one_msg(msg)
+        elif isinstance(msg, ExitMsg):
+            raise KeyboardInterrupt
+        elif isinstance(msg, UserMsg):
+            logger.debug_rank0("Received user msg: %s", msg)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is not None and msg.uid in tombstones:
+                tombstones.pop(msg.uid, None)
+                logger.debug_rank0(
+                    "Dropping request %d because its abort arrived before admission", msg.uid
+                )
+                return
+            if msg.mm_items and self.engine.encoder_cache is None:
+                # no encoder runtime: fail loudly instead of decoding unexpanded placeholders
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            error="image input is not supported by this server",
+                        )
+                    ]
+                )
+                return
+            input_len, max_seq_len = len(msg.input_ids), self.engine.max_seq_len
+            max_output_len = max_seq_len - input_len
+            if max_output_len <= 0:
+                logger.warning_rank0(
+                    f"Input sequence length {input_len} exceeds {max_seq_len}, "
+                    f"request {msg.uid} is dropped."
+                )
+                # Tell the client instead of dropping silently — otherwise its wait_for_ack
+                # never sees a `finished` reply and hangs until the request times out.
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            # "prompt is too long: N tokens > M" is the phrasing Claude Code and
+                            # OpenClaw match on; the Anthropic wire has no error code to read.
+                            error=(
+                                f"prompt is too long: {input_len} tokens > {max_seq_len} maximum "
+                                f"(prompt + generation); shorten the prompt or increase the KV "
+                                f"cache budget"
+                            ),
+                            # OpenAI's standard class for this, for clients that read a code.
+                            code="context_length_exceeded",
+                        )
+                    ]
+                )
+                return
+            if msg.sampling_params.max_tokens > max_output_len:
+                # Offline batches can share SamplingParams. Clip only this
+                # request, without changing later prompts or caller state.
+                msg = replace(msg, sampling_params=replace(msg.sampling_params, max_tokens=max_output_len))
+                logger.warning_rank0(
+                    f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
+                )
+            self.prefill_manager.add_one_req(msg)
+        elif isinstance(msg, AbortBackendMsg):
+            logger.debug_rank0("Aborting request %d", msg.uid)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is None:
+                tombstones = self._abort_tombstones = {}
+            tombstones[msg.uid] = None
+            # Unknown aborts normally consume their tombstone when the cross-worker UserMsg
+            # catches up. Bound hostile/no-followup abort traffic without affecting realistic
+            # in-flight concurrency.
+            while len(tombstones) > 65_536:
+                tombstones.pop(next(iter(tombstones)))
+            req_to_free = self.prefill_manager.abort_req(msg.uid)
+            req_to_free = req_to_free or self.decode_manager.abort_req(msg.uid)
+>           if req_to_free is None and self._last_data is not None:
+                                       ^^^^^^^^^^^^^^^
+E           AttributeError: 'Scheduler' object has no attribute '_last_data'
+
+python\freetoken\scheduler\scheduler.py:565: AttributeError
+____ test_abort_before_cross_worker_user_message_cannot_resurrect_request _____
+
+    def test_abort_before_cross_worker_user_message_cannot_resurrect_request():
+        scheduler = Scheduler.__new__(Scheduler)
+        scheduler.engine = SimpleNamespace(max_seq_len=64)
+        added = []
+        scheduler.prefill_manager = SimpleNamespace(
+            add_one_req=added.append,
+            abort_req=lambda uid: None,
+        )
+        scheduler.decode_manager = SimpleNamespace(abort_req=lambda uid: None)
+        scheduler._pending_abort_acks = set()
+        scheduler._abort_tombstones = {}
+        sent = []
+        scheduler.send_result = sent.extend
+    
+>       Scheduler._process_one_msg(scheduler, AbortBackendMsg(uid=78))
+
+tests\scheduler\test_cost_accounting_core.py:184: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <freetoken.scheduler.scheduler.Scheduler object at 0x00000212F6AF2F00>
+msg = AbortBackendMsg(uid=78)
+
+    def _process_one_msg(self, msg: BaseBackendMsg) -> None:
+        if isinstance(msg, BatchBackendMsg):
+            for msg in msg.data:
+                self._process_one_msg(msg)
+        elif isinstance(msg, ExitMsg):
+            raise KeyboardInterrupt
+        elif isinstance(msg, UserMsg):
+            logger.debug_rank0("Received user msg: %s", msg)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is not None and msg.uid in tombstones:
+                tombstones.pop(msg.uid, None)
+                logger.debug_rank0(
+                    "Dropping request %d because its abort arrived before admission", msg.uid
+                )
+                return
+            if msg.mm_items and self.engine.encoder_cache is None:
+                # no encoder runtime: fail loudly instead of decoding unexpanded placeholders
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            error="image input is not supported by this server",
+                        )
+                    ]
+                )
+                return
+            input_len, max_seq_len = len(msg.input_ids), self.engine.max_seq_len
+            max_output_len = max_seq_len - input_len
+            if max_output_len <= 0:
+                logger.warning_rank0(
+                    f"Input sequence length {input_len} exceeds {max_seq_len}, "
+                    f"request {msg.uid} is dropped."
+                )
+                # Tell the client instead of dropping silently — otherwise its wait_for_ack
+                # never sees a `finished` reply and hangs until the request times out.
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            # "prompt is too long: N tokens > M" is the phrasing Claude Code and
+                            # OpenClaw match on; the Anthropic wire has no error code to read.
+                            error=(
+                                f"prompt is too long: {input_len} tokens > {max_seq_len} maximum "
+                                f"(prompt + generation); shorten the prompt or increase the KV "
+                                f"cache budget"
+                            ),
+                            # OpenAI's standard class for this, for clients that read a code.
+                            code="context_length_exceeded",
+                        )
+                    ]
+                )
+                return
+            if msg.sampling_params.max_tokens > max_output_len:
+                # Offline batches can share SamplingParams. Clip only this
+                # request, without changing later prompts or caller state.
+                msg = replace(msg, sampling_params=replace(msg.sampling_params, max_tokens=max_output_len))
+                logger.warning_rank0(
+                    f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
+                )
+            self.prefill_manager.add_one_req(msg)
+        elif isinstance(msg, AbortBackendMsg):
+            logger.debug_rank0("Aborting request %d", msg.uid)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is None:
+                tombstones = self._abort_tombstones = {}
+            tombstones[msg.uid] = None
+            # Unknown aborts normally consume their tombstone when the cross-worker UserMsg
+            # catches up. Bound hostile/no-followup abort traffic without affecting realistic
+            # in-flight concurrency.
+            while len(tombstones) > 65_536:
+                tombstones.pop(next(iter(tombstones)))
+            req_to_free = self.prefill_manager.abort_req(msg.uid)
+            req_to_free = req_to_free or self.decode_manager.abort_req(msg.uid)
+>           if req_to_free is None and self._last_data is not None:
+                                       ^^^^^^^^^^^^^^^
+E           AttributeError: 'Scheduler' object has no attribute '_last_data'
+
+python\freetoken\scheduler\scheduler.py:565: AttributeError
+__________ test_normal_loop_sends_prior_sample_before_abort_terminal __________
+
+    def test_normal_loop_sends_prior_sample_before_abort_terminal():
+        scheduler = Scheduler.__new__(Scheduler)
+        scheduler.prefill_manager = SimpleNamespace(runnable=False, abort_req=lambda uid: None)
+        scheduler.decode_manager = SimpleNamespace(runnable=False, abort_req=lambda uid: None)
+        scheduler._pending_abort_acks = set()
+        scheduler._pending_rebuild = None
+        scheduler.receive_msg = lambda blocking: [AbortBackendMsg(uid=5)]
+        scheduler._schedule_next_batch = lambda: None
+        sent = []
+        scheduler.send_result = lambda messages: sent.append(messages)
+        late_sample = DetokenizeMsg(uid=5, next_token=99, finished=False)
+        scheduler._process_last_data = lambda _data: scheduler.send_result([late_sample])
+    
+>       Scheduler.normal_loop(scheduler)
+
+tests\scheduler\test_cost_accounting_core.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+python\freetoken\scheduler\scheduler.py:281: in normal_loop
+    self._process_one_msg(msg)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <freetoken.scheduler.scheduler.Scheduler object at 0x00000212F6A812B0>
+msg = AbortBackendMsg(uid=5)
+
+    def _process_one_msg(self, msg: BaseBackendMsg) -> None:
+        if isinstance(msg, BatchBackendMsg):
+            for msg in msg.data:
+                self._process_one_msg(msg)
+        elif isinstance(msg, ExitMsg):
+            raise KeyboardInterrupt
+        elif isinstance(msg, UserMsg):
+            logger.debug_rank0("Received user msg: %s", msg)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is not None and msg.uid in tombstones:
+                tombstones.pop(msg.uid, None)
+                logger.debug_rank0(
+                    "Dropping request %d because its abort arrived before admission", msg.uid
+                )
+                return
+            if msg.mm_items and self.engine.encoder_cache is None:
+                # no encoder runtime: fail loudly instead of decoding unexpanded placeholders
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            error="image input is not supported by this server",
+                        )
+                    ]
+                )
+                return
+            input_len, max_seq_len = len(msg.input_ids), self.engine.max_seq_len
+            max_output_len = max_seq_len - input_len
+            if max_output_len <= 0:
+                logger.warning_rank0(
+                    f"Input sequence length {input_len} exceeds {max_seq_len}, "
+                    f"request {msg.uid} is dropped."
+                )
+                # Tell the client instead of dropping silently — otherwise its wait_for_ack
+                # never sees a `finished` reply and hangs until the request times out.
+                self.send_result(
+                    [
+                        ErrorReplyMsg(
+                            uid=msg.uid,
+                            # "prompt is too long: N tokens > M" is the phrasing Claude Code and
+                            # OpenClaw match on; the Anthropic wire has no error code to read.
+                            error=(
+                                f"prompt is too long: {input_len} tokens > {max_seq_len} maximum "
+                                f"(prompt + generation); shorten the prompt or increase the KV "
+                                f"cache budget"
+                            ),
+                            # OpenAI's standard class for this, for clients that read a code.
+                            code="context_length_exceeded",
+                        )
+                    ]
+                )
+                return
+            if msg.sampling_params.max_tokens > max_output_len:
+                # Offline batches can share SamplingParams. Clip only this
+                # request, without changing later prompts or caller state.
+                msg = replace(msg, sampling_params=replace(msg.sampling_params, max_tokens=max_output_len))
+                logger.warning_rank0(
+                    f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
+                )
+            self.prefill_manager.add_one_req(msg)
+        elif isinstance(msg, AbortBackendMsg):
+            logger.debug_rank0("Aborting request %d", msg.uid)
+            tombstones = getattr(self, "_abort_tombstones", None)
+            if tombstones is None:
+                tombstones = self._abort_tombstones = {}
+            tombstones[msg.uid] = None
+            # Unknown aborts normally consume their tombstone when the cross-worker UserMsg
+            # catches up. Bound hostile/no-followup abort traffic without affecting realistic
+            # in-flight concurrency.
+            while len(tombstones) > 65_536:
+                tombstones.pop(next(iter(tombstones)))
+            req_to_free = self.prefill_manager.abort_req(msg.uid)
+            req_to_free = req_to_free or self.decode_manager.abort_req(msg.uid)
+>           if req_to_free is None and self._last_data is not None:
+                                       ^^^^^^^^^^^^^^^
+E           AttributeError: 'Scheduler' object has no attribute '_last_data'
+
+python\freetoken\scheduler\scheduler.py:565: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/scheduler/test_cost_accounting_core.py::test_scheduler_always_emits_terminal_abort_ack_for_unknown_uid
+FAILED tests/scheduler/test_cost_accounting_core.py::test_abort_before_cross_worker_user_message_cannot_resurrect_request
+FAILED tests/scheduler/test_cost_accounting_core.py::test_normal_loop_sends_prior_sample_before_abort_terminal
+3 failed, 11 passed in 4.37s

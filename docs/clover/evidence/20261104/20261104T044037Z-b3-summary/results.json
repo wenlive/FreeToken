@@ -1,0 +1,165 @@
+{
+  "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T043454Z-b3-q8-attention\\data\\results.json",
+  "sha256": "e9fa06299674e7b58f1f4b89c192c5790efe94594f9078e64d4dfb9d6249002f",
+  "state_unchanged": true,
+  "operator_cases": 12,
+  "model_cases": 24,
+  "cohorts": {
+    "all_mask_p09": {
+      "cases": 6,
+      "noise_vs_default": {
+        "relative_l2_range": [
+          0.02739419788122177,
+          0.04165618121623993
+        ],
+        "relative_l2_median": 0.032231464982032776,
+        "argmax_range": [
+          0.875,
+          0.96875
+        ],
+        "kl_mean_range": [
+          0.005591712877503596,
+          0.01563719834666699
+        ]
+      },
+      "split_vs_default": {
+        "relative_l2_range": [
+          0.030977755784988403,
+          0.041679106652736664
+        ],
+        "relative_l2_median": 0.03637503832578659,
+        "argmax_range": [
+          0.875,
+          1.0
+        ],
+        "kl_mean_range": [
+          0.007732684331131168,
+          0.01683229539776221
+        ]
+      }
+    },
+    "all_cases": {
+      "cases": 24,
+      "noise_vs_default": {
+        "relative_l2_range": [
+          0.02739419788122177,
+          0.1577424556016922
+        ],
+        "relative_l2_median": 0.042061762884259224,
+        "argmax_range": [
+          0.75,
+          1.0
+        ],
+        "kl_mean_range": [
+          0.0030992931715445593,
+          0.02327025047270581
+        ]
+      },
+      "split_vs_default": {
+        "relative_l2_range": [
+          0.030419373884797096,
+          0.15027324855327606
+        ],
+        "relative_l2_median": 0.04179493337869644,
+        "argmax_range": [
+          0.75,
+          1.0
+        ],
+        "kl_mean_range": [
+          0.004203656841127668,
+          0.024616614122351166
+        ]
+      }
+    }
+  },
+  "operators_vs_fp32": {
+    "default": {
+      "relative_l2_range": [
+        0.0016529652057215571,
+        0.0017382787773385644
+      ],
+      "max_abs": 0.0161590576171875
+    },
+    "tile_noise": {
+      "relative_l2_range": [
+        0.001651622587814927,
+        0.0017382523510605097
+      ],
+      "max_abs": 0.0161590576171875
+    },
+    "split8": {
+      "relative_l2_range": [
+        0.0016502270009368658,
+        0.0017374567687511444
+      ],
+      "max_abs": 0.0161590576171875
+    }
+  },
+  "split_exceeds_single_noise_sample": [
+    {
+      "prefix": 16384,
+      "width": 8,
+      "anchored": true,
+      "coreset": 1.0,
+      "noise": 0.028940780088305473,
+      "split": 0.05321170389652252
+    },
+    {
+      "prefix": 16384,
+      "width": 32,
+      "anchored": false,
+      "coreset": 0.9,
+      "noise": 0.028120778501033783,
+      "split": 0.03625639155507088
+    },
+    {
+      "prefix": 16384,
+      "width": 32,
+      "anchored": true,
+      "coreset": 0.9,
+      "noise": 0.03635752573609352,
+      "split": 0.044716525822877884
+    },
+    {
+      "prefix": 32768,
+      "width": 8,
+      "anchored": false,
+      "coreset": 0.9,
+      "noise": 0.02964426577091217,
+      "split": 0.041679106652736664
+    },
+    {
+      "prefix": 32768,
+      "width": 8,
+      "anchored": false,
+      "coreset": 1.0,
+      "noise": 0.02960309386253357,
+      "split": 0.04861019179224968
+    },
+    {
+      "prefix": 32768,
+      "width": 16,
+      "anchored": false,
+      "coreset": 0.9,
+      "noise": 0.02739419788122177,
+      "split": 0.04153457656502724
+    },
+    {
+      "prefix": 32768,
+      "width": 16,
+      "anchored": true,
+      "coreset": 1.0,
+      "noise": 0.04294006898999214,
+      "split": 0.10555072873830795
+    },
+    {
+      "prefix": 32768,
+      "width": 32,
+      "anchored": true,
+      "coreset": 1.0,
+      "noise": 0.046018335968256,
+      "split": 0.07515620440244675
+    }
+  ],
+  "conclusion": "Real-operand errors are comparable and persistent state is unchanged. A tile-only perturbation produces comparable model amplification; this is not proof of long-context quality or a universal 1.2x bound. Keep split-KV opt-in pending natural-text quality/denoise progress and dequantized arithmetic controls."
+}

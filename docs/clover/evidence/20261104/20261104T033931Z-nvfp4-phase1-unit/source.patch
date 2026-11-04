@@ -1,0 +1,159 @@
+diff --git a/benchmarks/bench_clover.py b/benchmarks/bench_clover.py
+index 71e2a41..1008156 100644
+--- a/benchmarks/bench_clover.py
++++ b/benchmarks/bench_clover.py
+@@ -128,7 +128,9 @@ def main():
+ 
+         qwen_weight._DenseReader = Bf16BenchmarkReader
+     started = time.perf_counter()
+-    runtime_options = {} if args.clover_max_width is None else dict(clover_max_width=args.clover_max_width)
++    runtime_options = dict(clover_max_width=(
++        max((width for mode, width in modes if mode != "causal"), default=0)
++        if args.clover_max_width is None else args.clover_max_width))
+     llm = LLM(
+         args.model,
+         moe_strategy="offload",
+diff --git a/benchmarks/bench_clover_context.py b/benchmarks/bench_clover_context.py
+index 1962be7..164ca9c 100644
+--- a/benchmarks/bench_clover_context.py
++++ b/benchmarks/bench_clover_context.py
+@@ -24,7 +24,7 @@ def main():
+     llm = LLM(a.model, moe_strategy='offload', moe_cache_size=a.cache_slots,
+         expert_load='serial', max_running_req=1, memory_ratio=.95,
+         num_token_override=max(prefixes)+128, max_seq_len_override=max(prefixes)+128,
+-        max_extend_tokens=4096, cuda_graph_bs=[1])
++        max_extend_tokens=4096, cuda_graph_bs=[1], clover_max_width=32)
+     engine, runtime = llm.engine, llm.engine.mtp_runtime
+     match = llm.cache_manager.match_req
+     llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
+diff --git a/benchmarks/check_clover_graphs.py b/benchmarks/check_clover_graphs.py
+index 0683d40..d94cd95 100644
+--- a/benchmarks/check_clover_graphs.py
++++ b/benchmarks/check_clover_graphs.py
+@@ -32,7 +32,7 @@ def main():
+     llm = LLM(args.model, moe_strategy="offload", moe_cache_size=args.cache_slots,
+         expert_load="serial", max_running_req=1, memory_ratio=args.memory_ratio, num_token_override=4096,
+         max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1], moe_collect_stats=True,
+-        clover_split_kv=args.split_kv)
++        clover_split_kv=args.split_kv, clover_max_width=32)
+     engine, result = llm.engine, dict(state="running", previews=[], verifies=[], causal_ms=[])
+     runtime = engine.mtp_runtime
+     original = engine.forward_batch
+diff --git a/benchmarks/check_clover_lifecycle.py b/benchmarks/check_clover_lifecycle.py
+index 2df7ecd..4b01357 100644
+--- a/benchmarks/check_clover_lifecycle.py
++++ b/benchmarks/check_clover_lifecycle.py
+@@ -27,6 +27,7 @@ def main():
+         max_seq_len_override=4096,
+         max_extend_tokens=4096,
+         cuda_graph_bs=[1],
++        clover_max_width=32,
+     )
+     from freetoken.engine.speculative import runtime_reserve_bytes
+ 
+diff --git a/benchmarks/check_clover_verify.py b/benchmarks/check_clover_verify.py
+index 507988f..70332f3 100644
+--- a/benchmarks/check_clover_verify.py
++++ b/benchmarks/check_clover_verify.py
+@@ -30,6 +30,7 @@ def main():
+         max_seq_len_override=4096,
+         max_extend_tokens=4096,
+         cuda_graph_bs=[1],
++        clover_max_width=16,
+     )
+     engine = llm.engine
+     original = engine.model.forward
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 1e980be..793dcc6 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -17,3 +17,13 @@ contains `error` and, when supplied by the scheduler, `error_code`; other items
+ 
+ Implementation/qualification evidence is tracked in
+ `C:/workspace/tasks/T-20261104-clover-improve/README.md` until the phase evidence is archived.
++
++## Capacity and sparse prefill
++
++`clover_max_width=None` resolves to 0 for a causal engine, or `clover_width` for a
++block engine. Explicit 0/8/16/32 remain supported. A causal engine serving request-level
++block modes must declare their maximum width in advance. Exceeding it is an admission error.
++
++`clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`; the default
++remains 128 rows, and 0 disables union admission. The threshold has not been tuned.
++The Q8-only bank-descriptor and IQ4_XS changes are not part of this NVFP4 port.
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index a1f3f20..f18abd5 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -116,7 +116,8 @@ class EngineConfig:
+     mtp_draft_policy: str = "full"
+     clover_mode: str = "causal"
+     clover_width: int = 8
+-    clover_max_width: int = 32
++    clover_max_width: int | None = None
++    clover_sparse_prefill_limit: int = 128
+     clover_split_kv: bool = False
+     clover_threshold: float = .95
+     clover_accept_rule: str = "exact"
+@@ -126,6 +127,10 @@ class EngineConfig:
+     clover_disable_penalties: bool = False
+ 
+     def __post_init__(self):
++        if self.clover_max_width is None:
++            object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
++        if self.clover_sparse_prefill_limit < 0:
++            raise ValueError("Clover sparse prefill limit must be nonnegative")
+         if self.clover_mode not in ("causal", "selfspec", "denoise"):
+             raise ValueError("Clover mode must be causal, selfspec or denoise")
+         if self.clover_mode == "selfspec" and self.clover_width == 32:
+diff --git a/python/freetoken/engine/engine.py b/python/freetoken/engine/engine.py
+index b980efc..67ac5a1 100644
+--- a/python/freetoken/engine/engine.py
++++ b/python/freetoken/engine/engine.py
+@@ -364,6 +364,8 @@ class Engine:
+         set_rope_device(self.device)
+         with torch.device("meta"), torch_dtype(config.dtype):
+             self.model = create_model(config.model_config)
++        if config.model_config.model_type == "clover_moe":
++            self.model.configure_runtime(config)
+         self._load_weights(config)
+         self._host_tables_bytes = 0
+         if config.gguf_embedding_host:
+diff --git a/python/freetoken/models/clover_moe/model.py b/python/freetoken/models/clover_moe/model.py
+index a3ff644..d4bcbdf 100644
+--- a/python/freetoken/models/clover_moe/model.py
++++ b/python/freetoken/models/clover_moe/model.py
+@@ -26,6 +26,10 @@ class CloverPlusOneRMSNorm(GemmaRMSNorm):
+ 
+ 
+ class CloverMoeModelLM(Qwen3_5ForCausalLM):
++    def configure_runtime(self, config):
++        for layer in self.model.layers.op_list:
++            layer.mlp.sparse_prefill_limit = config.clover_sparse_prefill_limit
++
+     def place_input_embedding(self):
+         """Optional exact-byte mapped-host table; output weights remain resident."""
+         from freetoken.kernel.pinned import alloc_pinned_tensor, MappedHostBytes
+diff --git a/python/freetoken/models/clover_moe/moe.py b/python/freetoken/models/clover_moe/moe.py
+index 89e8689..06b97c5 100644
+--- a/python/freetoken/models/clover_moe/moe.py
++++ b/python/freetoken/models/clover_moe/moe.py
+@@ -1,6 +1,4 @@
+-"""Clover-only short-prompt expert-union admission, with an A/B switch."""
+-
+-import os
++"""Clover-only short-prompt expert-union admission."""
+ 
+ import torch
+ 
+@@ -26,9 +24,7 @@ def admit_expert_union(cache, layer_id, indices):
+ class CloverMoE(Qwen3_5MoE):
+     def __init__(self, config, layer_id=None, *, prefix=""):
+         super().__init__(config, layer_id, prefix=prefix)
+-        self.sparse_prefill_limit = (
+-            128 if os.environ.get("FREETOKEN_CLOVER_SPARSE_PREFILL", "1") == "1" else 0
+-        )
++        self.sparse_prefill_limit = 128
+ 
+     def forward(self, hidden_states):
+         cache = getattr(self.experts, "offload_cache", None)

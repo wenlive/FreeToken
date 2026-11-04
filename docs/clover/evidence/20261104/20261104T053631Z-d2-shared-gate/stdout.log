@@ -1,0 +1,60 @@
+{
+  "state": "passed",
+  "comparisons": [
+    {
+      "mode": "mtp-off",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "mode": "mtp-off",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "mode": "mtp-off",
+      "prompt": "Context",
+      "equal": true,
+      "tokens": 1
+    },
+    {
+      "mode": "mtp-on",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "mode": "mtp-on",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "mode": "mtp-on",
+      "prompt": "Context",
+      "equal": true,
+      "tokens": 1
+    },
+    {
+      "mode": "qwen36",
+      "prompt": "Count",
+      "equal": true,
+      "tokens": 29
+    },
+    {
+      "mode": "qwen36",
+      "prompt": "Arithmetic",
+      "equal": true,
+      "tokens": 2
+    },
+    {
+      "mode": "qwen36",
+      "prompt": "JSON",
+      "equal": true,
+      "tokens": 19
+    }
+  ],
+  "regression": "509 passed, 147 skipped, 47 subtests passed in 118.19s (0:01:58)"
+}

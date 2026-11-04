@@ -1,0 +1,40 @@
+{
+  "started_at": "20261104T040312Z",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "tests/models/test_clover_overlap.py",
+    "tests/scheduler/test_clover_prefill_bundle.py",
+    "tests/models/qwen4_exp",
+    "-q"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "98a8dfa32beb087b8a77b349ed2665069fc1b65b",
+  "dirty": " M docs/clover/changes.md\n M python/freetoken/engine/speculative.py\n M python/freetoken/models/clover_moe/runtime.py\n M python/freetoken/models/qwen4_exp/mtp_runtime.py\n M python/freetoken/scheduler/scheduler.py\n M tests/scheduler/test_clover_prefill_bundle.py\n?? tests/models/test_clover_overlap.py\n",
+  "patch_sha256": "bd673b8f209ec9dfd663493f12f7d564376aac9011c57b0622e9fd0a94b56d2a",
+  "state": "failed",
+  "environment": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8/torch-extensions",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8",
+    "CLOVER_GGUF_CHECKPOINT": null,
+    "CLOVER_HF_SOURCE": null,
+    "FREETOKEN_QWEN4EXP_MODEL": null,
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "CUDA_VISIBLE_DEVICES": null,
+    "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": null
+  },
+  "external_scripts": [
+    {
+      "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+      "artifact": "external-scripts\\0-run.py",
+      "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+    }
+  ],
+  "pid": 14624,
+  "exit_code": 1,
+  "elapsed_seconds": 196.31299999999464
+}

@@ -1,0 +1,207 @@
+FFFFFFFFF                                                                [100%]
+================================== FAILURES ===================================
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-clover_gguf-False-True] _
+
+model_type = 'clover_moe', quant = 'clover_gguf', tied = False, expected = True
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-clover_gguf-True-False] _
+
+model_type = 'clover_moe', quant = 'clover_gguf', tied = True, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-nvfp4-False-False] _
+
+model_type = 'clover_moe', quant = 'nvfp4', tied = False, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-None-False-False] _
+
+model_type = 'clover_moe', quant = None, tied = False, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[qwen3_5_moe-nvfp4-False-False] _
+
+model_type = 'qwen3_5_moe', quant = 'nvfp4', tied = False, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[qwen4_exp-gguf_strata-False-False] _
+
+model_type = 'qwen4_exp', quant = 'gguf_strata', tied = False, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+_ test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[gemma4-gguf_q4_0-True-False] _
+
+model_type = 'gemma4', quant = 'gguf_q4_0', tied = True, expected = False
+
+    @pytest.mark.parametrize("model_type,quant,tied,expected", [
+        ("clover_moe", "clover_gguf", False, True),
+        ("clover_moe", "clover_gguf", True, False),
+        ("clover_moe", "nvfp4", False, False),
+        ("clover_moe", None, False, False),
+        ("qwen3_5_moe", "nvfp4", False, False),
+        ("qwen4_exp", "gguf_strata", False, False),
+        ("gemma4", "gguf_q4_0", True, False),
+    ])
+    def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
+        from types import SimpleNamespace
+    
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+        config.__dict__["model_config"] = SimpleNamespace(
+            model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
+>       assert config.host_embedding_enabled is expected
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:74: AttributeError
+___ test_explicit_embedding_placement_needs_no_automatic_model_probe[False] ___
+
+enabled = False
+
+    @pytest.mark.parametrize("enabled", [False, True])
+    def test_explicit_embedding_placement_needs_no_automatic_model_probe(enabled):
+        config = EngineConfig("nonexistent", DistributedInfo(0, 1), torch.bfloat16,
+            gguf_embedding_host=enabled)
+>       assert config.host_embedding_enabled is enabled
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:81: AttributeError
+___ test_explicit_embedding_placement_needs_no_automatic_model_probe[True] ____
+
+enabled = True
+
+    @pytest.mark.parametrize("enabled", [False, True])
+    def test_explicit_embedding_placement_needs_no_automatic_model_probe(enabled):
+        config = EngineConfig("nonexistent", DistributedInfo(0, 1), torch.bfloat16,
+            gguf_embedding_host=enabled)
+>       assert config.host_embedding_enabled is enabled
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'host_embedding_enabled'
+
+tests\engine\test_clover_config.py:81: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-clover_gguf-False-True]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-clover_gguf-True-False]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-nvfp4-False-False]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[clover_moe-None-False-False]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[qwen3_5_moe-nvfp4-False-False]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[qwen4_exp-gguf_strata-False-False]
+FAILED tests/engine/test_clover_config.py::test_automatic_host_embedding_is_scoped_to_untied_clover_gguf[gemma4-gguf_q4_0-True-False]
+FAILED tests/engine/test_clover_config.py::test_explicit_embedding_placement_needs_no_automatic_model_probe[False]
+FAILED tests/engine/test_clover_config.py::test_explicit_embedding_placement_needs_no_automatic_model_probe[True]
+9 failed, 16 deselected in 3.98s

@@ -1,0 +1,40 @@
+{
+  "state": "complete",
+  "command": [
+    "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "-q",
+    "-ra",
+    "--junitxml",
+    "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T053129Z-d2-q8-regression\\data\\junit.xml",
+    "tests/models/qwen4_exp",
+    "tests/models/test_qwen3_5_moe_weight.py",
+    "tests/models/test_gemma4_gguf_rope.py",
+    "tests/kernels/test_gemma4_fused_ops.py",
+    "tests/moe/test_nvfp4_backends.py",
+    "tests/moe/test_fused_copy.py",
+    "tests/kvcache/test_mtp_pool.py",
+    "tests/kvcache/test_linear_state_pool_alloc.py",
+    "tests/models/test_clover_model.py",
+    "tests/models/test_clover_generation.py",
+    "tests/models/test_clover_offload.py",
+    "tests/models/test_clover_gguf.py",
+    "tests/models/test_clover_eval.py",
+    "tests/models/test_clover_llama_metrics.py",
+    "tests/scheduler/test_clover_prefill_bundle.py",
+    "tests/kernels/test_clover_preview.py",
+    "tests/kernels/test_clover_gguf.py",
+    "tests/models/test_clover_real_layers.py",
+    "tests/models/test_clover_bf16_blocks.py"
+  ],
+  "absent_files": [],
+  "exit_code": 0,
+  "seconds": 121.93799999999464,
+  "summary": "509 passed, 147 skipped, 47 subtests passed in 118.19s (0:01:58)",
+  "weight_environment": {
+    "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+    "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "FREETOKEN_QWEN4EXP_MODEL": null
+  }
+}

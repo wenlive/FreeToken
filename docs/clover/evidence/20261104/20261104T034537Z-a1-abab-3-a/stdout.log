@@ -1,0 +1,83 @@
+[1m[2026-11-04|11:45:41|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|11:45:48|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|11:45:48|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|11:45:48|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|11:45:54|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|11:46:23|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=2292 num_pages=4182 (prefill_overlap=True)
+[1m[2026-11-04|11:46:24|core|rank=0][0m [32mINFO    [0m Allocating 4096 tokens for KV cache, K + V = 0.08 GiB
+[1m[2026-11-04|11:46:24|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 1.98 GiB
+[1m[2026-11-04|11:46:24|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 3.46 GiB
+[1m[2026-11-04|11:46:24|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|11:46:24|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 3.46 GiB
+ninja: no work to do.
+[1m[2026-11-04|11:46:25|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 3.42 GiB
+[1m[2026-11-04|11:46:25|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.679 s
+[1m[2026-11-04|11:46:33|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 41.85
+{"prompt": "Count", "mode": "causal", "width": 8, "warmup": true, "output_tokens": 30, "wall_seconds": 0.8655958000163082, "ttft_seconds": 0.474351500015473, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 33.83
+[1m[2026-11-04|11:46:34|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 31, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 31.93, #queue-req: 0
+{"prompt": "Count", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 30, "wall_seconds": 0.5699825000192504, "ttft_seconds": 0.20771420001983643, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 21, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 38.44
+[1m[2026-11-04|11:46:35|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 41, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 61.38, #queue-req: 0
+{"prompt": "Count", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 30, "wall_seconds": 0.5277460000070278, "ttft_seconds": 0.18309880001470447, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:35|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 40.03
+[1m[2026-11-04|11:46:35|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 53, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 56.89, #queue-req: 0
+{"prompt": "Sky", "mode": "causal", "width": 8, "warmup": true, "output_tokens": 41, "wall_seconds": 0.7109683000016958, "ttft_seconds": 0.22798730002250522, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 33.42
+[1m[2026-11-04|11:46:36|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 52, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 59.26, #queue-req: 0
+{"prompt": "Sky", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 41, "wall_seconds": 0.6856299999926705, "ttft_seconds": 0.2042187999759335, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 23, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 33.45
+[1m[2026-11-04|11:46:37|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 51, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 59.09, #queue-req: 0
+{"prompt": "Sky", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 41, "wall_seconds": 0.6870831999985967, "ttft_seconds": 0.20514750000438653, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:37|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 47.81
+[1m[2026-11-04|11:46:37|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 63, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 53.23, #queue-req: 0
+[1m[2026-11-04|11:46:38|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 103, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 75.56, #queue-req: 0
+[1m[2026-11-04|11:46:38|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 143, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 75.14, #queue-req: 0
+[1m[2026-11-04|11:46:39|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 183, token usage: 0.04, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 84.52, #queue-req: 0
+[1m[2026-11-04|11:46:40|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 223, token usage: 0.05, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 74.01, #queue-req: 0
+[1m[2026-11-04|11:46:40|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 263, token usage: 0.06, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 74.22, #queue-req: 0
+{"prompt": "Python", "mode": "causal", "width": 8, "warmup": true, "output_tokens": 249, "wall_seconds": 3.5266094999969937, "ttft_seconds": 0.26871410000603646, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:41|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 10.12
+[1m[2026-11-04|11:46:41|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 54, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 47.31, #queue-req: 0
+[1m[2026-11-04|11:46:41|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 94, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 73.50, #queue-req: 0
+[1m[2026-11-04|11:46:42|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 134, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 71.85, #queue-req: 0
+[1m[2026-11-04|11:46:42|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 174, token usage: 0.04, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 81.48, #queue-req: 0
+[1m[2026-11-04|11:46:43|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 214, token usage: 0.05, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 69.97, #queue-req: 0
+[1m[2026-11-04|11:46:44|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 254, token usage: 0.06, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 75.14, #queue-req: 0
+{"prompt": "Python", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 249, "wall_seconds": 3.664532299997518, "ttft_seconds": 0.2919464999868069, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:44|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 9.90
+[1m[2026-11-04|11:46:44|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 45, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 48.87, #queue-req: 0
+[1m[2026-11-04|11:46:45|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 85, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 76.11, #queue-req: 0
+[1m[2026-11-04|11:46:45|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 125, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 76.13, #queue-req: 0
+[1m[2026-11-04|11:46:46|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 165, token usage: 0.04, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 82.88, #queue-req: 0
+[1m[2026-11-04|11:46:46|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 205, token usage: 0.05, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 73.55, #queue-req: 0
+[1m[2026-11-04|11:46:47|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 245, token usage: 0.06, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 79.96, #queue-req: 0
+[1m[2026-11-04|11:46:48|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 0, #token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, gen throughput (token/s): 71.37, #queue-req: 0
+{"prompt": "Python", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 249, "wall_seconds": 3.51952450000681, "ttft_seconds": 0.2616956000274513, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:48|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 48, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 13.36
+[1m[2026-11-04|11:46:48|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 88, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 47.59, #queue-req: 0
+[1m[2026-11-04|11:46:49|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 128, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 79.76, #queue-req: 0
+{"prompt": "JSON", "mode": "causal", "width": 8, "warmup": true, "output_tokens": 86, "wall_seconds": 1.4212285999965388, "ttft_seconds": 0.3320096999814268, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:49|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 48, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 34.19
+[1m[2026-11-04|11:46:50|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 82, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 48.02, #queue-req: 0
+[1m[2026-11-04|11:46:50|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 122, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 80.32, #queue-req: 0
+{"prompt": "JSON", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 86, "wall_seconds": 1.4024110000173096, "ttft_seconds": 0.3121815000195056, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:51|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 48, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 34.15
+[1m[2026-11-04|11:46:51|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 76, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 47.99, #queue-req: 0
+[1m[2026-11-04|11:46:52|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 116, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 78.23, #queue-req: 0
+{"prompt": "JSON", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 86, "wall_seconds": 1.422787799994694, "ttft_seconds": 0.31269049999536946, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:52|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 25.82
+[1m[2026-11-04|11:46:52|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 58, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 50.52, #queue-req: 0
+[1m[2026-11-04|11:46:53|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 98, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 105.69, #queue-req: 0
+[1m[2026-11-04|11:46:53|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 138, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 99.34, #queue-req: 0
+{"prompt": "Chinese", "mode": "causal", "width": 8, "warmup": true, "output_tokens": 122, "wall_seconds": 1.514387799979886, "ttft_seconds": 0.27305069999420084, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:54|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 23.82
+[1m[2026-11-04|11:46:54|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 56, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 56.32, #queue-req: 0
+[1m[2026-11-04|11:46:54|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 96, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 104.60, #queue-req: 0
+[1m[2026-11-04|11:46:55|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 136, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 99.42, #queue-req: 0
+{"prompt": "Chinese", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 122, "wall_seconds": 1.512030699988827, "ttft_seconds": 0.2669064999790862, "tokens_per_round": 1.0, "matches_causal": null}
+[1m[2026-11-04|11:46:55|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 36, #cached-token: 0, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 1, #queue-req: 0, input throughput (token/s): 23.91
+[1m[2026-11-04|11:46:55|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 54, token usage: 0.01, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 57.43, #queue-req: 0
+[1m[2026-11-04|11:46:56|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 94, token usage: 0.02, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 104.38, #queue-req: 0
+[1m[2026-11-04|11:46:56|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 134, token usage: 0.03, #mamba-slot: 3/8, mamba usage: 0.38, gen throughput (token/s): 98.54, #queue-req: 0
+{"prompt": "Chinese", "mode": "causal", "width": 8, "warmup": false, "output_tokens": 122, "wall_seconds": 1.4996737000183202, "ttft_seconds": 0.25774890001048334, "tokens_per_round": 1.0, "matches_causal": null}

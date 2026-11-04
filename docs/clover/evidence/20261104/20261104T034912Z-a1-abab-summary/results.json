@@ -1,0 +1,652 @@
+{
+  "inputs": [
+    {
+      "variant": "a",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T033921Z-a1-abab-1-a\\data\\results.json",
+      "sha256": "3eceeef91e07a0c35c89171190411dbd40819423994612a4ac9ef3ace6351155",
+      "manifest": {
+        "started_at": "20261104T033921Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "1",
+          "--repeats",
+          "2",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T033921Z-a1-abab-1-a\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-before",
+        "commit": "921815331b2dc64cb183f38691b2ea9112e90d8b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-before/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-before",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-before/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-before",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "pid": 15756,
+        "exit_code": 0,
+        "elapsed_seconds": 201.96900000001187
+      }
+    },
+    {
+      "variant": "b",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034243Z-a1-abab-2-b\\data\\results.json",
+      "sha256": "d92e819946b1c4a856786d8943a821f5fcd9ad0bbed9b17b964a7f95b3ad66f7",
+      "manifest": {
+        "started_at": "20261104T034243Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "1",
+          "--repeats",
+          "2",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034243Z-a1-abab-2-b\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-phase1",
+        "commit": "98a8dfa32beb087b8a77b349ed2665069fc1b65b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-phase1/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-phase1",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "pid": 8576,
+        "exit_code": 0,
+        "elapsed_seconds": 173.39100000000326
+      }
+    },
+    {
+      "variant": "a",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034537Z-a1-abab-3-a\\data\\results.json",
+      "sha256": "4399ca15799eb28c14c4b7284a5d238e406e5c4fa61f43569ea802f887c57c3b",
+      "manifest": {
+        "started_at": "20261104T034537Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "1",
+          "--repeats",
+          "2",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034537Z-a1-abab-3-a\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-before",
+        "commit": "921815331b2dc64cb183f38691b2ea9112e90d8b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-before/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-before",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-before/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-before",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "pid": 7444,
+        "exit_code": 0,
+        "elapsed_seconds": 86.53200000000652
+      }
+    },
+    {
+      "variant": "b",
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034704Z-a1-abab-4-b\\data\\results.json",
+      "sha256": "a508b05fdd0812244d4e84ae2c71a8551ac66e412c27526c40cb269db72e8e9e",
+      "manifest": {
+        "started_at": "20261104T034704Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "benchmarks/bench_clover.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "causal",
+          "--tokens",
+          "256",
+          "--warmups",
+          "1",
+          "--repeats",
+          "2",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T034704Z-a1-abab-4-b\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-phase1",
+        "commit": "98a8dfa32beb087b8a77b349ed2665069fc1b65b",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-phase1",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-phase1/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-phase1",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1"
+        },
+        "pid": 16008,
+        "exit_code": 0,
+        "elapsed_seconds": 84.85900000002584
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "prompt": "Count",
+      "ids_equal": true,
+      "tokens": 30,
+      "measurements": {
+        "decode_tokens_per_second": {
+          "samples": {
+            "a": [
+              88.35905952842441,
+              86.92727663560704,
+              85.53045842794718,
+              88.42894993529616
+            ],
+            "b": [
+              95.75820854930477,
+              95.97335515268533,
+              97.14735176097975,
+              97.17681254444213
+            ]
+          },
+          "median": {
+            "a": 87.64316808201573,
+            "b": 96.56035345683253
+          },
+          "change_percent": 10.174421543584744
+        },
+        "end_to_end_tokens_per_second": {
+          "samples": {
+            "a": [
+              55.954292059440945,
+              54.97045612817134,
+              52.63319487701252,
+              56.84552796155822
+            ],
+            "b": [
+              62.36562805744216,
+              62.67649963558902,
+              64.05386673633183,
+              64.2788502228947
+            ]
+          },
+          "median": {
+            "a": 55.46237409380615,
+            "b": 63.36518318596042
+          },
+          "change_percent": 14.24895565917874
+        },
+        "ttft_seconds": {
+          "samples": {
+            "a": [
+              0.18442379997577518,
+              0.19494549999944866,
+              0.20771420001983643,
+              0.18309880001470447
+            ],
+            "b": [
+              0.16299199999775738,
+              0.1620818999945186,
+              0.154734500014456,
+              0.15409540000837296
+            ]
+          },
+          "median": {
+            "a": 0.18968464998761192,
+            "b": 0.1584082000044873
+          },
+          "change_percent": -16.488656296209125
+        },
+        "wall_seconds": {
+          "samples": {
+            "a": [
+              0.5361518999852706,
+              0.5457477000018116,
+              0.5699825000192504,
+              0.5277460000070278
+            ],
+            "b": [
+              0.48103419999824837,
+              0.47864829999161884,
+              0.4683558000251651,
+              0.46671649999916553
+            ]
+          },
+          "median": {
+            "a": 0.5409497999935411,
+            "b": 0.47350205000839196
+          },
+          "change_percent": -12.468393552591095
+        }
+      }
+    },
+    {
+      "prompt": "Sky",
+      "ids_equal": true,
+      "tokens": 41,
+      "measurements": {
+        "decode_tokens_per_second": {
+          "samples": {
+            "a": [
+              85.96622816668393,
+              85.80783463702527,
+              85.80142932349344,
+              85.72285800156226
+            ],
+            "b": [
+              91.34111361959854,
+              91.27999888451592,
+              92.4305823210927,
+              92.33075368561
+            ]
+          },
+          "median": {
+            "a": 85.80463198025936,
+            "b": 91.83593365260427
+          },
+          "change_percent": 7.02910965661212
+        },
+        "end_to_end_tokens_per_second": {
+          "samples": {
+            "a": [
+              59.8685403659092,
+              59.76950836585021,
+              59.7990169631409,
+              59.672540385332866
+            ],
+            "b": [
+              63.897624160092974,
+              63.839570228095454,
+              65.12296645353487,
+              65.11663660239441
+            ]
+          },
+          "median": {
+            "a": 59.78426266449556,
+            "b": 64.50713038124368
+          },
+          "change_percent": 7.899851074943376
+        },
+        "ttft_seconds": {
+          "samples": {
+            "a": [
+              0.20432819999405183,
+              0.2045491999888327,
+              0.2042187999759335,
+              0.20514750000438653
+            ],
+            "b": [
+              0.18922540001221932,
+              0.1895150999771431,
+              0.1824108000146225,
+              0.18200139998225495
+            ]
+          },
+          "median": {
+            "a": 0.20443869999144226,
+            "b": 0.18581810001342092
+          },
+          "change_percent": -9.108158082985662
+        },
+        "wall_seconds": {
+          "samples": {
+            "a": [
+              0.6848338000127114,
+              0.6859685000090394,
+              0.6856299999926705,
+              0.6870831999985967
+            ],
+            "b": [
+              0.6416514000156894,
+              0.6422348999767564,
+              0.6295782000233885,
+              0.6296393999946304
+            ]
+          },
+          "median": {
+            "a": 0.685799250000855,
+            "b": 0.6356454000051599
+          },
+          "change_percent": -7.313196973550573
+        }
+      }
+    },
+    {
+      "prompt": "Python",
+      "ids_equal": true,
+      "tokens": 249,
+      "measurements": {
+        "decode_tokens_per_second": {
+          "samples": {
+            "a": [
+              75.87026172977684,
+              76.32778412890343,
+              73.9812726552718,
+              76.60645275930176
+            ],
+            "b": [
+              86.78637237042723,
+              86.76620196118968,
+              83.1865660668216,
+              84.99358709640151
+            ]
+          },
+          "median": {
+            "a": 76.09902292934014,
+            "b": 85.8798945287956
+          },
+          "change_percent": 12.85282152510323
+        },
+        "end_to_end_tokens_per_second": {
+          "samples": {
+            "a": [
+              70.13239757347336,
+              69.89729532843465,
+              67.94864381470144,
+              70.74819339928398
+            ],
+            "b": [
+              79.74567215616425,
+              79.72385960286718,
+              75.9953792366641,
+              77.50217402955634
+            ]
+          },
+          "median": {
+            "a": 70.014846450954,
+            "b": 78.61301681621177
+          },
+          "change_percent": 12.280495924933387
+        },
+        "ttft_seconds": {
+          "samples": {
+            "a": [
+              0.2608285000023898,
+              0.29173589998390526,
+              0.2919464999868069,
+              0.2616956000274513
+            ],
+            "b": [
+              0.24510000000009313,
+              0.24519749998580664,
+              0.27500349999172613,
+              0.2751280999800656
+            ]
+          },
+          "median": {
+            "a": 0.2767157500056783,
+            "b": 0.2601004999887664
+          },
+          "change_percent": -6.004446807444442
+        },
+        "wall_seconds": {
+          "samples": {
+            "a": [
+              3.5504276000137907,
+              3.5623695999966003,
+              3.664532299997518,
+              3.51952450000681
+            ],
+            "b": [
+              3.122426499990979,
+              3.1232808000058867,
+              3.27651500000502,
+              3.212813099991763
+            ]
+          },
+          "median": {
+            "a": 3.5563986000051955,
+            "b": 3.168046949998825
+          },
+          "change_percent": -10.919801003346564
+        }
+      }
+    },
+    {
+      "prompt": "JSON",
+      "ids_equal": true,
+      "tokens": 86,
+      "measurements": {
+        "decode_tokens_per_second": {
+          "samples": {
+            "a": [
+              80.1114699284705,
+              80.21396934883424,
+              79.27582559384086,
+              77.84602075256896
+            ],
+            "b": [
+              90.36834990028905,
+              92.92664261568478,
+              91.94076462063018,
+              92.17060584017428
+            ]
+          },
+          "median": {
+            "a": 79.69364776115569,
+            "b": 92.05568523040222
+          },
+          "change_percent": 15.511948337834824
+        },
+        "end_to_end_tokens_per_second": {
+          "samples": {
+            "a": [
+              61.8488653924307,
+              62.24777437016334,
+              61.32296452248202,
+              60.4447128379374
+            ],
+            "b": [
+              67.65560277303588,
+              70.78841835528115,
+              69.69225036762917,
+              69.89140744468283
+            ]
+          },
+          "median": {
+            "a": 61.58591495745636,
+            "b": 69.791828906156
+          },
+          "change_percent": 13.32433553088932
+        },
+        "ttft_seconds": {
+          "samples": {
+            "a": [
+              0.31179280002834275,
+              0.30416470000636764,
+              0.3121815000195056,
+              0.31269049999536946
+            ],
+            "b": [
+              0.3145274000125937,
+              0.28414890001295134,
+              0.2932172000000719,
+              0.29223540000384673
+            ]
+          },
+          "median": {
+            "a": 0.3119871500239242,
+            "b": 0.2927263000019593
+          },
+          "change_percent": -6.173603630946944
+        },
+        "wall_seconds": {
+          "samples": {
+            "a": [
+              1.3904863000207115,
+              1.3815755000105128,
+              1.4024110000173096,
+              1.422787799994694
+            ],
+            "b": [
+              1.2711437999969348,
+              1.2148880000167992,
+              1.233996599999955,
+              1.230480300000636
+            ]
+          },
+          "median": {
+            "a": 1.3964486500190105,
+            "b": 1.2322384500002954
+          },
+          "change_percent": -11.759129132065095
+        }
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "ids_equal": true,
+      "tokens": 122,
+      "measurements": {
+        "decode_tokens_per_second": {
+          "samples": {
+            "a": [
+              97.75926868750287,
+              99.81445235678278,
+              98.27985880058861,
+              98.53740361839444
+            ],
+            "b": [
+              106.32095660517435,
+              107.17467106446293,
+              107.63127056684503,
+              107.79770273343263
+            ]
+          },
+          "median": {
+            "a": 98.40863120949152,
+            "b": 107.40297081565399
+          },
+          "change_percent": 9.139787329238835
+        },
+        "end_to_end_tokens_per_second": {
+          "samples": {
+            "a": [
+              80.89629380231557,
+              82.29850273983237,
+              80.68619241719199,
+              81.35102989304248
+            ],
+            "b": [
+              87.9768462237485,
+              88.52432989674921,
+              89.39328193406304,
+              89.4950819506128
+            ]
+          },
+          "median": {
+            "a": 81.12366184767902,
+            "b": 88.95880591540612
+          },
+          "change_percent": 9.6582721850484
+        },
+        "ttft_seconds": {
+          "samples": {
+            "a": [
+              0.25658749998547137,
+              0.2563360000203829,
+              0.2669064999790862,
+              0.25774890001048334
+            ],
+            "b": [
+              0.23880110000027344,
+              0.23942389999865554,
+              0.23072990000946447,
+              0.23097770000458695
+            ]
+          },
+          "median": {
+            "a": 0.25716819999797735,
+            "b": 0.2348894000024302
+          },
+          "change_percent": -8.663123977117849
+        },
+        "wall_seconds": {
+          "samples": {
+            "a": [
+              1.5081037000054494,
+              1.4824085000145715,
+              1.512030699988827,
+              1.4996737000183202
+            ],
+            "b": [
+              1.3867285000160336,
+              1.3781521999917459,
+              1.3647557999938726,
+              1.3632034000183921
+            ]
+          },
+          "median": {
+            "a": 1.5038887000118848,
+            "b": 1.3714539999928093
+          },
+          "change_percent": -8.806150349958008
+        }
+      }
+    }
+  ],
+  "slots": [
+    2292,
+    2928,
+    2292,
+    2928
+  ],
+  "all_ids_equal": true
+}

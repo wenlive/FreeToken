@@ -1,0 +1,89 @@
+{
+  "varied_settings": {
+    "cache_slots": [
+      2928,
+      3232,
+      2928,
+      3232
+    ],
+    "embedding_host": [
+      false,
+      true,
+      false,
+      true
+    ],
+    "mapped_host_table_bytes": [
+      0,
+      1017118720,
+      0,
+      1017118720
+    ]
+  },
+  "cases": [
+    {
+      "prompt": "Count",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 5.620912761516017,
+        "decode_tokens_per_second": 4.674044693501234,
+        "ttft_seconds": -7.015895666534688,
+        "expert_cache_hit_rate": 3.8389219680350806,
+        "decode_expert_copy_payload_bytes": -12.641898864809086
+      }
+    },
+    {
+      "prompt": "Sky",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 3.6174930481325474,
+        "decode_tokens_per_second": 2.4465845600846636,
+        "ttft_seconds": -5.2906110600587475,
+        "expert_cache_hit_rate": 2.680108187853447,
+        "decode_expert_copy_payload_bytes": -7.925351429956374
+      }
+    },
+    {
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 5.5813117493440645,
+        "decode_tokens_per_second": 5.06246968375994,
+        "ttft_seconds": -10.34221436652083,
+        "expert_cache_hit_rate": 3.082574424121831,
+        "decode_expert_copy_payload_bytes": -11.133838244236827
+      }
+    },
+    {
+      "prompt": "JSON",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 4.430995774944813,
+        "decode_tokens_per_second": 5.028336434693403,
+        "ttft_seconds": -2.62227164179174,
+        "expert_cache_hit_rate": 3.6799271055519833,
+        "decode_expert_copy_payload_bytes": -11.500873729855677
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "mode": "causal",
+      "width": 8,
+      "equal": true,
+      "changes_percent": {
+        "end_to_end_tokens_per_second": 3.7186612082898973,
+        "decode_tokens_per_second": 3.0296797555849464,
+        "ttft_seconds": -6.742808133062839,
+        "expert_cache_hit_rate": 1.826942653545971,
+        "decode_expert_copy_payload_bytes": -11.044555674078937
+      }
+    }
+  ]
+}

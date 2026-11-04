@@ -1,0 +1,94 @@
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 1e980be..4f2a32b 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -17,3 +17,11 @@ contains `error` and, when supplied by the scheduler, `error_code`; other items
+ 
+ Implementation/qualification evidence is tracked in
+ `C:/workspace/tasks/T-20261104-clover-improve/README.md` until the phase evidence is archived.
++
++## IQ4_XS expert strides
++
++IQ4_XS now uses the actual distance between expert slots, like Q4_0/Q8_0/Q4_K/Q6_K.
++This repairs mixed-layer banks with slot padding; official homogeneous Q8 is unaffected.
++IQ4_XS support guarantees the addressing behavior, not grouped MMQ performance: when
++either projection of a layer uses type 23, that layer's two projections use MMVQ even
++for multiple input rows. Other layers using supported types can still use MMQ.
+diff --git a/python/freetoken/kernel/csrc/gguf/gguf_kernel.cu b/python/freetoken/kernel/csrc/gguf/gguf_kernel.cu
+index 4a55a2b..58f5634 100644
+--- a/python/freetoken/kernel/csrc/gguf/gguf_kernel.cu
++++ b/python/freetoken/kernel/csrc/gguf/gguf_kernel.cu
+@@ -796,7 +796,7 @@ torch::Tensor ggml_moe_a8_vec(
+             col,
+             row,
+             quant_X.stride(0),
+-            stream);
++            stream, W.stride(0));
+         break;
+       case 29:
+         moe_vec_iq1_m_q8_1_cuda<scalar_t>(
+diff --git a/python/freetoken/kernel/csrc/gguf/moe_vec.cuh b/python/freetoken/kernel/csrc/gguf/moe_vec.cuh
+index 9fc19ec..d2265c7 100644
+--- a/python/freetoken/kernel/csrc/gguf/moe_vec.cuh
++++ b/python/freetoken/kernel/csrc/gguf/moe_vec.cuh
+@@ -394,12 +394,13 @@ static void moe_vec_iq4_xs_q8_1_cuda(
+     const int ncols,
+     const int nrows,
+     const int token_stride,
+-    cudaStream_t stream) {
++    cudaStream_t stream,
++    const int64_t expert_stride = 0) {
+   const int block_num_y = (nrows + GGML_CUDA_MMV_Y - 1) / GGML_CUDA_MMV_Y;
+   const dim3 block_nums(block_num_y, 1, tokens * top_k);
+   const dim3 block_dims(WARP_SIZE, GGML_CUDA_MMV_Y, 1);
+   moe_vec_q<scalar_t, QK_K, QI4_XS, block_iq4_xs, 1, vec_dot_iq4_xs_q8_1>
+-      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride);
++      <<<block_nums, block_dims, 0, stream>>>(vx, vy, dst, topk_ids, top_k, ncols, nrows, token_stride, expert_stride);
+ }
+ 
+ template <typename scalar_t>
+diff --git a/tests/kernels/test_clover_gguf.py b/tests/kernels/test_clover_gguf.py
+index 34c6f37..2b9d034 100644
+--- a/tests/kernels/test_clover_gguf.py
++++ b/tests/kernels/test_clover_gguf.py
+@@ -290,7 +290,7 @@ def test_short_route_grouping_replays_with_different_high_cache_slots():
+ 
+ 
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+-@pytest.mark.parametrize("kind", [2, 8, 12, 14])
++@pytest.mark.parametrize("kind", [2, 8, 12, 14, 23])
+ def test_mmvq_honors_padded_expert_slot_stride(kind):
+     from freetoken.kernel.gguf import ggml_moe_a8_vec
+ 
+@@ -306,6 +306,31 @@ def test_mmvq_honors_padded_expert_slot_stride(kind):
+     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+ 
+ 
++@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
++@pytest.mark.parametrize("rows", [1, 8])
++def test_mixed_layers_share_q8_sized_banks_without_changing_results(rows):
++    from freetoken.moe.fused_gguf import fused_experts_gguf
++
++    gate_bank = torch.zeros(6, 512, 272, dtype=torch.uint8, device="cuda")
++    down_bank = torch.zeros(6, 256, 272, dtype=torch.uint8, device="cuda")
++    hidden = torch.randn(rows, 256, dtype=torch.bfloat16, device="cuda")
++    weights = torch.full((rows, 2), .5, device="cuda")
++    ids = torch.tensor([[2, 0]] * rows, dtype=torch.int32, device="cuda")
++    for layer, (gate_kind, down_kind) in enumerate(((8, 8), (23, 12))):
++        gate, _ = packed_fixture(gate_kind, rows=512, width=256)
++        down, _ = packed_fixture(down_kind, rows=256, width=256)
++        views = []
++        for bank, packed in ((gate_bank, gate), (down_bank, down)):
++            view = bank.as_strided((6, *packed.shape[1:]), (bank.stride(0), packed.stride(1), 1))
++            view[layer * 3:layer * 3 + 3].copy_(packed)
++            views.append(view)
++        expected = fused_experts_gguf(hidden, gate.cuda(), down.cuda(), weights, ids,
++            "silu", gate_up_type=gate_kind, down_type=down_kind)
++        actual = fused_experts_gguf(hidden, *views, weights, ids + layer * 3,
++            "silu", gate_up_type=gate_kind, down_type=down_kind)
++        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
++
++
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+ @pytest.mark.parametrize("width", [1, 8, 16, 32, 1024])
+ def test_packed_dense_q8_mmvq_and_mmq_match_independent_dot(reference, width):

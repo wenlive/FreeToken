@@ -1,0 +1,1068 @@
+{
+  "input": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T053331Z-c1-q8-expert-reuse\\data\\expert-reuse.json",
+  "sha256": "ef327b1e6a466d644b2108d4a87bccf9113c4e19b47057a5a41634b08a15a5eb",
+  "blocks": [
+    {
+      "block": 0,
+      "width": 16,
+      "first_union": 570,
+      "cumulative_union": 1448,
+      "slots": 2292,
+      "preview_count": 2,
+      "noncapture_previews": 1,
+      "active_expert_calls": 1157,
+      "missed_expert_calls": 664,
+      "first_missing_start": [
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0
+      ],
+      "verify_union": [
+        1805
+      ]
+    },
+    {
+      "block": 1,
+      "width": 16,
+      "first_union": 893,
+      "cumulative_union": 893,
+      "slots": 2292,
+      "preview_count": 1,
+      "noncapture_previews": 1,
+      "active_expert_calls": 893,
+      "missed_expert_calls": 332,
+      "first_missing_start": [],
+      "first_missing_and_reused_start": [],
+      "verify_union": [
+        1993
+      ]
+    },
+    {
+      "block": 2,
+      "width": 32,
+      "first_union": 635,
+      "cumulative_union": 2367,
+      "slots": 2292,
+      "preview_count": 3,
+      "noncapture_previews": 2,
+      "active_expert_calls": 2943,
+      "missed_expert_calls": 1548,
+      "first_missing_start": [
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0
+      ],
+      "verify_union": [
+        2646
+      ]
+    },
+    {
+      "block": 3,
+      "width": 16,
+      "first_union": 621,
+      "cumulative_union": 2112,
+      "slots": 2292,
+      "preview_count": 13,
+      "noncapture_previews": 13,
+      "active_expert_calls": 12819,
+      "missed_expert_calls": 1614,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1882
+      ]
+    },
+    {
+      "block": 4,
+      "width": 16,
+      "first_union": 600,
+      "cumulative_union": 2186,
+      "slots": 2292,
+      "preview_count": 16,
+      "noncapture_previews": 16,
+      "active_expert_calls": 16396,
+      "missed_expert_calls": 1134,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1897
+      ]
+    },
+    {
+      "block": 5,
+      "width": 16,
+      "first_union": 784,
+      "cumulative_union": 2450,
+      "slots": 2292,
+      "preview_count": 5,
+      "noncapture_previews": 5,
+      "active_expert_calls": 6111,
+      "missed_expert_calls": 1687,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1991
+      ]
+    },
+    {
+      "block": 6,
+      "width": 32,
+      "first_union": 659,
+      "cumulative_union": 3444,
+      "slots": 2292,
+      "preview_count": 30,
+      "noncapture_previews": 30,
+      "active_expert_calls": 42675,
+      "missed_expert_calls": 3262,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        41,
+        61,
+        77,
+        104,
+        118,
+        129,
+        139,
+        141,
+        163,
+        200,
+        213,
+        229,
+        257
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1,
+        10,
+        3,
+        0,
+        1,
+        3,
+        2,
+        0,
+        2,
+        3,
+        6,
+        10
+      ],
+      "verify_union": [
+        2646
+      ]
+    },
+    {
+      "block": 7,
+      "width": 32,
+      "first_union": 863,
+      "cumulative_union": 1691,
+      "slots": 2292,
+      "preview_count": 3,
+      "noncapture_previews": 3,
+      "active_expert_calls": 2824,
+      "missed_expert_calls": 1194,
+      "first_missing_start": [
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0
+      ],
+      "verify_union": [
+        1418
+      ]
+    },
+    {
+      "block": 8,
+      "width": 16,
+      "first_union": 493,
+      "cumulative_union": 2121,
+      "slots": 2292,
+      "preview_count": 8,
+      "noncapture_previews": 8,
+      "active_expert_calls": 7529,
+      "missed_expert_calls": 1705,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1879
+      ]
+    },
+    {
+      "block": 9,
+      "width": 16,
+      "first_union": 568,
+      "cumulative_union": 2043,
+      "slots": 2292,
+      "preview_count": 3,
+      "noncapture_previews": 3,
+      "active_expert_calls": 3048,
+      "missed_expert_calls": 1313,
+      "first_missing_start": [
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0
+      ],
+      "verify_union": [
+        2023
+      ]
+    },
+    {
+      "block": 10,
+      "width": 16,
+      "first_union": 648,
+      "cumulative_union": 2687,
+      "slots": 2292,
+      "preview_count": 8,
+      "noncapture_previews": 8,
+      "active_expert_calls": 8862,
+      "missed_expert_calls": 2190,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        2345
+      ]
+    },
+    {
+      "block": 11,
+      "width": 16,
+      "first_union": 500,
+      "cumulative_union": 2746,
+      "slots": 2292,
+      "preview_count": 8,
+      "noncapture_previews": 8,
+      "active_expert_calls": 9311,
+      "missed_expert_calls": 2117,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        119
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4
+      ],
+      "verify_union": [
+        2167
+      ]
+    },
+    {
+      "block": 12,
+      "width": 32,
+      "first_union": 531,
+      "cumulative_union": 3279,
+      "slots": 2292,
+      "preview_count": 16,
+      "noncapture_previews": 16,
+      "active_expert_calls": 23204,
+      "missed_expert_calls": 3217,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        26,
+        66,
+        119,
+        176,
+        190,
+        209
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        3,
+        8,
+        5,
+        1
+      ],
+      "verify_union": [
+        3113
+      ]
+    },
+    {
+      "block": 13,
+      "width": 32,
+      "first_union": 543,
+      "cumulative_union": 3376,
+      "slots": 2292,
+      "preview_count": 12,
+      "noncapture_previews": 12,
+      "active_expert_calls": 19825,
+      "missed_expert_calls": 3314,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        61,
+        91,
+        125,
+        144,
+        179,
+        187
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        3,
+        5,
+        4,
+        10,
+        3
+      ],
+      "verify_union": [
+        3011
+      ]
+    },
+    {
+      "block": 14,
+      "width": 16,
+      "first_union": 552,
+      "cumulative_union": 1767,
+      "slots": 2292,
+      "preview_count": 7,
+      "noncapture_previews": 7,
+      "active_expert_calls": 5921,
+      "missed_expert_calls": 1372,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1868
+      ]
+    },
+    {
+      "block": 15,
+      "width": 16,
+      "first_union": 775,
+      "cumulative_union": 2621,
+      "slots": 2292,
+      "preview_count": 8,
+      "noncapture_previews": 8,
+      "active_expert_calls": 11455,
+      "missed_expert_calls": 1660,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        109
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4
+      ],
+      "verify_union": [
+        2107
+      ]
+    },
+    {
+      "block": 16,
+      "width": 16,
+      "first_union": 680,
+      "cumulative_union": 1622,
+      "slots": 2292,
+      "preview_count": 4,
+      "noncapture_previews": 4,
+      "active_expert_calls": 3429,
+      "missed_expert_calls": 1041,
+      "first_missing_start": [
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        2003
+      ]
+    },
+    {
+      "block": 17,
+      "width": 16,
+      "first_union": 822,
+      "cumulative_union": 2873,
+      "slots": 2292,
+      "preview_count": 8,
+      "noncapture_previews": 8,
+      "active_expert_calls": 11650,
+      "missed_expert_calls": 2232,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        74,
+        169
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        13
+      ],
+      "verify_union": [
+        2274
+      ]
+    },
+    {
+      "block": 18,
+      "width": 32,
+      "first_union": 622,
+      "cumulative_union": 3288,
+      "slots": 2292,
+      "preview_count": 14,
+      "noncapture_previews": 14,
+      "active_expert_calls": 18772,
+      "missed_expert_calls": 3028,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        95,
+        129,
+        171,
+        197
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        4,
+        6
+      ],
+      "verify_union": [
+        2805
+      ]
+    },
+    {
+      "block": 19,
+      "width": 32,
+      "first_union": 714,
+      "cumulative_union": 3123,
+      "slots": 2292,
+      "preview_count": 11,
+      "noncapture_previews": 11,
+      "active_expert_calls": 16844,
+      "missed_expert_calls": 2695,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        38,
+        96,
+        174,
+        182,
+        204
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3,
+        4,
+        18,
+        11
+      ],
+      "verify_union": [
+        3134
+      ]
+    },
+    {
+      "block": 20,
+      "width": 16,
+      "first_union": 590,
+      "cumulative_union": 2199,
+      "slots": 2292,
+      "preview_count": 15,
+      "noncapture_previews": 15,
+      "active_expert_calls": 14549,
+      "missed_expert_calls": 1719,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1720
+      ]
+    },
+    {
+      "block": 21,
+      "width": 16,
+      "first_union": 480,
+      "cumulative_union": 1802,
+      "slots": 2292,
+      "preview_count": 16,
+      "noncapture_previews": 16,
+      "active_expert_calls": 13582,
+      "missed_expert_calls": 944,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1562
+      ]
+    },
+    {
+      "block": 22,
+      "width": 16,
+      "first_union": 520,
+      "cumulative_union": 1697,
+      "slots": 2292,
+      "preview_count": 16,
+      "noncapture_previews": 16,
+      "active_expert_calls": 13090,
+      "missed_expert_calls": 518,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "verify_union": [
+        1423
+      ]
+    },
+    {
+      "block": 23,
+      "width": 16,
+      "first_union": 665,
+      "cumulative_union": 2501,
+      "slots": 2292,
+      "preview_count": 15,
+      "noncapture_previews": 15,
+      "active_expert_calls": 17608,
+      "missed_expert_calls": 1425,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        28
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3
+      ],
+      "verify_union": [
+        1917
+      ]
+    },
+    {
+      "block": 24,
+      "width": 32,
+      "first_union": 609,
+      "cumulative_union": 2732,
+      "slots": 2292,
+      "preview_count": 31,
+      "noncapture_previews": 31,
+      "active_expert_calls": 38217,
+      "missed_expert_calls": 2276,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        31,
+        48,
+        56,
+        61,
+        75,
+        94
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        3
+      ],
+      "verify_union": [
+        2310
+      ]
+    },
+    {
+      "block": 25,
+      "width": 32,
+      "first_union": 629,
+      "cumulative_union": 3111,
+      "slots": 2292,
+      "preview_count": 32,
+      "noncapture_previews": 32,
+      "active_expert_calls": 38314,
+      "missed_expert_calls": 2221,
+      "first_missing_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        10,
+        107,
+        195
+      ],
+      "first_missing_and_reused_start": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        6,
+        5
+      ],
+      "verify_union": [
+        2398
+      ]
+    }
+  ],
+  "scope": "Actual routes and cache snapshots. Excludes graph capture forwards from miss totals. A missing first-preview expert only matters if used again. Snapshot intersections cannot predict misses caused within a forward or the opportunity cost of protected slots. No speed claim.",
+  "by_width": {
+    "16": {
+      "blocks": 17,
+      "first_union_range": [
+        480,
+        893
+      ],
+      "cumulative_union_range": [
+        893,
+        2873
+      ],
+      "blocks_with_first_eviction": 4,
+      "blocks_with_first_evicted_and_reused": 4,
+      "first_missing_and_reused": 32,
+      "active_expert_calls": 157410,
+      "missed_expert_calls": 23667,
+      "miss_fraction": 0.15035258242805413
+    },
+    "32": {
+      "blocks": 9,
+      "first_union_range": [
+        531,
+        863
+      ],
+      "cumulative_union_range": [
+        1691,
+        3444
+      ],
+      "blocks_with_first_eviction": 7,
+      "blocks_with_first_evicted_and_reused": 7,
+      "first_missing_and_reused": 160,
+      "active_expert_calls": 203618,
+      "missed_expert_calls": 22755,
+      "miss_fraction": 0.11175338133170938
+    }
+  },
+  "state": "complete"
+}

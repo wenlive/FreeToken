@@ -1,0 +1,70 @@
+FFFFF                                                                    [100%]
+================================== FAILURES ===================================
+__ test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths0-32-1] ___
+
+widths = [4], maximum = 32, running = 1
+
+    @pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
+        ([8], 0, 1), ([8], 32, 2)])
+    def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
+        with pytest.raises(ValueError, match="warmup"):
+>           EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+                max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
+E           TypeError: EngineConfig.__init__() got an unexpected keyword argument 'clover_graph_warmup_widths'
+
+tests\engine\test_clover_config.py:34: TypeError
+__ test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths1-16-1] ___
+
+widths = [32], maximum = 16, running = 1
+
+    @pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
+        ([8], 0, 1), ([8], 32, 2)])
+    def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
+        with pytest.raises(ValueError, match="warmup"):
+>           EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+                max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
+E           TypeError: EngineConfig.__init__() got an unexpected keyword argument 'clover_graph_warmup_widths'
+
+tests\engine\test_clover_config.py:34: TypeError
+___ test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths2-0-1] ___
+
+widths = [8], maximum = 0, running = 1
+
+    @pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
+        ([8], 0, 1), ([8], 32, 2)])
+    def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
+        with pytest.raises(ValueError, match="warmup"):
+>           EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+                max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
+E           TypeError: EngineConfig.__init__() got an unexpected keyword argument 'clover_graph_warmup_widths'
+
+tests\engine\test_clover_config.py:34: TypeError
+__ test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths3-32-2] ___
+
+widths = [8], maximum = 32, running = 2
+
+    @pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
+        ([8], 0, 1), ([8], 32, 2)])
+    def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
+        with pytest.raises(ValueError, match="warmup"):
+>           EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+                max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
+E           TypeError: EngineConfig.__init__() got an unexpected keyword argument 'clover_graph_warmup_widths'
+
+tests\engine\test_clover_config.py:34: TypeError
+_________ test_graph_warmup_is_opt_in_and_normalizes_declared_widths __________
+
+    def test_graph_warmup_is_opt_in_and_normalizes_declared_widths():
+        config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+>       assert config.clover_graph_warmup_widths == []
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'EngineConfig' object has no attribute 'clover_graph_warmup_widths'
+
+tests\engine\test_clover_config.py:40: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/engine/test_clover_config.py::test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths0-32-1]
+FAILED tests/engine/test_clover_config.py::test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths1-16-1]
+FAILED tests/engine/test_clover_config.py::test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths2-0-1]
+FAILED tests/engine/test_clover_config.py::test_graph_warmup_rejects_unreserved_or_unsupported_widths[widths3-32-2]
+FAILED tests/engine/test_clover_config.py::test_graph_warmup_is_opt_in_and_normalizes_declared_widths
+5 failed, 11 deselected in 3.67s

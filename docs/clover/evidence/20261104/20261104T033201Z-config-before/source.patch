@@ -1,0 +1,21 @@
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index beba507..f2c18cd 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -6,6 +6,16 @@ from types import SimpleNamespace
+ import pytest
+ import torch
+ 
++
++def test_bank_estimate_requires_mixed_gguf_descriptors():
++    from types import SimpleNamespace
++    from freetoken.moe.expert_banks import bank_bytes_estimate
++
++    config = SimpleNamespace(expert_quant="clover_gguf", expert_source=None,
++        num_moe_layers=40, num_experts=256, hidden_size=2048, moe_intermediate_size=512)
++    with pytest.raises(ValueError, match="expert_source"):
++        bank_bytes_estimate(config)
++
+ from freetoken.distributed import set_tp_info, try_get_tp_info
+ from freetoken.models.clover_moe import gguf as adapter
+ from freetoken.models.gguf.config import GgufConfigShim

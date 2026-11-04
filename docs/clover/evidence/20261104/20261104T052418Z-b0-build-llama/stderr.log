@@ -1,0 +1,10 @@
+. : The script 'Enter-BuildEnvironment.ps1' cannot be run because it contained a "#requires" statement for Windows Powe
+rShell 7.0. The version of Windows PowerShell that is required by the script does not match the currently running versi
+on of Windows PowerShell 5.1.26100.9711.
+At C:\workspace\tasks\T-20261102-clover-q8\env.ps1:1 char:3
++ . C:/workspace/tasks/SP-20261026/Enter-BuildEnvironment.ps1 -VisualSt ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (Enter-BuildEnvironment.ps1:String) [], ParentContainsErrorRecordEx 
+   ception
+    + FullyQualifiedErrorId : ScriptRequiresUnmatchedPSVersion
+ 

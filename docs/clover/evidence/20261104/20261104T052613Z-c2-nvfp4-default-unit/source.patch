@@ -1,0 +1,111 @@
+diff --git a/benchmarks/clover/README.md b/benchmarks/clover/README.md
+index 9212ce8..fa4f0c5 100644
+--- a/benchmarks/clover/README.md
++++ b/benchmarks/clover/README.md
+@@ -36,7 +36,8 @@ python -m benchmarks.clover bench --model /path/to/clover-nvfp4 --output NEW_DIR
+ ```
+ 
+ The matrix declares the largest selected block width for capacity planning; an explicit
+-`--clover-max-width` overrides it. `--embedding-host` evaluates the mapped embedding table.
++`--clover-max-width` overrides it. Embedding placement follows engine defaults;
++`--embedding-host` and `--no-embedding-host` explicitly select mapped host or device storage.
+ `--long-prompts-json FILE --prompts NAME` uses saved `prompts.NAME.user_text`; the result
+ records actual input IDs. Prefix reuse is disabled by default. CUDA event and cache
+ counter instrumentation (`--runtime-breakdown`, `--phase-cache-stats`) belongs in a
+diff --git a/benchmarks/clover/bench_clover.py b/benchmarks/clover/bench_clover.py
+index 7ed536a..a776b80 100644
+--- a/benchmarks/clover/bench_clover.py
++++ b/benchmarks/clover/bench_clover.py
+@@ -37,7 +37,7 @@ def main():
+         help="Separate instrumented run: CUDA event envelopes for preview, verify, state and prompt/pending advance")
+     parser.add_argument("--clover-max-width", type=int, choices=[0, 8, 16, 32])
+     parser.add_argument("--cache-auto", action="store_true")
+-    parser.add_argument("--embedding-host", action="store_true")
++    parser.add_argument("--embedding-host", action=argparse.BooleanOptionalAction, default=None)
+     parser.add_argument("--phase-cache-stats", action="store_true",
+         help="With --runtime-breakdown, snapshot GPU miss counters at phase boundaries")
+     parser.add_argument("--no-penalties", action="store_true")
+@@ -164,7 +164,7 @@ def main():
+         settings=dict(
+             cache_slots=llm.engine.moe_offload_cache.cache_size,
+             cache_auto=args.cache_auto,
+-            embedding_host=args.embedding_host,
++            embedding_host=llm.engine.config.host_embedding_enabled,
+             mapped_host_table_bytes=llm.engine._host_tables_bytes,
+             memory_ratio=args.memory_ratio,
+             context=args.context_size,
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index 92621fc..df26c53 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -52,7 +52,7 @@ class EngineConfig:
+     # Online owner exchange is opt-in; zero retains the frozen initial residency.
+     moe_q2_adapt_every: int = 0
+     moe_q2_adapt_decay: float = 1.0
+-    gguf_embedding_host: bool = False
++    gguf_embedding_host: bool | None = None
+     moe_q2_prefill_workspace: bool = False
+     fixed_q2_rebuild_reserve_mib: int = 512
+     moe_cache_rate: float | None = None
+@@ -200,6 +200,14 @@ class EngineConfig:
+         object.__setattr__(self, "moe_strategy", self.moe_backend)
+         object.__setattr__(self, "moe_backend", None)
+ 
++    @cached_property
++    def host_embedding_enabled(self) -> bool:
++        if self.gguf_embedding_host is not None:
++            return self.gguf_embedding_host
++        model = self.model_config
++        return (model.model_type == "clover_moe" and model.expert_quant == "clover_gguf"
++                and not model.tie_word_embeddings)
++
+     @cached_property
+     def hf_config(self):
+         return cached_load_hf_config(self.model_path, self.hf_overrides)
+diff --git a/python/freetoken/engine/engine.py b/python/freetoken/engine/engine.py
+index 67ac5a1..9d2bf47 100644
+--- a/python/freetoken/engine/engine.py
++++ b/python/freetoken/engine/engine.py
+@@ -368,7 +368,7 @@ class Engine:
+             self.model.configure_runtime(config)
+         self._load_weights(config)
+         self._host_tables_bytes = 0
+-        if config.gguf_embedding_host:
++        if config.host_embedding_enabled:
+             if not hasattr(self.model, 'place_input_embedding'):
+                 raise ValueError('This model does not support mapped GGUF input embeddings')
+             self._host_tables_bytes = int(self.model.place_input_embedding() or 0)
+diff --git a/tests/engine/test_clover_config.py b/tests/engine/test_clover_config.py
+index 9d4a2e7..a701846 100644
+--- a/tests/engine/test_clover_config.py
++++ b/tests/engine/test_clover_config.py
+@@ -54,3 +54,29 @@ def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
+     model = SimpleNamespace(model=SimpleNamespace(layers=SimpleNamespace(op_list=layers)))
+     CloverMoeModelLM.configure_runtime(model, config)
+     assert all(layer.mlp.sparse_prefill_limit == limit for layer in layers)
++
++
++@pytest.mark.parametrize("model_type,quant,tied,expected", [
++    ("clover_moe", "clover_gguf", False, True),
++    ("clover_moe", "clover_gguf", True, False),
++    ("clover_moe", "nvfp4", False, False),
++    ("clover_moe", None, False, False),
++    ("qwen3_5_moe", "nvfp4", False, False),
++    ("qwen4_exp", "gguf_strata", False, False),
++    ("gemma4", "gguf_q4_0", True, False),
++])
++def test_automatic_host_embedding_is_scoped_to_untied_clover_gguf(model_type, quant, tied, expected):
++    from types import SimpleNamespace
++
++    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
++    config.__dict__["model_config"] = SimpleNamespace(
++        model_type=model_type, expert_quant=quant, tie_word_embeddings=tied)
++    assert config.host_embedding_enabled is expected
++
++
++@pytest.mark.parametrize("enabled", [False, True])
++def test_explicit_embedding_placement_needs_no_automatic_model_probe(enabled):
++    config = EngineConfig("nonexistent", DistributedInfo(0, 1), torch.bfloat16,
++        gguf_embedding_host=enabled)
++    assert config.host_embedding_enabled is enabled
++    assert "hf_config" not in config.__dict__

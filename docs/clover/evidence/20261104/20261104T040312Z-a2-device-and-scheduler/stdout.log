@@ -1,0 +1,44 @@
+..........F...................................................................................... [ 37%]
+................ss....s........s..........s.......s..................... [ 65%]
+.............................................sssssssssssssssssssssssssss [ 93%]
+ssssssssssssssssss                                                       [100%]
+================================== FAILURES ===================================
+____ test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag _____
+
+    @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+    def test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag():
+        runtime = runtime_for_counts("cuda")
+        reqs = [Req(torch.tensor([4, 4], dtype=torch.int32), uid, 0, 12, uid,
+            SamplingParams(clover_mode="causal"), None) for uid in range(2)]
+        oracles = [CloverPenaltyState(runtime.generation, 17, "cpu", runtime.stop_ids) for _ in reqs]
+        logits = (torch.arange(34, dtype=torch.float32).reshape(2, 17) / 5 - 2).bfloat16().cuda()
+        for req in reqs:
+            req.complete_one()
+        runtime.process_logits(Batch(reqs, "prefill"), logits)
+        for tokens in ((4, 8), (4, 8), (7, 4), (6, 7)):
+            batch = Batch(reqs, "decode")
+            batch.input_ids = torch.tensor(tokens, dtype=torch.int32, device="cuda")
+            for req in reqs:
+                req.complete_one()
+            actual = runtime.process_logits(batch, logits).cpu()
+            for row, (req, oracle, token) in enumerate(zip(reqs, oracles, tokens)):
+                oracle.commit(torch.tensor([token]))
+                expected = logits[row:row + 1].float().cpu()
+                expected[:, runtime.mask_id] = -float("inf")
+                oracle.apply(expected, torch.tensor([runtime.mask_id]), runtime.mask_id)
+>               torch.testing.assert_close(actual[row:row + 1], expected, rtol=0, atol=0)
+E               AssertionError: Tensor-likes are not equal!
+E               
+E               Mismatched elements: 1 / 17 (5.9%)
+E               Greatest absolute difference: 1.1920928955078125e-07 at index (0, 8)
+E               Greatest relative difference: 7.36292662395499e-08 at index (0, 8)
+
+tests\models\test_clover_overlap.py:136: AssertionError
+---------------------------- Captured stdout call -----------------------------
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPEZD~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPEZD~1\__triton_launcher.cp312-win_amd64.exp
+__TRIT~1.C
+  正在创建库 C:\Users\PC\AppData\Local\Temp\TMPFKE~1\__triton_launcher.cp312-win_amd64.lib 和对象 C:\Users\PC\AppData\Local\Temp\TMPFKE~1\__triton_launcher.cp312-win_amd64.exp
+=========================== short test summary info ===========================
+FAILED tests/models/test_clover_overlap.py::test_gpu_causal_logits_and_counts_match_forced_history_with_host_lag
+1 failed, 207 passed, 51 skipped, 47 subtests passed in 194.98s (0:03:14)
