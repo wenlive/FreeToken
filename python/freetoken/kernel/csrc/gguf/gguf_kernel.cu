@@ -796,7 +796,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 29:
         moe_vec_iq1_m_q8_1_cuda<scalar_t>(

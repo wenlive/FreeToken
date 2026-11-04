@@ -290,7 +290,7 @@ def test_short_route_grouping_replays_with_different_high_cache_slots():
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
-@pytest.mark.parametrize("kind", [2, 8, 12, 14])
+@pytest.mark.parametrize("kind", [2, 8, 12, 14, 23])
 def test_mmvq_honors_padded_expert_slot_stride(kind):
     from freetoken.kernel.gguf import ggml_moe_a8_vec
 
@@ -304,6 +304,31 @@ def test_mmvq_honors_padded_expert_slot_stride(kind):
     expected = ggml_moe_a8_vec(value, packed, ids, 2, kind, 64, 1)
     actual = ggml_moe_a8_vec(value, view, ids, 2, kind, 64, 1)
     torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+@pytest.mark.parametrize("rows", [1, 8])
+def test_mixed_layers_share_q8_sized_banks_without_changing_results(rows):
+    from freetoken.moe.fused_gguf import fused_experts_gguf
+
+    gate_bank = torch.zeros(6, 512, 272, dtype=torch.uint8, device="cuda")
+    down_bank = torch.zeros(6, 256, 272, dtype=torch.uint8, device="cuda")
+    hidden = torch.randn(rows, 256, dtype=torch.bfloat16, device="cuda")
+    weights = torch.full((rows, 2), .5, device="cuda")
+    ids = torch.tensor([[2, 0]] * rows, dtype=torch.int32, device="cuda")
+    for layer, (gate_kind, down_kind) in enumerate(((8, 8), (23, 12))):
+        gate, _ = packed_fixture(gate_kind, rows=512, width=256)
+        down, _ = packed_fixture(down_kind, rows=256, width=256)
+        views = []
+        for bank, packed in ((gate_bank, gate), (down_bank, down)):
+            view = bank.as_strided((6, *packed.shape[1:]), (bank.stride(0), packed.stride(1), 1))
+            view[layer * 3:layer * 3 + 3].copy_(packed)
+            views.append(view)
+        expected = fused_experts_gguf(hidden, gate.cuda(), down.cuda(), weights, ids,
+            "silu", gate_up_type=gate_kind, down_type=down_kind)
+        actual = fused_experts_gguf(hidden, *views, weights, ids + layer * 3,
+            "silu", gate_up_type=gate_kind, down_type=down_kind)
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
