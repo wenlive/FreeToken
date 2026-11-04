@@ -1,0 +1,297 @@
+{
+  "state": "complete",
+  "turns": [
+    {
+      "turn": 1,
+      "variant": "before",
+      "commit": "e69a00ca6a760479dc205162c93ba977f7c7d110",
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061147Z-c5-startup-abab-1\\data\\results.json",
+      "sha256": "c377eb023f430cdf761daf19f19a542b0668857e7fbb52ee36ae33c1e8e874a4",
+      "startup_seconds": 139.88742760001332,
+      "reader_count": 4,
+      "reader_seconds": [
+        7.301776699983748,
+        7.499822400015546,
+        6.984728899988113,
+        6.397130600002129
+      ],
+      "reader_total_seconds": 28.183458599989535,
+      "settings": null,
+      "manifest": {
+        "started_at": "20261104T061147Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--hash-weights",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061147Z-c5-startup-abab-1\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-c2",
+        "commit": "e69a00ca6a760479dc205162c93ba977f7c7d110",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c2/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c2",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c2/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c2",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+            "artifact": "external-scripts\\1-profile_gguf_startup.py",
+            "sha256": "91c632fcc05b45a7dbcb07f74c490e2b73f0e654a8249ff3e3499410c019dfa3"
+          }
+        ],
+        "pid": 15640,
+        "exit_code": 0,
+        "elapsed_seconds": 169.46799999999348
+      }
+    },
+    {
+      "turn": 2,
+      "variant": "after",
+      "commit": "5df3410831a4254995b1318e78376cab83d51032",
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061438Z-c5-startup-abab-2\\data\\results.json",
+      "sha256": "ca63cafa29704587950473f4acce45c57e59ddd6a59c0bf9f06635588c521581",
+      "startup_seconds": 141.5969175999926,
+      "reader_count": 3,
+      "reader_seconds": [
+        7.238505100016482,
+        7.4334614999825135,
+        7.121573299984448
+      ],
+      "reader_total_seconds": 21.793539899983443,
+      "settings": {
+        "model": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "cache_slots": 3232,
+        "memory_ratio": 0.9,
+        "context": 4096,
+        "clover_max_width": 0,
+        "mapped_host_table_bytes": 1017118720
+      },
+      "manifest": {
+        "started_at": "20261104T061438Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--hash-weights",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061438Z-c5-startup-abab-2\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-c5",
+        "commit": "5df3410831a4254995b1318e78376cab83d51032",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c5/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c5",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+            "artifact": "external-scripts\\1-profile_gguf_startup.py",
+            "sha256": "97b9eaad30d73c2a92b2b8ca429d5494f96447c91776a16f58d7dc6673bcc2eb"
+          }
+        ],
+        "pid": 15556,
+        "exit_code": 0,
+        "elapsed_seconds": 171.88999999998487
+      }
+    },
+    {
+      "turn": 3,
+      "variant": "before",
+      "commit": "e69a00ca6a760479dc205162c93ba977f7c7d110",
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061730Z-c5-startup-abab-3\\data\\results.json",
+      "sha256": "229b665b1eefcba28385b3802b70aab1d1d5934e64436492c65433c8bb45b2d8",
+      "startup_seconds": 51.39582010000595,
+      "reader_count": 4,
+      "reader_seconds": [
+        7.193343899998581,
+        7.383339599997271,
+        6.917984100000467,
+        6.6317459999991115
+      ],
+      "reader_total_seconds": 28.12641359999543,
+      "settings": {
+        "model": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "cache_slots": 3232,
+        "memory_ratio": 0.9,
+        "context": 4096,
+        "clover_max_width": 0,
+        "mapped_host_table_bytes": 1017118720
+      },
+      "manifest": {
+        "started_at": "20261104T061730Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061730Z-c5-startup-abab-3\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-c2",
+        "commit": "e69a00ca6a760479dc205162c93ba977f7c7d110",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c2/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c2",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c2/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c2",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+            "artifact": "external-scripts\\1-profile_gguf_startup.py",
+            "sha256": "97b9eaad30d73c2a92b2b8ca429d5494f96447c91776a16f58d7dc6673bcc2eb"
+          }
+        ],
+        "pid": 6112,
+        "exit_code": 0,
+        "elapsed_seconds": 62.28100000001723
+      }
+    },
+    {
+      "turn": 4,
+      "variant": "after",
+      "commit": "5df3410831a4254995b1318e78376cab83d51032",
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061832Z-c5-startup-abab-4\\data\\results.json",
+      "sha256": "0286afa3f39a68cac3118317c54a9be4d42a6aafa23627fae16f09753deff456",
+      "startup_seconds": 45.124560800002655,
+      "reader_count": 3,
+      "reader_seconds": [
+        7.15353799998411,
+        7.39116389999981,
+        7.412847799976589
+      ],
+      "reader_total_seconds": 21.95754969996051,
+      "settings": {
+        "model": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+        "cache_slots": 3232,
+        "memory_ratio": 0.9,
+        "context": 4096,
+        "clover_max_width": 0,
+        "mapped_host_table_bytes": 1017118720
+      },
+      "manifest": {
+        "started_at": "20261104T061832Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T061832Z-c5-startup-abab-4\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-c5",
+        "commit": "5df3410831a4254995b1318e78376cab83d51032",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c5/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c5",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\profile_gguf_startup.py",
+            "artifact": "external-scripts\\1-profile_gguf_startup.py",
+            "sha256": "97b9eaad30d73c2a92b2b8ca429d5494f96447c91776a16f58d7dc6673bcc2eb"
+          }
+        ],
+        "pid": 12916,
+        "exit_code": 0,
+        "elapsed_seconds": 56.0
+      }
+    }
+  ],
+  "tensor_names_equal": true,
+  "tensor_hash_mismatches": [],
+  "tensor_count": 693,
+  "settings_captured_turns": [
+    2,
+    3,
+    4
+  ],
+  "settings_equal": null,
+  "settings_note": "Early profile revision did not save resolved settings; preserve the original result and command/script identity rather than inventing metadata.",
+  "startup_pairs": [
+    {
+      "before": 139.88742760001332,
+      "after": 141.5969175999926,
+      "reduction_percent": -1.2220469196612127
+    },
+    {
+      "before": 51.39582010000595,
+      "after": 45.124560800002655,
+      "reduction_percent": 12.201885849473138
+    }
+  ],
+  "startup_medians": {
+    "before": 95.64162385000964,
+    "after": 93.36073919999762
+  },
+  "scope": "Same-boot ABAB; full per-turn times retained, including first-use compilation. Weight hashing occurs after the startup timer. Only reader durations are summed; nested parser timers are not."
+}

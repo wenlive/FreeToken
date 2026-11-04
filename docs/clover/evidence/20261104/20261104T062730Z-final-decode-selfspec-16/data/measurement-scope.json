@@ -1,0 +1,24 @@
+{
+  "commit": "8767adac144e77eda8c8142f90556e6c86d7f586",
+  "scope": "Final commit snapshot; one warmup and one measured request per input. Checkpoint penalties, strict selfspec, EOS respected. No routing/logit alteration. Short Python task and the identical task after 4096 tokens of natural documentation context. Each mode process reserves only its declared width; causal reserves zero.",
+  "context_capacity": 4608,
+  "requested_inputs": [
+    "short",
+    4096
+  ],
+  "requested_output_limit": 256,
+  "sources": [
+    {
+      "path": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-final8767ada\\docs\\quickstart.md",
+      "sha256": "f7b19a870f27e24a8bfc343f2043ae2c6b9605feb2c83c06934d14ca74b080c1"
+    },
+    {
+      "path": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-final8767ada\\docs\\cli.md",
+      "sha256": "2306376b0f072a8e5250df92ffcd74d9610bbd887e4cfd769126db04405e93be"
+    },
+    {
+      "path": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-final8767ada\\docs\\models.md",
+      "sha256": "6786e350b85e7e095c35e58751960271506bff534263cb47c9f05d5cecdde095"
+    }
+  ]
+}
