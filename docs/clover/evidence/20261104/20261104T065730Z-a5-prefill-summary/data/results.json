@@ -1,0 +1,2606 @@
+{
+  "state": "complete",
+  "inputs": [
+    {
+      "slots": 2292,
+      "turn": 1,
+      "limit": 128,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064146Z-a5-prefill-2292-abab-1\\data\\results.json",
+      "sha256": "0bd663aecdf54e94819d56e69ba3a31d233434fc8b633c16ce4259aeac4a7656",
+      "manifest": {
+        "started_at": "20261104T064146Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2292",
+          "--limit",
+          "128",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064146Z-a5-prefill-2292-abab-1\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 6416,
+        "exit_code": 0,
+        "elapsed_seconds": 174.23499999998603
+      }
+    },
+    {
+      "slots": 2292,
+      "turn": 2,
+      "limit": 1024,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064440Z-a5-prefill-2292-abab-2\\data\\results.json",
+      "sha256": "60a695dfe702354b94a76176fccc9d9ea592d944d3a5baebffc8b00fde92b27c",
+      "manifest": {
+        "started_at": "20261104T064440Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2292",
+          "--limit",
+          "1024",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064440Z-a5-prefill-2292-abab-2\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 4248,
+        "exit_code": 0,
+        "elapsed_seconds": 107.75
+      }
+    },
+    {
+      "slots": 2292,
+      "turn": 3,
+      "limit": 128,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064628Z-a5-prefill-2292-abab-3\\data\\results.json",
+      "sha256": "8410282fe8fd2e29c9f5d521b56c8c07135699a72bf413b8b24d5aadfe87cbb9",
+      "manifest": {
+        "started_at": "20261104T064628Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2292",
+          "--limit",
+          "128",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064628Z-a5-prefill-2292-abab-3\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 12824,
+        "exit_code": 0,
+        "elapsed_seconds": 104.06299999999464
+      }
+    },
+    {
+      "slots": 2292,
+      "turn": 4,
+      "limit": 1024,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064812Z-a5-prefill-2292-abab-4\\data\\results.json",
+      "sha256": "da9646343616b9c208696608741fba0d45f25843379e6fb4ed7313b9d00f7c03",
+      "manifest": {
+        "started_at": "20261104T064812Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2292",
+          "--limit",
+          "1024",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T064812Z-a5-prefill-2292-abab-4\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 8388,
+        "exit_code": 0,
+        "elapsed_seconds": 107.0
+      }
+    },
+    {
+      "slots": 2928,
+      "turn": 1,
+      "limit": 128,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065000Z-a5-prefill-2928-abab-1\\data\\results.json",
+      "sha256": "8ed5be1bb5aa8bdb106bb76d1341154764f5577edad61a2313145602da83d372",
+      "manifest": {
+        "started_at": "20261104T065000Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2928",
+          "--limit",
+          "128",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065000Z-a5-prefill-2928-abab-1\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 15596,
+        "exit_code": 0,
+        "elapsed_seconds": 104.03200000000652
+      }
+    },
+    {
+      "slots": 2928,
+      "turn": 2,
+      "limit": 1024,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065144Z-a5-prefill-2928-abab-2\\data\\results.json",
+      "sha256": "53705aba2b9c1c18a0bb8a124bb8fc13e4cae4e4e27a73242810f456403657e6",
+      "manifest": {
+        "started_at": "20261104T065144Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2928",
+          "--limit",
+          "1024",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065144Z-a5-prefill-2928-abab-2\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 6380,
+        "exit_code": 0,
+        "elapsed_seconds": 107.48499999998603
+      }
+    },
+    {
+      "slots": 2928,
+      "turn": 3,
+      "limit": 128,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065332Z-a5-prefill-2928-abab-3\\data\\results.json",
+      "sha256": "133625db32e9bde43132369817025eeb4a2c23c688b2ec2686b7dbefe7276f49",
+      "manifest": {
+        "started_at": "20261104T065332Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2928",
+          "--limit",
+          "128",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065332Z-a5-prefill-2928-abab-3\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 16420,
+        "exit_code": 0,
+        "elapsed_seconds": 103.73500000001513
+      }
+    },
+    {
+      "slots": 2928,
+      "turn": 4,
+      "limit": 1024,
+      "source": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065516Z-a5-prefill-2928-abab-4\\data\\results.json",
+      "sha256": "6c03b867b5fc8bd77a9767d2fb3594fc2bb782264a2c2322250b872c3de2bacf",
+      "manifest": {
+        "started_at": "20261104T065516Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--cache-slots",
+          "2928",
+          "--limit",
+          "1024",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T065516Z-a5-prefill-2928-abab-4\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_prefill_limit.py",
+            "artifact": "external-scripts\\1-bench_prefill_limit.py",
+            "sha256": "876483fabce2d78ceecc3a8a12a11cb4e45206580e500726dd4c9aee365ac57f"
+          }
+        ],
+        "pid": 15692,
+        "exit_code": 0,
+        "elapsed_seconds": 106.4210000000021
+      }
+    }
+  ],
+  "cases": [
+    {
+      "cache_slots": 2292,
+      "input_tokens": 129,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7106744000047911,
+            0.514307400007965,
+            0.7126043000025675,
+            0.5114837999863084
+          ],
+          "process_ranges": [
+            [
+              0.7086363999987952,
+              0.7217796000186354
+            ],
+            [
+              0.5124178999976721,
+              0.5269172000116669
+            ],
+            [
+              0.7112286999763455,
+              0.7190735999902245
+            ],
+            [
+              0.5109132999787107,
+              0.5230649000150152
+            ]
+          ],
+          "dense_median": 0.7119335000024876,
+          "sparse_median": 0.5133936000056565,
+          "sparse_over_dense_pairs": [
+            0.7236892168966517,
+            0.7177669289737174
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7107640999893192,
+            0.514379900007043,
+            0.7127057999896351,
+            0.5115606999897864
+          ],
+          "process_ranges": [
+            [
+              0.7087292000069283,
+              0.7218720000237226
+            ],
+            [
+              0.5125181000039447,
+              0.5270177000202239
+            ],
+            [
+              0.7113046000013128,
+              0.7192153999931179
+            ],
+            [
+              0.5109882999968249,
+              0.5231591000047047
+            ]
+          ],
+          "dense_median": 0.7120274999906542,
+          "sparse_median": 0.5134688000107417,
+          "sparse_over_dense_pairs": [
+            0.7236998886336166,
+            0.7177726068697996
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.4069365630805315,
+            1.9440884062272024,
+            1.4031034965823808,
+            1.9548022356290575
+          ],
+          "process_ranges": [
+            [
+              1.3852871422733357,
+              1.410976152796053
+            ],
+            [
+              1.897469477707534,
+              1.9511506032514818
+            ],
+            [
+              1.3904040430857973,
+              1.4058674722448785
+            ],
+            [
+              1.9114644091845239,
+              1.9569919702784067
+            ]
+          ],
+          "dense_median": 1.4044414120538722,
+          "sparse_median": 1.9475441321672735,
+          "sparse_over_dense_pairs": [
+            1.3817882463517475,
+            1.3931988911655346
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          722.3211669921875
+        ],
+        [
+          515.96630859375
+        ],
+        [
+          707.835205078125
+        ],
+        [
+          515.2471923828125
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          17770
+        ],
+        [
+          17770
+        ],
+        [
+          17770
+        ],
+        [
+          17770
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 192,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7183097000233829,
+            0.5934683999803383,
+            0.7298195000039414,
+            0.5952370000013616
+          ],
+          "process_ranges": [
+            [
+              0.7120657000050414,
+              0.7265841999906115
+            ],
+            [
+              0.5867415999819059,
+              0.6180044000211637
+            ],
+            [
+              0.7232676999992691,
+              0.7356075999850873
+            ],
+            [
+              0.5924754999869037,
+              0.6083052999747451
+            ]
+          ],
+          "dense_median": 0.7249159999919357,
+          "sparse_median": 0.5950393000093754,
+          "sparse_over_dense_pairs": [
+            0.8262012888883713,
+            0.815594814879771
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7183921000105329,
+            0.5935428999946453,
+            0.7299019999918528,
+            0.5953443999751471
+          ],
+          "process_ranges": [
+            [
+              0.7121591000177432,
+              0.7266605999902822
+            ],
+            [
+              0.5868317999993451,
+              0.6181148000177927
+            ],
+            [
+              0.7233685999817681,
+              0.7357015000015963
+            ],
+            [
+              0.5925779000099283,
+              0.608402699988801
+            ]
+          ],
+          "dense_median": 0.725013150004088,
+          "sparse_median": 0.595148699983838,
+          "sparse_over_dense_pairs": [
+            0.8262102269581513,
+            0.8156497721362489
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.391997489929717,
+            1.6847981839375412,
+            1.370046937823382,
+            1.679700019084324
+          ],
+          "process_ranges": [
+            [
+              1.376158278037055,
+              1.4041806107302222
+            ],
+            [
+              1.6178224497637244,
+              1.7040657987537757
+            ],
+            [
+              1.3592469228319233,
+              1.3824210783066948
+            ],
+            [
+              1.6436481955428652,
+              1.687541840462234
+            ]
+          ],
+          "dense_median": 1.3792869335097508,
+          "sparse_median": 1.6802525287433068,
+          "sparse_over_dense_pairs": [
+            1.2103457054528224,
+            1.2260164033160015
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          714.4874267578125
+        ],
+        [
+          606.9312744140625
+        ],
+        [
+          717.5254516601562
+        ],
+        [
+          599.28466796875
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 256,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7331500999862328,
+            0.6696989000192843,
+            0.7221963000192773,
+            0.6599543000047561
+          ],
+          "process_ranges": [
+            [
+              0.724957699974766,
+              0.736247299995739
+            ],
+            [
+              0.6604703000048175,
+              0.6757085999997798
+            ],
+            [
+              0.7192162999999709,
+              0.7324793000007048
+            ],
+            [
+              0.6568202000053134,
+              0.676886499975808
+            ]
+          ],
+          "dense_median": 0.7287184999877354,
+          "sparse_median": 0.6645109500095714,
+          "sparse_over_dense_pairs": [
+            0.9134540117117355,
+            0.9138156758586831
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7332292999781203,
+            0.6697817000094801,
+            0.7222962000232656,
+            0.6600358000141568
+          ],
+          "process_ranges": [
+            [
+              0.7250415000016801,
+              0.7363498999911826
+            ],
+            [
+              0.6605660000059288,
+              0.6757989999896381
+            ],
+            [
+              0.7192900999798439,
+              0.7325694000173826
+            ],
+            [
+              0.656895500025712,
+              0.6769758999871556
+            ]
+          ],
+          "dense_median": 0.7288054500095313,
+          "sparse_median": 0.6645995500148274,
+          "sparse_over_dense_pairs": [
+            0.9134682697888186,
+            0.9138021216128462
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3638298415377568,
+            1.4930237717540595,
+            1.3844735718778383,
+            1.515069334085441
+          ],
+          "process_ranges": [
+            [
+              1.3580500248753675,
+              1.3792313957169111
+            ],
+            [
+              1.4797299197177456,
+              1.5138532712719466
+            ],
+            [
+              1.3650583821495572,
+              1.3902596463207573
+            ],
+            [
+              1.4771574586613396,
+              1.5223121485241693
+            ]
+          ],
+          "dense_median": 1.3721448889332342,
+          "sparse_median": 1.504717810086249,
+          "sparse_over_dense_pairs": [
+            1.0947287750139219,
+            1.0943288227816934
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          722.9053955078125
+        ],
+        [
+          659.0504150390625
+        ],
+        [
+          727.5818481445312
+        ],
+        [
+          654.3880615234375
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 384,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.72493750002468,
+            0.7768011000007391,
+            0.7279506999766454,
+            0.7726490999921225
+          ],
+          "process_ranges": [
+            [
+              0.7239733999886084,
+              0.7274179000232834
+            ],
+            [
+              0.7726054000086151,
+              0.791704800009029
+            ],
+            [
+              0.7245475000236183,
+              0.7388450000144076
+            ],
+            [
+              0.7705163999926299,
+              0.7853479999757838
+            ]
+          ],
+          "dense_median": 0.726609900011681,
+          "sparse_median": 0.7744414000044344,
+          "sparse_over_dense_pairs": [
+            1.071542167392766,
+            1.0614030593238128
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7250427000108175,
+            0.7769022000138648,
+            0.7280335999967065,
+            0.7727368999912869
+          ],
+          "process_ranges": [
+            [
+              0.7240567999833729,
+              0.7275083000131417
+            ],
+            [
+              0.772705000010319,
+              0.7918003000086173
+            ],
+            [
+              0.7246429000224452,
+              0.7389274000015575
+            ],
+            [
+              0.7705943000037223,
+              0.7854355999734253
+            ]
+          ],
+          "dense_median": 0.7266968500043731,
+          "sparse_median": 0.7745288500009337,
+          "sparse_over_dense_pairs": [
+            1.0715261321881782,
+            1.0614027978856782
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3792291129682157,
+            1.2871633005829481,
+            1.3735629784181993,
+            1.2941015240908977
+          ],
+          "process_ranges": [
+            [
+              1.3745547645050042,
+              1.381107117594868
+            ],
+            [
+              1.2629447096561048,
+              1.2941549491547817
+            ],
+            [
+              1.3533129235671761,
+              1.3799900612688343
+            ],
+            [
+              1.2731788577368206,
+              1.2976997104639492
+            ]
+          ],
+          "dense_median": 1.3760913465546187,
+          "sparse_median": 1.2911083790139684,
+          "sparse_over_dense_pairs": [
+            0.9332483548094962,
+            0.9421493913451208
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          738.6210327148438
+        ],
+        [
+          771.3494262695312
+        ],
+        [
+          729.751220703125
+        ],
+        [
+          770.3562622070312
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          760
+        ],
+        [
+          760
+        ],
+        [
+          760
+        ],
+        [
+          760
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 512,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7333093000052031,
+            0.8644452000153251,
+            0.7497860000003129,
+            0.8627699000062421
+          ],
+          "process_ranges": [
+            [
+              0.7329719999979716,
+              0.7507691999780945
+            ],
+            [
+              0.8626755000150297,
+              0.8724526999867521
+            ],
+            [
+              0.743669499992393,
+              0.7592010000080336
+            ],
+            [
+              0.8610316000122111,
+              0.8798927000025287
+            ]
+          ],
+          "dense_median": 0.7465881499956595,
+          "sparse_median": 0.8641109000163851,
+          "sparse_over_dense_pairs": [
+            1.1788275424969947,
+            1.1506881963732078
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7333953000197653,
+            0.8645513000083156,
+            0.749866900005145,
+            0.862865300005069
+          ],
+          "process_ranges": [
+            [
+              0.733066000015242,
+              0.7508579999848735
+            ],
+            [
+              0.8627887000038754,
+              0.8725509999785572
+            ],
+            [
+              0.7437440000066999,
+              0.759294499992393
+            ],
+            [
+              0.8611318999901414,
+              0.8799907999928109
+            ]
+          ],
+          "dense_median": 0.7466637500037905,
+          "sparse_median": 0.8642124000034528,
+          "sparse_over_dense_pairs": [
+            1.178833979417397,
+            1.1506912760106476
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3635211460627708,
+            1.1566693613095969,
+            1.3335699975464164,
+            1.158929441239699
+          ],
+          "process_ranges": [
+            [
+              1.331809743014186,
+              1.3641336523303602
+            ],
+            [
+              1.1460648145776864,
+              1.1590323331720829
+            ],
+            [
+              1.3170120421128015,
+              1.3445486618930595
+            ],
+            [
+              1.1363755166624123,
+              1.161262287474716
+            ]
+          ],
+          "dense_median": 1.3393114255456136,
+          "sparse_median": 1.1571229521205564,
+          "sparse_over_dense_pairs": [
+            0.8482958732613222,
+            0.8690428274271079
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          732.52294921875
+        ],
+        [
+          879.10205078125
+        ],
+        [
+          758.2571411132812
+        ],
+        [
+          871.747802734375
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 768,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7603554999805056,
+            1.0162163999921177,
+            0.7588554999965709,
+            1.0155367999977898
+          ],
+          "process_ranges": [
+            [
+              0.7516020000039134,
+              0.7770177999918815
+            ],
+            [
+              1.0136782000190578,
+              1.023393900017254
+            ],
+            [
+              0.7526516999932937,
+              0.7605156000063289
+            ],
+            [
+              1.0148805999779142,
+              1.0276155000028666
+            ]
+          ],
+          "dense_median": 0.7589613000018289,
+          "sparse_median": 1.0158850999869173,
+          "sparse_over_dense_pairs": [
+            1.3365016758847303,
+            1.3382479273094532
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7604538000014145,
+            1.0163175000052433,
+            0.7589370999776293,
+            1.0156417999824043
+          ],
+          "process_ranges": [
+            [
+              0.7516814999980852,
+              0.7771106000000145
+            ],
+            [
+              1.0137702000210993,
+              1.023500300012529
+            ],
+            [
+              0.7527249999984633,
+              0.7605903999938164
+            ],
+            [
+              1.0149782999942545,
+              1.0277201000135392
+            ]
+          ],
+          "dense_median": 0.75905119998788,
+          "sparse_median": 1.015973950008629,
+          "sparse_over_dense_pairs": [
+            1.3364618600148397,
+            1.338242391908818
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3150042777064694,
+            0.9839444858470319,
+            1.31763225177617,
+            0.9845990978485964
+          ],
+          "process_ranges": [
+            [
+              1.286818118296136,
+              1.33035068709626
+            ],
+            [
+              0.9770392837088164,
+              0.9864168427708639
+            ],
+            [
+              1.314768106471144,
+              1.328506426652551
+            ],
+            [
+              0.9730275782159228,
+              0.9852427386926998
+            ]
+          ],
+          "dense_median": 1.3174342160474102,
+          "sparse_median": 0.9842772919560269,
+          "sparse_over_dense_pairs": [
+            0.7482443232528133,
+            0.7472487839618038
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          772.0466918945312
+        ],
+        [
+          1015.7830200195312
+        ],
+        [
+          775.305419921875
+        ],
+        [
+          1021.0604248046875
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2292,
+      "input_tokens": 1024,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7789807999797631,
+            1.1660130999807734,
+            0.7751548000087496,
+            1.1585933000023942
+          ],
+          "process_ranges": [
+            [
+              0.7744494999933522,
+              0.7806548999797087
+            ],
+            [
+              1.156133200012846,
+              1.188686699984828
+            ],
+            [
+              0.770634800021071,
+              0.7841083999956027
+            ],
+            [
+              1.154653400008101,
+              1.176573600008851
+            ]
+          ],
+          "dense_median": 0.7765669000073103,
+          "sparse_median": 1.1641283499920974,
+          "sparse_over_dense_pairs": [
+            1.4968444665273712,
+            1.4946605503691863
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7790754999732599,
+            1.1661644999985583,
+            0.7752551999874413,
+            1.1586985999892931
+          ],
+          "process_ranges": [
+            [
+              0.7745393999794032,
+              0.7807375999982469
+            ],
+            [
+              1.1562412999919616,
+              1.1888204999850132
+            ],
+            [
+              0.7707228000217583,
+              0.7841938000055961
+            ],
+            [
+              1.1547599000041373,
+              1.1766856999893207
+            ]
+          ],
+          "dense_median": 0.7766675500024576,
+          "sparse_median": 1.1642358999961289,
+          "sparse_over_dense_pairs": [
+            1.4968568515356784,
+            1.494602809511066
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.2835726448005653,
+            0.8575119547895999,
+            1.289897829793595,
+            0.8630372039883715
+          ],
+          "process_ranges": [
+            [
+              1.2808400671393891,
+              1.291089904563399
+            ],
+            [
+              0.8411698822594382,
+              0.8648713724435827
+            ],
+            [
+              1.275194983679881,
+              1.297483349359548
+            ],
+            [
+              0.8498446101699678,
+              0.8659808848544335
+            ]
+          ],
+          "dense_median": 1.287554059502178,
+          "sparse_median": 0.8589328569048212,
+          "sparse_over_dense_pairs": [
+            0.668066554910755,
+            0.6690740801746071
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          784.4869995117188
+        ],
+        [
+          1185.9033203125
+        ],
+        [
+          773.6142578125
+        ],
+        [
+          1163.8160400390625
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 129,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ],
+        [
+          [
+            17770
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.71117769999546,
+            0.5109251999820117,
+            0.7065307000011671,
+            0.5109879999945406
+          ],
+          "process_ranges": [
+            [
+              0.7069189999892842,
+              0.7134580999845639
+            ],
+            [
+              0.5103711999836378,
+              0.5160400000168011
+            ],
+            [
+              0.7057862000074238,
+              0.706635800015647
+            ],
+            [
+              0.5106725999794435,
+              0.5111280000128318
+            ]
+          ],
+          "dense_median": 0.7067774000024656,
+          "sparse_median": 0.5109565999882761,
+          "sparse_over_dense_pairs": [
+            0.7184212890607696,
+            0.7232353809872614
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7112676000106148,
+            0.5110049000068102,
+            0.7066229000047315,
+            0.5110791000188328
+          ],
+          "process_ranges": [
+            [
+              0.7070101999852341,
+              0.7135326999996323
+            ],
+            [
+              0.5104455999971833,
+              0.5161463000113145
+            ],
+            [
+              0.7058574999973644,
+              0.7067279000184499
+            ],
+            [
+              0.5107609999831766,
+              0.5112342000065837
+            ]
+          ],
+          "dense_median": 0.706869050001842,
+          "sparse_median": 0.5110420000128215,
+          "sparse_over_dense_pairs": [
+            0.7184425383627541,
+            0.7232699365041958
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.405940605174587,
+            1.9569283973337104,
+            1.4151819874409732,
+            1.9566442845405942
+          ],
+          "process_ranges": [
+            [
+              1.4014774655744793,
+              1.4144067511626919
+            ],
+            [
+              1.9374351806417658,
+              1.9590726220492802
+            ],
+            [
+              1.4149717309503331,
+              1.4167165469003786
+            ],
+            [
+              1.9560506710762346,
+              1.9578628752644347
+            ]
+          ],
+          "dense_median": 1.4146892410565126,
+          "sparse_median": 1.9567863409371524,
+          "sparse_over_dense_pairs": [
+            1.391899764564167,
+            1.3826096586197578
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          707.07861328125
+        ],
+        [
+          509.97760009765625
+        ],
+        [
+          704.9443359375
+        ],
+        [
+          509.0729675292969
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          17770
+        ],
+        [
+          17770
+        ],
+        [
+          17770
+        ],
+        [
+          17770
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 192,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7149281000019982,
+            0.5848473999940325,
+            0.7087715000088792,
+            0.5846324000158347
+          ],
+          "process_ranges": [
+            [
+              0.7098168000229634,
+              0.724425299995346
+            ],
+            [
+              0.5843478000024334,
+              0.5853326999931596
+            ],
+            [
+              0.7082379999919794,
+              0.7100500999949872
+            ],
+            [
+              0.5841619000129867,
+              0.5848221000051126
+            ]
+          ],
+          "dense_median": 0.7099334500089753,
+          "sparse_median": 0.5847881499939831,
+          "sparse_over_dense_pairs": [
+            0.8180506543139062,
+            0.8248531437967112
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7150251000130083,
+            0.5849187000130769,
+            0.7088421999942511,
+            0.5847068000002764
+          ],
+          "process_ranges": [
+            [
+              0.7098867000022437,
+              0.7245146000059322
+            ],
+            [
+              0.5844243000028655,
+              0.5854056999960449
+            ],
+            [
+              0.708305999985896,
+              0.7101444999861997
+            ],
+            [
+              0.5842342000105418,
+              0.5849018000008073
+            ]
+          ],
+          "dense_median": 0.7100155999942217,
+          "sparse_median": 0.5848642999917502,
+          "sparse_over_dense_pairs": [
+            0.8180393947043755,
+            0.8248758327382576
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3985523025440745,
+            1.7096393053900367,
+            1.4107512222157628,
+            1.7102588853071783
+          ],
+          "process_ranges": [
+            [
+              1.380234435568051,
+              1.4086754970854354
+            ],
+            [
+              1.7082170535865233,
+              1.7110855931129094
+            ],
+            [
+              1.4081641131057596,
+              1.411819185521388
+            ],
+            [
+              1.7096887032979209,
+              1.711642351615082
+            ]
+          ],
+          "dense_median": 1.4084198050955976,
+          "sparse_median": 1.7097983312114509,
+          "sparse_over_dense_pairs": [
+            1.2224350153226813,
+            1.2123036708208559
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          727.600341796875
+        ],
+        [
+          583.5585327148438
+        ],
+        [
+          708.3146362304688
+        ],
+        [
+          583.3856201171875
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 256,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ],
+        [
+          [
+            794
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7161374999850523,
+            0.6531411999894772,
+            0.7135428999899887,
+            0.6535707000002731
+          ],
+          "process_ranges": [
+            [
+              0.7134571000060532,
+              0.7209432999952696
+            ],
+            [
+              0.6530199999979232,
+              0.6535507000226062
+            ],
+            [
+              0.7132681999937631,
+              0.7151257999939844
+            ],
+            [
+              0.6532837999984622,
+              0.6542490000138059
+            ]
+          ],
+          "dense_median": 0.7144790000020294,
+          "sparse_median": 0.6533966499991948,
+          "sparse_over_dense_pairs": [
+            0.9120332338456093,
+            0.9159515146313458
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7162144999892917,
+            0.6532168999838177,
+            0.7136167999997269,
+            0.6536448000115342
+          ],
+          "process_ranges": [
+            [
+              0.7135484000027645,
+              0.7210363000049256
+            ],
+            [
+              0.6530802999914158,
+              0.6536186000157613
+            ],
+            [
+              0.713343800016446,
+              0.7152246999903582
+            ],
+            [
+              0.6533533000038005,
+              0.6543413000181317
+            ]
+          ],
+          "dense_median": 0.7145661499962443,
+          "sparse_median": 0.6534725500096101,
+          "sparse_over_dense_pairs": [
+            0.9120408760135186,
+            0.9159604987043247
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3962297607978493,
+            1.5308850705252317,
+            1.401312300944124,
+            1.529882896616563
+          ],
+          "process_ranges": [
+            [
+              1.3868927264732285,
+              1.4014466292631664
+            ],
+            [
+              1.5299442212566872,
+              1.531205274471063
+            ],
+            [
+              1.398162004211377,
+              1.4018485896659438
+            ],
+            [
+              1.5282544445418471,
+              1.5305654689341632
+            ]
+          ],
+          "dense_median": 1.399451000136134,
+          "sparse_median": 1.5302861716633154,
+          "sparse_over_dense_pairs": [
+            1.0964420853273005,
+            1.0917501370578246
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          718.7633056640625
+        ],
+        [
+          652.6585693359375
+        ],
+        [
+          712.590087890625
+        ],
+        [
+          652.0845336914062
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ],
+        [
+          794
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 384,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ],
+        [
+          [
+            760
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7241783999779727,
+            0.7705137000011746,
+            0.7226414000033401,
+            0.7706760999863036
+          ],
+          "process_ranges": [
+            [
+              0.7223227999929804,
+              0.7270735999918543
+            ],
+            [
+              0.770171800017124,
+              0.7720824999851175
+            ],
+            [
+              0.7222608999873046,
+              0.7228399000014178
+            ],
+            [
+              0.7701691000256687,
+              0.7715745999885257
+            ]
+          ],
+          "dense_median": 0.7226630000077421,
+          "sparse_median": 0.7706130000005942,
+          "sparse_over_dense_pairs": [
+            1.0639832671405434,
+            1.0664710048202906
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7242482999863569,
+            0.7706059000047389,
+            0.7227320999954827,
+            0.7707629000069574
+          ],
+          "process_ranges": [
+            [
+              0.7223940000112634,
+              0.7271709000051487
+            ],
+            [
+              0.7702531999966595,
+              0.7721877000003587
+            ],
+            [
+              0.722340099979192,
+              0.7229277000005823
+            ],
+            [
+              0.7702406000171322,
+              0.7716803999792319
+            ]
+          ],
+          "dense_median": 0.7227483000024222,
+          "sparse_median": 0.77070310000272,
+          "sparse_over_dense_pairs": [
+            1.0640078824061519,
+            1.0664572668237302
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3807419361824358,
+            1.2976801760716474,
+            1.3836385570894807,
+            1.297415846028621
+          ],
+          "process_ranges": [
+            [
+              1.3751925441363502,
+              1.3842861374601785
+            ],
+            [
+              1.2950219227780182,
+              1.2982743856232428
+            ],
+            [
+              1.3832641908716385,
+              1.3843894310018319
+            ],
+            [
+              1.2958732657028906,
+              1.2982956234425416
+            ]
+          ],
+          "dense_median": 1.3836075442848585,
+          "sparse_median": 1.2975165222728577,
+          "sparse_over_dense_pairs": [
+            0.9398426614458869,
+            0.9376840789676811
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          724.441162109375
+        ],
+        [
+          771.001708984375
+        ],
+        [
+          721.6129760742188
+        ],
+        [
+          769.422119140625
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          760
+        ],
+        [
+          760
+        ],
+        [
+          760
+        ],
+        [
+          760
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 512,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7463653000013437,
+            0.858760600007372,
+            0.7327474000048824,
+            0.8581978000001982
+          ],
+          "process_ranges": [
+            [
+              0.7365060000156518,
+              0.7594796999765094
+            ],
+            [
+              0.8582806999911554,
+              0.8592915000044741
+            ],
+            [
+              0.732410800002981,
+              0.7336715999990702
+            ],
+            [
+              0.8581628999963868,
+              0.858841700013727
+            ]
+          ],
+          "dense_median": 0.735088800007361,
+          "sparse_median": 0.8584938999993028,
+          "sparse_over_dense_pairs": [
+            1.1505902002756907,
+            1.1712055204760603
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.746444699994754,
+            0.8588361000001896,
+            0.7328356000070926,
+            0.8582729999907315
+          ],
+          "process_ranges": [
+            [
+              0.7365958000009414,
+              0.7595769999898039
+            ],
+            [
+              0.8583574999938719,
+              0.8593805000127759
+            ],
+            [
+              0.7324765999801457,
+              0.733754399989266
+            ],
+            [
+              0.8582455999858212,
+              0.8589273999969009
+            ]
+          ],
+          "dense_median": 0.7351750999951037,
+          "sparse_median": 0.858578800005489,
+          "sparse_over_dense_pairs": [
+            1.150568957092502,
+            1.1711671758064495
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3396839712399697,
+            1.1643665188267927,
+            1.3645625294272299,
+            1.1651304421912363
+          ],
+          "process_ranges": [
+            [
+              1.3165222222545225,
+              1.3575966629170597
+            ],
+            [
+              1.1636289163939997,
+              1.165015742283535
+            ],
+            [
+              1.36285383776183,
+              1.3652313261981417
+            ],
+            [
+              1.1642427520691598,
+              1.165167639678573
+            ]
+          ],
+          "dense_median": 1.360225250339445,
+          "sparse_median": 1.1647154996560691,
+          "sparse_over_dense_pairs": [
+            0.8691352168296015,
+            0.8538490666897438
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          757.498291015625
+        ],
+        [
+          857.0836181640625
+        ],
+        [
+          731.6761474609375
+        ],
+        [
+          857.1387329101562
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 768,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7592231000016909,
+            1.0104869000206236,
+            0.7524580999743193,
+            1.0158502000267617
+          ],
+          "process_ranges": [
+            [
+              0.7546895999985281,
+              0.7621464999974705
+            ],
+            [
+              1.0091032000200357,
+              1.0109212000097614
+            ],
+            [
+              0.7521642000065185,
+              0.7533707999973558
+            ],
+            [
+              1.0098192000004929,
+              1.0312601999903563
+            ]
+          ],
+          "dense_median": 0.754030199997942,
+          "sparse_median": 1.010744800005341,
+          "sparse_over_dense_pairs": [
+            1.3309485710041924,
+            1.3500422150568008
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7593067999987397,
+            1.0105883000069298,
+            0.7525575999752618,
+            1.015958900010446
+          ],
+          "process_ranges": [
+            [
+              0.7547772999969311,
+              0.7622478000121191
+            ],
+            [
+              1.0091899000108242,
+              1.0110349000024144
+            ],
+            [
+              0.7522680000110995,
+              0.7534735999943223
+            ],
+            [
+              1.0099205000151414,
+              1.0314246999914758
+            ]
+          ],
+          "dense_median": 0.7541254499956267,
+          "sparse_median": 1.0108528999990085,
+          "sparse_over_dense_pairs": [
+            1.3309354005635234,
+            1.3500081589021795
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.3169907078425476,
+            0.9895226374510202,
+            1.3288019415827734,
+            0.9842917858091681
+          ],
+          "process_ranges": [
+            [
+              1.3119093292025255,
+              1.3248941111557886
+            ],
+            [
+              0.9890855399725687,
+              0.9908937851927316
+            ],
+            [
+              1.3271865132468283,
+              1.3293134893219507
+            ],
+            [
+              0.9695327249854153,
+              0.9901769495569278
+            ]
+          ],
+          "dense_median": 1.3260403122013085,
+          "sparse_median": 0.9892636529187755,
+          "sparse_over_dense_pairs": [
+            0.7513512673692473,
+            0.740736264003912
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          753.58935546875
+        ],
+        [
+          1007.4827880859375
+        ],
+        [
+          751.1109008789062
+        ],
+        [
+          1007.6445922851562
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    },
+    {
+      "cache_slots": 2928,
+      "input_tokens": 1024,
+      "all_formal_output_ids_equal": true,
+      "output_signatures_per_turn": [
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ],
+        [
+          [
+            8160
+          ]
+        ]
+      ],
+      "metrics": {
+        "ttft_seconds": {
+          "process_medians": [
+            0.7741898999956902,
+            1.155897399992682,
+            0.7711221000063233,
+            1.1568358000076842
+          ],
+          "process_ranges": [
+            [
+              0.7709868999954779,
+              0.7894746999954805
+            ],
+            [
+              1.1519088000059128,
+              1.1588815999857616
+            ],
+            [
+              0.7700159999949392,
+              0.7822211999737192
+            ],
+            [
+              1.152409100002842,
+              1.1660504000028595
+            ]
+          ],
+          "dense_median": 0.7726471000059973,
+          "sparse_median": 1.156130449991906,
+          "sparse_over_dense_pairs": [
+            1.4930411776220753,
+            1.500197958271716
+          ]
+        },
+        "wall_seconds": {
+          "process_medians": [
+            0.7742670999723487,
+            1.156003399984911,
+            0.771227400022326,
+            1.156939100008458
+          ],
+          "process_ranges": [
+            [
+              0.7710825999965891,
+              0.7895572000124957
+            ],
+            [
+              1.1520069999969564,
+              1.1589827999996487
+            ],
+            [
+              0.7700787999783643,
+              0.7823260999866761
+            ],
+            [
+              1.1525135000119917,
+              1.166220399987651
+            ]
+          ],
+          "dense_median": 0.7727346000028774,
+          "sparse_median": 1.156236099996022,
+          "sparse_over_dense_pairs": [
+            1.4930292143708488,
+            1.5001270701416547
+          ]
+        },
+        "end_to_end_tokens_per_second": {
+          "process_medians": [
+            1.2915439646547204,
+            0.8650493588626579,
+            1.2966344297039385,
+            0.864349731107445
+          ],
+          "process_ranges": [
+            [
+              1.2665326843757156,
+              1.2968779220338047
+            ],
+            [
+              0.8628255742883355,
+              0.8680502809467668
+            ],
+            [
+              1.2782393429249403,
+              1.2985684062827019
+            ],
+            [
+              0.8574708520024078,
+              0.8676687951938048
+            ]
+          ],
+          "dense_median": 1.294106237437918,
+          "sparse_median": 0.8648752971020488,
+          "sparse_over_dense_pairs": [
+            0.6697792584195297,
+            0.6666101958319914
+          ]
+        }
+      },
+      "separate_forward_milliseconds": [
+        [
+          771.9411010742188
+        ],
+        [
+          1151.745849609375
+        ],
+        [
+          769.1598510742188
+        ],
+        [
+          1151.2022705078125
+        ]
+      ],
+      "forward_output_ids": [
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ],
+        [
+          8160
+        ]
+      ]
+    }
+  ],
+  "scope": "Same-boot ABAB, cold expert cache and no prefix reuse. Each formal request emits one token, so decode TPS is undefined. Forward CUDA-event diagnostics are separate from primary latency samples. Identical input/output checks do not prove full-generation equivalence."
+}

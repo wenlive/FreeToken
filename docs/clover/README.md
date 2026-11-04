@@ -1,5 +1,10 @@
 # Clover development records
 
+Ongoing Clover development uses `feat/clover-gguf-q8` and the official Q8_0 GGUF.
+As of 2026-11-04, `feat/clover-nvfp4` is retired at the owner's request; its final
+maintenance notice is commit `8afcec6`. Its previous results remain historical records,
+and unfinished NVFP4 work is not treated as qualified.
+
 - [Current repair qualification and outstanding gates](qualification-20261104.md)
 - [Performance index and metric definitions](clover-performance.md)
 - [R0 runtime report](clover-runtime-performance.md)

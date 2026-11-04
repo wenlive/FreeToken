@@ -1,8 +1,10 @@
 # Clover repair qualification, 2026-11-04
 
-Status: active. Q8 serving changes through `5df3410` and applicable NVFP4 changes through
-`9ec70fb` are committed locally. The latest combined hardware gate and numerical work
-are still running. A successful diagnostic process is not a numerical acceptance result.
+Status: active, Q8 only. Q8 serving changes through `5df3410` are committed locally and
+the combined hardware gate has passed. Numerical work is still running. At the owner's
+request, NVFP4 maintenance ended with documentation commit `8afcec6`; the previous
+`9ec70fb` serving code and results are historical, and pending NVFP4 work is retired,
+not passed. A successful diagnostic process is not a numerical acceptance result.
 
 The machine is an RTX 5070 Ti 16 GB with a Ryzen 9700X and 64 GB RAM. Q8 experiments
 use the existing official DiffuSpace revision `32e22a02b885e173177b7ce7661ad13448b4f89e`,
@@ -20,7 +22,7 @@ source identities, failed attempts and result files.
 | A2 | Causal penalty counts advance from consumed device input, independent of lagging host history. Drain is determined by the fixed request mode; Flash MTP retains its previous behavior. P0/P1, overlap on/off, concurrent requests, chunked prefill, stop and prefix-reuse tests passed. [Output gate](evidence/20261104/20261104T043529Z-a2-output-comparison/results.json). |
 | A3 | Optional owned-resource graph warmup at startup and idle rebuild. Full state bytes and allocator capacities are restored. All 24 cold-process requests have identical IDs within mode. [Latency and integrity](evidence/20261104/20261104T045609Z-a3-latency-summary/data/results.json). |
 | A4 | Retain the encoder-attribute guard: the GGUF shim is frozen, so assigning even an absent/None encoder attribute would fail. Keep request-cache handling after the complete bundle, with ordinary multi-token prefill coverage. Other shared changes remain individually justified. |
-| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`, default 128; zero disables it. Crossover measurement is pending. |
+| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`, default 128; zero disables it. ABAB supports a candidate cutoff of 256; full-generation boundary acceptance is pending before changing the default. |
 | D1-D4 | Historical archives moved without changing bytes. Eager oracles moved out of serving. Runtime gains the minimal `requires_drain` capability. Benchmark entry points share a harness under `benchmarks/clover/`. [Commands](../../benchmarks/clover/README.md). |
 | D5 | Clover GGUF bank sizing requires actual per-layer row-byte descriptors; the guessed `(8,8)` fallback was removed. |
 
@@ -34,13 +36,19 @@ The D2 selected suite passed 509 tests and 47 subtests, with 147 skips.
 [A3 gate](evidence/20261104/20261104T045822Z-a3-shared-gate/data/results.json),
 [D2 gate](evidence/20261104/20261104T053631Z-d2-shared-gate/data/results.json).
 
-## Latest changes awaiting the combined hardware gate
+## Additional qualified changes
+
+The combined Q8 C2+C5 gate is `20261104T064143Z-c2-shared-gate`: all nine Flash-Next
+MTP off/on and Qwen3.6 comparisons match main, the 112-tail audit and lifecycle pass,
+and the selected suite passes 509 tests plus 47 subtests, with 147 skips. Graph warmup
+integrity also passed on the same source. These runs bind Q8 serving commit `5df3410`.
+[Combined gate](evidence/20261104/20261104T064143Z-c2-shared-gate/data/results.json).
 
 Host input embeddings are automatic only for untied Clover GGUF, with explicit opt-out.
 Isolated same-boot ABAB added 304 slots and kept all 30 prompt/mode outputs identical.
 Causal W0 decode improved 2.45-5.06%; shared-W32 end-to-end gains were 3.33-30.56%.
 These describe the measured workloads, not a guarantee for every prompt. Matched forward
-traces and the latest default-policy gate remain pending.
+traces remain pending; the latest default-policy gate is complete as recorded above.
 [Causal results](evidence/20261104/20261104T050343Z-c2-causal-summary/data/results.json),
 [six-mode results](evidence/20261104/20261104T051959Z-c2-six-summary/data/results.json).
 
@@ -75,8 +83,9 @@ W16/W32 exceed it for the first block. For JSON W32, native progress is 2.46-2.6
 per preview across the variants, versus HF 4.00. This difference remains unexplained.
 [Progress/noise results](evidence/20261104/20261104T061945Z-b1-noise-progress-summary/data/results.json).
 
-B1 prefill-state localization, B2 NVFP4 and B0 fixed-history native/HF/llama distributions
-are not yet closed. No acceptance threshold was changed to pass them.
+B1 prefill-state localization and B0 fixed-history native/HF/llama distributions are not
+yet closed. B2 NVFP4 is retired at the owner's request with its differences unresolved.
+No acceptance threshold was changed to pass them.
 Strict selfspec performs greedy acceptance at each position; it does not guarantee the
 same IDs as independent single-row causal execution.
 
@@ -97,8 +106,8 @@ locally. This missing gate is recorded separately from Clover Q8 acceptance.
 At the user's request this snapshot was brought forward ahead of the remaining numerical
 campaign. Measured clean commit: `8767adac144e77eda8c8142f90556e6c86d7f586`, whose serving
 code is `5df3410`. Subsequent report/evidence commits do not change that measured source.
-The latest 112-tail audit also passed before these measurements. The remaining combined
-gate and numerical diagnostics continue; this table does not assert they have finished.
+The latest 112-tail audit also passed before these measurements. The combined Q8 gate
+subsequently passed; numerical diagnostics continue independently of this speed table.
 
 RTX 5070 Ti 16 GB, official Q8_0, one request at a time, greedy generation with checkpoint
 penalties, host embedding, auto cache .9 and state reserved only for each declared mode.
@@ -122,3 +131,18 @@ or an ABAB speedup claim. Selfspec W8 matches causal IDs in both inputs; selfspe
 matches on the short input but differs on 4K. Denoise outputs differ from causal.
 [Results and provenance](evidence/20261104/20261104T063126Z-final-decode-summary/data/results.json),
 [Chinese table](evidence/20261104/20261104T063126Z-final-decode-summary/data/table.md).
+
+## Sparse prefill crossover
+
+Eight processes compare limits 128/1024 in ABAB order at 2292 and 2928 expert slots,
+using identical natural-text inputs, cold expert caches, two warmups and five measured
+requests per length. At 129/192/256 input tokens, sparse admission reduces TTFT by about
+28%/18%/8-9% at both capacities. It becomes slower at 384 tokens (about 6-7%), and is
+about 50% slower at 1024. Both chronological A/B pairs show the same crossover direction.
+All formal first-token IDs match. The tested slot capacities do not justify different
+cutoffs. Each request emits only one token, so decode TPS is undefined; separate forward
+CUDA-event diagnostics are retained rather than mixed into the primary timing samples.
+
+This supports testing 256 as the default, but does not prove complete generation is
+equivalent. The current default remains 128 until the boundary-length output check and
+required final-source gates finish. [ABAB results](evidence/20261104/20261104T065730Z-a5-prefill-summary/data/results.json).
