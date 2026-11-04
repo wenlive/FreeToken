@@ -23,7 +23,7 @@ def block_pair(request):
         pytest.skip("set CLOVER_HF_SOURCE to the local BF16 revision")
     source = Path(location)
     harness = runpy.run_path(
-        str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py")
+        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
     )
     official, configuration, _ = harness["official_modules"](source)
     cfg = configuration.CloverMoeConfig(

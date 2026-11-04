@@ -9,6 +9,7 @@ import time
 import torch
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
+from benchmarks.clover.harness import load_engine, save_results
 
 
 @torch.inference_mode()
@@ -21,10 +22,9 @@ def main():
     a = p.parse_args()
     a.output.mkdir(parents=True, exist_ok=False)
     prefixes = [int(x) for x in a.prefixes.split(',')]
-    llm = LLM(a.model, moe_strategy='offload', moe_cache_size=a.cache_slots,
-        expert_load='serial', max_running_req=1, memory_ratio=.95,
-        num_token_override=max(prefixes)+128, max_seq_len_override=max(prefixes)+128,
-        max_extend_tokens=4096, cuda_graph_bs=[1], clover_max_width=32)
+    llm = load_engine(a.model, factory=LLM, cache_slots=a.cache_slots,
+        memory_ratio=.95, context=max(prefixes)+128,
+        max_extend_tokens=4096, clover_max_width=32)
     engine, runtime = llm.engine, llm.engine.mtp_runtime
     match = llm.cache_manager.match_req
     llm.cache_manager.match_req = lambda req, max_len=None: match(req, max_len=0)
@@ -35,7 +35,7 @@ def main():
     original = engine.forward_batch
 
     def save():
-        (a.output/'results.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+        save_results(a.output, result)
 
     def audited(batch, sampling):
         output = original(batch, sampling)

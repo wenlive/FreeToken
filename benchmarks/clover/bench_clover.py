@@ -12,29 +12,9 @@ import torch
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
 from freetoken.message import DetokenizeMsg
-from clover_metrics import arrival_metrics
-
-PROMPTS = {
-    "Count": "Count from 1 to 10.",
-    "Sky": "Explain why the sky is blue in two sentences.",
-    "Python": "Write a Python function that merges overlapping integer intervals. Include type hints and three assert-based examples. Output only Python code.",
-    "JSON": 'Return only a JSON object describing three books. Use the keys "books", "title", "author", "year", and "tags". Each book must have exactly two tags.',
-    "Chinese": "请用中文解释城市为什么会形成热岛效应，并给出三项缓解措施。分成两个自然段，约二百字。",
-}
-
-
-def parse_modes(value):
-    result = []
-    for item in value.split(","):
-        mode, _, width = item.partition(":")
-        if mode not in ("causal", "selfspec", "denoise"):
-            raise ValueError(f"Unknown mode {mode}")
-        result.append((mode, int(width) if width else 8))
-    return result
-
-
-def expert_bytes(cache):
-    return sum(tensor[0].numel() * tensor.element_size() for _, tensor in cache.banks)
+from benchmarks.clover.harness import (
+    PROMPTS, arrival_metrics, expert_bytes, load_engine, parse_modes, save_results,
+)
 
 
 def main():
@@ -43,6 +23,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--modes", default="causal,selfspec:8,selfspec:16")
     parser.add_argument("--prompts", default=",".join(PROMPTS))
+    parser.add_argument("--long-prompts-json", type=Path,
+        help='Saved {"prompts": {name: {"user_text": ...}}}; select names with --prompts')
     parser.add_argument("--tokens", type=int, default=256)
     parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--repeats", type=int, default=5)
@@ -68,6 +50,9 @@ def main():
         help="Benchmark-only Qwen override: dequantize stored dense linears to BF16 while keeping NVFP4 experts",
     )
     args = parser.parse_args()
+    if args.long_prompts_json:
+        rows = json.loads(args.long_prompts_json.read_text(encoding="utf-8"))["prompts"]
+        PROMPTS.update({name: row["user_text"] for name, row in rows.items()})
     if args.phase_cache_stats and not args.runtime_breakdown:
         parser.error('--phase-cache-stats requires --runtime-breakdown')
     args.output.mkdir(parents=True, exist_ok=False)
@@ -122,20 +107,15 @@ def main():
     runtime_options = dict(clover_max_width=(
         max((width for mode, width in modes if mode != "causal"), default=0)
         if args.clover_max_width is None else args.clover_max_width))
-    llm = LLM(
+    llm = load_engine(
         args.model,
-        moe_strategy="offload",
-        moe_cache_size=0 if args.cache_auto else args.cache_slots,
+        factory=LLM,
+        context=args.context_size,
+        cache_slots=0 if args.cache_auto else args.cache_slots,
         moe_cache_auto=args.cache_auto,
         kv_reserve_tokens=args.context_size,
         gguf_embedding_host=args.embedding_host,
-        expert_load="serial",
-        max_running_req=1,
         memory_ratio=args.memory_ratio,
-        num_token_override=args.context_size,
-        max_seq_len_override=args.context_size,
-        max_extend_tokens=args.context_size,
-        cuda_graph_bs=[1],
         moe_collect_stats=True,
         clover_disable_penalties=args.no_penalties,
         clover_accept_rule=args.accept_rule,
@@ -227,9 +207,7 @@ def main():
     result["expert_payload_bytes"] = per_expert
 
     def save():
-        (args.output / "results.json").write_text(
-            json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8"
-        )
+        save_results(args.output, result)
 
     save()
     mismatch = False

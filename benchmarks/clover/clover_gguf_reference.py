@@ -16,10 +16,10 @@ import numpy as np
 import torch
 import torch.nn.functional as functional
 
-from clover_gguf_decode import decode_expert
-from clover_hf_reference import official_modules
+from benchmarks.clover.clover_gguf_decode import decode_expert
+from benchmarks.clover.clover_hf_reference import official_modules
 from freetoken.models.clover_moe.gguf import parse_gguf_config
-from clover.oracles import iter_hf_gguf_weights
+from benchmarks.clover.oracles import iter_hf_gguf_weights
 from freetoken.models.gguf.reader import iter_gguf_tensors
 from freetoken.utils import cached_load_hf_config
 

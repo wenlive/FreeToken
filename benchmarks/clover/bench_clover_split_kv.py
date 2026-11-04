@@ -8,8 +8,9 @@ import statistics
 import torch
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
-from clover.oracles import make_preview_batch
-from check_clover_preview import persistent_hashes
+from benchmarks.clover.oracles import make_preview_batch
+from benchmarks.clover.check_clover_preview import persistent_hashes
+from benchmarks.clover.harness import load_engine, save_results
 
 
 @torch.inference_mode()
@@ -21,15 +22,14 @@ def main():
     a=p.parse_args()
     a.output.mkdir(parents=True,exist_ok=False)
     prefixes=list(map(int,a.prefixes.split(',')))
-    llm=LLM(a.model,moe_strategy='offload',moe_cache_size=2304,expert_load='serial',
-        max_running_req=1,memory_ratio=.95,clover_max_width=0,
-        num_token_override=max(prefixes)+128,max_seq_len_override=max(prefixes)+128,
-        max_extend_tokens=4096,cuda_graph_bs=[1])
+    llm=load_engine(a.model,factory=LLM,cache_slots=2304,
+        memory_ratio=.95,clover_max_width=0,context=max(prefixes)+128,
+        max_extend_tokens=4096)
     engine=llm.engine
     result=dict(state='running',scope='Same model/prefix/mask/KV/GDN state, two independent graphs, '
         'ABAB with two warmups plus five CUDA-event measurements per turn; no metadata/input staging in timed replay',cases=[])
     def save():
-        (a.output/'results.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
+        save_results(a.output,result)
     forward=engine.forward_batch
     current=None
     def audited(batch,sampling):

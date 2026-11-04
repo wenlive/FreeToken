@@ -1,6 +1,5 @@
 """Independent Q8_1 dot arithmetic and Clover's routed rounding boundaries."""
 
-from pathlib import Path
 import os
 
 import gguf
@@ -10,9 +9,8 @@ import torch
 
 
 @pytest.fixture
-def reference(monkeypatch):
-    monkeypatch.syspath_prepend(str(Path(__file__).parents[2] / "benchmarks"))
-    import clover_gguf_reference
+def reference():
+    from benchmarks.clover import clover_gguf_reference
 
     return clover_gguf_reference
 
@@ -116,7 +114,7 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
 def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
     if device == "cuda" and not torch.cuda.is_available():
         pytest.skip("requires CUDA")
-    from clover_gguf_decode import decode_expert
+    from benchmarks.clover.clover_gguf_decode import decode_expert
 
     raw, expected = packed_fixture(kind, rows=19, width=1024)
     for expert in (0, 1, 2):
@@ -146,7 +144,7 @@ def real_gguf_experts():
 def test_real_expert_torch_decoder_is_bitwise_numpy(
     reference, real_gguf_experts, layer, expert, role
 ):
-    from clover_gguf_decode import decode_expert
+    from benchmarks.clover.clover_gguf_decode import decode_expert
 
     tensor = real_gguf_experts[f"blk.{layer}.ffn_{role}_exps.weight"]
     raw = tensor._raw.reshape(*tensor.shape[:2], -1)[expert]

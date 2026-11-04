@@ -176,7 +176,7 @@ def load_official(
     source, checkpoint, *, device="cuda", cache_bytes=6 << 30, precision="nvfp4"
 ):
     if precision == "gguf":
-        from clover_gguf_reference import load_gguf_official
+        from benchmarks.clover.clover_gguf_reference import load_gguf_official
 
         return load_gguf_official(
             source, checkpoint, device=device, cache_bytes=cache_bytes

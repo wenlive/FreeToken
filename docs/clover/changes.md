@@ -88,3 +88,11 @@ were removed. Historical source copies inside evidence archives remain unchanged
 
 The inactive `--indexed-clover-penalty` benchmark switch was removed: serving already uses
 the fused penalty kernel, so this switch no longer selected a serving implementation.
+
+Current tools are grouped in `benchmarks/clover/`, with seven public command entries
+under `python -m benchmarks.clover`. Shared prompts, engine defaults, arrival metrics and
+result writing replace duplicated setup. The preview latency tool explicitly reserves
+W16 after the causal-default reservation change. The old long-prompt wrapper is folded
+into `bench --long-prompts-json`; both it and the old CPU experiment are archived unchanged.
+See the package README for selectors and current commands. Historical evidence retains
+the source paths and commands that actually produced it.

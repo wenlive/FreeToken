@@ -11,9 +11,9 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 
-from clover_gguf_decode import decode_expert
-from clover_gguf_reference import q8_1_activations, load_gguf_official
-from clover_hf_reference import official_modules
+from benchmarks.clover.clover_gguf_decode import decode_expert
+from benchmarks.clover.clover_gguf_reference import q8_1_activations, load_gguf_official
+from benchmarks.clover.clover_hf_reference import official_modules
 
 
 def metrics(actual, expected, mask):
@@ -43,7 +43,7 @@ def main():
         (a.output/'results.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
 
     if a.stage == 'reference':
-        import clover_gguf_reference as oracle
+        from benchmarks.clover import clover_gguf_reference as oracle
         native = json.loads((a.native_output/'results.json').read_text(encoding='utf-8'))
         model, storage = load_gguf_official(a.source, a.model, cache_bytes=4<<30)
         for case in native['cases']:
@@ -79,13 +79,13 @@ def main():
 
     from freetoken.core import SamplingParams, get_global_ctx
     from freetoken.llm import LLM
-    from clover.oracles import make_preview_batch
+    from benchmarks.clover.oracles import make_preview_batch
     from freetoken.models.clover_moe.packed import CloverPackedLinear
     from freetoken.layers.activation import silu_and_mul
     from freetoken.kernel import moe_sum_reduce_triton
     import freetoken.models.clover_moe.preview as preview
     import freetoken.moe.fused_gguf as moe
-    from bench_clover import PROMPTS
+    from benchmarks.clover.harness import PROMPTS
 
     llm = LLM(a.model, moe_strategy='offload', moe_cache_size=2048, expert_load='serial',
         max_running_req=1, memory_ratio=.95, num_token_override=4096,

@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 import torch
 
-from clover_hf_reference import load_official, official_modules
+from benchmarks.clover.clover_hf_reference import load_official, official_modules
 
 
 def sha256(path):

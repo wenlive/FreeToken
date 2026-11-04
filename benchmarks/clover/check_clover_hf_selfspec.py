@@ -14,7 +14,7 @@ from types import SimpleNamespace
 import time
 
 import torch
-from clover_hf_reference import (
+from benchmarks.clover.clover_hf_reference import (
     load_official,
     official_modules,
     reference_generation_config,

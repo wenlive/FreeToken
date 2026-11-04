@@ -136,7 +136,7 @@ def main():
             )[0]
     else:
         from transformers import AutoTokenizer
-        from clover_hf_reference import (
+        from benchmarks.clover.clover_hf_reference import (
             load_official,
             official_modules,
             reference_generation_config,

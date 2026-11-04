@@ -9,7 +9,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
     import copy
     import runpy
 
-    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/summarize_clover_abab.py'))['summarize']
+    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/summarize_clover_abab.py'))['summarize']
     turns = []
     for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
         rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
@@ -37,7 +37,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
 def test_denoise_budget_uses_visible_progress_and_keeps_hf_attainment_unclamped(native_tokens):
     import runpy
 
-    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/analyze_clover_budget.py'))['analyze']
+    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/analyze_clover_budget.py'))['analyze']
     trace = ([dict(phase='preview',cuda_ms=2.)]*4 +
              [dict(phase='verify',cuda_ms=2.)]*2 +
              [dict(phase='state_commit',cuda_ms=.5)]*2 +
@@ -58,9 +58,8 @@ def test_denoise_budget_uses_visible_progress_and_keeps_hf_attainment_unclamped(
 
 
 @pytest.fixture
-def metrics(monkeypatch):
-    monkeypatch.syspath_prepend(str(Path(__file__).parents[2] / "benchmarks"))
-    import bench_clover_llama
+def metrics():
+    from benchmarks.clover import bench_clover_llama
 
     return bench_clover_llama
 

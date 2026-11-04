@@ -4,6 +4,7 @@
 - [R0 runtime report](clover-runtime-performance.md)
 - [R1 review and experiments](clover-runtime-review.md)
 - [Current repair behavior and configuration](changes.md)
+- [Benchmark commands and independent references](../../benchmarks/clover/README.md)
 - [R0 evidence](evidence/clover-runtime/README.md)
 - [R1 evidence](evidence/clover-runtime-review/README.md)
 
