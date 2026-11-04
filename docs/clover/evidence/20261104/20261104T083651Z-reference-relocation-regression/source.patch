@@ -1,0 +1,408 @@
+diff --git a/benchmarks/clover/README.md b/benchmarks/clover/README.md
+index b2818de..756c0b7 100644
+--- a/benchmarks/clover/README.md
++++ b/benchmarks/clover/README.md
+@@ -1,7 +1,8 @@
+ # Clover measurements
+ 
+ Run from the repository root with `PYTHONPATH=python:.` and a local checkpoint.
+-The package keeps measurement and independent reference code outside serving.
++The package keeps measurement code outside serving. Independent arithmetic references
++live in `tests/clover_reference/`, so the core tests also work without benchmarks.
+ 
+ ```bash
+ python -m benchmarks.clover --help
+@@ -27,8 +28,9 @@ worker remains a separate isolated `python -I` subprocess with a timeout.
+ `harness.py` owns the fixed prompts, native engine defaults and JSON result writing.
+ `clover_metrics.py` handles visible token arrivals, excluding terminal EOS and the first
+ burst from decode throughput. `summarize_clover_abab.py` preserves process drift and both
+-chronological before/after ratios. Arithmetic references live in `oracles.py` and the
+-HF/GGUF reference modules; they are not performance backends.
++chronological before/after ratios. `oracles.py` and the HF/GGUF reference modules are
++compatibility aliases to `tests/clover_reference/`; they are not performance backends.
++Run tool-specific checks with `python -m pytest benchmarks/clover/tests`.
+ 
+ Example Q8 causal measurement:
+ 
+diff --git a/tests/models/test_clover_eval.py b/benchmarks/clover/tests/test_clover_eval.py
+similarity index 96%
+rename from tests/models/test_clover_eval.py
+rename to benchmarks/clover/tests/test_clover_eval.py
+index 332ae00..436e4ce 100644
+--- a/tests/models/test_clover_eval.py
++++ b/benchmarks/clover/tests/test_clover_eval.py
+@@ -11,7 +11,7 @@ import pytest
+ 
+ @pytest.fixture
+ def arrival_metrics():
+-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
++    script = Path(__file__).parents[1] / "clover_metrics.py"
+     return runpy.run_path(str(script))["arrival_metrics"]
+ 
+ 
+@@ -53,7 +53,7 @@ def test_mismatched_arrival_counts_are_rejected(arrival_metrics, count, arrivals
+ 
+ 
+ def test_saved_report_timing_correction_preserves_source():
+-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
++    script = Path(__file__).parents[1] / "clover_metrics.py"
+     correct = runpy.run_path(str(script))["corrected_timing_report"]
+     report = dict(
+         runs=[
+@@ -187,7 +187,7 @@ def test_cap_extension_reuses_only_eos_cases(tmp_path, monkeypatch, change_tempe
+             str(old),
+         ],
+     )
+-    script = Path(__file__).parents[2] / "benchmarks/clover/eval_clover_quality.py"
++    script = Path(__file__).parents[1] / "eval_clover_quality.py"
+     if change_temperature:
+         with pytest.raises(ValueError, match="different protocol"):
+             runpy.run_path(str(script), run_name="__main__")
+diff --git a/tests/models/test_clover_llama_metrics.py b/benchmarks/clover/tests/test_clover_llama_metrics.py
+similarity index 95%
+rename from tests/models/test_clover_llama_metrics.py
+rename to benchmarks/clover/tests/test_clover_llama_metrics.py
+index cdba292..1bf1d16 100644
+--- a/tests/models/test_clover_llama_metrics.py
++++ b/benchmarks/clover/tests/test_clover_llama_metrics.py
+@@ -9,7 +9,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+     import copy
+     import runpy
+ 
+-    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/summarize_clover_abab.py'))['summarize']
++    summarize = runpy.run_path(str(Path(__file__).parents[1]/'summarize_clover_abab.py'))['summarize']
+     turns = []
+     for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
+         rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
+@@ -37,7 +37,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+ def test_denoise_budget_uses_visible_progress_and_keeps_hf_attainment_unclamped(native_tokens):
+     import runpy
+ 
+-    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/analyze_clover_budget.py'))['analyze']
++    analyze = runpy.run_path(str(Path(__file__).parents[1]/'analyze_clover_budget.py'))['analyze']
+     trace = ([dict(phase='preview',cuda_ms=2.)]*4 +
+              [dict(phase='verify',cuda_ms=2.)]*2 +
+              [dict(phase='state_commit',cuda_ms=.5)]*2 +
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 67e3976..1534c92 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -79,12 +79,15 @@ Warmup temporarily owns a request table, GDN slot and KV pages through the regul
+ allocators. It restores their contents and frees them without inserting a synthetic prefix.
+ Verify graphs share one transaction allocation sized for the largest declared width.
+ `runtime.graph_warmup` reports capture times and allocated/reserved memory deltas.
+-Cold-request latency and state-integrity qualification are pending; this is opt-in.
++Cold-request latency and state-integrity qualification passed; results are linked from
++the qualification report. Warmup remains opt-in.
+ 
+ ## Diagnostic references
+ 
+ Eager preview/verify batch builders, tensor acceptance, the eager LowConfidence controller,
+-sampling reference and HF-oriented GGUF reader now live in `benchmarks/clover/oracles.py`.
++sampling reference and HF-oriented GGUF reader now live in `tests/clover_reference/`.
++Benchmark import aliases preserve module identity, including diagnostic monkeypatches.
++Core tests can be extracted with serving code without depending on benchmarks or docs.
+ Production generation uses its existing CUDA greedy controller and fused penalty/verify
+ kernels. The unused acceptance helper, verify penalty oracle and legacy GGUF type constants
+ were removed. Historical source copies inside evidence archives remain unchanged.
+@@ -112,8 +115,8 @@ Same-boot ABAB added 304 expert slots: causal W0 2928 -> 3232, shared W32 2292 -
+ Five prompts across six modes retained identical output IDs. Causal W0 decode improved
+ 2.45-5.06%; across the shared W32 matrix end-to-end gains ranged from 3.33% to 30.56%.
+ These are workload-specific measured ranges, not a universal speed claim. Instrumented
+-forward traces and the full default-policy hardware gate are tracked separately in the
+-active campaign; config tests alone do not qualify this default change.
++forward traces and the full default-policy hardware gate passed and are linked from the
++qualification report; config tests alone do not qualify this default change.
+ 
+ ## GGUF startup reader reuse
+ 
+diff --git a/docs/clover/qualification-20261104.md b/docs/clover/qualification-20261104.md
+index fe1dbc8..ce34b61 100644
+--- a/docs/clover/qualification-20261104.md
++++ b/docs/clover/qualification-20261104.md
+@@ -1,7 +1,7 @@
+ # Clover repair qualification, 2026-11-04
+ 
+-Status: active, Q8 only. Q8 serving changes through `5df3410` are committed and pushed, and
+-the combined hardware gate has passed. Numerical work is still running. At the owner's
++Status: review handoff, Q8 only. Q8 serving changes through `a5190a5` have passed the
++combined hardware gate. Numerical limitations are recorded below. At the owner's
+ request, NVFP4 maintenance ended with documentation commit `8afcec6`; the previous
+ `9ec70fb` serving code and results are historical, and pending NVFP4 work is retired,
+ not passed. A successful diagnostic process is not a numerical acceptance result.
+@@ -22,7 +22,7 @@ source identities, failed attempts and result files.
+ | A2 | Causal penalty counts advance from consumed device input, independent of lagging host history. Drain is determined by the fixed request mode; Flash MTP retains its previous behavior. P0/P1, overlap on/off, concurrent requests, chunked prefill, stop and prefix-reuse tests passed. [Output gate](evidence/20261104/20261104T043529Z-a2-output-comparison/results.json). |
+ | A3 | Optional owned-resource graph warmup at startup and idle rebuild. Full state bytes and allocator capacities are restored. All 24 cold-process requests have identical IDs within mode. [Latency and integrity](evidence/20261104/20261104T045609Z-a3-latency-summary/data/results.json). |
+ | A4 | Retain the encoder-attribute guard: the GGUF shim is frozen, so assigning even an absent/None encoder attribute would fail. Keep request-cache handling after the complete bundle, with ordinary multi-token prefill coverage. Other shared changes remain individually justified. |
+-| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`; zero disables it. The local candidate default is 256 after ABAB and full-output boundary checks. The new-source hardware gate is pending; the published serving default remains 128 until that gate passes and the candidate is pushed. |
++| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`; zero disables it. The default is 256 after ABAB, full-output boundary checks and the source-bound hardware gate at `a5190a5`. |
+ | D1-D4 | Historical archives moved without changing bytes. Eager oracles moved out of serving. Runtime gains the minimal `requires_drain` capability. Benchmark entry points share a harness under `benchmarks/clover/`. [Commands](../../benchmarks/clover/README.md). |
+ | D5 | Clover GGUF bank sizing requires actual per-layer row-byte descriptors; the guessed `(8,8)` fallback was removed. |
+ 
+@@ -55,6 +55,12 @@ and the selected suite passes 509 tests plus 47 subtests, with 147 skips. Graph
+ integrity also passed on the same source. These runs bind Q8 serving commit `5df3410`.
+ [Combined gate](evidence/20261104/20261104T064143Z-c2-shared-gate/data/results.json).
+ 
++The latest serving source `a5190a5` also passed the complete gate: all nine Flash-Next
++MTP off/on and Qwen3.6 comparisons match main; 112 graph tails, lifecycle and warmup
++integrity pass; 79 focused GPU tests and 509 selected regression tests pass, with
++147 skips and 47 subtests. Later reference relocation changes no serving arithmetic.
++[Latest serving gate](evidence/20261104/20261104T080736Z-cutoff-shared-gate/data/results.json).
++
+ Host input embeddings are automatic only for untied Clover GGUF, with explicit opt-out.
+ Isolated same-boot ABAB added 304 slots and kept all 30 prompt/mode outputs identical.
+ Causal W0 decode improved 2.45-5.06%; shared-W32 end-to-end gains were 3.33-30.56%.
+@@ -113,7 +119,10 @@ perturbation radius. These are observations, not a newly approved tolerance: his
+ can diverge after the first block, and the measured perturbations do not bound all error.
+ Python W16 and JSON W32 exceed that radius for full generation; Python W16 and JSON
+ W16/W32 exceed it for the first block. For JSON W32, native progress is 2.46-2.67 tokens
+-per preview across the variants, versus HF 4.00. This difference remains unexplained.
++per preview across the variants, versus HF 4.00. The numerical cause remains unresolved.
++Inspection of the saved outputs also finds compact native JSON versus pretty-printed HF
++JSON: different text and histories confound a direct interpretation as algorithm cost
++on the same answer. This observation does not establish numerical equivalence.
+ [Progress/noise results](evidence/20261104/20261104T061945Z-b1-noise-progress-summary/data/results.json).
+ 
+ B1 prefill localization now covers all 40 layers and 30 real GDN operators for each of
+@@ -131,8 +140,9 @@ preserved, and the corrected comparison reused the existing native captures.
+ 
+ B0 fixed-history native/HF/llama distributions are complete: five prompts, 32 forced
+ causal rows each, and mask/anchor/partially fixed blocks at W8/W16/W32 (840 preview
+-rows). All 45 llama previews restore the prefix so that causal replay logits match
+-byte for byte. The numerical-export helper is committed as `101007f`; its compiled
++rows). Each of the 45 llama previews restores the prefix; the final causal replay
++probe for each of the five prompts matches saved logits byte for byte.
++The numerical-export helper is committed as `101007f`; its compiled
+ source hash matches the tested file. This uses stock llama `cb09d43` and the same
+ official Q8 file, with full logits rather than independent generated histories.
+ 
+@@ -150,6 +160,13 @@ because the speculative example does not expose `--no-warmup`; the corrected com
+ uses its normal startup behavior, with no timing claim or serving-code change.
+ [Three-way distributions](evidence/20261104/20261104T074657Z-b0-three-way-summary/data/results.json).
+ 
++Read-only inspection of the 15 saved progress outputs finds five native/HF ID-identical
++cases (Count at all widths, Python at W8/W32). Sky and Chinese differ mainly in wording;
++Python W16 differs in docstring/format; JSON differs in formatting and W8 book selection.
++Python, JSON and Chinese reach the 64-token cap, so these excerpts do not certify complete
++task correctness. Logit relative L2 is not a percentage loss of task quality.
++[Saved output inspection](evidence/20261104/20261104T081335Z-saved-numerical-output-inspection/data/results.json).
++
+ B2 NVFP4 is retired at the owner's request with its differences unresolved.
+ No acceptance threshold was changed to pass them.
+ Strict selfspec performs greedy acceptance at each position; it does not guarantee the
+@@ -171,7 +188,9 @@ locally. This missing gate is recorded separately from Clover Q8 acceptance.
+ 
+ At the user's request this snapshot was brought forward ahead of the remaining numerical
+ campaign. Measured clean commit: `8767adac144e77eda8c8142f90556e6c86d7f586`, whose serving
+-code is `5df3410`. Subsequent report/evidence commits do not change that measured source.
++code is `5df3410`. The later serving change at `a5190a5` changes the sparse-prefill default
++from 128 to 256. Both this table's 36-token and 4096-token inputs retain their old prefill
++path, but this table remains a measurement of `8767ada`, not a new measurement of HEAD.
+ The latest 112-tail audit also passed before these measurements. The combined Q8 gate
+ subsequently passed; numerical diagnostics continue independently of this speed table.
+ 
+@@ -218,5 +237,5 @@ prefix lengths 128/129/192/256/257/384, two requests per configuration, checkpoi
+ penalties and cold expert caches. All 48 outputs match within their length/capacity
+ comparison, including repeat stability. Actual outputs are 3-64 tokens, with EOS
+ respected; this is not 48 forced 64-token decodes. The local default is now 256; its
+-new-source hardware gate is pending, so the candidate is not yet pushed or qualified.
++new-source hardware gate at `a5190a5` passed, as linked above.
+ [Boundary output check](evidence/20261104/20261104T075150Z-a5-boundary-summary/data/results.json).
+diff --git a/tests/README.md b/tests/README.md
+index 76b2b1f..7cda735 100644
+--- a/tests/README.md
++++ b/tests/README.md
+@@ -83,6 +83,12 @@ FREETOKEN_REBUILD_TEST_MODEL=<small model dir> uv run pytest tests/e2e/test_cach
+ 
+ ## What earns a place here
+ 
++Clover's independent arithmetic and HF/GGUF references live in `clover_reference/`.
++Core Clover tests need only `python/` and `tests/`, plus the normal project dependencies
++and any explicitly configured local weights. Benchmark metric and evaluation-tool tests
++live in `benchmarks/clover/tests/` and run separately with
++`python -m pytest benchmarks/clover/tests`.
++
+ A test must be able to fail on a plausible regression of production code.
+ 
+ Weigh that against how the bug would be found otherwise. Application-facing
+diff --git a/benchmarks/clover/LICENSE.clover-gguf-reference b/tests/clover_reference/LICENSE.clover-gguf-reference
+similarity index 100%
+rename from benchmarks/clover/LICENSE.clover-gguf-reference
+rename to tests/clover_reference/LICENSE.clover-gguf-reference
+diff --git a/benchmarks/clover/clover_gguf_reference.py b/tests/clover_reference/gguf.py
+similarity index 97%
+rename from benchmarks/clover/clover_gguf_reference.py
+rename to tests/clover_reference/gguf.py
+index 6e52738..b3e83aa 100644
+--- a/benchmarks/clover/clover_gguf_reference.py
++++ b/tests/clover_reference/gguf.py
+@@ -16,10 +16,10 @@ import numpy as np
+ import torch
+ import torch.nn.functional as functional
+ 
+-from benchmarks.clover.clover_gguf_decode import decode_expert
+-from benchmarks.clover.clover_hf_reference import official_modules
++from tests.clover_reference.gguf_decode import decode_expert
++from tests.clover_reference.hf import official_modules
+ from freetoken.models.clover_moe.gguf import parse_gguf_config
+-from benchmarks.clover.oracles import iter_hf_gguf_weights
++from tests.clover_reference.oracles import iter_hf_gguf_weights
+ from freetoken.models.gguf.reader import iter_gguf_tensors
+ from freetoken.utils import cached_load_hf_config
+ 
+diff --git a/benchmarks/clover/clover_gguf_decode.py b/tests/clover_reference/gguf_decode.py
+similarity index 100%
+rename from benchmarks/clover/clover_gguf_decode.py
+rename to tests/clover_reference/gguf_decode.py
+diff --git a/benchmarks/clover/clover_hf_reference.py b/tests/clover_reference/hf.py
+similarity index 99%
+rename from benchmarks/clover/clover_hf_reference.py
+rename to tests/clover_reference/hf.py
+index 066021f..18c1951 100644
+--- a/benchmarks/clover/clover_hf_reference.py
++++ b/tests/clover_reference/hf.py
+@@ -176,7 +176,7 @@ def load_official(
+     source, checkpoint, *, device="cuda", cache_bytes=6 << 30, precision="nvfp4"
+ ):
+     if precision == "gguf":
+-        from benchmarks.clover.clover_gguf_reference import load_gguf_official
++        from tests.clover_reference.gguf import load_gguf_official
+ 
+         return load_gguf_official(
+             source, checkpoint, device=device, cache_bytes=cache_bytes
+diff --git a/benchmarks/clover/oracles.py b/tests/clover_reference/oracles.py
+similarity index 100%
+rename from benchmarks/clover/oracles.py
+rename to tests/clover_reference/oracles.py
+diff --git a/tests/kernels/test_clover_gguf.py b/tests/kernels/test_clover_gguf.py
+index d6b50b8..7a0491a 100644
+--- a/tests/kernels/test_clover_gguf.py
++++ b/tests/kernels/test_clover_gguf.py
+@@ -10,7 +10,7 @@ import torch
+ 
+ @pytest.fixture
+ def reference():
+-    from benchmarks.clover import clover_gguf_reference
++    from tests.clover_reference import gguf as clover_gguf_reference
+ 
+     return clover_gguf_reference
+ 
+@@ -114,7 +114,7 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
+ def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
+     if device == "cuda" and not torch.cuda.is_available():
+         pytest.skip("requires CUDA")
+-    from benchmarks.clover.clover_gguf_decode import decode_expert
++    from tests.clover_reference.gguf_decode import decode_expert
+ 
+     raw, expected = packed_fixture(kind, rows=19, width=1024)
+     for expert in (0, 1, 2):
+@@ -144,7 +144,7 @@ def real_gguf_experts():
+ def test_real_expert_torch_decoder_is_bitwise_numpy(
+     reference, real_gguf_experts, layer, expert, role
+ ):
+-    from benchmarks.clover.clover_gguf_decode import decode_expert
++    from tests.clover_reference.gguf_decode import decode_expert
+ 
+     tensor = real_gguf_experts[f"blk.{layer}.ffn_{role}_exps.weight"]
+     raw = tensor._raw.reshape(*tensor.shape[:2], -1)[expert]
+diff --git a/tests/kernels/test_clover_preview.py b/tests/kernels/test_clover_preview.py
+index 323ad5f..189aba5 100644
+--- a/tests/kernels/test_clover_preview.py
++++ b/tests/kernels/test_clover_preview.py
+@@ -13,7 +13,7 @@ def official():
+     source = os.environ.get("CLOVER_HF_SOURCE")
+     if not source:
+         pytest.skip("set CLOVER_HF_SOURCE to the existing fixed official HF source")
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "tests/clover_reference/hf.py"))
+     return harness["official_modules"](Path(source))[0]
+ 
+ 
+diff --git a/tests/models/test_clover_bf16_blocks.py b/tests/models/test_clover_bf16_blocks.py
+index 4cafa9f..0aecf8e 100644
+--- a/tests/models/test_clover_bf16_blocks.py
++++ b/tests/models/test_clover_bf16_blocks.py
+@@ -23,7 +23,7 @@ def block_pair(request):
+         pytest.skip("set CLOVER_HF_SOURCE to the local BF16 revision")
+     source = Path(location)
+     harness = runpy.run_path(
+-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
++        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
+     )
+     official, configuration, _ = harness["official_modules"](source)
+     cfg = configuration.CloverMoeConfig(
+@@ -128,7 +128,7 @@ def test_full_bf16_preview_block_matches_official(block_pair, monkeypatch, width
+         attention_preview,
+         moe_preview,
+     )
+-    from benchmarks.clover.oracles import make_preview_batch
++    from tests.clover_reference.oracles import make_preview_batch
+     import freetoken.core as core
+ 
+     device = torch.device("cuda")
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index c5240de..9f2585c 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -3,7 +3,7 @@ from types import SimpleNamespace
+ import pytest
+ import torch
+ 
+-from benchmarks.clover.oracles import clover_correct_drafts
++from tests.clover_reference.oracles import clover_correct_drafts
+ from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
+ 
+ 
+@@ -20,7 +20,7 @@ def test_serving_low_confidence_rejects_unqualified_execution(device, do_sample)
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+ @pytest.mark.parametrize("width", [8, 16, 32])
+ def test_gpu_low_confidence_matches_eager_reference_without_committing(width):
+-    from benchmarks.clover.oracles import resolve_low_confidence_reference
++    from tests.clover_reference.oracles import resolve_low_confidence_reference
+     from freetoken.models.clover_moe.generation import resolve_low_confidence
+ 
+     gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False, "presence_penalty": .9,
+@@ -133,7 +133,7 @@ def test_verify_capacity_defaults_remain_four_and_can_be_explicitly_extended():
+ 
+ 
+ def test_lowconfidence_strict_threshold_fallback_and_frozen_positions():
+-    from benchmarks.clover.oracles import resolve_low_confidence_reference as resolve_low_confidence
++    from tests.clover_reference.oracles import resolve_low_confidence_reference as resolve_low_confidence
+ 
+     state = CloverPenaltyState(
+         SimpleNamespace(**PENALTY_DEFAULTS, do_sample=False), 4, "cpu", [0]
+@@ -237,7 +237,7 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
+     harness = runpy.run_path(
+-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
++        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
+     )
+     sampling = harness["official_modules"](Path(location))[2]
+     gen = SimpleNamespace(
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index e17587a..e414162 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -331,7 +331,7 @@ def test_gguf_sampling_metadata_overrides_published_clover_defaults():
+     assert generation["dllm_length_penalty"] == 10.0
+     assert generation["dllm_think_end_token_id"] == 0
+     assert generation["eos_token_id"] == [2, 3]
+-    from benchmarks.clover.oracles import predict_with_confidence
++    from tests.clover_reference.oracles import predict_with_confidence
+ 
+     logits = torch.tensor([[0.0, 2.0, 0.0, -1.0, 0.0]])
+     prediction, confidence = predict_with_confidence(
+diff --git a/tests/models/test_clover_real_layers.py b/tests/models/test_clover_real_layers.py
+index ee55350..49d76cd 100644
+--- a/tests/models/test_clover_real_layers.py
++++ b/tests/models/test_clover_real_layers.py
+@@ -19,7 +19,7 @@ def gdn_pair(request):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the fixed local checkpoint")
+     source = Path(location)
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "tests/clover_reference/hf.py"))
+     official, configuration, _ = harness["official_modules"](source)
+     config = configuration.CloverMoeConfig(**json.loads((source / "config.json").read_text(encoding="utf-8")))
+     from freetoken.distributed import set_tp_info, try_get_tp_info

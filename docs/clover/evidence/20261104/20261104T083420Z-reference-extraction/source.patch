@@ -1,0 +1,299 @@
+diff --git a/benchmarks/clover/README.md b/benchmarks/clover/README.md
+index b2818de..756c0b7 100644
+--- a/benchmarks/clover/README.md
++++ b/benchmarks/clover/README.md
+@@ -1,7 +1,8 @@
+ # Clover measurements
+ 
+ Run from the repository root with `PYTHONPATH=python:.` and a local checkpoint.
+-The package keeps measurement and independent reference code outside serving.
++The package keeps measurement code outside serving. Independent arithmetic references
++live in `tests/clover_reference/`, so the core tests also work without benchmarks.
+ 
+ ```bash
+ python -m benchmarks.clover --help
+@@ -27,8 +28,9 @@ worker remains a separate isolated `python -I` subprocess with a timeout.
+ `harness.py` owns the fixed prompts, native engine defaults and JSON result writing.
+ `clover_metrics.py` handles visible token arrivals, excluding terminal EOS and the first
+ burst from decode throughput. `summarize_clover_abab.py` preserves process drift and both
+-chronological before/after ratios. Arithmetic references live in `oracles.py` and the
+-HF/GGUF reference modules; they are not performance backends.
++chronological before/after ratios. `oracles.py` and the HF/GGUF reference modules are
++compatibility aliases to `tests/clover_reference/`; they are not performance backends.
++Run tool-specific checks with `python -m pytest benchmarks/clover/tests`.
+ 
+ Example Q8 causal measurement:
+ 
+diff --git a/tests/models/test_clover_eval.py b/benchmarks/clover/tests/test_clover_eval.py
+similarity index 96%
+rename from tests/models/test_clover_eval.py
+rename to benchmarks/clover/tests/test_clover_eval.py
+index 332ae00..436e4ce 100644
+--- a/tests/models/test_clover_eval.py
++++ b/benchmarks/clover/tests/test_clover_eval.py
+@@ -11,7 +11,7 @@ import pytest
+ 
+ @pytest.fixture
+ def arrival_metrics():
+-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
++    script = Path(__file__).parents[1] / "clover_metrics.py"
+     return runpy.run_path(str(script))["arrival_metrics"]
+ 
+ 
+@@ -53,7 +53,7 @@ def test_mismatched_arrival_counts_are_rejected(arrival_metrics, count, arrivals
+ 
+ 
+ def test_saved_report_timing_correction_preserves_source():
+-    script = Path(__file__).parents[2] / "benchmarks/clover/clover_metrics.py"
++    script = Path(__file__).parents[1] / "clover_metrics.py"
+     correct = runpy.run_path(str(script))["corrected_timing_report"]
+     report = dict(
+         runs=[
+@@ -187,7 +187,7 @@ def test_cap_extension_reuses_only_eos_cases(tmp_path, monkeypatch, change_tempe
+             str(old),
+         ],
+     )
+-    script = Path(__file__).parents[2] / "benchmarks/clover/eval_clover_quality.py"
++    script = Path(__file__).parents[1] / "eval_clover_quality.py"
+     if change_temperature:
+         with pytest.raises(ValueError, match="different protocol"):
+             runpy.run_path(str(script), run_name="__main__")
+diff --git a/tests/models/test_clover_llama_metrics.py b/benchmarks/clover/tests/test_clover_llama_metrics.py
+similarity index 95%
+rename from tests/models/test_clover_llama_metrics.py
+rename to benchmarks/clover/tests/test_clover_llama_metrics.py
+index cdba292..1bf1d16 100644
+--- a/tests/models/test_clover_llama_metrics.py
++++ b/benchmarks/clover/tests/test_clover_llama_metrics.py
+@@ -9,7 +9,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+     import copy
+     import runpy
+ 
+-    summarize = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/summarize_clover_abab.py'))['summarize']
++    summarize = runpy.run_path(str(Path(__file__).parents[1]/'summarize_clover_abab.py'))['summarize']
+     turns = []
+     for values in ([10., 12.], [20., 24.], [20., 22.], [30., 34.]):
+         rows = [dict(prompt='fixture',mode='causal',width=8,warmup=False,
+@@ -37,7 +37,7 @@ def test_abab_retains_process_drift_and_rejects_mismatched_controls():
+ def test_denoise_budget_uses_visible_progress_and_keeps_hf_attainment_unclamped(native_tokens):
+     import runpy
+ 
+-    analyze = runpy.run_path(str(Path(__file__).parents[2]/'benchmarks/clover/analyze_clover_budget.py'))['analyze']
++    analyze = runpy.run_path(str(Path(__file__).parents[1]/'analyze_clover_budget.py'))['analyze']
+     trace = ([dict(phase='preview',cuda_ms=2.)]*4 +
+              [dict(phase='verify',cuda_ms=2.)]*2 +
+              [dict(phase='state_commit',cuda_ms=.5)]*2 +
+diff --git a/docs/clover/qualification-20261104.md b/docs/clover/qualification-20261104.md
+index fe1dbc8..376ef23 100644
+--- a/docs/clover/qualification-20261104.md
++++ b/docs/clover/qualification-20261104.md
+@@ -131,8 +131,9 @@ preserved, and the corrected comparison reused the existing native captures.
+ 
+ B0 fixed-history native/HF/llama distributions are complete: five prompts, 32 forced
+ causal rows each, and mask/anchor/partially fixed blocks at W8/W16/W32 (840 preview
+-rows). All 45 llama previews restore the prefix so that causal replay logits match
+-byte for byte. The numerical-export helper is committed as `101007f`; its compiled
++rows). Each of the 45 llama previews restores the prefix; the final causal replay
++probe for each of the five prompts matches saved logits byte for byte.
++The numerical-export helper is committed as `101007f`; its compiled
+ source hash matches the tested file. This uses stock llama `cb09d43` and the same
+ official Q8 file, with full logits rather than independent generated histories.
+ 
+diff --git a/tests/README.md b/tests/README.md
+index 76b2b1f..7cda735 100644
+--- a/tests/README.md
++++ b/tests/README.md
+@@ -83,6 +83,12 @@ FREETOKEN_REBUILD_TEST_MODEL=<small model dir> uv run pytest tests/e2e/test_cach
+ 
+ ## What earns a place here
+ 
++Clover's independent arithmetic and HF/GGUF references live in `clover_reference/`.
++Core Clover tests need only `python/` and `tests/`, plus the normal project dependencies
++and any explicitly configured local weights. Benchmark metric and evaluation-tool tests
++live in `benchmarks/clover/tests/` and run separately with
++`python -m pytest benchmarks/clover/tests`.
++
+ A test must be able to fail on a plausible regression of production code.
+ 
+ Weigh that against how the bug would be found otherwise. Application-facing
+diff --git a/benchmarks/clover/LICENSE.clover-gguf-reference b/tests/clover_reference/LICENSE.clover-gguf-reference
+similarity index 100%
+rename from benchmarks/clover/LICENSE.clover-gguf-reference
+rename to tests/clover_reference/LICENSE.clover-gguf-reference
+diff --git a/benchmarks/clover/clover_gguf_reference.py b/tests/clover_reference/gguf.py
+similarity index 97%
+rename from benchmarks/clover/clover_gguf_reference.py
+rename to tests/clover_reference/gguf.py
+index 6e52738..b3e83aa 100644
+--- a/benchmarks/clover/clover_gguf_reference.py
++++ b/tests/clover_reference/gguf.py
+@@ -16,10 +16,10 @@ import numpy as np
+ import torch
+ import torch.nn.functional as functional
+ 
+-from benchmarks.clover.clover_gguf_decode import decode_expert
+-from benchmarks.clover.clover_hf_reference import official_modules
++from tests.clover_reference.gguf_decode import decode_expert
++from tests.clover_reference.hf import official_modules
+ from freetoken.models.clover_moe.gguf import parse_gguf_config
+-from benchmarks.clover.oracles import iter_hf_gguf_weights
++from tests.clover_reference.oracles import iter_hf_gguf_weights
+ from freetoken.models.gguf.reader import iter_gguf_tensors
+ from freetoken.utils import cached_load_hf_config
+ 
+diff --git a/benchmarks/clover/clover_gguf_decode.py b/tests/clover_reference/gguf_decode.py
+similarity index 100%
+rename from benchmarks/clover/clover_gguf_decode.py
+rename to tests/clover_reference/gguf_decode.py
+diff --git a/benchmarks/clover/clover_hf_reference.py b/tests/clover_reference/hf.py
+similarity index 99%
+rename from benchmarks/clover/clover_hf_reference.py
+rename to tests/clover_reference/hf.py
+index 066021f..18c1951 100644
+--- a/benchmarks/clover/clover_hf_reference.py
++++ b/tests/clover_reference/hf.py
+@@ -176,7 +176,7 @@ def load_official(
+     source, checkpoint, *, device="cuda", cache_bytes=6 << 30, precision="nvfp4"
+ ):
+     if precision == "gguf":
+-        from benchmarks.clover.clover_gguf_reference import load_gguf_official
++        from tests.clover_reference.gguf import load_gguf_official
+ 
+         return load_gguf_official(
+             source, checkpoint, device=device, cache_bytes=cache_bytes
+diff --git a/benchmarks/clover/oracles.py b/tests/clover_reference/oracles.py
+similarity index 100%
+rename from benchmarks/clover/oracles.py
+rename to tests/clover_reference/oracles.py
+diff --git a/tests/kernels/test_clover_gguf.py b/tests/kernels/test_clover_gguf.py
+index d6b50b8..7a0491a 100644
+--- a/tests/kernels/test_clover_gguf.py
++++ b/tests/kernels/test_clover_gguf.py
+@@ -10,7 +10,7 @@ import torch
+ 
+ @pytest.fixture
+ def reference():
+-    from benchmarks.clover import clover_gguf_reference
++    from tests.clover_reference import gguf as clover_gguf_reference
+ 
+     return clover_gguf_reference
+ 
+@@ -114,7 +114,7 @@ def test_reference_cpu_cache_is_bounded_and_avoids_repeated_decode(
+ def test_eager_torch_decoder_matches_independent_numpy_bitwise(reference, kind, device):
+     if device == "cuda" and not torch.cuda.is_available():
+         pytest.skip("requires CUDA")
+-    from benchmarks.clover.clover_gguf_decode import decode_expert
++    from tests.clover_reference.gguf_decode import decode_expert
+ 
+     raw, expected = packed_fixture(kind, rows=19, width=1024)
+     for expert in (0, 1, 2):
+@@ -144,7 +144,7 @@ def real_gguf_experts():
+ def test_real_expert_torch_decoder_is_bitwise_numpy(
+     reference, real_gguf_experts, layer, expert, role
+ ):
+-    from benchmarks.clover.clover_gguf_decode import decode_expert
++    from tests.clover_reference.gguf_decode import decode_expert
+ 
+     tensor = real_gguf_experts[f"blk.{layer}.ffn_{role}_exps.weight"]
+     raw = tensor._raw.reshape(*tensor.shape[:2], -1)[expert]
+diff --git a/tests/kernels/test_clover_preview.py b/tests/kernels/test_clover_preview.py
+index 323ad5f..189aba5 100644
+--- a/tests/kernels/test_clover_preview.py
++++ b/tests/kernels/test_clover_preview.py
+@@ -13,7 +13,7 @@ def official():
+     source = os.environ.get("CLOVER_HF_SOURCE")
+     if not source:
+         pytest.skip("set CLOVER_HF_SOURCE to the existing fixed official HF source")
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "tests/clover_reference/hf.py"))
+     return harness["official_modules"](Path(source))[0]
+ 
+ 
+diff --git a/tests/models/test_clover_bf16_blocks.py b/tests/models/test_clover_bf16_blocks.py
+index 4cafa9f..0aecf8e 100644
+--- a/tests/models/test_clover_bf16_blocks.py
++++ b/tests/models/test_clover_bf16_blocks.py
+@@ -23,7 +23,7 @@ def block_pair(request):
+         pytest.skip("set CLOVER_HF_SOURCE to the local BF16 revision")
+     source = Path(location)
+     harness = runpy.run_path(
+-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
++        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
+     )
+     official, configuration, _ = harness["official_modules"](source)
+     cfg = configuration.CloverMoeConfig(
+@@ -128,7 +128,7 @@ def test_full_bf16_preview_block_matches_official(block_pair, monkeypatch, width
+         attention_preview,
+         moe_preview,
+     )
+-    from benchmarks.clover.oracles import make_preview_batch
++    from tests.clover_reference.oracles import make_preview_batch
+     import freetoken.core as core
+ 
+     device = torch.device("cuda")
+diff --git a/tests/models/test_clover_generation.py b/tests/models/test_clover_generation.py
+index c5240de..9f2585c 100644
+--- a/tests/models/test_clover_generation.py
++++ b/tests/models/test_clover_generation.py
+@@ -3,7 +3,7 @@ from types import SimpleNamespace
+ import pytest
+ import torch
+ 
+-from benchmarks.clover.oracles import clover_correct_drafts
++from tests.clover_reference.oracles import clover_correct_drafts
+ from freetoken.models.clover_moe.generation import CloverPenaltyState, PENALTY_DEFAULTS
+ 
+ 
+@@ -20,7 +20,7 @@ def test_serving_low_confidence_rejects_unqualified_execution(device, do_sample)
+ @pytest.mark.skipif(not torch.cuda.is_available(), reason="requires CUDA")
+ @pytest.mark.parametrize("width", [8, 16, 32])
+ def test_gpu_low_confidence_matches_eager_reference_without_committing(width):
+-    from benchmarks.clover.oracles import resolve_low_confidence_reference
++    from tests.clover_reference.oracles import resolve_low_confidence_reference
+     from freetoken.models.clover_moe.generation import resolve_low_confidence
+ 
+     gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False, "presence_penalty": .9,
+@@ -133,7 +133,7 @@ def test_verify_capacity_defaults_remain_four_and_can_be_explicitly_extended():
+ 
+ 
+ def test_lowconfidence_strict_threshold_fallback_and_frozen_positions():
+-    from benchmarks.clover.oracles import resolve_low_confidence_reference as resolve_low_confidence
++    from tests.clover_reference.oracles import resolve_low_confidence_reference as resolve_low_confidence
+ 
+     state = CloverPenaltyState(
+         SimpleNamespace(**PENALTY_DEFAULTS, do_sample=False), 4, "cpu", [0]
+@@ -237,7 +237,7 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
+     harness = runpy.run_path(
+-        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
++        str(Path(__file__).parents[2] / "tests/clover_reference/hf.py")
+     )
+     sampling = harness["official_modules"](Path(location))[2]
+     gen = SimpleNamespace(
+diff --git a/tests/models/test_clover_gguf.py b/tests/models/test_clover_gguf.py
+index e17587a..e414162 100644
+--- a/tests/models/test_clover_gguf.py
++++ b/tests/models/test_clover_gguf.py
+@@ -331,7 +331,7 @@ def test_gguf_sampling_metadata_overrides_published_clover_defaults():
+     assert generation["dllm_length_penalty"] == 10.0
+     assert generation["dllm_think_end_token_id"] == 0
+     assert generation["eos_token_id"] == [2, 3]
+-    from benchmarks.clover.oracles import predict_with_confidence
++    from tests.clover_reference.oracles import predict_with_confidence
+ 
+     logits = torch.tensor([[0.0, 2.0, 0.0, -1.0, 0.0]])
+     prediction, confidence = predict_with_confidence(
+diff --git a/tests/models/test_clover_real_layers.py b/tests/models/test_clover_real_layers.py
+index ee55350..49d76cd 100644
+--- a/tests/models/test_clover_real_layers.py
++++ b/tests/models/test_clover_real_layers.py
+@@ -19,7 +19,7 @@ def gdn_pair(request):
+     if not location:
+         pytest.skip("set CLOVER_HF_SOURCE to the fixed local checkpoint")
+     source = Path(location)
+-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
++    harness = runpy.run_path(str(Path(__file__).parents[2] / "tests/clover_reference/hf.py"))
+     official, configuration, _ = harness["official_modules"](source)
+     config = configuration.CloverMoeConfig(**json.loads((source / "config.json").read_text(encoding="utf-8")))
+     from freetoken.distributed import set_tp_info, try_get_tp_info

@@ -79,12 +79,15 @@ Warmup temporarily owns a request table, GDN slot and KV pages through the regul
 allocators. It restores their contents and frees them without inserting a synthetic prefix.
 Verify graphs share one transaction allocation sized for the largest declared width.
 `runtime.graph_warmup` reports capture times and allocated/reserved memory deltas.
-Cold-request latency and state-integrity qualification are pending; this is opt-in.
+Cold-request latency and state-integrity qualification passed; results are linked from
+the qualification report. Warmup remains opt-in.
 
 ## Diagnostic references
 
 Eager preview/verify batch builders, tensor acceptance, the eager LowConfidence controller,
-sampling reference and HF-oriented GGUF reader now live in `benchmarks/clover/oracles.py`.
+sampling reference and HF-oriented GGUF reader now live in `tests/clover_reference/`.
+Benchmark import aliases preserve module identity, including diagnostic monkeypatches.
+Core tests can be extracted with serving code without depending on benchmarks or docs.
 Production generation uses its existing CUDA greedy controller and fused penalty/verify
 kernels. The unused acceptance helper, verify penalty oracle and legacy GGUF type constants
 were removed. Historical source copies inside evidence archives remain unchanged.
@@ -112,8 +115,8 @@ Same-boot ABAB added 304 expert slots: causal W0 2928 -> 3232, shared W32 2292 -
 Five prompts across six modes retained identical output IDs. Causal W0 decode improved
 2.45-5.06%; across the shared W32 matrix end-to-end gains ranged from 3.33% to 30.56%.
 These are workload-specific measured ranges, not a universal speed claim. Instrumented
-forward traces and the full default-policy hardware gate are tracked separately in the
-active campaign; config tests alone do not qualify this default change.
+forward traces and the full default-policy hardware gate passed and are linked from the
+qualification report; config tests alone do not qualify this default change.
 
 ## GGUF startup reader reuse
 

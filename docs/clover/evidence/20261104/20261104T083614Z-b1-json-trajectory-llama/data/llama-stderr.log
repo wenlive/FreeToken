@@ -1,0 +1,2 @@
+0.00.520.520 W llama_model_loader: tensor overrides to CPU are used with mmap enabled - consider using --load-mode none for better performance
+0.03.729.418 I cmn          init: llama threadpool init, n_threads = 8

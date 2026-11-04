@@ -1,7 +1,7 @@
 # Clover repair qualification, 2026-11-04
 
-Status: active, Q8 only. Q8 serving changes through `5df3410` are committed and pushed, and
-the combined hardware gate has passed. Numerical work is still running. At the owner's
+Status: review handoff, Q8 only. Q8 serving changes through `a5190a5` have passed the
+combined hardware gate. Numerical limitations are recorded below. At the owner's
 request, NVFP4 maintenance ended with documentation commit `8afcec6`; the previous
 `9ec70fb` serving code and results are historical, and pending NVFP4 work is retired,
 not passed. A successful diagnostic process is not a numerical acceptance result.
@@ -22,7 +22,7 @@ source identities, failed attempts and result files.
 | A2 | Causal penalty counts advance from consumed device input, independent of lagging host history. Drain is determined by the fixed request mode; Flash MTP retains its previous behavior. P0/P1, overlap on/off, concurrent requests, chunked prefill, stop and prefix-reuse tests passed. [Output gate](evidence/20261104/20261104T043529Z-a2-output-comparison/results.json). |
 | A3 | Optional owned-resource graph warmup at startup and idle rebuild. Full state bytes and allocator capacities are restored. All 24 cold-process requests have identical IDs within mode. [Latency and integrity](evidence/20261104/20261104T045609Z-a3-latency-summary/data/results.json). |
 | A4 | Retain the encoder-attribute guard: the GGUF shim is frozen, so assigning even an absent/None encoder attribute would fail. Keep request-cache handling after the complete bundle, with ordinary multi-token prefill coverage. Other shared changes remain individually justified. |
-| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`; zero disables it. The local candidate default is 256 after ABAB and full-output boundary checks. The new-source hardware gate is pending; the published serving default remains 128 until that gate passes and the candidate is pushed. |
+| A5 | Sparse prefill is configured by `clover_sparse_prefill_limit`; zero disables it. The default is 256 after ABAB, full-output boundary checks and the source-bound hardware gate at `a5190a5`. |
 | D1-D4 | Historical archives moved without changing bytes. Eager oracles moved out of serving. Runtime gains the minimal `requires_drain` capability. Benchmark entry points share a harness under `benchmarks/clover/`. [Commands](../../benchmarks/clover/README.md). |
 | D5 | Clover GGUF bank sizing requires actual per-layer row-byte descriptors; the guessed `(8,8)` fallback was removed. |
 
@@ -54,6 +54,12 @@ MTP off/on and Qwen3.6 comparisons match main, the 112-tail audit and lifecycle 
 and the selected suite passes 509 tests plus 47 subtests, with 147 skips. Graph warmup
 integrity also passed on the same source. These runs bind Q8 serving commit `5df3410`.
 [Combined gate](evidence/20261104/20261104T064143Z-c2-shared-gate/data/results.json).
+
+The latest serving source `a5190a5` also passed the complete gate: all nine Flash-Next
+MTP off/on and Qwen3.6 comparisons match main; 112 graph tails, lifecycle and warmup
+integrity pass; 79 focused GPU tests and 509 selected regression tests pass, with
+147 skips and 47 subtests. Later reference relocation changes no serving arithmetic.
+[Latest serving gate](evidence/20261104/20261104T080736Z-cutoff-shared-gate/data/results.json).
 
 Host input embeddings are automatic only for untied Clover GGUF, with explicit opt-out.
 Isolated same-boot ABAB added 304 slots and kept all 30 prompt/mode outputs identical.
@@ -113,7 +119,10 @@ perturbation radius. These are observations, not a newly approved tolerance: his
 can diverge after the first block, and the measured perturbations do not bound all error.
 Python W16 and JSON W32 exceed that radius for full generation; Python W16 and JSON
 W16/W32 exceed it for the first block. For JSON W32, native progress is 2.46-2.67 tokens
-per preview across the variants, versus HF 4.00. This difference remains unexplained.
+per preview across the variants, versus HF 4.00. The numerical cause remains unresolved.
+Inspection of the saved outputs also finds compact native JSON versus pretty-printed HF
+JSON: different text and histories confound a direct interpretation as algorithm cost
+on the same answer. This observation does not establish numerical equivalence.
 [Progress/noise results](evidence/20261104/20261104T061945Z-b1-noise-progress-summary/data/results.json).
 
 B1 prefill localization now covers all 40 layers and 30 real GDN operators for each of
@@ -131,8 +140,9 @@ preserved, and the corrected comparison reused the existing native captures.
 
 B0 fixed-history native/HF/llama distributions are complete: five prompts, 32 forced
 causal rows each, and mask/anchor/partially fixed blocks at W8/W16/W32 (840 preview
-rows). All 45 llama previews restore the prefix so that causal replay logits match
-byte for byte. The numerical-export helper is committed as `101007f`; its compiled
+rows). Each of the 45 llama previews restores the prefix; the final causal replay
+probe for each of the five prompts matches saved logits byte for byte.
+The numerical-export helper is committed as `101007f`; its compiled
 source hash matches the tested file. This uses stock llama `cb09d43` and the same
 official Q8 file, with full logits rather than independent generated histories.
 
@@ -149,6 +159,41 @@ The first llama invocation failed
 because the speculative example does not expose `--no-warmup`; the corrected command
 uses its normal startup behavior, with no timing claim or serving-code change.
 [Three-way distributions](evidence/20261104/20261104T074657Z-b0-three-way-summary/data/results.json).
+
+Read-only inspection of the 15 saved progress outputs finds five native/HF ID-identical
+cases (Count at all widths, Python at W8/W32). Sky and Chinese differ mainly in wording;
+Python W16 differs in docstring/format; JSON differs in formatting and W8 book selection.
+Python, JSON and Chinese reach the 64-token cap, so these excerpts do not certify complete
+task correctness. Logit relative L2 is not a percentage loss of task quality.
+[Saved output inspection](evidence/20261104/20261104T081335Z-saved-numerical-output-inspection/data/results.json).
+
+The final focused JSON W32 check records the actual native first block's 14 preview
+inputs and feeds each identical input to HF, llama and the native tile/eager control.
+On the 240 still-masked positions, mean KL is 0.03711 native/HF, 0.03342 llama/HF and
+0.03882 native/control. Native/HF top-1 agreement is 210/240, versus 207/240 for the
+native/control pair. HF chooses the same transfer positions in 9/14 iterations;
+llama and the control do so in 11/14. Transfer counts match native on every iteration
+for llama/control, and 13/14 for HF (one iteration selects four instead of three).
+Thus the large free-generation progress difference is not reproduced as a large
+per-iteration count gap on these matched inputs. Different chosen positions/tokens can
+still alter later trajectories. These are counterfactual decisions along the native
+trajectory, not HF/llama autonomous progress or throughput. The control uses eager
+preview while the native capture uses its serving graph. First-block non-mask penalties
+are verified inert and fused picks/confidence match Torch. L2 and KL are inside the
+proposed per-row envelope on only 199/240 and 190/240 positions respectively. B1 remains
+unresolved; these data support amplification but do not certify equivalence. The initial
+capture failed because its diagnostic applied mask suppression on only one side of an
+assertion; that failed attempt is preserved, and serving code was unchanged.
+[Matched trajectory](evidence/20261104/20261104T083803Z-b1-json-trajectory-summary/data/results.json).
+
+The final reference relocation is `1d1bcd6`. Core Clover tests run in a physical copy
+containing only `python/`, `tests/` and project metadata: 99 pass and 157 skip without
+CUDA or local weights. All four benchmark aliases preserve module identity and
+monkeypatch visibility; 18 tool tests pass. The full selected hardware suite after
+relocation again passes 509 tests and 47 subtests, with 147 skips. Reference ASTs are
+unchanged except imports, and the third-party license bytes are preserved.
+[Extraction](evidence/20261104/20261104T083420Z-reference-extraction/data/results.json),
+[Hardware regression](evidence/20261104/20261104T083651Z-reference-relocation-regression/data/results.json).
 
 B2 NVFP4 is retired at the owner's request with its differences unresolved.
 No acceptance threshold was changed to pass them.
@@ -171,7 +216,9 @@ locally. This missing gate is recorded separately from Clover Q8 acceptance.
 
 At the user's request this snapshot was brought forward ahead of the remaining numerical
 campaign. Measured clean commit: `8767adac144e77eda8c8142f90556e6c86d7f586`, whose serving
-code is `5df3410`. Subsequent report/evidence commits do not change that measured source.
+code is `5df3410`. The later serving change at `a5190a5` changes the sparse-prefill default
+from 128 to 256. Both this table's 36-token and 4096-token inputs retain their old prefill
+path, but this table remains a measurement of `8767ada`, not a new measurement of HEAD.
 The latest 112-tail audit also passed before these measurements. The combined Q8 gate
 subsequently passed; numerical diagnostics continue independently of this speed table.
 
@@ -218,5 +265,5 @@ prefix lengths 128/129/192/256/257/384, two requests per configuration, checkpoi
 penalties and cold expert caches. All 48 outputs match within their length/capacity
 comparison, including repeat stability. Actual outputs are 3-64 tokens, with EOS
 respected; this is not 48 forced 64-token decodes. The local default is now 256; its
-new-source hardware gate is pending, so the candidate is not yet pushed or qualified.
+new-source hardware gate at `a5190a5` passed, as linked above.
 [Boundary output check](evidence/20261104/20261104T075150Z-a5-boundary-summary/data/results.json).

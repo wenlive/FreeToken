@@ -45,4 +45,4 @@ for item in inventory['files']:
         content = gzip.decompress(payload) if item['storage']=='gzip' else payload
         assert len(content) == item['size'] and hashlib.sha256(content).hexdigest() == item['sha256'], path
     checked += 1
-print(f'Verified {checked} files; {external} external binary files not requested')
+print(f'Verified {checked} files; {external} external files not requested')

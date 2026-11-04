@@ -1,0 +1,39 @@
+{
+  "started_at": "20261104T075850Z",
+  "command": [
+    "C:/workspace/envs/T-20261102-clover-q8/runtime/Scripts/python.exe",
+    "-m",
+    "pytest",
+    "tests/engine/test_clover_config.py",
+    "tests/models/test_clover_offload.py",
+    "-q"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261102-clover-q8\\FreeToken",
+  "commit": "964498e8dbcb720a61fb3ade27db644d29978a3b",
+  "dirty": " M docs/clover/changes.md\n M python/freetoken/engine/config.py\n M python/freetoken/models/clover_moe/moe.py\n M tests/engine/test_clover_config.py\n",
+  "patch_sha256": "8e6d902c8c4fb049e94225be4e35656caafa744fa3221aa693416e1df1ab921d",
+  "state": "passed",
+  "environment": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261102-clover-q8/FreeToken/python;C:/workspace/wt/T-20261102-clover-q8/FreeToken",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c5/torch-extensions",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c5",
+    "CLOVER_GGUF_CHECKPOINT": null,
+    "CLOVER_HF_SOURCE": null,
+    "FREETOKEN_QWEN4EXP_MODEL": null,
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "CUDA_VISIBLE_DEVICES": "-1",
+    "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": null
+  },
+  "external_scripts": [
+    {
+      "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+      "artifact": "external-scripts\\0-run.py",
+      "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+    }
+  ],
+  "pid": 14288,
+  "exit_code": 0,
+  "elapsed_seconds": 4.312000000005355
+}

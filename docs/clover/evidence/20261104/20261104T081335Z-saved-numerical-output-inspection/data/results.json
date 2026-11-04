@@ -1,0 +1,185 @@
+{
+  "state": "complete",
+  "scope": "Read and decode saved 64-token-cap outputs only; no model inference, no new quality score.",
+  "sources": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054326Z-b1-native-noise-none\\data\\results.json",
+      "sha256": "b7df9eb51bca638fbc93a6f916ddd877c25a7e91a318d8f454368ab3aa8bb3f1"
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T054911Z-b1-hf-q8-progress\\data\\results.json",
+      "sha256": "11cf5b3ec25e9ac9dc090fab28e0bc4112e2b1af51daa66957fe9df02afb0866"
+    },
+    {
+      "path": "C:\\workspace\\models\\inputs\\clover-35b-a3b-bf16\\4b0402b65e523d0183a14c431955438714cb16ff\\tokenizer.json",
+      "sha256": "7c62ba7d8bb13291c94459896cd27537858beb58a88a037b09a150e213420988"
+    }
+  ],
+  "cases": [
+    {
+      "prompt": "Count",
+      "width": 8,
+      "native_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "hf_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "native_ids_equal_hf": true,
+      "native_length": 30,
+      "hf_length": 30,
+      "native_decode_matches_saved_text": true,
+      "first_difference": null
+    },
+    {
+      "prompt": "Count",
+      "width": 16,
+      "native_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "hf_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "native_ids_equal_hf": true,
+      "native_length": 30,
+      "hf_length": 30,
+      "native_decode_matches_saved_text": true,
+      "first_difference": null
+    },
+    {
+      "prompt": "Count",
+      "width": 32,
+      "native_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "hf_text": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10.",
+      "native_ids_equal_hf": true,
+      "native_length": 30,
+      "hf_length": 30,
+      "native_decode_matches_saved_text": true,
+      "first_difference": null
+    },
+    {
+      "prompt": "Sky",
+      "width": 8,
+      "native_text": "Sunlight is made of all colors, but when it enters Earth's atmosphere, gas molecules scatter blue light much more than other colors. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "hf_text": "Sunlight is made of all colors, but when it enters Earth's atmosphere, the gas molecules scatter shorter blue wavelengths more than longer ones. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "native_ids_equal_hf": false,
+      "native_length": 44,
+      "hf_length": 45,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 16
+    },
+    {
+      "prompt": "Sky",
+      "width": 16,
+      "native_text": "Sunlight is made of all colors, and as it enters Earth's atmosphere, gas molecules scatter shorter blue wavelengths more than longer ones. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "hf_text": "Sunlight is made of all colors, and as it enters Earth's atmosphere, gas molecules scatter shorter blue wavelengths more than longer red ones. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "native_ids_equal_hf": false,
+      "native_length": 44,
+      "hf_length": 45,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 25
+    },
+    {
+      "prompt": "Sky",
+      "width": 32,
+      "native_text": "Sunlight scatters in Earth's atmosphere, and shorter blue wavelengths are scattered more strongly than other wavelengths. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "hf_text": "Sunlight is made of all colors, but Earth's atmosphere scatters shorter blue wavelengths more than longer ones. This scattered blue light reaches our eyes from all directions, making the sky appear blue.",
+      "native_ids_equal_hf": false,
+      "native_length": 38,
+      "hf_length": 39,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 2
+    },
+    {
+      "prompt": "Python",
+      "width": 8,
+      "native_text": "```python\nfrom typing import List, Tuple\n\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"Merge overlapping integer intervals.\"\"\"\n    if not intervals:\n        return []\n\n    sorted = sorted(intervals, key=lambda x: x[",
+      "hf_text": "```python\nfrom typing import List, Tuple\n\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"Merge overlapping integer intervals.\"\"\"\n    if not intervals:\n        return []\n\n    sorted = sorted(intervals, key=lambda x: x[",
+      "native_ids_equal_hf": true,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": null
+    },
+    {
+      "prompt": "Python",
+      "width": 16,
+      "native_text": "```python\nfrom typing import List, Tuple\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"Merge overlapping integer intervals.\"\"\"\n    if not intervals:\n        return []\n\n    sorted = sorted(intervals, key=lambda x: x[",
+      "hf_text": "```python\nfrom typing import List, Tuple\n\n\ndef merge_intervals(intervals: List[Tuple[int, int]]) -> List[Tuple[int, int]]:\n    \"\"\"Merge overlapping integer intervals.\n\n    Args:\n        intervals: A list of (start, end) tuples where start <= end.\n\n   ",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 9
+    },
+    {
+      "prompt": "Python",
+      "width": 32,
+      "native_text": "```python\nfrom typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    \"\"\"Merge overlapping integer intervals.\"\"\"\n    if not intervals:\n        return []\n\n    sorted = sorted(intervals, key=lambda x: x[0])\n    merged = [sorted",
+      "hf_text": "```python\nfrom typing import List\n\ndef merge_intervals(intervals: List[List[int]]) -> List[List[int]]:\n    \"\"\"Merge overlapping integer intervals.\"\"\"\n    if not intervals:\n        return []\n\n    sorted = sorted(intervals, key=lambda x: x[0])\n    merged = [sorted",
+      "native_ids_equal_hf": true,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": null
+    },
+    {
+      "prompt": "JSON",
+      "width": 8,
+      "native_text": "{\"books\":[{\"title\":\"1984\",\"author\":\"George Orwell\",\"year\":1949,\"tags\":[\"dystopia\",\"political fiction\"]},{\"title\":\"To Kill a Mockingbird\",\"author\":\"Harper Lee\",\"year\":1960,\"tags\":[\"southern gothic\",\"moral growth",
+      "hf_text": "{\n  \"books\": [\n    {\n      \"title\": \"Dune\",\n      \"author\": \"Frank Herbert\",\n      \"year\": 1965,\n      \"tags\": [\"science fiction\", \"desert\"]\n    },\n    {\n      \"title\": \"",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 0
+    },
+    {
+      "prompt": "JSON",
+      "width": 16,
+      "native_text": "{\"books\":[{\"title\":\"1984\",\"author\":\"George Orwell\",\"year\":1949,\"tags\":[\"dystopian\",\"political fiction\"]},{\"title\":\"To Kill a Mockingbird\",\"author\":\"Harper Lee\",\"year\":1960,\"tags\":[\"classic\",\"moral growth\"]},{\"title",
+      "hf_text": "{\n  \"books\": [\n    {\n      \"title\": \"1984\",\n      \"author\": \"George Orwell\",\n      \"year\": 1949,\n      \"tags\": [\"dystopia\", \"political fiction\"]\n    },\n    {\n      \"",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 0
+    },
+    {
+      "prompt": "JSON",
+      "width": 32,
+      "native_text": "{\"books\":[{\"title\":\"1984\",\"author\":\"George Orwell\",\"year\":1949,\"tags\":[\"dystopian\",\"political fiction\"]},{\"title\":\"To Kill a Mockingbird\",\"author\":\"Harper Lee\",\"year\":1960,\"tags\":[\"classic literature\",\"social justice\"]},{\"title",
+      "hf_text": "{\n  \"books\": [\n    {\n      \"title\": \"1984\",\n      \"author\": \"George Orwell\",\n      \"year\": 1949,\n      \"tags\": [\"dystopia\", \"political fiction\"]\n    },\n    {\n      \"",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 0
+    },
+    {
+      "prompt": "Chinese",
+      "width": 8,
+      "native_text": "城市热岛效应是指城市中心温度明显高于周边郊区的现象。主要原因包括：大量沥青、混凝土等建筑材料吸收并储存太阳辐射热量；人类活动（如空调、交通）排放废热；绿地和水体减少，蒸发降温作用减弱；建筑密集导致通风不良，热量不易扩散。\n\n",
+      "hf_text": "城市热岛效应指城市中心温度明显高于周边郊区的现象。主要原因包括：大量混凝土和沥青等建筑材料吸热快、散热慢；人类活动（如空调、汽车、工业）排放大量废热；绿地和水体减少，削弱了自然降温能力；以及建筑密集导致空气流通受阻。",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 4
+    },
+    {
+      "prompt": "Chinese",
+      "width": 16,
+      "native_text": "城市热岛效应指城市中心温度明显高于周边郊区的现象。成因包括：建筑、道路等硬质材料吸收并储存大量太阳辐射；人类活动排放废热；植被减少导致蒸腾降温作用减弱；空气流通受阻使热量积聚。\n\n缓解措施有三项：一是增加绿化面积和屋顶",
+      "hf_text": "城市热岛效应指城市中心温度明显郊区高的现象，成因包括：建筑与路面吸收并储存大量太阳辐射；人类活动如空调、交通排放废热；植被稀少导致蒸发散热减少。这些因素叠加使城区热量难以散发。\n\n缓解措施有三项：一是增加绿化和屋顶花园，",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 9
+    },
+    {
+      "prompt": "Chinese",
+      "width": 32,
+      "native_text": "城市热岛效应指城区温度明显高于郊区。成因包括：建筑、路面等硬质材料吸热储热；植被减少导致蒸腾降温；人类活动排放废热；空气流通不畅使热量积聚。\n\n缓解措施有三项：一是增加绿地和屋顶绿化，利用植物蒸腾和遮",
+      "hf_text": "城市热岛效应指城区温度明显高于郊区。成因包括：建筑、路面等硬质材料吸热储热；植被稀少削弱蒸腾降温；人类活动排放大量废热；空气流通受阻使热量积聚。\n\n缓解措施有三项：一是增加绿化与屋顶绿化，利用植物蒸腾和",
+      "native_ids_equal_hf": false,
+      "native_length": 64,
+      "hf_length": 64,
+      "native_decode_matches_saved_text": true,
+      "first_difference": 26
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+...................................................................................ss....s....... [ 14%]
+.s..........s.......s................................................... [ 25%]
+...............sssssssssssssssssssssssssssssssssssssssssssss....ssssssss [ 36%]
+..ss.sssss....sss.sss.ss..sss.sss.ss..sss.sss.ss..ssss.sssss..ssss.ss.ss [ 47%]
+..sssss.ssss..ssssss..ss..ss.sssssss..ss.sssss...........s.............s [ 58%]
+ss....s.ss.............................................................. [ 69%]
+........................................................................ [ 80%]
+........................................................................ [ 91%]
+.......................................................                  [100%]
+=========================== short test summary info ===========================
+SKIPPED [1] tests\models\qwen4_exp\test_ple.py:126: set FREETOKEN_QWEN4_HF_PYTHON to a transformers build that ships qwen4_exp
+SKIPPED [1] tests\models\qwen4_exp\test_ple.py:145: set FREETOKEN_QWEN4_HF_PYTHON to a transformers build that ships qwen4_exp
+SKIPPED [1] tests\models\qwen4_exp\test_ple.py:227: needs FREETOKEN_QWEN4EXP_MODEL
+SKIPPED [1] tests\models\qwen4_exp\test_ple.py:518: set FREETOKEN_QWEN4_HF_PYTHON to a transformers build that ships qwen4_exp
+SKIPPED [1] tests\models\qwen4_exp\test_qsa_backend.py:110: could not import 'flashinfer': No module named 'flashinfer'
+SKIPPED [1] tests\models\qwen4_exp\test_qsa_hf.py:190: set FREETOKEN_QWEN4_HF_PYTHON to a transformers build that ships qwen4_exp
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:181: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:199: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:204: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:213: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [37] tests\models\qwen4_exp\test_weight_ckpt.py:222: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:240: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:298: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:319: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [1] tests\models\qwen4_exp\test_weight_ckpt.py:325: FREETOKEN_QWEN4EXP_MODEL is not set
+SKIPPED [8] tests\models\test_qwen3_5_moe_weight.py:394: block-fp8 layouts only
+SKIPPED [8] tests\models\test_qwen3_5_moe_weight.py:416: modelopt layouts only
+SKIPPED [9] tests\models\test_qwen3_5_moe_weight.py:443: llm-compressor NVFP4 layouts only
+SKIPPED [10] tests\models\test_qwen3_5_moe_weight.py:469: unsloth layout only
+SKIPPED [10] tests\models\test_qwen3_5_moe_weight.py:487: Ornith layout only
+SKIPPED [6] tests\models\test_qwen3_5_moe_weight.py:504: NVFP4 expert layouts only
+SKIPPED [18] tests\models\test_qwen3_5_moe_weight.py:527: block-fp8 expert layouts only
+SKIPPED [10] tests\models\test_qwen3_5_moe_weight.py:364: bf16 layout only
+SKIPPED [10] tests\models\test_qwen3_5_moe_weight.py:383: bf16 layout only
+SKIPPED [1] tests\models\test_gemma4_gguf_rope.py:26: FREETOKEN_GEMMA4_GGUF_GLOB not set to a local gemma4 GGUF
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:171: needs vllm (marlin path)
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:198: needs vllm (marlin path)
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:231: needs vllm (marlin path)
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:451: b12x not runnable here: flashinfer is not installed
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:494: needs vllm (marlin path)
+SKIPPED [1] tests\moe\test_nvfp4_backends.py:529: b12x not runnable here: flashinfer is not installed
+509 passed, 147 skipped, 47 subtests passed in 59.02s

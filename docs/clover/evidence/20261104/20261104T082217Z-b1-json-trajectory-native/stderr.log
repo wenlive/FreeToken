@@ -1,0 +1,63 @@
+C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\engine\engine.py:1303: FutureWarning: torch.cuda._set_allocator_settings is deprecated. Use torch._C._accelerator_setAllocatorSettings instead.
+  torch.cuda.memory._set_allocator_settings("expandable_segments:True")
+[W1104 16:22:27.000000000 socket.cpp:764] [c10d] The client socket has failed to connect to [DESKTOP-0I0S4P8]:2333 (system error: 10049 - 在其上下文中，该请求的地址无效。).
+C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\_device.py:116: UserWarning: expandable_segments not supported on this platform (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\c10/cuda/CUDAAllocatorConfig.h:39.)
+  return func(*args, **kwargs)
+C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\models\gguf\reader.py:112: UserWarning: The given NumPy array is not writable, and PyTorch does not support non-writable tensors. This means writing to this tensor will result in undefined behavior. You may want to copy the array to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\pytorch\torch\csrc\utils\tensor_numpy.cpp:219.)
+  return torch.from_numpy(self._raw)
+Preparing for capturing CUDA graphs...:   0%|          | 0/1 [00:00<?, ?batch/s]Capturing graphs: bs = 1   | avail_mem = 3.14 GiB:   0%|          | 0/1 [00:00<?, ?batch/s][rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505] Error checking compiler version for cl
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505] Traceback (most recent call last):
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]   File "C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\cpp_extension.py", line 501, in get_compiler_abi_compatibility_and_version
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]     compiler_info = subprocess.check_output(compiler, stderr=subprocess.STDOUT)
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]   File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 466, in check_output
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]     return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]   File "C:\Users\PC\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505]     raise CalledProcessError(retcode, process.args,
+[rank0]:W1104 16:22:58.327000 396 torch\utils\cpp_extension.py:505] subprocess.CalledProcessError: Command 'cl' returned non-zero exit status 2.
+Capturing graphs: bs = 1   | avail_mem = 3.14 GiB: 100%|鈻堚枅鈻堚枅鈻堚枅鈻堚枅鈻堚枅| 1/1 [00:00<00:00,  1.40batch/s]Capturing graphs: bs = 1   | avail_mem = 3.14 GiB: 100%|鈻堚枅鈻堚枅鈻堚枅鈻堚枅鈻堚枅| 1/1 [00:00<00:00,  1.40batch/s]
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "C:\workspace\tasks\T-20261104-clover-improve\capture_json_trajectory.py", line 113, in <module>
+[rank0]:     main()
+[rank0]:   File "C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\tasks\T-20261104-clover-improve\capture_json_trajectory.py", line 79, in main
+[rank0]:     answer=llm.generate([ids],SamplingParams(temperature=0,max_tokens=32,clover_mode='denoise',clover_width=32))[0]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\llm\llm.py", line 130, in generate
+[rank0]:     self.run_forever()
+[rank0]:   File "C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\utils\_contextlib.py", line 124, in decorate_context
+[rank0]:     return func(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\scheduler\scheduler.py", line 328, in run_forever
+[rank0]:     data = self.overlap_loop(data)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\scheduler\scheduler.py", line 274, in overlap_loop
+[rank0]:     ongoing_data = (forward_input, self._forward(forward_input))
+[rank0]:                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\scheduler\scheduler.py", line 935, in _forward
+[rank0]:     output = runtime.forward(batch, self.cache_manager, self.token_pool,
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\models\clover_moe\runtime.py", line 280, in forward
+[rank0]:     return self._denoise(batch, manager, token_pool, clip, anchor_id)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\models\clover_moe\runtime.py", line 377, in _denoise
+[rank0]:     block, steps = resolve_low_confidence(
+[rank0]:                    ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\tasks\T-20261104-clover-improve\capture_json_trajectory.py", line 69, in resolve
+[rank0]:     block,steps=old_resolve(preview_fn,state,**kwargs)
+[rank0]:                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\wt\T-20261104-clover-improve\FreeToken-q8-cutoff\python\freetoken\models\clover_moe\generation.py", line 222, in resolve_low_confidence
+[rank0]:     prediction, confidence = pick_with_confidence(logits, state, block, mask_id)
+[rank0]:                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "C:\workspace\tasks\T-20261104-clover-improve\capture_json_trajectory.py", line 61, in pick
+[rank0]:     torch.testing.assert_close(adjusted,masked,rtol=0,atol=0)
+[rank0]:   File "C:\workspace\envs\T-20261031-clover-gguf\runtime\Lib\site-packages\torch\testing\_comparison.py", line 1600, in assert_close
+[rank0]:     raise error_metas[0].to_error(msg)
+[rank0]: AssertionError: Tensor-likes are not equal!
+
+[rank0]: Mismatched elements: 32 / 7946240 (0.0%)
+[rank0]: Greatest absolute difference: inf at index (0, 151669)
+[rank0]: Greatest relative difference: nan at index (0, 151669)

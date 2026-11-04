@@ -7,7 +7,8 @@ Failed reproductions and failed setup attempts are retained too.
 
 `inventory.json` records the measured source commit, original path, byte count and SHA256.
 Text artifacts above 4 MiB use deterministic gzip; their decompressed bytes exactly match
-the originals. Tensor operands and synthetic binary test artifacts remain in the local
+the originals. Tensor operands, synthetic binary test artifacts and the physical source
+copy used by the extraction check remain in the local
 run store named by `source_root`, with their paths and hashes recorded in the inventory.
 Historical command paths are provenance and have not been rewritten.
 

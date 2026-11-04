@@ -5,6 +5,7 @@ As of 2026-11-04, `feat/clover-nvfp4` is retired at the owner's request; its fin
 maintenance notice is commit `8afcec6`. Its previous results remain historical records,
 and unfinished NVFP4 work is not treated as qualified.
 
+- [Review handoff and remaining limitations (Chinese)](review-handoff-20261104.md)
 - [Current repair qualification and outstanding gates](qualification-20261104.md)
 - [Performance index and metric definitions](clover-performance.md)
 - [R0 runtime report](clover-runtime-performance.md)
@@ -31,7 +32,7 @@ Both archives have an `inventory.json` mapping paths relative to their own direc
 byte length and SHA256. The relocation verified every listed digest in both archives.
 Do not rewrite historical manifests or patches to make them look like current runs.
 
-The 2026-11-04 implementation campaign is active. Its source-bound local runs are under
+The 2026-11-04 implementation batch is handed off for review. Its source-bound local runs are under
 `C:/workspace/runs/T-20261104-clover-improve/`; the task log is
 `C:/workspace/tasks/T-20261104-clover-improve/README.md`. Completed runs are archived above;
 new snapshots are appended as qualification proceeds. Large binary operands remain in

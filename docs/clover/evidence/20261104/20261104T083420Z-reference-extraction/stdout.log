@@ -1,0 +1,38 @@
+..................................ssssssssssssssssssssssssssssssssssssss [ 28%]
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss [ 56%]
+ss..sss........sssssssssss.ssssssssss........................ssssss..... [ 84%]
+.....sssssssssssssss....................                                 [100%]
+=========================== short test summary info ===========================
+SKIPPED [5] tests\kernels\test_clover_gguf.py:116: requires CUDA
+SKIPPED [18] tests\kernels\test_clover_gguf.py:139: requires CUDA
+SKIPPED [16] tests\kernels\test_clover_gguf.py:158: requires CUDA
+SKIPPED [12] tests\kernels\test_clover_gguf.py:206: requires CUDA
+SKIPPED [12] tests\kernels\test_clover_gguf.py:244: requires CUDA
+SKIPPED [1] tests\kernels\test_clover_gguf.py:269: requires CUDA
+SKIPPED [5] tests\kernels\test_clover_gguf.py:290: requires CUDA
+SKIPPED [2] tests\kernels\test_clover_gguf.py:307: requires CUDA
+SKIPPED [5] tests\kernels\test_clover_gguf.py:332: requires CUDA
+SKIPPED [2] tests\kernels\test_clover_gguf.py:348: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:23: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:44: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:67: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:78: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:98: requires CUDA
+SKIPPED [3] tests\kernels\test_clover_preview.py:125: requires CUDA
+SKIPPED [10] tests\kernels\test_clover_preview.py:160: requires CUDA
+SKIPPED [6] tests\models\test_clover_bf16_blocks.py:120: requires CUDA
+SKIPPED [3] tests\models\test_clover_generation.py:20: requires CUDA
+SKIPPED [8] tests\models\test_clover_generation.py:228: requires CUDA
+SKIPPED [3] tests\models\test_clover_generation.py:279: requires CUDA
+SKIPPED [1] tests\models\test_clover_generation.py:323: requires CUDA
+SKIPPED [1] tests\models\test_clover_generation.py:346: requires CUDA
+SKIPPED [8] tests\models\test_clover_generation.py:363: requires CUDA
+SKIPPED [6] tests\models\test_clover_offload.py:10: requires CUDA
+SKIPPED [1] tests\models\test_clover_overlap.py:115: requires CUDA
+SKIPPED [14] tests\models\test_clover_real_layers.py:68: requires CUDA
+99 passed, 157 skipped in 4.25s
+
+Four benchmark aliases preserve module identity and monkeypatch visibility
+..................                                                       [100%]
+18 passed in 1.25s
+

@@ -1,0 +1,57 @@
+diff --git a/docs/clover/changes.md b/docs/clover/changes.md
+index 9ab7f8e..67e3976 100644
+--- a/docs/clover/changes.md
++++ b/docs/clover/changes.md
+@@ -46,8 +46,11 @@ These are budget calculations; actual auto-cache capacity also depends on free m
+ other reservations and alignment. Explicit W32 retains the previous reservation.
+ 
+ `clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`. It defaults to
+-128 rows; 0 disables union admission. The default threshold is unchanged pending TTFT
+-measurements. Mixed GGUF bank estimates require actual `expert_source.row_bytes` instead
++256 rows; 0 disables union admission. Q8 ABAB at 2292/2928 slots found sparse admission
++faster for 129-256 rows and slower from 384 rows. Full output comparisons at six boundary
++lengths match between limits 128 and 256. See the [qualification report](qualification-20261104.md)
++for exact inputs, results and the new-source gate status.
++Mixed GGUF bank estimates require actual `expert_source.row_bytes` instead
+ of guessing Q8 for missing descriptors.
+ 
+ The shared encoder guard in EngineConfig is retained: frozen GGUF config shims have no
+diff --git a/python/freetoken/engine/config.py b/python/freetoken/engine/config.py
+index d9929e7..283e293 100644
+--- a/python/freetoken/engine/config.py
++++ b/python/freetoken/engine/config.py
+@@ -117,7 +117,7 @@ class EngineConfig:
+     clover_mode: str = "causal"
+     clover_width: int = 8
+     clover_max_width: int | None = None
+-    clover_sparse_prefill_limit: int = 128
++    clover_sparse_prefill_limit: int = 256
+     clover_graph_warmup_widths: List[int] = field(default_factory=list)
+     clover_split_kv: bool = False
+     clover_threshold: float = .95
+diff --git a/python/freetoken/models/clover_moe/moe.py b/python/freetoken/models/clover_moe/moe.py
+index d661eba..166c688 100644
+--- a/python/freetoken/models/clover_moe/moe.py
++++ b/python/freetoken/models/clover_moe/moe.py
+@@ -24,7 +24,7 @@ def admit_expert_union(cache, layer_id, indices):
+ class CloverMoE(Qwen3_5MoE):
+     def __init__(self, config, layer_id=None, *, prefix=""):
+         super().__init__(config, layer_id, prefix=prefix)
+-        self.sparse_prefill_limit = 128
++        self.sparse_prefill_limit = 256
+ 
+     def forward(self, hidden_states):
+         cache = getattr(self.experts, "offload_cache", None)
+diff --git a/tests/engine/test_clover_config.py b/tests/engine/test_clover_config.py
+index a701846..edd3c3d 100644
+--- a/tests/engine/test_clover_config.py
++++ b/tests/engine/test_clover_config.py
+@@ -43,7 +43,7 @@ def test_graph_warmup_is_opt_in_and_normalizes_declared_widths():
+     assert config.clover_graph_warmup_widths == [8, 16, 32]
+ 
+ 
+-@pytest.mark.parametrize("limit", [0, 128, 512])
++@pytest.mark.parametrize("limit", [0, 128, 256, 512])
+ def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
+     from types import SimpleNamespace
+     from freetoken.models.clover_moe.model import CloverMoeModelLM
