@@ -548,6 +548,13 @@ class Scheduler(SchedulerIOMixin):
                 logger.warning_rank0(
                     f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
                 )
+            validate_request = getattr(getattr(self.engine, "mtp_runtime", None), "validate_request", None)
+            if validate_request is not None:
+                try:
+                    msg = validate_request(msg, self.cache_manager)
+                except (ValueError, NotImplementedError) as error:
+                    self.send_result([ErrorReplyMsg(uid=msg.uid, error=str(error), code="invalid_request")])
+                    return
             self.prefill_manager.add_one_req(msg)
         elif isinstance(msg, AbortBackendMsg):
             logger.debug_rank0("Aborting request %d", msg.uid)
