@@ -2,6 +2,7 @@
 
 import copy
 from collections import deque
+from dataclasses import replace
 import json
 from pathlib import Path
 import time
@@ -88,8 +89,8 @@ class CloverRuntime:
 
     def settings(self, req):
         params, config = req.sampling_params, self.engine.config
-        mode = params.clover_mode or config.clover_mode
-        width = params.clover_width or config.clover_width
+        mode = config.clover_mode if params.clover_mode is None else params.clover_mode
+        width = config.clover_width if params.clover_width is None else params.clover_width
         threshold = (
             config.clover_threshold
             if params.clover_threshold is None
@@ -106,6 +107,22 @@ class CloverRuntime:
         if mode != "causal" and width > getattr(config, "clover_max_width", 32):
             raise ValueError("Requested Clover width exceeds the reserved maximum")
         return mode, width, threshold
+
+    def validate_request(self, msg, manager):
+        mode, width, threshold = self.settings(msg)
+        if mode != "causal":
+            self._require_block_backend(manager)
+            if not msg.sampling_params.is_greedy:
+                raise ValueError("Clover block generation currently requires greedy sampling")
+        if mode == "denoise" and msg.sampling_params.max_tokens > 0:
+            # Even the last partial delivery previews W rows. Reserve its full context.
+            blocks = (msg.sampling_params.max_tokens + width - 1) // width
+            if len(msg.input_ids) + blocks * width > self.engine.max_seq_len:
+                raise ValueError(
+                    "Denoising requires room for a full preview block, including the final partial block"
+                )
+        return replace(msg, sampling_params=replace(msg.sampling_params,
+            clover_mode=mode, clover_width=width, clover_threshold=threshold))
 
     def state(self, req, pending=None):
         state = self.states.get(req)

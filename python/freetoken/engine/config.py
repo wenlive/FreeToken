@@ -128,6 +128,10 @@ class EngineConfig:
     def __post_init__(self):
         if self.clover_mode not in ("causal", "selfspec", "denoise"):
             raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
         if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
             raise ValueError("Invalid Clover block width or acceptance rule")
         if self.clover_max_width not in (0, 8, 16, 32):
