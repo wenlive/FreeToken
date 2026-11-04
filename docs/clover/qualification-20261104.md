@@ -1,6 +1,6 @@
 # Clover repair qualification, 2026-11-04
 
-Status: active, Q8 only. Q8 serving changes through `5df3410` are committed locally and
+Status: active, Q8 only. Q8 serving changes through `5df3410` are committed and pushed, and
 the combined hardware gate has passed. Numerical work is still running. At the owner's
 request, NVFP4 maintenance ended with documentation commit `8afcec6`; the previous
 `9ec70fb` serving code and results are historical, and pending NVFP4 work is retired,
@@ -48,7 +48,13 @@ Host input embeddings are automatic only for untied Clover GGUF, with explicit o
 Isolated same-boot ABAB added 304 slots and kept all 30 prompt/mode outputs identical.
 Causal W0 decode improved 2.45-5.06%; shared-W32 end-to-end gains were 3.33-30.56%.
 These describe the measured workloads, not a guarantee for every prompt. Matched forward
-traces remain pending; the latest default-policy gate is complete as recorded above.
+traces now cover 35 cases (five causal W0 and 30 shared-W32 prompt/mode combinations),
+with identical output IDs across placements and repeats. For the Python task at W32
+reservation, denoise16 preview/verify mean times change from 39.880/106.308 ms to
+37.739/94.678 ms; denoise32 changes from 42.584/214.185 to 40.432/191.403 ms.
+These are separate instrumented diagnostics, not the ABAB timing samples. Outer round
+events contain inner phases and must not be added to them.
+[Matched forwards](evidence/20261104/20261104T071538Z-c2-matched-forward-summary/data/results.json).
 [Causal results](evidence/20261104/20261104T050343Z-c2-causal-summary/data/results.json),
 [six-mode results](evidence/20261104/20261104T051959Z-c2-six-summary/data/results.json).
 
@@ -70,8 +76,24 @@ Split-KV remains disabled by default. At 16K/32K, real attention operands give r
 L2 around 0.00165-0.00174 against the FP32 reference for all three arithmetic variants.
 Whole-model tile perturbations can be as large as split differences, but 8/24 cases
 exceed 1.2 times this single measured perturbation. This supports amplification as a
-contributor; it does not prove every difference harmless. Natural-context and FP32-linear
-controls remain pending. [Initial B3 summary](evidence/20261104/20261104T044037Z-b3-summary/results.json).
+contributor; it does not prove every difference harmless.
+[Initial B3 summary](evidence/20261104/20261104T044037Z-b3-summary/results.json).
+
+The six natural, anchored, coreset-1.0 controls at 8K/16K/32K replace packed Q8 linears
+and routed expert matmuls with exact-dequantized FP32 matmuls, with TF32 disabled.
+BF16 boundaries, unquantized linears and discrete top-8 routing remain. Split/default
+whole-model relative L2 remains 2.07-5.06%; four of six cases exceed 1.2 times the tile
+perturbation. Persistent prefix states remain byte-identical. Activation Q8_1 rounding
+is therefore not the sole source; this is not an all-FP32 proof or a reason to enable
+split by default. [FP32 packed-linear controls](evidence/20261104/20261104T065702Z-b3-natural-fp32-linears/data/results.json).
+
+Two natural-context tasks at each of 8K/16K/32K, under default/tile/split8, all produce
+the requested correct numeric final marker (18/18) before the 128-token cap. Outputs
+and preview progress can differ; split8 also emits malformed intermediate `<<...>>`
+formatting in the 8K Chinese case. This small check does not establish general quality.
+Runs are instrumented and have no warmup, so first-use graph capture may affect timing;
+they are not ABAB speed measurements. Split remains off by default.
+[Natural-context progress and outputs](evidence/20261104/20261104T073647Z-b3-natural-context-summary/data/results.json).
 
 B1's 15-case Q8 progress run and four native arithmetic variants are complete. Comparing
 HF with a symmetric radius around the unperturbed native run, 13/15 full-generation
@@ -83,8 +105,21 @@ W16/W32 exceed it for the first block. For JSON W32, native progress is 2.46-2.6
 per preview across the variants, versus HF 4.00. This difference remains unexplained.
 [Progress/noise results](evidence/20261104/20261104T061945Z-b1-noise-progress-summary/data/results.json).
 
-B1 prefill-state localization and B0 fixed-history native/HF/llama distributions are not
-yet closed. B2 NVFP4 is retired at the owner's request with its differences unresolved.
+B1 prefill localization now covers all 40 layers and 30 real GDN operators for each of
+five short prompts. Disabling sparse admission produces exactly the same captured
+layer tensors, ruling it out for these tested prompts. Native and HF have identical
+layer-0 mixer input, but mixer output L2 is 0.36-0.46% and MLP output L2 is 1.08-1.97%.
+Final hidden-state L2 is 5.49-8.32% against HF, versus 4.49-9.80% for native tile noise.
+On identical actual operands, the largest per-prompt GDN output L2 is 0.42-0.50% and
+state L2 is 0.33-0.39%. These local differences are measured, not declared harmless.
+The first drift is localized, but the JSON W32 progress discrepancy is still unknown;
+no specific incorrect operator has been demonstrated or repaired by this diagnostic.
+The first comparison attempt failed on a diagnostic `argsort` API call; its record is
+preserved, and the corrected comparison reused the existing native captures.
+[Prefill localization](evidence/20261104/20261104T073922Z-b1-prefill-localization-summary/data/results.json).
+
+B0 fixed-history native/HF/llama distributions are still running.
+B2 NVFP4 is retired at the owner's request with its differences unresolved.
 No acceptance threshold was changed to pass them.
 Strict selfspec performs greedy acceptance at each position; it does not guarantee the
 same IDs as independent single-row causal execution.

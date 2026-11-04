@@ -1,0 +1,1069 @@
+{
+  "cases": 35,
+  "output_differences": [],
+  "python": [
+    {
+      "maximum": 0,
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 8,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2928,
+          "phases": {
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 255.4640655517578,
+                  "total_ms": 255.4640655517578
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 250.2135009765625,
+                  "total_ms": 250.2135009765625
+                }
+              ],
+              "median_mean_ms": 252.83878326416016
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 250,
+                  "mean_ms": 11.095183729171753,
+                  "total_ms": 2773.7959322929382
+                },
+                {
+                  "calls": 250,
+                  "mean_ms": 11.1124626121521,
+                  "total_ms": 2778.115653038025
+                }
+              ],
+              "median_mean_ms": 11.103823170661926
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 3232,
+          "phases": {
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 261.4955749511719,
+                  "total_ms": 261.4955749511719
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 245.15904235839844,
+                  "total_ms": 245.15904235839844
+                }
+              ],
+              "median_mean_ms": 253.32730865478516
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 250,
+                  "mean_ms": 10.631138172149658,
+                  "total_ms": 2657.7845430374146
+                },
+                {
+                  "calls": 250,
+                  "mean_ms": 10.62365454864502,
+                  "total_ms": 2655.913637161255
+                }
+              ],
+              "median_mean_ms": 10.627396360397338
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "causal",
+      "width": 8,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 285.25799560546875,
+                  "total_ms": 285.25799560546875
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 268.5025939941406,
+                  "total_ms": 268.5025939941406
+                }
+              ],
+              "median_mean_ms": 276.8802947998047
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 250,
+                  "mean_ms": 12.763752983093262,
+                  "total_ms": 3190.9382457733154
+                },
+                {
+                  "calls": 250,
+                  "mean_ms": 12.607855987548827,
+                  "total_ms": 3151.963996887207
+                }
+              ],
+              "median_mean_ms": 12.685804485321045
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 258.9148254394531,
+                  "total_ms": 258.9148254394531
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 257.11810302734375,
+                  "total_ms": 257.11810302734375
+                }
+              ],
+              "median_mean_ms": 258.01646423339844
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 250,
+                  "mean_ms": 11.885130895614624,
+                  "total_ms": 2971.282723903656
+                },
+                {
+                  "calls": 250,
+                  "mean_ms": 11.908721950531007,
+                  "total_ms": 2977.1804876327515
+                }
+              ],
+              "median_mean_ms": 11.896926423072816
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 8,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 138.28833334786552,
+                  "total_ms": 3872.0733337402344
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 137.95102855137415,
+                  "total_ms": 3862.6287994384766
+                }
+              ],
+              "median_mean_ms": 138.11968094961983
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 73,
+                  "mean_ms": 28.27623147833837,
+                  "total_ms": 2064.164897918701
+                },
+                {
+                  "calls": 73,
+                  "mean_ms": 28.185367427460136,
+                  "total_ms": 2057.53182220459
+                }
+              ],
+              "median_mean_ms": 28.230799452899255
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 0.1654262872678893,
+                  "total_ms": 4.6319360435009
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 0.16532457300594874,
+                  "total_ms": 4.629088044166565
+                }
+              ],
+              "median_mean_ms": 0.16537543013691902
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 52.84317261832101,
+                  "total_ms": 1479.6088333129883
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 52.75608907427107,
+                  "total_ms": 1477.1704940795898
+                }
+              ],
+              "median_mean_ms": 52.79963084629604
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 0.14455085833157813,
+                  "total_ms": 4.047424033284187
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 0.14339657074638776,
+                  "total_ms": 4.015103980898857
+                }
+              ],
+              "median_mean_ms": 0.14397371453898294
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 295.672119140625,
+                  "total_ms": 295.672119140625
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 296.14239501953125,
+                  "total_ms": 296.14239501953125
+                }
+              ],
+              "median_mean_ms": 295.9072570800781
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 129.04891668047225,
+                  "total_ms": 3613.3696670532227
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 128.78983552115304,
+                  "total_ms": 3606.115394592285
+                }
+              ],
+              "median_mean_ms": 128.91937610081266
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 73,
+                  "mean_ms": 26.59229637825326,
+                  "total_ms": 1941.2376356124878
+                },
+                {
+                  "calls": 73,
+                  "mean_ms": 26.57025266673467,
+                  "total_ms": 1939.6284446716309
+                }
+              ],
+              "median_mean_ms": 26.581274522493963
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 0.165156573589359,
+                  "total_ms": 4.624384060502052
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 0.1649840005806514,
+                  "total_ms": 4.61955201625824
+                }
+              ],
+              "median_mean_ms": 0.1650702870850052
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 48.976407051086426,
+                  "total_ms": 1371.33939743042
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 48.97298663003104,
+                  "total_ms": 1371.2436256408691
+                }
+              ],
+              "median_mean_ms": 48.974696840558735
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 28,
+                  "mean_ms": 0.14297371464116232,
+                  "total_ms": 4.003264009952545
+                },
+                {
+                  "calls": 28,
+                  "mean_ms": 0.14426285667078836,
+                  "total_ms": 4.039359986782074
+                }
+              ],
+              "median_mean_ms": 0.14361828565597534
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 270.1099853515625,
+                  "total_ms": 270.1099853515625
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 265.76483154296875,
+                  "total_ms": 265.76483154296875
+                }
+              ],
+              "median_mean_ms": 267.9374084472656
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 16,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 334.29019927978516,
+                  "total_ms": 4680.062789916992
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 333.7631040300642,
+                  "total_ms": 4672.683456420898
+                }
+              ],
+              "median_mean_ms": 334.02665165492465
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 72,
+                  "mean_ms": 39.85876462194655,
+                  "total_ms": 2869.8310527801514
+                },
+                {
+                  "calls": 72,
+                  "mean_ms": 39.90184044837952,
+                  "total_ms": 2872.932512283325
+                }
+              ],
+              "median_mean_ms": 39.88030253516303
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 0.1671428605914116,
+                  "total_ms": 2.3400000482797623
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 0.166386288191591,
+                  "total_ms": 2.329408034682274
+                }
+              ],
+              "median_mean_ms": 0.16676457439150127
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 106.30537414550781,
+                  "total_ms": 1488.2752380371094
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 106.31026567731585,
+                  "total_ms": 1488.3437194824219
+                }
+              ],
+              "median_mean_ms": 106.30781991141183
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 0.14781485604388372,
+                  "total_ms": 2.0694079846143723
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 0.14783085776226862,
+                  "total_ms": 2.0696320086717606
+                }
+              ],
+              "median_mean_ms": 0.14782285690307617
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 300.162353515625,
+                  "total_ms": 300.162353515625
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 287.8723449707031,
+                  "total_ms": 287.8723449707031
+                }
+              ],
+              "median_mean_ms": 294.01734924316406
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 310.3512638636998,
+                  "total_ms": 4344.917694091797
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 311.8578545706613,
+                  "total_ms": 4366.009963989258
+                }
+              ],
+              "median_mean_ms": 311.1045592171805
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 72,
+                  "mean_ms": 37.77336406707764,
+                  "total_ms": 2719.68221282959
+                },
+                {
+                  "calls": 72,
+                  "mean_ms": 37.703965266545616,
+                  "total_ms": 2714.685499191284
+                }
+              ],
+              "median_mean_ms": 37.73866466681163
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 0.16733485886028834,
+                  "total_ms": 2.342688024044037
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 0.16759314707347325,
+                  "total_ms": 2.3463040590286255
+                }
+              ],
+              "median_mean_ms": 0.1674640029668808
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 94.71302304949079,
+                  "total_ms": 1325.982322692871
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 94.64308684212821,
+                  "total_ms": 1325.003215789795
+                }
+              ],
+              "median_mean_ms": 94.67805494580949
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 14,
+                  "mean_ms": 0.14781942857163294,
+                  "total_ms": 2.069472000002861
+                },
+                {
+                  "calls": 14,
+                  "mean_ms": 0.16267885799918855,
+                  "total_ms": 2.27750401198864
+                }
+              ],
+              "median_mean_ms": 0.15524914328541073
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 276.4892883300781,
+                  "total_ms": 276.4892883300781
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 302.4417419433594,
+                  "total_ms": 302.4417419433594
+                }
+              ],
+              "median_mean_ms": 289.46551513671875
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "denoise",
+      "width": 32,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 740.9317779541016,
+                  "total_ms": 5927.4542236328125
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 741.7357330322266,
+                  "total_ms": 5933.8858642578125
+                }
+              ],
+              "median_mean_ms": 741.3337554931641
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 92,
+                  "mean_ms": 42.602858108022936,
+                  "total_ms": 3919.4629459381104
+                },
+                {
+                  "calls": 92,
+                  "mean_ms": 42.56601733746736,
+                  "total_ms": 3916.073595046997
+                }
+              ],
+              "median_mean_ms": 42.58443772274515
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 0.1672280039638281,
+                  "total_ms": 1.3378240317106247
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 0.16746400110423565,
+                  "total_ms": 1.3397120088338852
+                }
+              ],
+              "median_mean_ms": 0.16734600253403187
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 214.3221559524536,
+                  "total_ms": 1714.577247619629
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 214.04807662963867,
+                  "total_ms": 1712.3846130371094
+                }
+              ],
+              "median_mean_ms": 214.18511629104614
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 0.15517599880695343,
+                  "total_ms": 1.2414079904556274
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 0.15536800026893616,
+                  "total_ms": 1.2429440021514893
+                }
+              ],
+              "median_mean_ms": 0.1552719995379448
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 269.711669921875,
+                  "total_ms": 269.711669921875
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 282.33477783203125,
+                  "total_ms": 282.33477783203125
+                }
+              ],
+              "median_mean_ms": 276.0232238769531
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "round": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 694.5816917419434,
+                  "total_ms": 5556.653533935547
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 689.7894706726074,
+                  "total_ms": 5518.315765380859
+                }
+              ],
+              "median_mean_ms": 692.1855812072754
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 92,
+                  "mean_ms": 40.524549940358035,
+                  "total_ms": 3728.2585945129395
+                },
+                {
+                  "calls": 92,
+                  "mean_ms": 40.33869975546132,
+                  "total_ms": 3711.1603775024414
+                }
+              ],
+              "median_mean_ms": 40.431624847909674
+            },
+            "save_ahead": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 0.16564000211656094,
+                  "total_ms": 1.3251200169324875
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 0.16608400270342827,
+                  "total_ms": 1.3286720216274261
+                }
+              ],
+              "median_mean_ms": 0.1658620024099946
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 192.03246116638184,
+                  "total_ms": 1536.2596893310547
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 190.77377605438232,
+                  "total_ms": 1526.1902084350586
+                }
+              ],
+              "median_mean_ms": 191.40311861038208
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 8,
+                  "mean_ms": 0.15651999972760677,
+                  "total_ms": 1.2521599978208542
+                },
+                {
+                  "calls": 8,
+                  "mean_ms": 0.15678800269961357,
+                  "total_ms": 1.2543040215969086
+                }
+              ],
+              "median_mean_ms": 0.15665400121361017
+            },
+            "advance": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 266.0830078125,
+                  "total_ms": 266.0830078125
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 257.8114318847656,
+                  "total_ms": 257.8114318847656
+                }
+              ],
+              "median_mean_ms": 261.9472198486328
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 8,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 55.717067033816605,
+                  "total_ms": 2172.9656143188477
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 55.713150513477814,
+                  "total_ms": 2172.8128700256348
+                }
+              ],
+              "median_mean_ms": 55.71510877364721
+            },
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 271.9196472167969,
+                  "total_ms": 271.9196472167969
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 276.8264465332031,
+                  "total_ms": 276.8264465332031
+                }
+              ],
+              "median_mean_ms": 274.373046875
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 0.16852922966847053,
+                  "total_ms": 6.572639957070351
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 0.16506174397774231,
+                  "total_ms": 6.43740801513195
+                }
+              ],
+              "median_mean_ms": 0.1667954868231064
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 26.804298596504406,
+                  "total_ms": 1045.3676452636719
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 26.822038992857323,
+                  "total_ms": 1046.0595207214355
+                }
+              ],
+              "median_mean_ms": 26.813168794680863
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 50.806844466771835,
+                  "total_ms": 1981.4669342041016
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 50.80320759308644,
+                  "total_ms": 1981.325096130371
+                }
+              ],
+              "median_mean_ms": 50.80502602992914
+            },
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 285.9727478027344,
+                  "total_ms": 285.9727478027344
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 285.806884765625,
+                  "total_ms": 285.806884765625
+                }
+              ],
+              "median_mean_ms": 285.8898162841797
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 0.18723856447598872,
+                  "total_ms": 7.3023040145635605
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 0.16893538374167222,
+                  "total_ms": 6.588479965925217
+                }
+              ],
+              "median_mean_ms": 0.17808697410883045
+            },
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 39,
+                  "mean_ms": 24.612019856770832,
+                  "total_ms": 959.8687744140625
+                },
+                {
+                  "calls": 39,
+                  "mean_ms": 24.6238530476888,
+                  "total_ms": 960.3302688598633
+                }
+              ],
+              "median_mean_ms": 24.617936452229817
+            }
+          }
+        }
+      }
+    },
+    {
+      "maximum": 32,
+      "prompt": "Python",
+      "mode": "selfspec",
+      "width": 16,
+      "all_formal_output_ids_equal": true,
+      "variants": {
+        "device": {
+          "cache_slots": 2292,
+          "phases": {
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 32.52800602383084,
+                  "total_ms": 878.2561626434326
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 32.478246759485316,
+                  "total_ms": 876.9126625061035
+                }
+              ],
+              "median_mean_ms": 32.50312639165808
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 112.95805994669597,
+                  "total_ms": 3049.867618560791
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 113.04240827207212,
+                  "total_ms": 3052.1450233459473
+                }
+              ],
+              "median_mean_ms": 113.00023410938405
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 0.17647644270349433,
+                  "total_ms": 4.764863952994347
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 0.1777682955618258,
+                  "total_ms": 4.799743980169296
+                }
+              ],
+              "median_mean_ms": 0.17712236913266005
+            },
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 271.8466796875,
+                  "total_ms": 271.8466796875
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 266.3008117675781,
+                  "total_ms": 266.3008117675781
+                }
+              ],
+              "median_mean_ms": 269.07374572753906
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 6,
+                  "mean_ms": 13.780725161234537,
+                  "total_ms": 82.68435096740723
+                },
+                {
+                  "calls": 6,
+                  "mean_ms": 13.784234841664633,
+                  "total_ms": 82.7054090499878
+                }
+              ],
+              "median_mean_ms": 13.782480001449585
+            }
+          }
+        },
+        "host": {
+          "cache_slots": 2596,
+          "phases": {
+            "preview": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 27.27031962076823,
+                  "total_ms": 736.2986297607422
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 27.238787686383283,
+                  "total_ms": 735.4472675323486
+                }
+              ],
+              "median_mean_ms": 27.254553653575755
+            },
+            "verify": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 80.95269591720016,
+                  "total_ms": 2185.7227897644043
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 80.9616971898962,
+                  "total_ms": 2185.9658241271973
+                }
+              ],
+              "median_mean_ms": 80.95719655354819
+            },
+            "state_commit": {
+              "per_request": [
+                {
+                  "calls": 27,
+                  "mean_ms": 0.17916325783288037,
+                  "total_ms": 4.83740796148777
+                },
+                {
+                  "calls": 27,
+                  "mean_ms": 0.17435140907764435,
+                  "total_ms": 4.707488045096397
+                }
+              ],
+              "median_mean_ms": 0.17675733345526234
+            },
+            "native_prefill": {
+              "per_request": [
+                {
+                  "calls": 1,
+                  "mean_ms": 291.9486389160156,
+                  "total_ms": 291.9486389160156
+                },
+                {
+                  "calls": 1,
+                  "mean_ms": 266.6346740722656,
+                  "total_ms": 266.6346740722656
+                }
+              ],
+              "median_mean_ms": 279.2916564941406
+            },
+            "causal": {
+              "per_request": [
+                {
+                  "calls": 6,
+                  "mean_ms": 12.717002709706625,
+                  "total_ms": 76.30201625823975
+                },
+                {
+                  "calls": 6,
+                  "mean_ms": 12.632970492045084,
+                  "total_ms": 75.79782295227051
+                }
+              ],
+              "median_mean_ms": 12.674986600875854
+            }
+          }
+        }
+      }
+    }
+  ]
+}

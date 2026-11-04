@@ -1,0 +1,1071 @@
+{
+  "state": "complete",
+  "inputs": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072637Z-b1-prefill-none-sparse128\\data\\results.json",
+      "sha256": "209fa060c5678d6d8d968b74ef22aee1bb34a4aba4493f938c35bd5683fc59ca",
+      "manifest": {
+        "started_at": "20261104T072637Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_states.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--source",
+          "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "--stage",
+          "native",
+          "--noise",
+          "none",
+          "--sparse-limit",
+          "128",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072637Z-b1-prefill-none-sparse128\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_states.py",
+            "artifact": "external-scripts\\1-check_prefill_states.py",
+            "sha256": "43c626e394fc7bc10532af42ff4d9bc572eeba4d6e1a17a738f53ab627b40d26"
+          }
+        ],
+        "pid": 13616,
+        "exit_code": 0,
+        "elapsed_seconds": 67.5
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T073546Z-b1-prefill-hf-comparison\\data\\results.json",
+      "sha256": "16d409d0d3ab65124c4725a381bf5cf52b436407064f88667e56453aa5a51f61",
+      "manifest": {
+        "started_at": "20261104T073546Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_states.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--source",
+          "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "--stage",
+          "reference",
+          "--native-results",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072637Z-b1-prefill-none-sparse128\\data\\results.json",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072745Z-b1-prefill-tile-sparse128\\data\\results.json",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072853Z-b1-prefill-none-sparse0\\data\\results.json",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T073546Z-b1-prefill-hf-comparison\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": null,
+          "CLOVER_HF_SOURCE": null,
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": null
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_states.py",
+            "artifact": "external-scripts\\1-check_prefill_states.py",
+            "sha256": "3e9f17d3fa65cc078c989b991ebfda4e84b4e08776e7de1f4ad91a2b3eb40ad6"
+          }
+        ],
+        "pid": 13364,
+        "exit_code": 0,
+        "elapsed_seconds": 73.17199999999139
+      }
+    }
+  ],
+  "cases": [
+    {
+      "prompt": "Count",
+      "first_layer": {
+        "layer": 0,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0,
+            "max_abs": 0.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.004231044556945562,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.0025445877108722925,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.005142686422914267,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.010815693065524101,
+            "max_abs": 0.001953125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.005818065721541643,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "conv": {
+            "relative_l2": 4.24144855060149e-06,
+            "max_abs": 0.0009765625,
+            "finite": true
+          },
+          "ssm": {
+            "relative_l2": 0.002629681956022978,
+            "max_abs": 0.033930420875549316,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 1.0,
+        "top8_member_fraction": 1.0
+      },
+      "hf_first_exceeding_diagnostic_levels": {
+        "0.001": {
+          "hidden": 0,
+          "mixer_input": 1,
+          "mixer_output": 0,
+          "mlp_output": 0,
+          "conv": 1,
+          "ssm": 0,
+          "key": 3,
+          "value": 3
+        },
+        "0.01": {
+          "hidden": 1,
+          "mixer_input": 2,
+          "mixer_output": 1,
+          "mlp_output": 0,
+          "conv": 4,
+          "ssm": 2,
+          "key": 3,
+          "value": 3
+        }
+      },
+      "final_hf_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.12995010614395142,
+            "max_abs": 2.8125,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.04214806854724884,
+            "max_abs": 0.53125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.017665065824985504,
+            "max_abs": 0.9375,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.17168012261390686,
+            "max_abs": 2.25,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.049791932106018066,
+            "max_abs": 1.8125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.054883211851119995,
+            "max_abs": 2.0625,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.09613791853189468,
+            "max_abs": 1.37060546875,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.04092396795749664,
+            "max_abs": 0.94140625,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.4761904776096344,
+        "top8_member_fraction": 0.8928571343421936
+      },
+      "final_tile_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0832531601190567,
+            "max_abs": 4.125,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.04028204083442688,
+            "max_abs": 0.65625,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.012245778925716877,
+            "max_abs": 0.625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.10708898305892944,
+            "max_abs": 2.15234375,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.04333028942346573,
+            "max_abs": 1.5625,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.044939082115888596,
+            "max_abs": 1.875,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.05732624977827072,
+            "max_abs": 0.70947265625,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.027575021609663963,
+            "max_abs": 1.0,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.761904776096344,
+        "top8_member_fraction": 0.9464285969734192
+      },
+      "sparse_all_layer_tensors_exact": true,
+      "gdn_same_operand_max": {
+        "output_vs_hf": 0.004265683703124523,
+        "state_vs_hf": 0.003433879930526018
+      },
+      "gdn_first_layer": {
+        "prompt": "Count",
+        "layer": 0,
+        "tokens": 21,
+        "output_vs_hf": {
+          "relative_l2": 0.0024429939221590757,
+          "max_abs": 0.0078125,
+          "finite": true
+        },
+        "state_vs_hf": {
+          "relative_l2": 0.0024526813067495823,
+          "max_abs": 0.033931851387023926,
+          "finite": true
+        },
+        "artifact": {
+          "file": "Count-gdn-0.pt",
+          "sha256": "64c157e0aea694fa42e0b0d081581782ad9b7f1d9464d1d5c6eae39577d6506e"
+        }
+      }
+    },
+    {
+      "prompt": "Sky",
+      "first_layer": {
+        "layer": 0,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0,
+            "max_abs": 0.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.004120299592614174,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.002504302654415369,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.005047198385000229,
+            "max_abs": 0.125,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.01080276444554329,
+            "max_abs": 0.001953125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.005771608091890812,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "conv": {
+            "relative_l2": 4.24144855060149e-06,
+            "max_abs": 0.0009765625,
+            "finite": true
+          },
+          "ssm": {
+            "relative_l2": 0.0030285657849162817,
+            "max_abs": 0.043749094009399414,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 1.0,
+        "top8_member_fraction": 1.0
+      },
+      "hf_first_exceeding_diagnostic_levels": {
+        "0.001": {
+          "hidden": 0,
+          "mixer_input": 1,
+          "mixer_output": 0,
+          "mlp_output": 0,
+          "conv": 1,
+          "ssm": 0,
+          "key": 3,
+          "value": 3
+        },
+        "0.01": {
+          "hidden": 1,
+          "mixer_input": 2,
+          "mixer_output": 1,
+          "mlp_output": 0,
+          "conv": 2,
+          "ssm": 2,
+          "key": 3,
+          "value": 3
+        }
+      },
+      "final_hf_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.07791850715875626,
+            "max_abs": 2.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.036848533898591995,
+            "max_abs": 0.9375,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.011935514397919178,
+            "max_abs": 0.53125,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.10741709917783737,
+            "max_abs": 2.6962890625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.08058581501245499,
+            "max_abs": 2.75,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.0795564204454422,
+            "max_abs": 2.75,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.05536459758877754,
+            "max_abs": 0.654296875,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.027050156146287918,
+            "max_abs": 0.875,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.6086956262588501,
+        "top8_member_fraction": 0.929347813129425
+      },
+      "final_tile_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.052871424704790115,
+            "max_abs": 0.75,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.022052837535738945,
+            "max_abs": 0.375,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.008046852424740791,
+            "max_abs": 0.59375,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.0718454048037529,
+            "max_abs": 1.65625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.08705179393291473,
+            "max_abs": 3.125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.08343477547168732,
+            "max_abs": 3.0,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.03888858109712601,
+            "max_abs": 0.6953125,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.01760253682732582,
+            "max_abs": 0.419921875,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.8695651888847351,
+        "top8_member_fraction": 0.97826087474823
+      },
+      "sparse_all_layer_tensors_exact": true,
+      "gdn_same_operand_max": {
+        "output_vs_hf": 0.004564419388771057,
+        "state_vs_hf": 0.003948313649743795
+      },
+      "gdn_first_layer": {
+        "prompt": "Sky",
+        "layer": 0,
+        "tokens": 23,
+        "output_vs_hf": {
+          "relative_l2": 0.002668352099135518,
+          "max_abs": 0.0078125,
+          "finite": true
+        },
+        "state_vs_hf": {
+          "relative_l2": 0.0028265868313610554,
+          "max_abs": 0.04374504089355469,
+          "finite": true
+        },
+        "artifact": {
+          "file": "Sky-gdn-0.pt",
+          "sha256": "767acad31c6b3f4e541f686d6c90dd8bb13d11188119529247b7c7dc57c1aa93"
+        }
+      }
+    },
+    {
+      "prompt": "Python",
+      "first_layer": {
+        "layer": 0,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0,
+            "max_abs": 0.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.003851889865472913,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.0025189267471432686,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.004836554639041424,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.013169245794415474,
+            "max_abs": 0.00146484375,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.006115853786468506,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "conv": {
+            "relative_l2": 4.24144855060149e-06,
+            "max_abs": 0.0009765625,
+            "finite": true
+          },
+          "ssm": {
+            "relative_l2": 0.002428811974823475,
+            "max_abs": 0.02652263641357422,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.9444444179534912,
+        "top8_member_fraction": 0.9930555820465088
+      },
+      "hf_first_exceeding_diagnostic_levels": {
+        "0.001": {
+          "hidden": 0,
+          "mixer_input": 1,
+          "mixer_output": 0,
+          "mlp_output": 0,
+          "conv": 1,
+          "ssm": 0,
+          "key": 3,
+          "value": 3
+        },
+        "0.01": {
+          "hidden": 1,
+          "mixer_input": 2,
+          "mixer_output": 1,
+          "mlp_output": 0,
+          "conv": 4,
+          "ssm": 2,
+          "key": 3,
+          "value": 3
+        }
+      },
+      "final_hf_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.08065265417098999,
+            "max_abs": 1.875,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.04141869768500328,
+            "max_abs": 0.84375,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.012835400179028511,
+            "max_abs": 0.5,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.104789599776268,
+            "max_abs": 1.6875,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.07644294202327728,
+            "max_abs": 2.5,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.07774422317743301,
+            "max_abs": 2.5,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.052357275038957596,
+            "max_abs": 0.875,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.028442639857530594,
+            "max_abs": 1.15625,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.4166666567325592,
+        "top8_member_fraction": 0.8993055820465088
+      },
+      "final_tile_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.08523209393024445,
+            "max_abs": 3.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.043814968317747116,
+            "max_abs": 1.0,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.012034116312861443,
+            "max_abs": 0.5625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.10323477536439896,
+            "max_abs": 1.6875,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.07516533136367798,
+            "max_abs": 2.25,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.07579246163368225,
+            "max_abs": 2.25,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.05942722409963608,
+            "max_abs": 1.0625,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.029947062954306602,
+            "max_abs": 1.0,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.6666666865348816,
+        "top8_member_fraction": 0.9375
+      },
+      "sparse_all_layer_tensors_exact": true,
+      "gdn_same_operand_max": {
+        "output_vs_hf": 0.004968574270606041,
+        "state_vs_hf": 0.003300568088889122
+      },
+      "gdn_first_layer": {
+        "prompt": "Python",
+        "layer": 0,
+        "tokens": 36,
+        "output_vs_hf": {
+          "relative_l2": 0.002611110918223858,
+          "max_abs": 0.0078125,
+          "finite": true
+        },
+        "state_vs_hf": {
+          "relative_l2": 0.0022770303767174482,
+          "max_abs": 0.026967406272888184,
+          "finite": true
+        },
+        "artifact": {
+          "file": "Python-gdn-0.pt",
+          "sha256": "828e3be5651b57719e02cefe5776c1e1c76e54864aa9c9ffab241d9dab5b6a37"
+        }
+      }
+    },
+    {
+      "prompt": "JSON",
+      "first_layer": {
+        "layer": 0,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0,
+            "max_abs": 0.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.003614427288994193,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.0024130132514983416,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.005000004079192877,
+            "max_abs": 0.125,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.01966273970901966,
+            "max_abs": 0.0028076171875,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.00725281098857522,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "conv": {
+            "relative_l2": 4.24144855060149e-06,
+            "max_abs": 0.0009765625,
+            "finite": true
+          },
+          "ssm": {
+            "relative_l2": 0.002637593075633049,
+            "max_abs": 0.04377400875091553,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.9583333134651184,
+        "top8_member_fraction": 0.9947916865348816
+      },
+      "hf_first_exceeding_diagnostic_levels": {
+        "0.001": {
+          "hidden": 0,
+          "mixer_input": 1,
+          "mixer_output": 0,
+          "mlp_output": 0,
+          "conv": 1,
+          "ssm": 0,
+          "key": 3,
+          "value": 3
+        },
+        "0.01": {
+          "hidden": 1,
+          "mixer_input": 2,
+          "mixer_output": 1,
+          "mlp_output": 0,
+          "conv": 2,
+          "ssm": 2,
+          "key": 3,
+          "value": 3
+        }
+      },
+      "final_hf_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.08870306611061096,
+            "max_abs": 2.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.03981797397136688,
+            "max_abs": 0.375,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.013149436563253403,
+            "max_abs": 0.6875,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.12012077867984772,
+            "max_abs": 2.875,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.054297760128974915,
+            "max_abs": 1.828125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.05771923065185547,
+            "max_abs": 2.078125,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.0603773333132267,
+            "max_abs": 0.9375,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.028763772919774055,
+            "max_abs": 0.7021484375,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.3958333432674408,
+        "top8_member_fraction": 0.8932291865348816
+      },
+      "final_tile_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.07127194851636887,
+            "max_abs": 2.5,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.04337546229362488,
+            "max_abs": 0.5,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.012728288769721985,
+            "max_abs": 0.65625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.09491952508687973,
+            "max_abs": 5.3125,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.042115468531847,
+            "max_abs": 1.0234375,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.04693903401494026,
+            "max_abs": 1.8125,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.052667852491140366,
+            "max_abs": 1.0,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.02494175359606743,
+            "max_abs": 0.90625,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.625,
+        "top8_member_fraction": 0.9505208134651184
+      },
+      "sparse_all_layer_tensors_exact": true,
+      "gdn_same_operand_max": {
+        "output_vs_hf": 0.0043669468723237514,
+        "state_vs_hf": 0.0034137109760195017
+      },
+      "gdn_first_layer": {
+        "prompt": "JSON",
+        "layer": 0,
+        "tokens": 48,
+        "output_vs_hf": {
+          "relative_l2": 0.0026734855491667986,
+          "max_abs": 0.0078125,
+          "finite": true
+        },
+        "state_vs_hf": {
+          "relative_l2": 0.0024708090350031853,
+          "max_abs": 0.044077157974243164,
+          "finite": true
+        },
+        "artifact": {
+          "file": "JSON-gdn-0.pt",
+          "sha256": "078272889ae08838b5b584497fc0359d82acc664e0802aefde37e8528d5f26f6"
+        }
+      }
+    },
+    {
+      "prompt": "Chinese",
+      "first_layer": {
+        "layer": 0,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0,
+            "max_abs": 0.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.0045586759224534035,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.0026118820533156395,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.00534874526783824,
+            "max_abs": 0.0625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.010955732315778732,
+            "max_abs": 0.001953125,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.0056810141541063786,
+            "max_abs": 0.0078125,
+            "finite": true
+          },
+          "conv": {
+            "relative_l2": 4.24144855060149e-06,
+            "max_abs": 0.0009765625,
+            "finite": true
+          },
+          "ssm": {
+            "relative_l2": 0.0026055225171148777,
+            "max_abs": 0.035155296325683594,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 1.0,
+        "top8_member_fraction": 1.0
+      },
+      "hf_first_exceeding_diagnostic_levels": {
+        "0.001": {
+          "hidden": 0,
+          "mixer_input": 1,
+          "mixer_output": 0,
+          "mlp_output": 0,
+          "conv": 1,
+          "ssm": 0,
+          "key": 3,
+          "value": 3
+        },
+        "0.01": {
+          "hidden": 1,
+          "mixer_input": 2,
+          "mixer_output": 1,
+          "mlp_output": 0,
+          "conv": 2,
+          "ssm": 2,
+          "key": 3,
+          "value": 3
+        }
+      },
+      "final_hf_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.0659041777253151,
+            "max_abs": 2.75,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.03707250580191612,
+            "max_abs": 0.5,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.008615352213382721,
+            "max_abs": 0.6875,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.09012569487094879,
+            "max_abs": 2.22265625,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.08521810919046402,
+            "max_abs": 2.5625,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.08319290727376938,
+            "max_abs": 2.625,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.04770299792289734,
+            "max_abs": 0.8525390625,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.023001110181212425,
+            "max_abs": 0.8125,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.7222222089767456,
+        "top8_member_fraction": 0.9513888955116272
+      },
+      "final_tile_layer": {
+        "layer": 39,
+        "errors": {
+          "mixer_input": {
+            "relative_l2": 0.051203932613134384,
+            "max_abs": 1.0,
+            "finite": true
+          },
+          "mixer_output": {
+            "relative_l2": 0.02993183769285679,
+            "max_abs": 0.5,
+            "finite": true
+          },
+          "router": {
+            "relative_l2": 0.007242701947689056,
+            "max_abs": 0.5,
+            "finite": true
+          },
+          "mlp_input": {
+            "relative_l2": 0.07115486264228821,
+            "max_abs": 1.3046875,
+            "finite": true
+          },
+          "mlp_output": {
+            "relative_l2": 0.10376966744661331,
+            "max_abs": 2.625,
+            "finite": true
+          },
+          "hidden": {
+            "relative_l2": 0.0979713499546051,
+            "max_abs": 2.6875,
+            "finite": true
+          },
+          "key": {
+            "relative_l2": 0.03804425150156021,
+            "max_abs": 0.76171875,
+            "finite": true
+          },
+          "value": {
+            "relative_l2": 0.018017863854765892,
+            "max_abs": 0.6875,
+            "finite": true
+          }
+        },
+        "top8_set_agreement": 0.6944444179534912,
+        "top8_member_fraction": 0.9513888955116272
+      },
+      "sparse_all_layer_tensors_exact": true,
+      "gdn_same_operand_max": {
+        "output_vs_hf": 0.004231764003634453,
+        "state_vs_hf": 0.003807594534009695
+      },
+      "gdn_first_layer": {
+        "prompt": "Chinese",
+        "layer": 0,
+        "tokens": 36,
+        "output_vs_hf": {
+          "relative_l2": 0.002564819995313883,
+          "max_abs": 0.0078125,
+          "finite": true
+        },
+        "state_vs_hf": {
+          "relative_l2": 0.0024030308704823256,
+          "max_abs": 0.03544330596923828,
+          "finite": true
+        },
+        "artifact": {
+          "file": "Chinese-gdn-0.pt",
+          "sha256": "5d3b57a325b0eb845a7365038cdb398f8a3382b1bf70529a45234a0c65feed5f"
+        }
+      }
+    }
+  ],
+  "scope": "Five short prompts, per-layer same-Q8 HF, native tile perturbation and sparse admission disabled. GDN oracle receives identical real operands. Diagnostics do not prove all arithmetic differences harmless; JSON W32 progress remains unresolved.",
+  "all_sparse_layer_tensors_exact": true
+}

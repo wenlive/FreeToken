@@ -1,0 +1,2194 @@
+{
+  "state": "complete",
+  "inputs": [
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071230Z-b3-natural-8192-default\\data\\results.json",
+      "sha256": "846ed447789e7c86de0026e1a04b023708215bc20681e63c3a3dd31284797e29",
+      "manifest": {
+        "started_at": "20261104T071230Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "8192",
+          "--attention-variant",
+          "default",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071230Z-b3-natural-8192-default\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 10548,
+        "exit_code": 0,
+        "elapsed_seconds": 79.96900000001187
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071351Z-b3-natural-8192-noise\\data\\results.json",
+      "sha256": "2db2ea9c2a936b73e8c0f54f3eacd47f6b44cb73ff44c87c52d0cf5013ff0457",
+      "manifest": {
+        "started_at": "20261104T071351Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "8192",
+          "--attention-variant",
+          "noise",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071351Z-b3-natural-8192-noise\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 2068,
+        "exit_code": 0,
+        "elapsed_seconds": 79.20300000000861
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071510Z-b3-natural-8192-split8\\data\\results.json",
+      "sha256": "18ff26252cc8d0b2aabbcd0508727db1d75f51b40d6b0bb47e5fa6b6ef394a89",
+      "manifest": {
+        "started_at": "20261104T071510Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "8192",
+          "--attention-variant",
+          "split8",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071510Z-b3-natural-8192-split8\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 12576,
+        "exit_code": 0,
+        "elapsed_seconds": 77.46900000001187
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071628Z-b3-natural-16384-default\\data\\results.json",
+      "sha256": "4d3244db2644d8e70a731e7ee2f7f20c43459c569e4730bc39bc3c24c2878adc",
+      "manifest": {
+        "started_at": "20261104T071628Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "16384",
+          "--attention-variant",
+          "default",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071628Z-b3-natural-16384-default\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 13860,
+        "exit_code": 0,
+        "elapsed_seconds": 90.75
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071759Z-b3-natural-16384-noise\\data\\results.json",
+      "sha256": "ec85fb33eec6dd94bad50698069b481b09e533516d78acbb20830efd67dbf9f7",
+      "manifest": {
+        "started_at": "20261104T071759Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "16384",
+          "--attention-variant",
+          "noise",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071759Z-b3-natural-16384-noise\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 2260,
+        "exit_code": 0,
+        "elapsed_seconds": 90.96900000001187
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071930Z-b3-natural-16384-split8\\data\\results.json",
+      "sha256": "59b3977cfba0d02612618cc6f8abb3d0fda529d3f5dbf29942f2a6b6f3afb68f",
+      "manifest": {
+        "started_at": "20261104T071930Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "16384",
+          "--attention-variant",
+          "split8",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T071930Z-b3-natural-16384-split8\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 14988,
+        "exit_code": 0,
+        "elapsed_seconds": 87.73399999999674
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072058Z-b3-natural-32768-default\\data\\results.json",
+      "sha256": "68cd96a903f33fca93375d8ead4beed53cc9528233d8caf1840e77f5e0a75eae",
+      "manifest": {
+        "started_at": "20261104T072058Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "32768",
+          "--attention-variant",
+          "default",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072058Z-b3-natural-32768-default\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 4000,
+        "exit_code": 0,
+        "elapsed_seconds": 112.89099999997416
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072251Z-b3-natural-32768-noise\\data\\results.json",
+      "sha256": "9bb5b7dd860a622e8191e8fa9a547e59cd9d647634f22ab7acfd40c7ea291d8c",
+      "manifest": {
+        "started_at": "20261104T072251Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "32768",
+          "--attention-variant",
+          "noise",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072251Z-b3-natural-32768-noise\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 14632,
+        "exit_code": 0,
+        "elapsed_seconds": 115.59399999998277
+      }
+    },
+    {
+      "path": "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072447Z-b3-natural-32768-split8\\data\\results.json",
+      "sha256": "4d3de28fb4d08629a062b201d1c80d88b8b340786f7455a5721987c5deeb8939",
+      "manifest": {
+        "started_at": "20261104T072447Z",
+        "command": [
+          "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+          "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+          "--model",
+          "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "--corpus",
+          "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+          "--prefix-tokens",
+          "32768",
+          "--attention-variant",
+          "split8",
+          "--cache-auto",
+          "--memory-ratio",
+          ".9",
+          "--modes",
+          "denoise:16",
+          "--tokens",
+          "128",
+          "--warmups",
+          "0",
+          "--repeats",
+          "1",
+          "--runtime-breakdown",
+          "--output",
+          "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T072447Z-b3-natural-32768-split8\\data"
+        ],
+        "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-tools",
+        "commit": "3b691cc5e848f71874b7353bfcbed5ab0e6bdac6",
+        "dirty": "",
+        "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "state": "passed",
+        "environment": {
+          "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-tools",
+          "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+          "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-tools/torch-extensions",
+          "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-tools",
+          "CLOVER_GGUF_CHECKPOINT": "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+          "CLOVER_HF_SOURCE": "C:/workspace/models/inputs/clover-35b-a3b-bf16/4b0402b65e523d0183a14c431955438714cb16ff",
+          "FREETOKEN_QWEN4EXP_MODEL": null,
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "CUDA_VISIBLE_DEVICES": null,
+          "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+        },
+        "external_scripts": [
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+            "artifact": "external-scripts\\0-run.py",
+            "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+          },
+          {
+            "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\bench_natural_context.py",
+            "artifact": "external-scripts\\1-bench_natural_context.py",
+            "sha256": "6032f5df5db403ed7628a9401ce8736f9f7f85fc3f7ec7b903f186fbd44201f5"
+          }
+        ],
+        "pid": 7048,
+        "exit_code": 0,
+        "elapsed_seconds": 109.89000000001397
+      }
+    }
+  ],
+  "cases": [
+    {
+      "prefix_tokens": 8192,
+      "prompt": "NaturalA",
+      "expected": 42,
+      "observations": {
+        "default": {
+          "text": "First, multiply the number of rows by the number of plants per row: 6 * 7 = <<6*7=42>>42 tomato plants.\nTo check using repeated addition, add seven together six times: 7 + 7 + 7 + 7 + 7 + 7 = <<7+7+7+7+7+7=42>>42.\n#### 42",
+          "output_tokens": 89,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.7142857142857142,
+          "visible_tokens_per_preview": 1.5892857142857142,
+          "first_block_tokens_per_preview": 1.0666666666666667,
+          "steps": [
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              2,
+              6,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              14
+            ],
+            [
+              1,
+              1,
+              5,
+              8,
+              1
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              1,
+              2,
+              5,
+              1
+            ]
+          ]
+        },
+        "noise": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants per row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 70,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.702127659574468,
+          "visible_tokens_per_preview": 1.4893617021276595,
+          "first_block_tokens_per_preview": 2.0,
+          "steps": [
+            [
+              1,
+              3,
+              1,
+              2,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              2,
+              1,
+              4,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              10,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              7,
+              1,
+              1,
+              3,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "split8": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants per row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 70,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.702127659574468,
+          "visible_tokens_per_preview": 1.4893617021276595,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              2,
+              1,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              10,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              7,
+              1,
+              1,
+              4,
+              1,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.012158054711246091,
+          "split_absolute_difference": 0.012158054711246091,
+          "split_within_1_2_single_noise": true
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.9333333333333333,
+          "split_absolute_difference": 1.219047619047619,
+          "split_within_1_2_single_noise": false
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": false,
+        "split8": false
+      }
+    },
+    {
+      "prefix_tokens": 8192,
+      "prompt": "NaturalB",
+      "expected": 52,
+      "observations": {
+        "default": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n\n计算过程：\n1. 将原有的书和收到的捐书相加：37 + 15 = 52\n2. 所以图书角现在共有 52 本书。\n\n检验方法：\n用总数减去捐书数量，看是否等于原有的书数量：52 - 15 = 37，与原有书数量一致，计算正确。\n\n#### 52",
+          "output_tokens": 105,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.6,
+          "visible_tokens_per_preview": 1.5,
+          "first_block_tokens_per_preview": 2.0,
+          "steps": [
+            [
+              1,
+              3,
+              4,
+              1,
+              1,
+              2,
+              3,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              7,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              4,
+              2,
+              3,
+              1,
+              2,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              9,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              4,
+              1,
+              7,
+              2,
+              1
+            ]
+          ]
+        },
+        "noise": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n\n计算过程：\n1. 将原有的书和收到的捐书相加：\n37 + 15 = 52（本）\n\n检验方法：\n用总数减去捐书的数量，看是否等于原有的数量：\n52 - 15 = 37（本），结果正确。\n\n#### 52",
+          "output_tokens": 90,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.5,
+          "visible_tokens_per_preview": 1.40625,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              4,
+              3,
+              1,
+              1,
+              2,
+              4
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              4,
+              3,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              3,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              11,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              5,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "split8": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n\n计算过程：\n1. 将原有的书和收到的捐书相加：37 + 15 = <<<<52=52>>52 本。\n\n检验方法：\n用总数减去捐书的数量，看是否等于原有的数量：52 - 15 = <<37=37>>37 本，结果正确。\n\n#### 52",
+          "output_tokens": 101,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.5342465753424657,
+          "visible_tokens_per_preview": 1.3835616438356164,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              3,
+              4,
+              1,
+              1,
+              1,
+              5
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              4,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              7,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              3,
+              4,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              8,
+              5,
+              2
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.10000000000000009,
+          "split_absolute_difference": 0.06575342465753442,
+          "split_within_1_2_single_noise": true
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.2857142857142856,
+          "split_absolute_difference": 0.2857142857142856,
+          "split_within_1_2_single_noise": true
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": false,
+        "split8": false
+      }
+    },
+    {
+      "prefix_tokens": 16384,
+      "prompt": "NaturalA",
+      "expected": 42,
+      "observations": {
+        "default": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 71,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.951219512195122,
+          "visible_tokens_per_preview": 1.7317073170731707,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              3,
+              1,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              11,
+              1,
+              1
+            ],
+            [
+              8,
+              1,
+              3,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "noise": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 71,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.8604651162790697,
+          "visible_tokens_per_preview": 1.6511627906976745,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              2,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              11,
+              1,
+              1
+            ],
+            [
+              8,
+              1,
+              3,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "split8": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 71,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.8181818181818181,
+          "visible_tokens_per_preview": 1.6136363636363635,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              11,
+              1,
+              1
+            ],
+            [
+              8,
+              1,
+              3,
+              2,
+              1,
+              1
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.09075439591605217,
+          "split_absolute_difference": 0.1330376940133038,
+          "split_within_1_2_single_noise": false
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.0,
+          "split_absolute_difference": 0.0,
+          "split_within_1_2_single_noise": true
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": true,
+        "split8": true
+      }
+    },
+    {
+      "prefix_tokens": 16384,
+      "prompt": "NaturalB",
+      "expected": 52,
+      "observations": {
+        "default": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n\n计算过程：\n1. 将原有的书和收到的捐书数量相加：37 + 15 = 52（本）。\n2. 因此，现在图书角共有 52 本书。\n\n检验方法：\n用现在的总数减去收到的捐书数，看是否等于原有的书数：52 - 15 = 37（本），与原有书数一致，说明计算正确。\n\n#### 52",
+          "output_tokens": 115,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.6,
+          "visible_tokens_per_preview": 1.4375,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              3,
+              4,
+              1,
+              1,
+              3,
+              3
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              7,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              4,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              4,
+              3,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              8,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "noise": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n计算过程：\n原有书数 + 捐书数 = 总书数\n37 + 15 = 52\n\n检验方法：\n用总书数减去捐书数，看是否等于原有书数。\n52 - 15 = 37\n结果与原有书数一致，说明计算正确。\n\n#### 52",
+          "output_tokens": 97,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.7230769230769232,
+          "visible_tokens_per_preview": 1.4923076923076923,
+          "first_block_tokens_per_preview": 2.0,
+          "steps": [
+            [
+              1,
+              4,
+              3,
+              1,
+              1,
+              2,
+              3,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              8,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              12,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "split8": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n计算过程：\n原有书数 + 捐书数 = 总书数\n37 + 15 = 52\n\n检验方法：\n用总书数减去捐书数，看是否等于原有书数。\n52 - 15 = 37\n结果与原有书数一致，说明计算正确。\n\n#### 52",
+          "output_tokens": 97,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.7230769230769232,
+          "visible_tokens_per_preview": 1.4923076923076923,
+          "first_block_tokens_per_preview": 2.0,
+          "steps": [
+            [
+              1,
+              3,
+              4,
+              1,
+              1,
+              2,
+              3,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              7,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              12,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              2,
+              1,
+              2,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.12307692307692308,
+          "split_absolute_difference": 0.12307692307692308,
+          "split_within_1_2_single_noise": true
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.2857142857142856,
+          "split_absolute_difference": 0.2857142857142856,
+          "split_within_1_2_single_noise": true
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": false,
+        "split8": false
+      }
+    },
+    {
+      "prefix_tokens": 32768,
+      "prompt": "NaturalA",
+      "expected": 42,
+      "observations": {
+        "default": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 71,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.8604651162790697,
+          "visible_tokens_per_preview": 1.6511627906976745,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              11,
+              1,
+              1
+            ],
+            [
+              8,
+              1,
+              3,
+              2,
+              1,
+              1
+            ]
+          ]
+        },
+        "noise": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 + 7 + 7 + 7 + 7 = 42.\n\n#### 42",
+          "output_tokens": 71,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 2.051282051282051,
+          "visible_tokens_per_preview": 1.8205128205128205,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              2,
+              2,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              11,
+              1,
+              1
+            ],
+            [
+              8,
+              1,
+              3,
+              3,
+              1
+            ]
+          ]
+        },
+        "split8": {
+          "text": "To find the total number of tomato plants, multiply the number of rows by the number of plants in each row: 6 rows × 7 plants/row = 42 plants.\n\nCheck using repeated addition:\n7 + 7 = 14\n14 + 7 = 21\n21 + 7 = 28\n28 + 7 = 35\n35 + 7 = 42\n\n#### 42",
+          "output_tokens": 98,
+          "reached_cap": false,
+          "final_marker": 42,
+          "final_marker_correct": true,
+          "tokens_per_preview": 2.6666666666666665,
+          "visible_tokens_per_preview": 2.3333333333333335,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              1,
+              1,
+              1,
+              1,
+              6
+            ],
+            [
+              3,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              2,
+              1,
+              1,
+              2,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              3,
+              1,
+              1,
+              9,
+              1,
+              1
+            ],
+            [
+              16
+            ],
+            [
+              13,
+              1,
+              1,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.19081693500298136,
+          "split_absolute_difference": 0.8062015503875968,
+          "split_within_1_2_single_noise": false
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.0,
+          "split_absolute_difference": 0.0,
+          "split_within_1_2_single_noise": true
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": true,
+        "split8": false
+      }
+    },
+    {
+      "prefix_tokens": 32768,
+      "prompt": "NaturalB",
+      "expected": 52,
+      "observations": {
+        "default": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n计算过程：\n原有书数 + 捐书数 = 总书数\n37 + 15 = 52\n\n检验方法：\n用总书数减去捐书数，看是否等于原有书数。\n52 - 15 = 37\n结果与原有书数一致，说明计算正确。\n\n#### 52",
+          "output_tokens": 97,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.75,
+          "visible_tokens_per_preview": 1.515625,
+          "first_block_tokens_per_preview": 2.6666666666666665,
+          "steps": [
+            [
+              1,
+              4,
+              3,
+              1,
+              1,
+              6
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              6,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              12,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              2,
+              2,
+              1,
+              2,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "noise": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n计算过程：\n原有书数 + 捐书数 = 总书数\n37 + 15 = 52\n\n检验方法：\n用总书数减去捐书数，看是否等于原有书数。\n52 - 15 = 37\n结果与原有书数一致，计算正确。\n\n#### 52",
+          "output_tokens": 96,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.8360655737704918,
+          "visible_tokens_per_preview": 1.5737704918032787,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              2,
+              1,
+              1,
+              5,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              8,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              12,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              2,
+              2,
+              3,
+              1,
+              1,
+              3,
+              1,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        },
+        "split8": {
+          "text": "图书角原有 37 本书，又收到 15 本捐书。\n计算过程：\n原有书数 + 捐书数 = 总书数\n37 + 15 = 52\n\n检验方法：\n用总书数减去捐书数，看是否等于原有书数。\n52 - 15 = 37\n结果与原有书数一致，说明计算正确。\n\n#### 52",
+          "output_tokens": 97,
+          "reached_cap": false,
+          "final_marker": 52,
+          "final_marker_correct": true,
+          "tokens_per_preview": 1.75,
+          "visible_tokens_per_preview": 1.515625,
+          "first_block_tokens_per_preview": 2.2857142857142856,
+          "steps": [
+            [
+              1,
+              5,
+              2,
+              1,
+              1,
+              5,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              1,
+              1,
+              1,
+              1,
+              8,
+              1,
+              1
+            ],
+            [
+              1,
+              2,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              2,
+              12,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              2,
+              1,
+              1,
+              1,
+              2,
+              1
+            ],
+            [
+              16
+            ]
+          ]
+        }
+      },
+      "envelopes": {
+        "tokens_per_preview": {
+          "noise_absolute_difference": 0.08606557377049184,
+          "split_absolute_difference": 0.0,
+          "split_within_1_2_single_noise": true
+        },
+        "first_block_tokens_per_preview": {
+          "noise_absolute_difference": 0.38095238095238093,
+          "split_absolute_difference": 0.38095238095238093,
+          "split_within_1_2_single_noise": true
+        }
+      },
+      "output_equal_to_default": {
+        "default": true,
+        "noise": false,
+        "split8": true
+      }
+    }
+  ],
+  "scope": "Two tasks per context, one instrumented request per variant. Final numeric marker checks only, not a general quality benchmark. No warmup; capture cost may affect timings, so these are progress/quality diagnostics, not ABAB performance evidence. Histories can diverge.",
+  "all_18_final_markers_correct": true,
+  "any_output_capped": false
+}

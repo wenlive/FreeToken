@@ -1,0 +1,24 @@
+[1m[2026-11-04|15:19:34|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|15:19:42|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|15:19:42|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|15:19:42|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|15:19:48|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m --moe-cache-auto resolved moe_cache_size=2523 num_pages=16787 (prefill_overlap=True)
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m Allocating 16640 tokens for KV cache, K + V = 0.32 GiB
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m Reserved Clover private runtime: 1.02 GiB
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 2.19 GiB
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|15:20:17|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 2.19 GiB
+ninja: no work to do.
+[1m[2026-11-04|15:20:18|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 2.18 GiB
+[1m[2026-11-04|15:20:18|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.587 s
+[1m[2026-11-04|15:20:29|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.25, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 1575.23
+[1m[2026-11-04|15:20:31|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.49, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 1564.28
+[1m[2026-11-04|15:20:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.74, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 1722.50
+[1m[2026-11-04|15:20:37|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.99, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 1295.86
+{"prompt": "NaturalA", "mode": "denoise", "width": 16, "warmup": false, "output_tokens": 71, "wall_seconds": 12.491815199988196, "ttft_seconds": 10.633268899982795, "tokens_per_round": 14.4, "matches_causal": null}
+[1m[2026-11-04|15:20:41|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.25, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 956.33
+[1m[2026-11-04|15:20:43|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.49, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 1755.46
+[1m[2026-11-04|15:20:46|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.74, #mamba-slot: 3/8, mamba usage: 0.38, #running-req: 0, #queue-req: 1, input throughput (token/s): 1702.01
+[1m[2026-11-04|15:20:49|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 4096, #cached-token: 0, token usage: 0.99, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 1420.42
+{"prompt": "NaturalB", "mode": "denoise", "width": 16, "warmup": false, "output_tokens": 97, "wall_seconds": 12.538355199998477, "ttft_seconds": 9.900124800013145, "tokens_per_round": 14, "matches_causal": null}
