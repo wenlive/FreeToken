@@ -1,3 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright 2025 The Qwen Team and The HuggingFace Inc. team. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+# CONDITIONS OF ANY KIND. See the License for the specific language governing
+# permissions and limitations under the License.
+# Sampling/controller source: DiffuSpace/Clover-35B-A3B-Preview@4b0402b65e523d0183a14c431955438714cb16ff
+# Paths: sampling_clover_moe.py; modeling_clover_moe.py (generate control flow).
 """Eager batch builders and numerical references; never imported by serving code."""
 # Acceptance source: WilliamZR/sglang@2243dc6edb416073b60be0765904cabae9eb61cf
 # Path: python/sglang/srt/speculative/clover_utils.py
