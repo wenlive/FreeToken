@@ -23,7 +23,7 @@ def test_gpu_low_confidence_matches_eager_reference_without_committing(width):
     from benchmarks.clover.oracles import resolve_low_confidence_reference
     from freetoken.models.clover_moe.generation import resolve_low_confidence
 
-    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "presence_penalty": .9,
+    gen = SimpleNamespace(**{**PENALTY_DEFAULTS, "do_sample": False, "presence_penalty": .9,
         "repetition_penalty": 1.05, "frequency_penalty": .2})
     state = CloverPenaltyState(gen, 17, "cuda", [15])
     state.commit(torch.tensor([4, 4], device="cuda"))
