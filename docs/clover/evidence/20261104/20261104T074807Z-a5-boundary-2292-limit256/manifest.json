@@ -1,0 +1,50 @@
+{
+  "started_at": "20261104T074807Z",
+  "command": [
+    "C:\\workspace\\envs\\T-20261102-clover-q8\\runtime\\Scripts\\python.exe",
+    "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_boundary.py",
+    "--model",
+    "C:/workspace/models/inputs/clover-gguf-diffuspace/32e22a02b885e173177b7ce7661ad13448b4f89e/Clover-35B-A3B-Preview-Q8_0.gguf",
+    "--corpus",
+    "C:/workspace/data/datasets/T-20261030-clover-nvfp4/gsm8k-original.jsonl",
+    "--cache-slots",
+    "2292",
+    "--limit",
+    "256",
+    "--output",
+    "C:\\workspace\\runs\\T-20261104-clover-improve\\20261104T074807Z-a5-boundary-2292-limit256\\data"
+  ],
+  "cwd": "C:\\workspace\\wt\\T-20261104-clover-improve\\FreeToken-q8-c5",
+  "commit": "5df3410831a4254995b1318e78376cab83d51032",
+  "dirty": "",
+  "patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "state": "passed",
+  "environment": {
+    "PYTHONPATH": "C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5/python;C:/workspace/wt/T-20261104-clover-improve/FreeToken-q8-c5",
+    "FREETOKEN_KERNEL_CACHE_DIR": "C:/workspace/builds/T-20261104-clover-improve/shared-kernel-cache",
+    "TORCH_EXTENSIONS_DIR": "C:/workspace/builds/T-20261104-clover-improve/q8-c5/torch-extensions",
+    "TRITON_CACHE_DIR": "C:/workspace/cache/triton/T-20261104-clover-improve/q8-c5",
+    "CLOVER_GGUF_CHECKPOINT": null,
+    "CLOVER_HF_SOURCE": null,
+    "FREETOKEN_QWEN4EXP_MODEL": null,
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "CUDA_VISIBLE_DEVICES": null,
+    "FREETOKEN_DISABLE_OVERLAP_SCHEDULING": "0"
+  },
+  "external_scripts": [
+    {
+      "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\run.py",
+      "artifact": "external-scripts\\0-run.py",
+      "sha256": "daa6789fb62a3cc91b95728e28d56206daddb74a9634f47fcbfc132c08ff46e6"
+    },
+    {
+      "source": "C:\\workspace\\tasks\\T-20261104-clover-improve\\check_prefill_boundary.py",
+      "artifact": "external-scripts\\1-check_prefill_boundary.py",
+      "sha256": "576bffa1b79c5cf4cf372fa17844672052855f5f235ba9df2d5e6446953a8e63"
+    }
+  ],
+  "pid": 13160,
+  "exit_code": 0,
+  "elapsed_seconds": 70.45300000000861
+}

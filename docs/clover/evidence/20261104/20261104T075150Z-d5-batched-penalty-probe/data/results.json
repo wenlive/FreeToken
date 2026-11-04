@@ -1,0 +1,166 @@
+{
+  "state": "complete",
+  "cases": [
+    {
+      "requests": 1,
+      "vocab": 248320,
+      "oracle_exact": true,
+      "counts_unchanged": true,
+      "turns": [
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 16.72300000791438,
+          "wall_us": 16.850999963935465,
+          "event_us": 15.478399991989136
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 12.57449999684468,
+          "wall_us": 12.631499994313344,
+          "event_us": 12.56816029548645
+        },
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 15.244499954860657,
+          "wall_us": 15.311500028474256,
+          "event_us": 15.261600017547607
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 12.427000037860125,
+          "wall_us": 12.47649997822009,
+          "event_us": 12.42143988609314
+        }
+      ],
+      "batched_over_sequential_wall_pairs": [
+        0.7495994315676993,
+        0.8148450481675854
+      ]
+    },
+    {
+      "requests": 2,
+      "vocab": 248320,
+      "oracle_exact": true,
+      "counts_unchanged": true,
+      "turns": [
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 26.75050011021085,
+          "wall_us": 26.841500075533986,
+          "event_us": 26.695361137390137
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 29.960499959997833,
+          "wall_us": 74.53300000634044,
+          "event_us": 74.44496154785156
+        },
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 27.379500097595155,
+          "wall_us": 27.447500033304095,
+          "event_us": 27.385599613189697
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 26.57249991898425,
+          "wall_us": 74.47749987477437,
+          "event_us": 74.40944194793701
+        }
+      ],
+      "batched_over_sequential_wall_pairs": [
+        2.7767822139820435,
+        2.7134529477877867
+      ]
+    },
+    {
+      "requests": 4,
+      "vocab": 248320,
+      "oracle_exact": true,
+      "counts_unchanged": true,
+      "turns": [
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 54.06550000770949,
+          "wall_us": 54.17250009486452,
+          "event_us": 54.08815860748291
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 29.172000067774206,
+          "wall_us": 77.74199999403208,
+          "event_us": 77.67375946044922
+        },
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 53.534000035142526,
+          "wall_us": 53.59450005926192,
+          "event_us": 53.5313606262207
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 26.193000085186213,
+          "wall_us": 77.71900010993704,
+          "event_us": 77.65439987182617
+        }
+      ],
+      "batched_over_sequential_wall_pairs": [
+        1.435082373120932,
+        1.450130144399137
+      ]
+    },
+    {
+      "requests": 8,
+      "vocab": 248320,
+      "oracle_exact": true,
+      "counts_unchanged": true,
+      "turns": [
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 104.47799999383278,
+          "wall_us": 104.58499993546866,
+          "event_us": 104.49824333190918
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 30.364499980350956,
+          "wall_us": 79.5030000153929,
+          "event_us": 79.4316816329956
+        },
+        {
+          "variant": "sequential",
+          "iterations": 200,
+          "host_enqueue_us": 104.56299991346896,
+          "wall_us": 104.63200000231154,
+          "event_us": 104.56864356994629
+        },
+        {
+          "variant": "batched",
+          "iterations": 200,
+          "host_enqueue_us": 26.47899993462488,
+          "wall_us": 75.95299990498461,
+          "event_us": 75.89312076568604
+        }
+      ],
+      "batched_over_sequential_wall_pairs": [
+        0.7601759340674865,
+        0.7259060316471696
+      ]
+    }
+  ],
+  "scope": "GPU operator prototype only, no model or serving changes. Includes pinned metadata allocation/copy and output allocation. Two native and two candidate turns in ABAB order per batch size; no end-to-end generation speed claim."
+}

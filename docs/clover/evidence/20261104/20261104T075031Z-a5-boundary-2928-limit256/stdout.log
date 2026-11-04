@@ -1,0 +1,35 @@
+[1m[2026-11-04|15:50:36|core|rank=0][0m [32mINFO    [0m Enabled expandable_segments (override via PYTORCH_ALLOC_CONF)
+[1m[2026-11-04|15:50:45|core|rank=0][0m [32mINFO    [0m Auto-selected attention backend: triton
+[1m[2026-11-04|15:50:45|core|rank=0][0m [32mINFO    [0m Resolved config: moe_strategy='offload', attention_backend='triton', cache_type='hybrid_radix', page_size=1
+[1m[2026-11-04|15:50:45|core|rank=0][0m [32mINFO    [0m Free memory before loading model: 14.67 GiB
+[1m[2026-11-04|15:50:54|core|rank=0][0m [32mINFO    [0m expert banks: slow path (serial build)
+[1m[2026-11-04|15:51:18|core|rank=0][0m [32mINFO    [0m Allocating 2048 tokens for KV cache, K + V = 0.04 GiB
+[1m[2026-11-04|15:51:18|core|rank=0][0m [32mINFO    [0m Free memory after initialization: 2.10 GiB
+[1m[2026-11-04|15:51:18|core|rank=0][0m [32mINFO    [0m Start capturing CUDA graphs with sizes: [1]
+[1m[2026-11-04|15:51:18|core|rank=0][0m [32mINFO    [0m Free GPU memory before capturing CUDA graphs: 2.10 GiB
+ninja: no work to do.
+[1m[2026-11-04|15:51:20|core|rank=0][0m [32mINFO    [0m Free GPU memory after capturing CUDA graphs: 2.06 GiB
+[1m[2026-11-04|15:51:20|core|rank=0][0m [32mINFO    [0m Prefill warmup complete for lengths [80, 128] in 0.611 s
+[1m[2026-11-04|15:51:29|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 128, #cached-token: 0, token usage: 0.06, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 16.24
+[1m[2026-11-04|15:51:30|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 169, token usage: 0.08, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 4.53, #queue-req: 0
+[1m[2026-11-04|15:51:30|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 128, #cached-token: 0, token usage: 0.06, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 85.12
+[1m[2026-11-04|15:51:31|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 166, token usage: 0.08, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 39.72, #queue-req: 0
+[1m[2026-11-04|15:51:32|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 129, #cached-token: 0, token usage: 0.06, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 80.95
+[1m[2026-11-04|15:51:32|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 164, token usage: 0.08, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 25.71, #queue-req: 0
+[1m[2026-11-04|15:51:33|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 129, #cached-token: 0, token usage: 0.06, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 123.39
+[1m[2026-11-04|15:51:33|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 160, token usage: 0.08, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 39.72, #queue-req: 0
+[1m[2026-11-04|15:51:34|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 192, #cached-token: 0, token usage: 0.09, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 171.64
+[1m[2026-11-04|15:51:35|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 192, #cached-token: 0, token usage: 0.09, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 294.77
+[1m[2026-11-04|15:51:35|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 256, #cached-token: 0, token usage: 0.13, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 350.87
+[1m[2026-11-04|15:51:36|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 256, #cached-token: 0, token usage: 0.13, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 316.78
+[1m[2026-11-04|15:51:36|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 0, #token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, gen throughput (token/s): 13.02, #queue-req: 0
+[1m[2026-11-04|15:51:37|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 257, #cached-token: 0, token usage: 0.13, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 290.46
+[1m[2026-11-04|15:51:38|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 298, token usage: 0.15, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 30.64, #queue-req: 0
+[1m[2026-11-04|15:51:39|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 257, #cached-token: 0, token usage: 0.13, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 166.72
+[1m[2026-11-04|15:51:39|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 278, token usage: 0.14, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 30.59, #queue-req: 0
+[1m[2026-11-04|15:51:39|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 0, #token: 0, token usage: 0.00, #mamba-slot: 0/8, mamba usage: 0.00, gen throughput (token/s): 83.74, #queue-req: 0
+[1m[2026-11-04|15:51:40|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 384, #cached-token: 0, token usage: 0.19, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 247.71
+[1m[2026-11-04|15:51:41|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 425, token usage: 0.21, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 30.15, #queue-req: 0
+[1m[2026-11-04|15:51:42|core|rank=0][0m [32mINFO    [0m Prefill batch, #new-seq: 1, #new-token: 384, #cached-token: 0, token usage: 0.19, #mamba-slot: 4/8, mamba usage: 0.50, #running-req: 1, #queue-req: 0, input throughput (token/s): 242.44
+[1m[2026-11-04|15:51:42|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 402, token usage: 0.20, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 30.48, #queue-req: 0
+[1m[2026-11-04|15:51:43|core|rank=0][0m [32mINFO    [0m Decode batch, #running-req: 1, #token: 442, token usage: 0.22, #mamba-slot: 4/8, mamba usage: 0.50, gen throughput (token/s): 82.29, #queue-req: 0

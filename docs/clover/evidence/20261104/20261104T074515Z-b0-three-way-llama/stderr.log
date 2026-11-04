@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "C:\workspace\tasks\T-20261104-clover-improve\check_three_way.py", line 317, in <module>
+    main()
+  File "C:\workspace\tasks\T-20261104-clover-improve\check_three_way.py", line 92, in main
+    assert result['exit_code'] == 0, result['exit_code']
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1

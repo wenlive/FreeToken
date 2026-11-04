@@ -1,0 +1,212 @@
+[
+  {
+    "part": "causal",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 160,
+        "within": 126,
+        "fraction": 0.7875
+      },
+      "kl_per_row": {
+        "rows": 160,
+        "within": 117,
+        "fraction": 0.73125
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.99375,
+      "llama_hf": 0.96875,
+      "native_noise": 0.9875,
+      "native_llama": 0.975
+    }
+  },
+  {
+    "part": "w8-mask",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 40,
+        "within": 22,
+        "fraction": 0.55
+      },
+      "kl_per_row": {
+        "rows": 40,
+        "within": 24,
+        "fraction": 0.6
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.9,
+      "llama_hf": 0.95,
+      "native_noise": 0.975,
+      "native_llama": 0.95
+    }
+  },
+  {
+    "part": "w8-anchor",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 40,
+        "within": 27,
+        "fraction": 0.675
+      },
+      "kl_per_row": {
+        "rows": 40,
+        "within": 24,
+        "fraction": 0.6
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.975,
+      "llama_hf": 0.9,
+      "native_noise": 0.975,
+      "native_llama": 0.925
+    }
+  },
+  {
+    "part": "w8-partial",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 40,
+        "within": 28,
+        "fraction": 0.7
+      },
+      "kl_per_row": {
+        "rows": 40,
+        "within": 24,
+        "fraction": 0.6
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.95,
+      "llama_hf": 0.95,
+      "native_noise": 0.95,
+      "native_llama": 0.95
+    }
+  },
+  {
+    "part": "w16-mask",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 80,
+        "within": 50,
+        "fraction": 0.625
+      },
+      "kl_per_row": {
+        "rows": 80,
+        "within": 47,
+        "fraction": 0.5875
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.9125,
+      "llama_hf": 0.925,
+      "native_noise": 0.8875,
+      "native_llama": 0.9
+    }
+  },
+  {
+    "part": "w16-anchor",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 80,
+        "within": 50,
+        "fraction": 0.625
+      },
+      "kl_per_row": {
+        "rows": 80,
+        "within": 58,
+        "fraction": 0.725
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.825,
+      "llama_hf": 0.85,
+      "native_noise": 0.9,
+      "native_llama": 0.9125
+    }
+  },
+  {
+    "part": "w16-partial",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 80,
+        "within": 59,
+        "fraction": 0.7375
+      },
+      "kl_per_row": {
+        "rows": 80,
+        "within": 56,
+        "fraction": 0.7
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.925,
+      "llama_hf": 0.925,
+      "native_noise": 0.8875,
+      "native_llama": 0.925
+    }
+  },
+  {
+    "part": "w32-mask",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 160,
+        "within": 126,
+        "fraction": 0.7875
+      },
+      "kl_per_row": {
+        "rows": 160,
+        "within": 105,
+        "fraction": 0.65625
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.85625,
+      "llama_hf": 0.88125,
+      "native_noise": 0.875,
+      "native_llama": 0.9
+    }
+  },
+  {
+    "part": "w32-anchor",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 160,
+        "within": 108,
+        "fraction": 0.675
+      },
+      "kl_per_row": {
+        "rows": 160,
+        "within": 110,
+        "fraction": 0.6875
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.83125,
+      "llama_hf": 0.8625,
+      "native_noise": 0.9,
+      "native_llama": 0.88125
+    }
+  },
+  {
+    "part": "w32-partial",
+    "heuristic_envelope": {
+      "relative_l2_per_row": {
+        "rows": 160,
+        "within": 135,
+        "fraction": 0.84375
+      },
+      "kl_per_row": {
+        "rows": 160,
+        "within": 124,
+        "fraction": 0.775
+      }
+    },
+    "mean_top1": {
+      "native_hf": 0.875,
+      "llama_hf": 0.90625,
+      "native_noise": 0.88125,
+      "native_llama": 0.89375
+    }
+  }
+]

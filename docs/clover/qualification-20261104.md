@@ -26,6 +26,17 @@ source identities, failed attempts and result files.
 | D1-D4 | Historical archives moved without changing bytes. Eager oracles moved out of serving. Runtime gains the minimal `requires_drain` capability. Benchmark entry points share a harness under `benchmarks/clover/`. [Commands](../../benchmarks/clover/README.md). |
 | D5 | Clover GGUF bank sizing requires actual per-layer row-byte descriptors; the guessed `(8,8)` fallback was removed. |
 
+An isolated D5 multi-request penalty prototype matched the Torch CUDA oracle exactly
+at batch sizes 1/2/4/8 and left counts unchanged. Including fresh pinned metadata,
+its transfer and output allocation, ABAB wall time at two requests increased from
+26.84/27.45 us to 74.53/74.48 us; at four, from 54.17/53.59 to 77.74/77.72 us.
+Eight requests improved from 104.58/104.63 to 79.50/75.95 us, but no end-to-end gain
+was established. The one-request variant only avoids slices; it does not fuse kernels.
+This simple batching design is not integrated because it regresses the smaller batches.
+Serving retains the existing per-request implementation; future batching would need
+a different metadata/state layout and real multi-request acceptance.
+[Isolated operator probe](evidence/20261104/20261104T075150Z-d5-batched-penalty-probe/data/results.json).
+
 A2's quiet, higher-repeat ABAB retained identical output IDs. Decode changed +0.02-2.35%,
 while end-to-end changed -1.66 to +0.10%; this is not a material end-to-end speedup.
 [Quiet ABAB](evidence/20261104/20261104T054714Z-a2-quiet-abab-summary/data/results.json).
@@ -118,7 +129,27 @@ The first comparison attempt failed on a diagnostic `argsort` API call; its reco
 preserved, and the corrected comparison reused the existing native captures.
 [Prefill localization](evidence/20261104/20261104T073922Z-b1-prefill-localization-summary/data/results.json).
 
-B0 fixed-history native/HF/llama distributions are still running.
+B0 fixed-history native/HF/llama distributions are complete: five prompts, 32 forced
+causal rows each, and mask/anchor/partially fixed blocks at W8/W16/W32 (840 preview
+rows). All 45 llama previews restore the prefix so that causal replay logits match
+byte for byte. The numerical-export helper is committed as `101007f`; its compiled
+source hash matches the tested file. This uses stock llama `cb09d43` and the same
+official Q8 file, with full logits rather than independent generated histories.
+
+Causal top-1 agreement with HF is 159/160 for native and 155/160 for llama. For preview
+rows it is 736/840 for native and 752/840 for llama; native tile noise matches native
+on 755/840. Under the proposed per-row `1.2 * max(llama-HF, native-noise)` ruler,
+native/HF L2 is inside the envelope on 126/160 causal and 605/840 preview rows; KL is
+inside on 117/160 and 572/840. Thus the ruler does not explain every discrepancy, even
+though causal top-1 agreement is high. Do not reinterpret process completion as full
+numerical acceptance. Mean causal KL is 0.00413 for native/HF, 0.00344 for llama/HF
+and 0.00335 for native noise; mean preview KL is 0.03094, 0.03079 and 0.02206 respectively.
+These pooled values do not erase the per-row outliers. No tolerance has been raised.
+The first llama invocation failed
+because the speculative example does not expose `--no-warmup`; the corrected command
+uses its normal startup behavior, with no timing claim or serving-code change.
+[Three-way distributions](evidence/20261104/20261104T074657Z-b0-three-way-summary/data/results.json).
+
 B2 NVFP4 is retired at the owner's request with its differences unresolved.
 No acceptance threshold was changed to pass them.
 Strict selfspec performs greedy acceptance at each position; it does not guarantee the
@@ -181,3 +212,11 @@ CUDA-event diagnostics are retained rather than mixed into the primary timing sa
 This supports testing 256 as the default, but does not prove complete generation is
 equivalent. The current default remains 128 until the boundary-length output check and
 required final-source gates finish. [ABAB results](evidence/20261104/20261104T065730Z-a5-prefill-summary/data/results.json).
+
+The boundary output check is now complete: limits 128/256 at both capacities, six exact
+prefix lengths 128/129/192/256/257/384, two requests per configuration, checkpoint
+penalties and cold expert caches. All 48 outputs match within their length/capacity
+comparison, including repeat stability. Actual outputs are 3-64 tokens, with EOS
+respected; this is not 48 forced 64-token decodes. A default change and its new-source
+hardware gate are the next step.
+[Boundary output check](evidence/20261104/20261104T075150Z-a5-boundary-summary/data/results.json).
