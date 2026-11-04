@@ -27,6 +27,22 @@ def test_sparse_prefill_limit_rejects_negative_values():
         EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16, clover_sparse_prefill_limit=-1)
 
 
+@pytest.mark.parametrize("widths,maximum,running", [([4], 32, 1), ([32], 16, 1),
+    ([8], 0, 1), ([8], 32, 2)])
+def test_graph_warmup_rejects_unreserved_or_unsupported_widths(widths, maximum, running):
+    with pytest.raises(ValueError, match="warmup"):
+        EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+            max_running_req=running, clover_max_width=maximum, clover_graph_warmup_widths=widths)
+
+
+def test_graph_warmup_is_opt_in_and_normalizes_declared_widths():
+    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16)
+    assert config.clover_graph_warmup_widths == []
+    config = EngineConfig("unused", DistributedInfo(0, 1), torch.bfloat16,
+        max_running_req=1, clover_max_width=32, clover_graph_warmup_widths=[32, 8, 16, 8])
+    assert config.clover_graph_warmup_widths == [8, 16, 32]
+
+
 @pytest.mark.parametrize("limit", [0, 128, 512])
 def test_runtime_configuration_applies_sparse_limit_to_all_clover_layers(limit):
     from types import SimpleNamespace

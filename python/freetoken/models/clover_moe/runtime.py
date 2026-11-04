@@ -62,6 +62,12 @@ class CloverRuntime:
         self.transactions = None
         self.states.clear()
 
+    def warmup_graphs(self, manager, tables):
+        if self.engine.config.clover_graph_warmup_widths:
+            from .warmup import warmup_block_graphs
+
+            self.graph_warmup = warmup_block_graphs(self, manager, tables)
+
     def before_native(self, batch):
         # Startup/rebuild reserve the window separately from graph/prefill headroom.
         return None

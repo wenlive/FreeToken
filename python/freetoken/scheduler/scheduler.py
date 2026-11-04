@@ -149,6 +149,7 @@ class Scheduler(SchedulerIOMixin):
             log=logger.info_rank0,
             decode_log_interval=config.decode_log_interval,
         )
+        self._warmup_runtime_graphs()
 
         # Initialize the I/O mixin
         super().__init__(config, self.engine.tp_cpu_group)
@@ -157,6 +158,15 @@ class Scheduler(SchedulerIOMixin):
         """Called when the scheduler is idle to perform background tasks."""
         logger.info_rank0("Scheduler is idle, waiting for new reqs...")
         self.cache_manager.check_integrity()
+
+    @torch.inference_mode()
+    def _warmup_runtime_graphs(self) -> None:
+        warmup = getattr(getattr(self.engine, "mtp_runtime", None), "warmup_graphs", None)
+        if warmup is not None:
+            with self.engine_stream_ctx:
+                self.engine.stream.wait_stream(self.stream)
+                warmup(self.cache_manager, self.table_manager)
+            self.stream.wait_stream(self.engine.stream)
 
     @torch.inference_mode()
     def rebuild_cache(
@@ -203,6 +213,7 @@ class Scheduler(SchedulerIOMixin):
             min(self.config.max_extend_tokens, _chunk_cap)
             if _chunk_cap else self.config.max_extend_tokens
         )
+        self._warmup_runtime_graphs()
         if self.config.tp_info.size > 1:
             self.sync_all_ranks()
 

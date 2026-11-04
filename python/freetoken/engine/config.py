@@ -118,6 +118,7 @@ class EngineConfig:
     clover_width: int = 8
     clover_max_width: int | None = None
     clover_sparse_prefill_limit: int = 128
+    clover_graph_warmup_widths: List[int] = field(default_factory=list)
     clover_split_kv: bool = False
     clover_threshold: float = .95
     clover_accept_rule: str = "exact"
@@ -131,6 +132,11 @@ class EngineConfig:
             object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
         if self.clover_sparse_prefill_limit < 0:
             raise ValueError("Clover sparse prefill limit must be nonnegative")
+        if self.clover_graph_warmup_widths:
+            if (self.max_running_req != 1 or any(width not in (8, 16, 32)
+                    or width > self.clover_max_width for width in self.clover_graph_warmup_widths)):
+                raise ValueError("Clover graph warmup requires reserved widths and max_running_req=1")
+            object.__setattr__(self, "clover_graph_warmup_widths", sorted(set(self.clover_graph_warmup_widths)))
         if self.clover_mode not in ("causal", "selfspec", "denoise"):
             raise ValueError("Clover mode must be causal, selfspec or denoise")
         if self.clover_mode == "selfspec" and self.clover_width == 32:
