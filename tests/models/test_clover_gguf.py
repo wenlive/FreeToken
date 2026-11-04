@@ -170,6 +170,14 @@ def test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping(tmp_
     writer.write_tensors_to_file()
     writer.close()
     monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    reader_calls = []
+    original_reader = gguf.GGUFReader
+
+    def counted_reader(*args, **kwargs):
+        reader_calls.append(args[0])
+        return original_reader(*args, **kwargs)
+
+    monkeypatch.setattr(gguf, "GGUFReader", counted_reader)
     config = SimpleNamespace(num_layers=2, num_experts=2, hidden_size=256, moe_intermediate_size=256)
     banks = adapter.load_packed_expert_sources(str(path), config)
     # The file can disappear after load: serving owns only independent host bytes.
@@ -180,6 +188,7 @@ def test_streaming_mixed_expert_loader_preserves_bytes_and_releases_mapping(tmp_
         offset = 256 * rb if role == "up" else 0
         actual = bank.as_strided(raw.shape, (bank.stride(0), rb, 1), offset)
         np.testing.assert_array_equal(actual.numpy(), raw)
+    assert reader_calls == [str(path)], "Expert streaming must reuse the validated directory"
 
 
 def test_raw_alog_is_restored_without_exponentiation():
@@ -267,6 +276,7 @@ def test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries(monkeypatch
         "<|im_start|>",
     ]
     metadata = {
+        "general.architecture": "clover_moe",
         "tokenizer.ggml.tokens": tokens,
         "tokenizer.ggml.token_type": [1, 3, 4, 4, 3, 3, 3],
         "tokenizer.ggml.bos_token_id": 1,
@@ -276,7 +286,13 @@ def test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries(monkeypatch
         "tokenizer.ggml.normalizer.nfc": True,
     }
     monkeypatch.setattr(module, "load_gguf_metadata", lambda _: metadata)
-    monkeypatch.setattr(module, "gguf_architecture", lambda _: "clover_moe")
+    architecture_reads = []
+
+    def read_architecture(path):
+        architecture_reads.append(path)
+        return "clover_moe"
+
+    monkeypatch.setattr(module, "gguf_architecture", read_architecture)
     import transformers.integrations.ggml as converter
 
     def convert(arch, data):
@@ -293,6 +309,7 @@ def test_clover_control_and_user_tokens_keep_ids_and_stop_boundaries(monkeypatch
         tokenizer.decode([2, 3, 5], skip_special_tokens=True) == "</think> <tool_call>"
     )
     assert module.gguf_eos_token_ids("synthetic.gguf", tokenizer) == {1, 4}
+    assert not architecture_reads, "Tokenizer metadata already contains the architecture"
 
 
 def test_gguf_sampling_metadata_overrides_published_clover_defaults():

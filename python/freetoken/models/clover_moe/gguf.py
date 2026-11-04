@@ -310,10 +310,10 @@ def load_packed_expert_sources(model_path, config, *, layer_sink=None, dummy=Fal
 
     def fill(sink):
         tracker = LayerCompletionTracker(3, hb, sink) if sink is not None else None
-        import gguf
+        from freetoken.models.gguf.reader import _reader
         # Only the tensor directory is consulted; readinto never faults payload
         # into a persistent file mapping alongside the 32 GiB pinned banks.
-        directory = gguf.GGUFReader(model_path)
+        directory = _reader(model_path)
         by_name = {t.name: t for t in directory.tensors}
         for tensor in iter_gguf_tensors(model_path):
             match = _EXPERT.fullmatch(tensor.name)

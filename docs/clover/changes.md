@@ -111,3 +111,16 @@ Five prompts across six modes retained identical output IDs. Causal W0 decode im
 These are workload-specific measured ranges, not a universal speed claim. Instrumented
 forward traces and the full default-policy hardware gate are tracked separately in the
 active campaign; config tests alone do not qualify this default change.
+
+## GGUF startup reader reuse
+
+Clover expert streaming reuses the directory reader already opened by expert validation.
+The tokenizer reads the architecture from its existing metadata, avoiding another reader
+after weight loading has released the mapping. Its previous lookup remains a fallback for
+metadata without the architecture field. These changes affect initialization, not decode.
+
+The mapping-release boundary and direct expert `readinto` path are retained. Synthetic
+mixed-format bank bytes, mapping release, tokenizer IDs and stop boundaries pass; both
+new reader-count assertions failed before the change. Real startup ABAB, loaded-weight
+hashes and the combined serving regression gate remain pending. The NVFP4 Clover loader
+does not use this GGUF adapter.

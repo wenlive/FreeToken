@@ -21,7 +21,7 @@ def load_gguf_tokenizer(model_path: str):
     from transformers.integrations.ggml import convert_gguf_tokenizer
 
     meta = load_gguf_metadata(model_path)
-    arch = gguf_architecture(model_path)
+    arch = meta.get("general.architecture") or gguf_architecture(model_path)
     conv_arch = _TOKENIZER_ARCH.get(arch, arch)
     tok_dict: dict[str, Any] = {
         k[len("tokenizer.ggml.") :]: v
@@ -94,7 +94,7 @@ def gguf_eos_token_ids(model_path: str, tokenizer) -> set[int]:
             ids.add(tokens.index(name))
         except ValueError:
             pass
-    if gguf_architecture(model_path) == "clover_moe":
+    if (meta.get("general.architecture") or gguf_architecture(model_path)) == "clover_moe":
         # Clover's published generation config stops on both im_end and endoftext.
         ids.add(int(meta["tokenizer.ggml.padding_token_id"]))
     return ids
