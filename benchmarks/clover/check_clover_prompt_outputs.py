@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import re
 
-from eval_clover_quality import code_completion, grade_code
+from benchmarks.clover.eval_clover_quality import code_completion, grade_code
 
 
 def main():

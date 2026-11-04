@@ -5,7 +5,7 @@ from pathlib import Path
 
 import torch
 
-from clover_hf_reference import load_official
+from benchmarks.clover.clover_hf_reference import load_official
 
 
 @torch.inference_mode()

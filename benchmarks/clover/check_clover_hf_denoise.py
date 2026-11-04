@@ -9,7 +9,7 @@ import time
 import torch
 from transformers import GenerationConfig
 
-from clover_hf_reference import load_official, official_modules
+from benchmarks.clover.clover_hf_reference import load_official, official_modules
 
 
 @torch.inference_mode()

@@ -18,7 +18,6 @@ p.add_argument('--resource-frontend', choices=['native', 'stock'], required=True
 args, rest = p.parse_known_args()
 sys.argv = [sys.argv[0], *rest]
 output = Path(rest[rest.index('--output') + 1])
-sys.path.insert(0, str(Path(__file__).resolve().parent))
 nvml = c.WinDLL('C:/Windows/System32/nvml.dll')
 assert nvml.nvmlInit_v2() == 0
 handle = c.c_void_p()
@@ -40,7 +39,7 @@ thread = threading.Thread(target=observe, daemon=True)
 thread.start()
 time.sleep(1)
 if args.resource_frontend == 'native':
-    import bench_clover as bench
+    from benchmarks.clover import bench_clover as bench
     original = bench.LLM
     def instrumented(*a, **kw):
         llm = original(*a, **kw)
@@ -54,7 +53,7 @@ if args.resource_frontend == 'native':
         return llm
     bench.LLM = instrumented
 else:
-    import bench_clover_llama as bench
+    from benchmarks.clover import bench_clover_llama as bench
     original = bench.urllib.request.urlopen
     class ObservedResponse:
         def __init__(self, response, start):

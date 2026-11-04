@@ -13,7 +13,7 @@ def official():
     source = os.environ.get("CLOVER_HF_SOURCE")
     if not source:
         pytest.skip("set CLOVER_HF_SOURCE to the existing fixed official HF source")
-    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py"))
+    harness = runpy.run_path(str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py"))
     return harness["official_modules"](Path(source))[0]
 
 

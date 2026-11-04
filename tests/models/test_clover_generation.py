@@ -237,7 +237,7 @@ def test_cuda_penalties_are_bitwise_equal_to_pinned_hf(width, biases):
     if not location:
         pytest.skip("set CLOVER_HF_SOURCE to the pinned local reference code")
     harness = runpy.run_path(
-        str(Path(__file__).parents[2] / "benchmarks/clover_hf_reference.py")
+        str(Path(__file__).parents[2] / "benchmarks/clover/clover_hf_reference.py")
     )
     sampling = harness["official_modules"](Path(location))[2]
     gen = SimpleNamespace(

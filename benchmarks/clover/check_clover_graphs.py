@@ -11,8 +11,8 @@ import torch
 
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
-from clover.oracles import make_preview_batch, make_verify_batch
-from check_clover_preview import persistent_hashes
+from benchmarks.clover.oracles import make_preview_batch, make_verify_batch
+from benchmarks.clover.check_clover_preview import persistent_hashes
 
 
 def digest(tensor):

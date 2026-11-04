@@ -7,8 +7,8 @@ import statistics
 import torch
 from freetoken.core import SamplingParams
 from freetoken.llm import LLM
-from bench_clover import PROMPTS
-from check_clover_preview import persistent_hashes
+from benchmarks.clover.harness import PROMPTS, load_engine, save_results
+from benchmarks.clover.check_clover_preview import persistent_hashes
 
 
 @torch.inference_mode()
@@ -19,9 +19,8 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
-    llm = LLM(args.model, moe_strategy='offload', moe_cache_size=args.cache_slots,
-        expert_load='serial', max_running_req=1, memory_ratio=.85, num_token_override=4096,
-        max_seq_len_override=4096, max_extend_tokens=4096, cuda_graph_bs=[1],
+    llm = load_engine(args.model, factory=LLM, cache_slots=args.cache_slots,
+        memory_ratio=.85, context=4096, clover_max_width=16,
         moe_collect_stats=True, clover_disable_penalties=True)
     engine = llm.engine
     runtime = engine.mtp_runtime
@@ -30,7 +29,7 @@ def main():
         warmups=2, repeats=5, cases=[], causal_ms={})
     current = None
     def save():
-        (args.output / 'results.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
+        save_results(args.output, result)
 
     def audited(batch, sampling):
         begin, end = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)

@@ -3,22 +3,6 @@
 Run from the repo root with `PYTHONPATH=python:.`, pinned to one GPU
 (`CUDA_VISIBLE_DEVICES=0`). Each script's `--help` / docstring has the details.
 
-**Clover qualification** — `bench_clover.py` measures the five fixed prompts with
-causal, selfspec and LowConfidence decoding, TTFT, stream arrivals and expert
-payloads. `bench_clover_cpu.py` compares actual-bank CPU W4A16 with cold GPU fetch.
-The `check_clover_hf_*.py` scripts use the pinned official arithmetic with bounded
-on-demand expert storage; they are correctness oracles, not serving benchmarks.
-`check_clover_quantization.py` compares NVFP4/FP8 on BF16-generated causal histories.
-`eval_clover_quality.py` grades fixed GSM8K/HumanEval subsets; fetch only the
-datasets with `fetch_clover_eval_data.py`. All model paths must already exist.
-See [the Clover guide](../docs/clover-nvfp4.md) for settings, measurements and limits.
-
-`check_qwen4_mtp.py` runs the existing local Flash-Next GGUF/MTP bundle with MTP
-OFF or ON. `--code-root` selects and verifies the imported checkout, allowing a
-matched frozen-main/feature regression. It hashes protected model metadata and
-requires actual draft rounds with four reserved slots; each mode needs a separate
-process. This is a compatibility check, with the qualified per-mode resources.
-
 **`bench_decode_moe.py`** — bs=1 decode tok/s of a served MoE model. Spawns `ft serve`
 per backend and times token arrivals over streamed `/v1/chat/completions`, so numbers
 include the full serving path. AIME-25 prompt, checkpoint-recommended sampling.
@@ -46,14 +30,7 @@ python benchmarks/bench_offload_cache_copy.py
 For host RAM vs PCIe bandwidth and the offload/hybrid backend pick, use `ft bench bw`
 instead — it writes the JSON profile the engine reads.
 
-Clover branch measurements are indexed in [the performance record](../docs/clover/clover-performance.md).
-`bench_clover.py` records visible outputs, TTFT, arrival-based decode and expert
-payload. Use `--runtime-breakdown` only for a separate event-instrumented run;
-`--phase-cache-stats` adds GPU counter snapshots and is also diagnostic.
-`--cache-auto --memory-ratio .9 --clover-max-width 32` includes the private block
-window in capacity planning; `--embedding-host` tests the optional mapped table.
-`bench_clover_context.py` measures exact 1K/4K/16K/32K prefixes;
-`bench_clover_split_kv.py` compares two read-only preview graphs on identical state.
-`analyze_clover_budget.py` combines measured costs with recorded HF progress,
-and `summarize_clover_abab.py` retains both chronological ratios and process drift
-for four before/after/before/after result files. Their `--help` gives the arguments.
+Clover tools are grouped under [clover/](clover/README.md). Start with
+`python -m benchmarks.clover --help`; the six entries cover the mode matrix,
+long contexts, previews, cost analysis, HF comparisons and quality evaluation.
+Measurements and evidence are indexed in [docs/clover](../docs/clover/README.md).
