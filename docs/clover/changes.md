@@ -38,3 +38,16 @@ The scheduler can overlap requests whose resolved mode is causal. Selfspec and d
 requests retain their drain barrier even during causal prefill or tail fallback, so stop
 strings and first-block delivery see complete history. Flash-Next MTP retains its barrier.
 GPU/P1 overlap-on/off and throughput qualification are tracked separately from unit tests.
+
+## Optional block graph warmup
+
+`clover_graph_warmup_widths=[8,16,32]` captures preview and verify graphs before serving,
+using the configured coreset top-p. Only list widths covered by `clover_max_width`.
+The default is empty, so causal deployments pay no block capture cost. Warmup also runs
+after an idle cache rebuild invalidates the graphs.
+
+Warmup temporarily owns a request table, GDN slot and KV pages through the regular
+allocators. It restores their contents and frees them without inserting a synthetic prefix.
+Verify graphs share one transaction allocation sized for the largest declared width.
+`runtime.graph_warmup` reports capture times and allocated/reserved memory deltas.
+Cold-request latency and state-integrity qualification are pending; this is opt-in.
