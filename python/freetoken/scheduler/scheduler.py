@@ -226,9 +226,10 @@ class Scheduler(SchedulerIOMixin):
         for msg in self.receive_msg(blocking=blocking):
             self._process_one_msg(msg)
 
-        if self.engine.mtp_runtime is not None and last_data is not None:
-            # A variable-size verified bundle must reach CPU history before the
-            # next window is prepared; native no-MTP keeps its overlap schedule.
+        runtime = self.engine.mtp_runtime
+        if (runtime is not None and last_data is not None
+                and getattr(runtime, "requires_drain", lambda batch: True)(last_data[0].batch)):
+            # Block runtimes need complete host history before preparing another window.
             self.stream.wait_stream(self.engine.stream)
             self._process_last_data(last_data)
             self._flush_abort_acks()

@@ -69,6 +69,9 @@ class MtpRuntime:
         return (req.sampling_params.is_greedy and not req.mm_items and req.extend_len == 1
                 and 0 < req.cached_len < self.draft.max_context and req.remain_len > 0)
 
+    def requires_drain(self, batch):
+        return True
+
     def prepare_graphs(self):
         if len(self.pool.reserved_slot_ids) != 4:
             raise ValueError('MTP needs four exclusively reserved transaction slots')

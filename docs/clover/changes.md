@@ -27,3 +27,14 @@ block modes must declare their maximum width in advance. Exceeding it is an admi
 `clover_sparse_prefill_limit` replaces `FREETOKEN_CLOVER_SPARSE_PREFILL`; the default
 remains 128 rows, and 0 disables union admission. The threshold has not been tuned.
 The Q8-only bank-descriptor and IQ4_XS changes are not part of this NVFP4 port.
+
+## Pure causal overlap
+
+Pure causal requests advance penalty counts from the consumed device token and the logical
+input position. Delayed host delivery no longer decides whether to increment or reset
+counts. Prompt tokens are excluded, and the runtime rejects a skipped response position.
+
+The scheduler can overlap requests whose resolved mode is causal. Selfspec and denoise
+requests retain their drain barrier even during causal prefill or tail fallback, so stop
+strings and first-block delivery see complete history. Flash-Next MTP retains its barrier.
+GPU/P1 overlap-on/off and throughput qualification are tracked separately from unit tests.

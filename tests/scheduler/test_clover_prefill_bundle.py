@@ -155,3 +155,49 @@ def test_offline_generation_reports_rejection_and_finishes_valid_requests():
     assert result[0]["error_code"] == "invalid_request"
     assert result[0]["token_ids"] == []
     assert result[1] == {"text": "[9]", "token_ids": [9]}
+
+
+@pytest.mark.parametrize("mode,expected", [
+    ("causal", ["schedule", "drain"]), ("selfspec", ["drain", "schedule"]),
+    ("denoise", ["drain", "schedule"]),
+])
+def test_overlap_drains_only_block_requests_before_scheduling(mode, expected):
+    scheduler, _, _ = admission_scheduler()
+    scheduler._pending_rebuild = None
+    scheduler.decode_manager = SimpleNamespace(runnable=False)
+    scheduler.prefill_manager.runnable = False
+    scheduler.receive_msg = lambda **kwargs: []
+    scheduler.engine.stream = object()
+    scheduler.stream = SimpleNamespace(wait_stream=lambda stream: None)
+    scheduler._flush_abort_acks = lambda: None
+    events = []
+    scheduler._process_last_data = lambda data: events.append("drain") if data is not None else None
+    scheduler._schedule_next_batch = lambda: events.append("schedule")
+    batch = Batch([SimpleNamespace(sampling_params=SamplingParams(clover_mode=mode))], "prefill")
+    scheduler.overlap_loop((SimpleNamespace(batch=batch), None))
+    assert events == expected
+
+
+def test_first_selfspec_window_sees_pending_causal_token_in_stop_history():
+    scheduler, _, _ = admission_scheduler()
+    scheduler._pending_rebuild = None
+    scheduler.prefill_manager.runnable = False
+    scheduler.decode_manager = SimpleNamespace(runnable=False)
+    scheduler.receive_msg = lambda **kwargs: []
+    scheduler.engine.stream = object()
+    scheduler.stream = SimpleNamespace(wait_stream=lambda stream: None)
+    scheduler._flush_abort_acks = lambda: None
+    scheduler.eos_token_ids = set()
+    scheduler.tokenizer = SimpleNamespace(decode=lambda ids: ''.join(chr(i) for i in ids))
+    req = Req(torch.tensor([88], dtype=torch.int32), 0, 0, 10, 1,
+        SamplingParams(clover_mode="selfspec", stop_strs=["AB"]), None)
+    previous = (SimpleNamespace(batch=Batch([req], "prefill")), None)
+    scheduler._process_last_data = lambda data: req.append_host(torch.tensor([65])) if data else None
+    limits = []
+
+    def schedule():
+        limits.append(scheduler._mtp_delivery_limit(req, [66, 67]))
+
+    scheduler._schedule_next_batch = schedule
+    scheduler.overlap_loop(previous)
+    assert limits == [(1, True)]
