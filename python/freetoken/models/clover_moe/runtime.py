@@ -125,17 +125,33 @@ class CloverRuntime:
         return replace(msg, sampling_params=replace(msg.sampling_params,
             clover_mode=mode, clover_width=width, clover_threshold=threshold))
 
+    def requires_drain(self, batch):
+        # Block requests also need their causal prefill/tail history before the next window.
+        return any(self.settings(req)[0] != "causal" for req in batch.reqs)
+
+    def _new_state(self, req):
+        state = CloverPenaltyState(self.generation,
+            self.engine.config.model_config.vocab_size, self.engine.device, self.stop_ids)
+        self.states[req] = state
+        return state
+
+    def _causal_state(self, req, pending):
+        state = self.states.get(req)
+        if state is None:
+            state = self._new_state(req)
+        # forward_batch has completed the input, while its sampled output is still pending.
+        consumed = max(0, req.cached_len - req.prompt_len)
+        if consumed != state.length:
+            if pending is None or pending.numel() != 1 or consumed != state.length + 1:
+                raise RuntimeError("Clover causal penalty cursor does not match the consumed input")
+            state.commit(pending.long())
+        return state
+
     def state(self, req, pending=None):
         state = self.states.get(req)
         history = req.input_ids[req.prompt_len :]
         if state is None or state.length > history.numel():
-            state = CloverPenaltyState(
-                self.generation,
-                self.engine.config.model_config.vocab_size,
-                self.engine.device,
-                self.stop_ids,
-            )
-            self.states[req] = state
+            state = self._new_state(req)
         if state.length < history.numel():
             delta = history.numel() - state.length
             state.commit(
@@ -149,9 +165,9 @@ class CloverRuntime:
 
         scores = torch.empty_like(logits, dtype=torch.float32)
         for row, req in enumerate(batch.reqs):
-            self.settings(req)
+            mode, _, _ = self.settings(req)
             pending = batch.input_ids[row:row + 1] if batch.is_decode else None
-            state = self.state(req, pending)
+            state = self._causal_state(req, pending) if mode == "causal" else self.state(req, pending)
             penalize_logits(logits[row:row + 1], state, self.mask_id,
                             output=scores[row:row + 1])
         return scores

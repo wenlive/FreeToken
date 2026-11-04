@@ -53,3 +53,14 @@ of guessing Q8 for missing descriptors.
 The shared encoder guard in EngineConfig is retained: frozen GGUF config shims have no
 encoder fields, so assigning missing attributes to None fails. Present active encoder
 sections still follow the existing disabling rules; the frozen-shim regression covers this.
+
+## Pure causal overlap
+
+Pure causal requests advance penalty counts from the consumed device token and the logical
+input position. Delayed host delivery no longer decides whether to increment or reset
+counts. Prompt tokens are excluded, and the runtime rejects a skipped response position.
+
+The scheduler can overlap requests whose resolved mode is causal. Selfspec and denoise
+requests retain their drain barrier even during causal prefill or tail fallback, so stop
+strings and first-block delivery see complete history. Flash-Next MTP retains its barrier.
+GPU/P1 overlap-on/off and throughput qualification are tracked separately from unit tests.
