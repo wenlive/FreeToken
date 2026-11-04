@@ -28,6 +28,25 @@ def _pool(num_slots=8, device="cpu", slot_states=()):
                            device=torch.device(device), tp_size=1, slot_states=slot_states)
 
 
+@pytest.mark.parametrize('width', [0, 8, 16, 32])
+def test_clover_runtime_reserve_matches_actual_transaction_and_clean_storage(width):
+    from freetoken.engine.speculative import runtime_reserve_bytes
+    from freetoken.models.clover_moe.preview import CloverTransactions
+
+    group = _group()
+    config = SimpleNamespace(model_config=SimpleNamespace(model_type='clover_moe',
+        quant=SimpleNamespace(dialect=None), linear_attention_group=lambda: group),
+        clover_max_width=width, dtype=torch.bfloat16, tp_info=SimpleNamespace(size=1))
+    if width:
+        pool = _pool()
+        transaction = CloverTransactions(pool, width)
+        assert runtime_reserve_bytes(config) == transaction.owned_bytes + pool.bytes_per_slot()
+    else:
+        assert runtime_reserve_bytes(config) == 0
+    config.model_config.model_type = 'qwen3_5_moe'
+    assert runtime_reserve_bytes(config) == 0
+
+
 def test_alloc_free_roundtrip():
     pool = _pool(num_slots=8)
     assert pool.num_free_slots == 7          # slots 1..7 (slot 0 = padding)

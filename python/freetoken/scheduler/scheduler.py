@@ -149,6 +149,7 @@ class Scheduler(SchedulerIOMixin):
             log=logger.info_rank0,
             decode_log_interval=config.decode_log_interval,
         )
+        self._warmup_runtime_graphs()
 
         # Initialize the I/O mixin
         super().__init__(config, self.engine.tp_cpu_group)
@@ -157,6 +158,15 @@ class Scheduler(SchedulerIOMixin):
         """Called when the scheduler is idle to perform background tasks."""
         logger.info_rank0("Scheduler is idle, waiting for new reqs...")
         self.cache_manager.check_integrity()
+
+    @torch.inference_mode()
+    def _warmup_runtime_graphs(self) -> None:
+        warmup = getattr(getattr(self.engine, "mtp_runtime", None), "warmup_graphs", None)
+        if warmup is not None:
+            with self.engine_stream_ctx:
+                self.engine.stream.wait_stream(self.stream)
+                warmup(self.cache_manager, self.table_manager)
+            self.stream.wait_stream(self.engine.stream)
 
     @torch.inference_mode()
     def rebuild_cache(
@@ -203,6 +213,7 @@ class Scheduler(SchedulerIOMixin):
             min(self.config.max_extend_tokens, _chunk_cap)
             if _chunk_cap else self.config.max_extend_tokens
         )
+        self._warmup_runtime_graphs()
         if self.config.tp_info.size > 1:
             self.sync_all_ranks()
 
@@ -226,9 +237,10 @@ class Scheduler(SchedulerIOMixin):
         for msg in self.receive_msg(blocking=blocking):
             self._process_one_msg(msg)
 
-        if self.engine.mtp_runtime is not None and last_data is not None:
-            # A variable-size verified bundle must reach CPU history before the
-            # next window is prepared; native no-MTP keeps its overlap schedule.
+        runtime = self.engine.mtp_runtime
+        if (runtime is not None and last_data is not None
+                and getattr(runtime, "requires_drain", lambda batch: True)(last_data[0].batch)):
+            # Block runtimes need complete host history before preparing another window.
             self.stream.wait_stream(self.engine.stream)
             self._process_last_data(last_data)
             self._flush_abort_acks()
@@ -403,16 +415,11 @@ class Scheduler(SchedulerIOMixin):
                         self._free_req_resources(req)
                         new_finished_reqs.add(req)
                         break
-                    elif batch.is_prefill and req.table_idx != -1:
-                        # for prefill, non-chunk req, cache the prefix.
-                        # Polymorphic: the DSV4 naive manager keeps the request's slots (no-op);
-                        # the generic manager inserts the prefix into its radix/naive cache.
-                        # table_idx == -1 is defense-in-depth: aborts mark in-flight requests
-                        # instead of freeing them (handled above), so a freed request should
-                        # never reach this commit -- but if a future path frees one early, skip
-                        # rather than re-read the freed page-table row (and on hybrid, deref the
-                        # None'd GDN ping-pong slots).
-                        self.cache_manager.cache_req(req, finished=False)
+                if not finished and batch.is_prefill and req.table_idx != -1:
+                    # A block may be delivered by the final prefill. Append the
+                    # complete bundle before caching its committed prefix; an
+                    # intermediate host view is shorter than cached_len.
+                    self.cache_manager.cache_req(req, finished=False)
 
         self.finished_reqs = new_finished_reqs
         if batch.mtp_token_ids is not None:
@@ -553,6 +560,13 @@ class Scheduler(SchedulerIOMixin):
                 logger.warning_rank0(
                     f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
                 )
+            validate_request = getattr(getattr(self.engine, "mtp_runtime", None), "validate_request", None)
+            if validate_request is not None:
+                try:
+                    msg = validate_request(msg, self.cache_manager)
+                except (ValueError, NotImplementedError) as error:
+                    self.send_result([ErrorReplyMsg(uid=msg.uid, error=str(error), code="invalid_request")])
+                    return
             self.prefill_manager.add_one_req(msg)
         elif isinstance(msg, AbortBackendMsg):
             logger.debug_rank0("Aborting request %d", msg.uid)
@@ -928,7 +942,7 @@ class Scheduler(SchedulerIOMixin):
         return forward_output
 
     def _mtp_delivery_limit(self, req, tokens):
-        from freetoken.models.qwen4_exp.mtp_runtime import DeliveryLimit
+        from freetoken.engine.speculative import DeliveryLimit
         history = req.input_ids.tolist()
         prompt_len = req.max_device_len - req.output_len
         for i, token in enumerate(tokens):

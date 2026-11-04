@@ -52,7 +52,7 @@ class EngineConfig:
     # Online owner exchange is opt-in; zero retains the frozen initial residency.
     moe_q2_adapt_every: int = 0
     moe_q2_adapt_decay: float = 1.0
-    gguf_embedding_host: bool = False
+    gguf_embedding_host: bool | None = None
     moe_q2_prefill_workspace: bool = False
     fixed_q2_rebuild_reserve_mib: int = 512
     moe_cache_rate: float | None = None
@@ -114,8 +114,45 @@ class EngineConfig:
     mtp_max_context: int = 8192
     mtp_compact_state: bool = False
     mtp_draft_policy: str = "full"
+    clover_mode: str = "causal"
+    clover_width: int = 8
+    clover_max_width: int | None = None
+    clover_sparse_prefill_limit: int = 256
+    clover_graph_warmup_widths: List[int] = field(default_factory=list)
+    clover_split_kv: bool = False
+    clover_threshold: float = .95
+    clover_accept_rule: str = "exact"
+    clover_accept_ratio: float = .9
+    clover_accept_delta: float = .6
+    clover_coreset_top_p: float = .9
+    clover_disable_penalties: bool = False
 
     def __post_init__(self):
+        if self.clover_max_width is None:
+            object.__setattr__(self, "clover_max_width", 0 if self.clover_mode == "causal" else self.clover_width)
+        if self.clover_sparse_prefill_limit < 0:
+            raise ValueError("Clover sparse prefill limit must be nonnegative")
+        if self.clover_graph_warmup_widths:
+            if (self.max_running_req != 1 or any(width not in (8, 16, 32)
+                    or width > self.clover_max_width for width in self.clover_graph_warmup_widths)):
+                raise ValueError("Clover graph warmup requires reserved widths and max_running_req=1")
+            object.__setattr__(self, "clover_graph_warmup_widths", sorted(set(self.clover_graph_warmup_widths)))
+        if self.clover_mode not in ("causal", "selfspec", "denoise"):
+            raise ValueError("Clover mode must be causal, selfspec or denoise")
+        if self.clover_mode == "selfspec" and self.clover_width == 32:
+            raise ValueError("Clover selfspec currently supports W=8/16")
+        if self.clover_mode != "causal" and self.max_running_req != 1:
+            raise ValueError("Clover block generation requires max_running_req=1")
+        if self.clover_width not in (8, 16, 32) or self.clover_accept_rule not in ("exact", "threshold"):
+            raise ValueError("Invalid Clover block width or acceptance rule")
+        if self.clover_max_width not in (0, 8, 16, 32):
+            raise ValueError("Clover maximum width must be 0, 8, 16 or 32")
+        if self.clover_mode != "causal" and self.clover_width > self.clover_max_width:
+            raise ValueError("Clover block width exceeds the reserved maximum")
+        if not 0 < self.clover_threshold < 1 or not 0 < self.clover_coreset_top_p <= 1:
+            raise ValueError("Clover confidence threshold and coreset top-p are out of range")
+        if not 0 <= self.clover_accept_ratio <= 1 or not 0 <= self.clover_accept_delta <= 1:
+            raise ValueError("Clover acceptance ratio/delta must be in [0,1]")
         if self.mtp_draft_policy not in ("full", "paired_cjk"):
             raise ValueError("MTP draft policy must be full or paired_cjk")
         if not 0 <= self.fixed_q2_rebuild_reserve_mib <= 512:
@@ -164,6 +201,14 @@ class EngineConfig:
         object.__setattr__(self, "moe_backend", None)
 
     @cached_property
+    def host_embedding_enabled(self) -> bool:
+        if self.gguf_embedding_host is not None:
+            return self.gguf_embedding_host
+        model = self.model_config
+        return (model.model_type == "clover_moe" and model.expert_quant == "clover_gguf"
+                and not model.tie_word_embeddings)
+
+    @cached_property
     def hf_config(self):
         return cached_load_hf_config(self.model_path, self.hf_overrides)
 
@@ -192,12 +237,20 @@ class EngineConfig:
         hf_config = copy.copy(self.hf_config)
         built = {e.config_key for e in self.active_encoders}
         for key in set(ENCODER_SECTIONS) | {e.config_key for e in self.model_spec.encoders}:
-            if key not in built:
+            if key not in built and getattr(hf_config, key, None) is not None:
                 setattr(hf_config, key, None)
         spec = self.model_spec
         quant = checkpoint_quant_config(self.model_path, hf_config, spec)
         set_quant_config(quant)
         model_config = _load_attr(spec.module, spec.parse_config)(hf_config)
+        if model_config.expert_quant == "clover_gguf" and (
+            self.moe_strategy not in ("auto", "offload") or self.moe_cpu_layers
+        ):
+            raise ValueError("Mixed Clover GGUF requires GPU expert offload; CPU/hybrid is unsupported")
+        if self.clover_mode != "causal" and model_config.model_type != "clover_moe":
+            raise ValueError("Clover decoding requires a Clover checkpoint")
+        if model_config.model_type == "clover_moe" and (self.tp_info.size != 1 or self.mtp_runtime_path is not None):
+            raise ValueError("Clover currently requires TP=1 and cannot use a separate MTP runtime")
         if self.mtp_runtime_path is not None:
             from freetoken.models.config import SlotStateSpec
             from freetoken.models.qwen4_exp.mtp_state import MTP_LAST_RESIDUAL

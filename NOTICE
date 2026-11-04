@@ -1,0 +1,10 @@
+Clover integration retains the original source headers and licenses.
+
+Architecture and sampling reference: DiffuSpace/Clover-35B-A3B-Preview,
+revision 4b0402b65e523d0183a14c431955438714cb16ff, Apache-2.0.
+Clover Triton kernels: WilliamZR/sglang,
+revision 2243dc6edb416073b60be0765904cabae9eb61cf, Apache-2.0.
+GGUF layout/reference decoder: ggml-org/llama.cpp,
+revision 4838ffb0c8ade92f34d9157deea38d92758ab824, MIT.
+GGUF CUDA operators retain the vLLM/sgl-kernel/llama.cpp attribution
+in kernel/csrc/gguf. See LICENSE-clover-gguf.txt and individual headers.
