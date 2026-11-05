@@ -81,6 +81,9 @@ Run these before opening a PR — they are cheap, and a gate nobody trips rots s
 FREETOKEN_REBUILD_TEST_MODEL=<small model dir> uv run pytest tests/e2e/test_cache_rebuild.py
 ```
 
+Clover correctness references live in `tests/clover_reference/`. Core tests do not
+require benchmark tools or execution evidence.
+
 ## What earns a place here
 
 A test must be able to fail on a plausible regression of production code.

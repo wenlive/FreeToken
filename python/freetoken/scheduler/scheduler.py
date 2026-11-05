@@ -9,6 +9,7 @@ import torch
 from freetoken.attention.linear import build_fla_metadata
 from freetoken.core import Batch, Req
 from freetoken.env import ENV
+from freetoken.engine.speculative import SpeculativeRequestError
 from freetoken.gpu_select import gpu_identity
 from freetoken.message import (
     AbortBackendMsg,
@@ -149,6 +150,7 @@ class Scheduler(SchedulerIOMixin):
             log=logger.info_rank0,
             decode_log_interval=config.decode_log_interval,
         )
+        self._warmup_runtime_graphs()
 
         # Initialize the I/O mixin
         super().__init__(config, self.engine.tp_cpu_group)
@@ -157,6 +159,15 @@ class Scheduler(SchedulerIOMixin):
         """Called when the scheduler is idle to perform background tasks."""
         logger.info_rank0("Scheduler is idle, waiting for new reqs...")
         self.cache_manager.check_integrity()
+
+    @torch.inference_mode()
+    def _warmup_runtime_graphs(self) -> None:
+        warmup = getattr(getattr(self.engine, "mtp_runtime", None), "warmup_graphs", None)
+        if warmup is not None:
+            with self.engine_stream_ctx:
+                self.engine.stream.wait_stream(self.stream)
+                warmup(self.cache_manager, self.table_manager)
+            self.stream.wait_stream(self.engine.stream)
 
     @torch.inference_mode()
     def rebuild_cache(
@@ -203,6 +214,7 @@ class Scheduler(SchedulerIOMixin):
             min(self.config.max_extend_tokens, _chunk_cap)
             if _chunk_cap else self.config.max_extend_tokens
         )
+        self._warmup_runtime_graphs()
         if self.config.tp_info.size > 1:
             self.sync_all_ranks()
 
@@ -226,9 +238,10 @@ class Scheduler(SchedulerIOMixin):
         for msg in self.receive_msg(blocking=blocking):
             self._process_one_msg(msg)
 
-        if self.engine.mtp_runtime is not None and last_data is not None:
-            # A variable-size verified bundle must reach CPU history before the
-            # next window is prepared; native no-MTP keeps its overlap schedule.
+        runtime = self.engine.mtp_runtime
+        if (runtime is not None and last_data is not None
+                and getattr(runtime, "requires_drain", lambda batch: True)(last_data[0].batch)):
+            # Block runtimes need complete host history before preparing another window.
             self.stream.wait_stream(self.engine.stream)
             self._process_last_data(last_data)
             self._flush_abort_acks()
@@ -259,7 +272,9 @@ class Scheduler(SchedulerIOMixin):
                 # cross-stream wait and before the forward reads the live slot (program order
                 # vs the prior batch's snapshot writes). Doing this on self.stream would race.
                 self._restore_linear_states(forward_input.batch)
-                ongoing_data = (forward_input, self._forward(forward_input))
+                output = self._forward(forward_input)
+                if output is not None:
+                    ongoing_data = (forward_input, output)
 
         # The drain issues GPU-visible writes to state the batch just launched still reads: the
         # page-table re-point and, for the paged-SWA pools, the full->swa (DSV4: full->window)
@@ -293,7 +308,9 @@ class Scheduler(SchedulerIOMixin):
         if forward_input is not None:
             # already inside engine_stream_ctx (run_forever); restore on the engine stream
             self._restore_linear_states(forward_input.batch)
-            ongoing_data = (forward_input, self._forward(forward_input))
+            output = self._forward(forward_input)
+            if output is not None:
+                ongoing_data = (forward_input, output)
 
         self._process_last_data(ongoing_data)
         self._flush_abort_acks()
@@ -359,6 +376,7 @@ class Scheduler(SchedulerIOMixin):
                     continue
                 output_tokens = (batch.mtp_token_ids if batch.mtp_token_ids is not None
                                  else next_tokens_cpu[i:i + 1])
+                finished = False
                 for next_token in output_tokens:
                     req.append_host(next_token.unsqueeze(0))
                     next_token = int(next_token.item())
@@ -403,16 +421,11 @@ class Scheduler(SchedulerIOMixin):
                         self._free_req_resources(req)
                         new_finished_reqs.add(req)
                         break
-                    elif batch.is_prefill and req.table_idx != -1:
-                        # for prefill, non-chunk req, cache the prefix.
-                        # Polymorphic: the DSV4 naive manager keeps the request's slots (no-op);
-                        # the generic manager inserts the prefix into its radix/naive cache.
-                        # table_idx == -1 is defense-in-depth: aborts mark in-flight requests
-                        # instead of freeing them (handled above), so a freed request should
-                        # never reach this commit -- but if a future path frees one early, skip
-                        # rather than re-read the freed page-table row (and on hybrid, deref the
-                        # None'd GDN ping-pong slots).
-                        self.cache_manager.cache_req(req, finished=False)
+                if not finished and batch.is_prefill and req.table_idx != -1:
+                    # A block may be delivered by the final prefill. Append the
+                    # complete bundle before caching its committed prefix; an
+                    # intermediate host view is shorter than cached_len.
+                    self.cache_manager.cache_req(req, finished=False)
 
         self.finished_reqs = new_finished_reqs
         if batch.mtp_token_ids is not None:
@@ -553,6 +566,13 @@ class Scheduler(SchedulerIOMixin):
                 logger.warning_rank0(
                     f"Adjust max_tokens to {max_output_len} for request {msg.uid}."
                 )
+            validate_request = getattr(getattr(self.engine, "mtp_runtime", None), "validate_request", None)
+            if validate_request is not None:
+                try:
+                    msg = validate_request(msg, self.cache_manager)
+                except (ValueError, NotImplementedError) as error:
+                    self.send_result([ErrorReplyMsg(uid=msg.uid, error=str(error), code="invalid_request")])
+                    return
             self.prefill_manager.add_one_req(msg)
         elif isinstance(msg, AbortBackendMsg):
             logger.debug_rank0("Aborting request %d", msg.uid)
@@ -911,24 +931,43 @@ class Scheduler(SchedulerIOMixin):
         pending.clear()
         self.send_result([ErrorReplyMsg(uid=uid, error="request aborted") for uid in uids])
 
-    def _forward(self, forward_input: ForwardInput) -> ForwardOutput:
+    def _forward(self, forward_input: ForwardInput) -> ForwardOutput | None:
         batch, sample_args, input_mapping, output_mapping = forward_input
         batch.input_ids = self.token_pool[input_mapping]
         if self.toolcall_anchor_id is not None and not batch.is_prefill:
             self.cache_manager.snapshot_toolcall_anchor(batch.reqs)
         runtime = self.engine.mtp_runtime
-        if runtime is not None and runtime.eligible(batch):
-            output = runtime.forward(batch, self.cache_manager, self.token_pool,
-                                     self.eos_token_ids, self._mtp_delivery_limit, self.toolcall_anchor_id)
-            self.decode_manager.filter_reqs(batch.reqs)
-            return output
-        forward_output = self.engine.forward_batch(batch, sample_args)
+        try:
+            if runtime is not None and runtime.eligible(batch):
+                output = runtime.forward(batch, self.cache_manager, self.token_pool,
+                                         self.eos_token_ids, self._mtp_delivery_limit, self.toolcall_anchor_id)
+                self.decode_manager.filter_reqs(batch.reqs)
+                return output
+            forward_output = self.engine.forward_batch(batch, sample_args)
+        except SpeculativeRequestError as error:
+            # A failed forward must finish its writes before its pages/slots are
+            # recycled. Unexpected CUDA/runtime failures still escape this handler.
+            self.engine.stream.synchronize()
+            abort_request = getattr(runtime, "abort_request", None)
+            replies = []
+            # Causal logits can fail in a batch; discard every affected request.
+            for req in batch.reqs:
+                if abort_request is not None:
+                    abort_request(req)
+                self.prefill_manager.abort_req(req.uid)
+                self.decode_manager.remove_req(req)
+                self._free_req_resources(req)
+                req.aborted = True
+                self.finished_reqs.add(req)
+                replies.append(ErrorReplyMsg(uid=req.uid, error=str(error), code=error.code))
+            self.send_result(replies)
+            return None
         self.token_pool[output_mapping] = forward_output.next_tokens_gpu
         self.decode_manager.filter_reqs(forward_input.batch.reqs)
         return forward_output
 
     def _mtp_delivery_limit(self, req, tokens):
-        from freetoken.models.qwen4_exp.mtp_runtime import DeliveryLimit
+        from freetoken.engine.speculative import DeliveryLimit
         history = req.input_ids.tolist()
         prompt_len = req.max_device_len - req.output_len
         for i, token in enumerate(tokens):

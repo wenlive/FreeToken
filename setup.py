@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 from setuptools import setup
-from torch.utils.cpp_extension import BuildExtension, CUDA_HOME, CppExtension, ROCM_HOME
+from torch.utils.cpp_extension import BuildExtension, CUDA_HOME, CppExtension, CUDAExtension, ROCM_HOME
 
 
 ROOT = Path(__file__).parent
@@ -97,6 +97,17 @@ _check_toolchain()
 
 setup(
     ext_modules=[
+        *([CUDAExtension(
+            name="freetoken.kernel._gguf",
+            sources=["python/freetoken/kernel/csrc/gguf/gguf_kernel.cu",
+                     "python/freetoken/kernel/csrc/gguf/bindings.cpp"],
+            include_dirs=[str(ROOT / "python/freetoken/kernel/csrc/gguf")],
+            extra_compile_args={
+                "cxx": ["/O2", "/Zc:preprocessor"] if os.name == "nt" else ["-O3"],
+                "nvcc": ["-O3", "--expt-relaxed-constexpr"] +
+                        (["-Xcompiler=/Zc:preprocessor"] if os.name == "nt" else []),
+            },
+        )] if not IS_ROCM else []),
         CppExtension(
             name="freetoken.kernel._pinned_tensor",
             sources=[

@@ -10,6 +10,7 @@ from freetoken.message import (
     BaseBackendMsg,
     BaseTokenizerMsg,
     DetokenizeMsg,
+    ErrorReplyMsg,
     PromptAdmittedMsg,
     UserMsg,
 )
@@ -26,6 +27,8 @@ class RequestStatus:
     input_ids: List[int]
     output_ids: List[int]
     matched_stop: str | None = None
+    error: str | None = None
+    error_code: str | None = None
 
 
 class LLM(Scheduler):
@@ -93,6 +96,10 @@ class LLM(Scheduler):
                 # PromptAdmittedMsg feeds the online server's global accounting. Offline
                 # generation already owns its inputs and has no FrontendManager stats sink.
                 continue
+            if isinstance(msg, ErrorReplyMsg):
+                status = self.status_map[msg.uid]
+                status.error, status.error_code = msg.error, msg.code
+                continue
             assert isinstance(msg, DetokenizeMsg)
             status = self.status_map[msg.uid]
             if not (msg.finished and msg.next_token in self.eos_token_ids):
@@ -106,7 +113,10 @@ class LLM(Scheduler):
         sampling_params: List[SamplingParams] | SamplingParams,
         images: List[List[bytes] | None] | None = None,
     ) -> List[Dict[str, str | List[int]]]:
-        """Offline generation; images is aligned with prompts: the raw image files of each prompt in placeholder order, or None."""
+        """Generate per prompt; rejected requests include error and optional error_code.
+
+        Images align with prompts and contain raw files in placeholder order, or None.
+        """
         self.pending_requests = []
         self.status_map = {}
         self.counter = 0
@@ -128,5 +138,10 @@ class LLM(Scheduler):
             # accounting, but give offline callers the same text as streaming.
             if status.matched_stop is not None:
                 output_text = output_text.partition(status.matched_stop)[0]
-            results.append({"text": output_text, "token_ids": status.output_ids})
+            result = {"text": output_text, "token_ids": status.output_ids}
+            if status.error is not None:
+                result["error"] = status.error
+                if status.error_code is not None:
+                    result["error_code"] = status.error_code
+            results.append(result)
         return results

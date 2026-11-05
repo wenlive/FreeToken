@@ -1,9 +1,15 @@
 // Adatped from
 // https://github.com/vllm-project/vllm/blob/755ed7b05be4743237d3339c4ff8c22bcaae04f4/csrc/quantization/gguf/gguf_kernel.cu
+#ifdef _WIN32
+// Import RPC before libtorch so its small macro can be removed once.
+#include <rpc.h>
+#include <rpcndr.h>
+#undef small
+#endif
 #include <c10/cuda/CUDAGuard.h>
 #include <cuda_fp16.h>
 #include <cuda_runtime.h>
-#include <torch/all.h>
+#include <torch/types.h>
 
 // dont use clang-format here, it breaks the include order
 // clang-format off
@@ -350,6 +356,7 @@ torch::Tensor ggml_moe_a8(
   cudaStream_t stream = at::cuda::getCurrentCUDAStream().stream();
   options = torch::TensorOptions().dtype(torch::kInt32).device(W.device());
   at::Tensor quant_X = torch::empty({tokens, padded / 32 * 9}, options);
+  // Expert ids are offload-cache slots; the MMQ header supports large banks.
   DISPATCH_FLOAT_TYPES(X.scalar_type(), "ggml_moe_a8", [&] {
     quantize_row_q8_1_cuda((scalar_t*)X.data_ptr(), (void*)quant_X.data_ptr(), col, tokens, stream);
     switch (type) {
@@ -568,7 +575,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 3:
         moe_vec_q4_1_q8_1_cuda<scalar_t>(
@@ -620,7 +627,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 10:
         moe_vec_q2_K_q8_1_cuda<scalar_t>(
@@ -659,7 +666,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 13:
         moe_vec_q5_K_q8_1_cuda<scalar_t>(
@@ -685,7 +692,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 16:
         moe_vec_iq2_xxs_q8_1_cuda<scalar_t>(
@@ -789,7 +796,7 @@ torch::Tensor ggml_moe_a8_vec(
             col,
             row,
             quant_X.stride(0),
-            stream);
+            stream, W.stride(0));
         break;
       case 29:
         moe_vec_iq1_m_q8_1_cuda<scalar_t>(
@@ -837,6 +844,7 @@ int64_t ggml_moe_get_block_size(int64_t type) {
 
 // ---- FreeToken pybind bindings (donor registers these via TORCH_LIBRARY; we
 // expose them through torch.utils.cpp_extension.load's pybind module instead) ----
+#ifdef FREETOKEN_GGUF_INLINE_BINDINGS
 #include <torch/extension.h>
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("ggml_dequantize", &ggml_dequantize, "");
@@ -846,3 +854,4 @@ PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   m.def("ggml_moe_a8_vec", &ggml_moe_a8_vec, "");
   m.def("ggml_moe_get_block_size", &ggml_moe_get_block_size, "");
 }
+#endif

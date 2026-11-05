@@ -46,6 +46,7 @@ _BANK_SCHEMAS: dict[str, tuple[str, ...]] = {
     # native GGUF Q4_0 experts: packed block bytes per output row, dequantized inside
     # the borrowed ggml MoE kernels. gate_up [L*E, 2I, H//32*18], down [L*E, H, I//32*18].
     "q4_0": ("gate_up", "down"),
+    "clover_gguf": ("gate_up", "down"),
     "q2_0": ("gate_up", "down"),
     # native ModelOpt rows for the Triton inline-dequant kernels: packed e2m1 codes +
     # fp8-e4m3 per-16 block scales + per-output-row fp16 globals (w1/w3 carry distinct
@@ -80,7 +81,7 @@ _BANK_SCHEMAS: dict[str, tuple[str, ...]] = {
 }
 
 # lives in kernel/aot_models.py: the AOT row table shares it and must stay importable in the torch-only kernel-cache build env, which cannot import freetoken.moe
-from freetoken.kernel.aot_models import fp8_block_scale_pad
+from freetoken.kernel.aot_models import fp8_block_scale_pad, expert_bank_row_bytes
 
 
 # bytes per (expert, layer) as f(hidden, moe_intermediate), from the bank shapes above; keep in sync with _BANK_SCHEMAS

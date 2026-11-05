@@ -28,6 +28,7 @@ from freetoken.utils import align_ceil, init_logger, is_sm90_family, is_sm100_fa
 
 from .config import EngineConfig
 from .graph import GraphRunner, get_free_memory
+from .speculative import runtime_reserve_bytes
 from .sample import BatchSamplingArgs, Sampler
 from freetoken.kvcache import create_kv_pool, resolve_pool_class
 from freetoken.kvcache.base import CacheRebuildRejected
@@ -363,9 +364,11 @@ class Engine:
         set_rope_device(self.device)
         with torch.device("meta"), torch_dtype(config.dtype):
             self.model = create_model(config.model_config)
+        if config.model_config.model_type == "clover_moe":
+            self.model.configure_runtime(config)
         self._load_weights(config)
         self._host_tables_bytes = 0
-        if config.gguf_embedding_host:
+        if config.host_embedding_enabled:
             if not hasattr(self.model, 'place_input_embedding'):
                 raise ValueError('This model does not support mapped GGUF input embeddings')
             self._host_tables_bytes = int(self.model.place_input_embedding() or 0)
@@ -431,7 +434,21 @@ class Engine:
         # off it; the KV pool family owns every geometry-specific formula behind the rest.
         available_memory = _startup_kv_budget(config.memory_ratio, init_free_memory, new_free)
         available_memory -= state_pool_bytes(config)
+        runtime_reserve = runtime_reserve_bytes(config)
+        available_memory -= runtime_reserve
         self.num_pages = self._pool_cls.solve_num_pages(config, available_memory)
+        if runtime_reserve:
+            from .cache_budget import net_cache_budget_bytes, required_bytes
+
+            page_bytes, fixed_bytes, _, _ = self._pool_cls.kv_cost(config)
+            target_moe, per_expert_bytes = self._target_moe_and_expert_bytes(None)
+            budget = net_cache_budget_bytes(config.memory_ratio, self._baseline_free,
+                self._weights_bytes, fixed_bytes + state_pool_bytes(config) + runtime_reserve)
+            need = required_bytes(target_moe, self.num_pages, per_expert_bytes, page_bytes)
+            if need > budget:
+                raise ValueError("KV/expert budget leaves no room for the reserved Clover transaction; "
+                                 "reduce moe_cache_size, context or clover_max_width")
+            logger.info_rank0(f"Reserved Clover private runtime: {mem_GB(runtime_reserve)}")
         num_tokens = self.num_pages * config.page_size
         self.ctx.kv_cache = self.kv_cache = create_kv_pool(
             config, self.num_pages, device=self.device, dtype=self.dtype
@@ -514,9 +531,10 @@ class Engine:
         if config.attention_backend.split(",")[0] == "triton":
             # Prefill runs on the first comma part; warm its autotune cache.
             self._warmup_prefill()
-        if config.mtp_runtime_path is not None:
-            from freetoken.models.qwen4_exp.mtp_runtime import MtpRuntime
-            self.mtp_runtime = MtpRuntime(self, self.model._mtp_drafter)
+        from freetoken.engine.speculative import create_runtime
+        # Retain the legacy attribute for scheduler/cache-rebuild compatibility;
+        # model-specific implementations share the neutral runtime protocol.
+        self.mtp_runtime = create_runtime(self)
         if config.moe_q2_adapt_every:
             self.q2_adaptive_owners = self.moe_offload_cache.start_adaptation()
 
@@ -638,6 +656,7 @@ class Engine:
 
         cache_per_page, fixed_cache_size, page_tokens, min_reserve = self._pool_cls.kv_cost(config)
         fixed_cache_size += state_pool_bytes(config)  # sibling GDN state pool, engine-summed
+        fixed_cache_size += runtime_reserve_bytes(config)
         num_experts = config.model_config.num_experts
         total_experts = config.model_config.num_moe_layers * num_experts
         return resolve_moe_cache_auto(
@@ -851,7 +870,8 @@ class Engine:
             )
         # Decode batches never exceed max_running_req, but CUDA-graph padding can
         # round a batch up to the largest captured size; cover both.
-        max_tokens = max(config.max_running_req, config.cuda_graph_max_bs or 0, 1)
+        block_rows = 32 if config.model_config.model_type == "clover_moe" else 1
+        max_tokens = max(config.max_running_req, config.cuda_graph_max_bs or 0, block_rows)
         method = sample.quant_method
         executor = CpuMoeExecutor(
             cache,
@@ -1017,7 +1037,7 @@ class Engine:
                 weights_bytes=self._weights_bytes, current_num_pages=self.num_pages,
                 extra_fixed_bytes=(
                     state_pool_bytes(config, target_mamba) if target_mamba is not None else 0
-                ),
+                ) + runtime_reserve_bytes(config),
                 extra_note=(
                     f", mamba={target_mamba - 1} slots" if target_mamba is not None else ""
                 ),
@@ -1144,6 +1164,9 @@ class Engine:
             req.complete_one()
 
         batch_logits = logits[: batch.size]
+        process_logits = getattr(self.mtp_runtime, "process_logits", None)
+        if process_logits is not None:
+            batch_logits = process_logits(batch, batch_logits)
         next_tokens_gpu = self.sampler.sample(batch_logits, args).to(torch.int32)
         next_tokens_cpu = next_tokens_gpu.to("cpu", non_blocking=True)
         copy_done_event = torch.cuda.Event()

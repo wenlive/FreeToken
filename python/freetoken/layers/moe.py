@@ -453,6 +453,22 @@ class OffloadMoELayer(MoELayer):
                 hidden_states, topk_weights, topk_ids, view, layer=self, is_prefill=is_prefill
             )
         fmt = cache.quant_format
+        if fmt == "clover_gguf":
+            from freetoken.moe.fused_gguf import fused_experts_gguf
+
+            gate_up, down = views
+            if n is not None:
+                gate_up, down = gate_up[:n], down[:n]
+            gate_type, down_type = self.gguf_types
+            gate_bytes, down_bytes = self.gguf_row_bytes
+            gate_up = gate_up.as_strided((gate_up.shape[0], gate_up.shape[1], gate_bytes),
+                                        (gate_up.stride(0), gate_bytes, 1))
+            down = down.as_strided((down.shape[0], down.shape[1], down_bytes),
+                                  (down.stride(0), down_bytes, 1))
+            return fused_experts_gguf(
+                hidden_states, gate_up, down, topk_weights, topk_ids, self.activation,
+                gate_up_type=gate_type, down_type=down_type,
+            )
         if fmt == "q4_0":
             # Native GGUF Q4_0 experts: dequant-in-kernel grouped GEMV (MMVQ) over the
             # streamed packed banks; topk_ids already index the cache slots / layer.
